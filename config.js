@@ -1,8 +1,7 @@
 // Supabase bağlantı bilgileri.
-// Boş bırakırsan uygulama ilk açılışta senden ister ve o cihazda saklar.
-// Herkesin kullanabilmesi için iki satırı doldur (anon/publishable anahtar herkese açık olabilir).
+// Publishable key istemci tarafında kullanılabilir.
 // ASLA service_role veya secret anahtarı buraya yazma.
 window.USTATEKLIF_CONFIG = {
-  SUPABASE_URL: '',
-  SUPABASE_KEY: ''
+  SUPABASE_URL: 'https://akkhzhqcbnoldjrfgnmj.supabase.co',
+  SUPABASE_KEY: 'sb_publishable_ELjeZSdrEnYBh9A-wn-nlQ_NUCiopQk'
 };
