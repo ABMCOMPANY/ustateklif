@@ -148,6 +148,10 @@ textarea.in{min-height:92px;resize:vertical}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 
 /* Tamİşim mobile refresh */
+
+.hero{padding:34px 0 12px}.hero .eyebrow{display:inline-block;font-size:13px;font-weight:800;color:#1457D9;background:#EAF2FF;padding:6px 10px;border-radius:999px;margin-bottom:12px}.hero h1{font-size:39px;line-height:1.03;letter-spacing:-.055em;color:#102A56}.hero h1 em{font-style:normal;color:#2F80ED}.hero p{color:#6B7C93;margin:14px 0 18px;max-width:380px}.searchbox{width:100%;min-height:58px;border:1px solid #E2E8F0;background:#fff;border-radius:18px;padding:0 18px;text-align:left;color:#6B7C93;box-shadow:0 9px 28px rgba(16,42,86,.08);font-weight:600;cursor:pointer}.searchbox span{font-size:25px;color:#1457D9;margin-right:8px}.home-section{margin:24px 0}.home-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:22px 0 12px}.home-title h2,.steps h2{font-size:21px}.home-title .link{margin:0}.homecats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.homecat{border:0;background:#fff;border-radius:17px;min-height:88px;padding:10px 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 6px 20px rgba(16,42,86,.06);cursor:pointer}.homecat span{font-size:26px}.homecat b{font-size:11px;line-height:1.15;color:#102A56}.trustbox{display:flex;gap:13px;align-items:flex-start;background:#EAF2FF;border-radius:20px;padding:18px;margin:26px 0}.trusticon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#1457D9;color:#fff;font-weight:800;flex:none}.trustbox h3{font-size:17px}.trustbox p{margin:4px 0 0;color:#5D7192;font-size:14px}.steps{background:#fff;border-radius:22px;padding:19px;box-shadow:0 7px 24px rgba(16,42,86,.06);margin:26px 0}.steps h2{margin-bottom:14px}.steps>div{display:flex;gap:12px;align-items:center;padding:9px 0}.steps>div>b{width:30px;height:30px;border-radius:10px;background:#EAF2FF;color:#1457D9;display:grid;place-items:center}.steps span{display:flex;flex-direction:column}.steps small{color:#6B7C93;margin-top:1px}
+@media(max-width:390px){.hero h1{font-size:35px}.homecats{grid-template-columns:repeat(4,1fr);gap:7px}.homecat{min-height:82px}.homecat b{font-size:10px}}
+
 body{background:linear-gradient(180deg,#fbfdff 0,#f5f8fc 100%);padding-bottom:84px}
 .app{max-width:520px;padding:0 18px 72px}
 .top{background:rgba(247,249,252,.94);backdrop-filter:blur(14px);border-bottom:0;padding:15px 2px}
@@ -427,9 +431,14 @@ function vAccount(){
 
 /* müşteri */
 function vList(){
-  return `<div class="pagehead"><h1>İlanların</h1><button class="btn" data-a="newIlan">Yeni ilan aç</button></div>
-  <p class="lede">Sorununu seç, ustalardan teklif al.</p>`+
-  (D.mine.length?D.mine.map(l=>ticket(l,{act:'open',pill:pillMine(l)})).join(''):'<div class="empty">Henüz ilanın yok. Yeni ilan açarak başlayabilirsin.</div>');
+  const popular=['boya','tesisat','elektrik','klima','temizlik','nakliyat','mobilya','oto'];
+  const cats=popular.map(k=>{const v=KAT[k];return `<button class="homecat" data-a="quickCat" data-v="${k}"><span>${v.ikon}</span><b>${esc(v.ad)}</b></button>`}).join('');
+  return `<section class="hero"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>İşini anlat, teklif al, karşılaştır ve güvenle seç.</p><button class="searchbox" data-a="newIlan"><span>⌕</span> Hangi hizmete ihtiyacın var?</button></section>
+  <section class="home-section"><div class="home-title"><h2>Popüler hizmetler</h2><button class="link" data-a="newIlan">Tümünü gör</button></div><div class="homecats">${cats}</div></section>
+  <section class="trustbox"><div class="trusticon">✓</div><div><h3>Güvenle uzmanını seç</h3><p>Teklifleri, puanları, tamamlanan işleri ve doğrulama rozetlerini karşılaştır.</p></div></section>
+  <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Hizmeti ve konumu belirt.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section>
+  <div class="home-title"><h2>İlanların</h2><button class="btn sm" data-a="newIlan">+ İlan ver</button></div>`+
+  (D.mine.length?D.mine.map(l=>ticket(l,{act:'open',pill:pillMine(l)})).join(''):'<div class="empty">Henüz ilanın yok. İlk ilanını vererek uzmanlardan teklif almaya başla.</div>');
 }
 function vNew(){
   const d=S.draft,q=S.catSearch.trim().toLocaleLowerCase('tr-TR');
@@ -636,6 +645,7 @@ const A={
     }
   },
   newIlan(){S.draft={kat:null,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
+  quickCat(v){S.draft={kat:v,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
   pickKat(v){if(S.draft.kat!==v){S.draft.kat=v;S.draft.sorunlar=[]}},
   toggleSorun(v){const s=S.draft.sorunlar,x=s.indexOf(v);x<0?s.push(v):s.splice(x,1)},
   zaman(v){S.draft.zaman=v},
