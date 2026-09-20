@@ -3,23 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0D4A5A">
+<meta name="theme-color" content="#1457D9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="UstaTeklif">
+<meta name="apple-mobile-web-app-title" content="Tamİşim">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>UstaTeklif</title>
+<title>Tamİşim</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
-  --bg:#EDF2F4; --surface:#FFFFFF; --ink:#13242C; --muted:#586C76; --line:#D3DDE2;
-  --petrol:#0D4A5A; --petrol-ink:#FFFFFF; --stub:#0D4A5A; --tint:#E1EDF0; --focus:#0D4A5A;
-  --amber:#F4B31D; --amber-ink:#2A1E00; --amber-bg:#FBE8B4; --amber-fg:#4A3500;
+  --bg:#F7F9FC; --surface:#FFFFFF; --ink:#102A56; --muted:#6B7C93; --line:#E2E8F0;\n  --petrol:#1457D9; --petrol-ink:#FFFFFF; --stub:#1457D9; --tint:#EAF2FF; --focus:#1457D9;\n  --amber:#2F80ED; --amber-ink:#FFFFFF; --amber-bg:#EAF2FF; --amber-fg:#1457D9;
   --good:#1D7448; --good-bg:#D9F0E4; --err-bg:#FBE0D8; --err-fg:#7A2410;
 }
 @media (prefers-color-scheme: dark){
@@ -148,12 +146,32 @@ textarea.in{min-height:92px;resize:vertical}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:600;font-size:15px;z-index:10;max-width:90%;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* Tamİşim mobile refresh */
+body{background:linear-gradient(180deg,#fbfdff 0,#f5f8fc 100%);padding-bottom:84px}
+.app{max-width:520px;padding:0 18px 72px}
+.top{background:rgba(247,249,252,.94);backdrop-filter:blur(14px);border-bottom:0;padding:15px 2px}
+.brand{font-size:25px;color:#102A56;letter-spacing:-.04em}.brand i{background:#2F80ED;width:8px;height:8px}
+.avatar,.notifbtn{background:#fff;border-color:#E2E8F0;box-shadow:0 4px 16px rgba(16,42,86,.06)}
+.pagehead{margin-top:28px}.pagehead h1{font-size:32px;letter-spacing:-.04em;color:#102A56}.lede{color:#6B7C93}
+.btn{background:#1457D9;color:#fff;border-radius:14px;box-shadow:0 8px 20px rgba(20,87,217,.16)}
+.btn.ghost{background:#fff;color:#1457D9;border-color:#D8E5FA;box-shadow:none}
+.in{border-radius:16px;border-color:#E2E8F0;box-shadow:0 4px 18px rgba(16,42,86,.04)}
+.cat{border:0;border-radius:18px;min-height:96px;box-shadow:0 7px 22px rgba(16,42,86,.07);color:#102A56}
+.cat[aria-pressed="true"]{background:#EAF2FF;border:0;box-shadow:inset 0 0 0 2px #1457D9}
+.ticket,.quote,.chat,.notif{border:0;border-radius:20px;box-shadow:0 8px 26px rgba(16,42,86,.07)}
+.stub{background:#1457D9}.pill{background:#EAF2FF;color:#1457D9}.pill.amber{background:#EAF2FF;color:#1457D9}
+.pill.good{background:#E8F7F0;color:#147A50}.star-i,.star{color:#2F80ED}
+.seg{border:0;box-shadow:0 4px 14px rgba(16,42,86,.06)}.seg button[aria-pressed="true"]{background:#1457D9;color:#fff}
+.field:first-of-type h2::before{content:"İhtiyacın neyse, uzmanı burada.";display:block;font:800 28px/1.15 "Bricolage Grotesque",Figtree,sans-serif;color:#102A56;letter-spacing:-.035em;margin-bottom:10px}
+@media(max-width:420px){.seg button{padding:7px 10px}.pagehead h1{font-size:29px}.cats{grid-template-columns:repeat(3,1fr)}}
+
 </style>
 </head>
 <body>
 <div class="app">
   <header class="top">
-    <div class="brand">UstaTeklif<i></i></div>
+    <div class="brand">Tamİşim<i></i></div>
     <div class="hdr-r" id="hdr-r" hidden>
       <div class="seg" role="group" aria-label="Kullanıcı türü">
         <button data-a="role" data-v="musteri" aria-pressed="true">Müşteri</button>
