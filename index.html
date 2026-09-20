@@ -148,6 +148,7 @@ textarea.in{min-height:92px;resize:vertical}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 
 /* Tamİşim mobile refresh */
+.bottomnav{position:fixed;z-index:40;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 22px),498px);height:68px;background:rgba(255,255,255,.96);backdrop-filter:blur(18px);border:1px solid #E6ECF5;border-radius:22px;box-shadow:0 12px 38px rgba(16,42,86,.16);display:grid;grid-template-columns:1fr 1fr 70px 1fr 1fr;align-items:center;padding:5px 7px}.bottomnav[hidden]{display:none}.bottomnav button{border:0;background:transparent;color:#74849A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:inherit;min-height:52px}.bottomnav button>span{font-size:22px}.bottomnav small{font-size:10px;font-weight:700}.bottomnav .navplus{width:58px;height:58px;min-height:58px;border-radius:19px;background:#1457D9;color:#fff;box-shadow:0 9px 20px rgba(20,87,217,.28);justify-self:center;transform:translateY(-10px)}.bottomnav .navplus span{font-size:30px}.account-hero{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#102A56,#1457D9);color:#fff;border-radius:22px;padding:20px;margin:12px 0 22px}.account-hero .proavatar{background:#fff;color:#1457D9}.account-hero h1{font-size:22px;margin:0}.account-hero p{margin:3px 0 0;opacity:.8;font-size:13px}
 
 .expert-card{background:#fff;border:1px solid #E6ECF5;border-radius:19px;padding:16px;box-shadow:none}
 .expert-head{align-items:flex-start}.expert-avatar{width:52px;height:52px;background:#EAF2FF;color:#1457D9;font-size:19px}
@@ -194,6 +195,7 @@ body{background:linear-gradient(180deg,#fbfdff 0,#f5f8fc 100%);padding-bottom:84
     </div>
   </header>
   <main id="app"></main>
+  <nav class="bottomnav" id="bottomnav" hidden aria-label="Ana menü"><button data-a="navHome"><span>⌂</span><small>Ana Sayfa</small></button><button data-a="navJobs"><span>▤</span><small>İlanlarım</small></button><button class="navplus" data-a="newIlan"><span>＋</span></button><button data-a="notifications"><span>♢</span><small>Bildirimler</small></button><button data-a="account"><span>○</span><small>Profil</small></button></nav>
 </div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
@@ -421,8 +423,7 @@ function vAuth(){
 }
 function vAccount(){
   return `<button class="link" data-a="closeAcct">Geri</button>
-  <div class="pagehead"><h1>Hesabım</h1></div>
-  <p class="lede">${esc(S.user.email||'')}</p>
+  <div class="account-hero"><div class="proavatar">${esc(initials((S.profile||{}).name||'K'))}</div><div><h1>${esc((S.profile||{}).name||'Profilim')}</h1><p>${esc((S.profile||{}).title||S.user.email||'')}</p></div></div>
   <div class="field two">
     <div><label class="lb" for="ac-name">Adın / işletme adın</label><input class="in" id="ac-name" maxlength="80" value="${esc(S.acct.name)}"></div>
     <div><label class="lb" for="ac-title">Kısa uzmanlık başlığı</label><input class="in" id="ac-title" maxlength="100" placeholder="Örn. Klima ve soğutma ustası" value="${esc(S.acct.title)}"></div>
@@ -592,6 +593,7 @@ function render(){
   $('#app').innerHTML=h;
   const signed=!!(S.user&&!S.setup&&!S.loading);
   $('#hdr-r').hidden=!signed;
+  const bn=$('#bottomnav');if(bn)bn.hidden=!signed;
   if(signed){
     document.querySelectorAll('.seg button[data-a="role"]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.role)));
     const nm=(S.profile&&S.profile.name)||S.user.email||'K';
@@ -607,6 +609,8 @@ function render(){
 const NET=new Set(['authGo','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
 const KEEP=new Set(['pickKat','toggleSorun','zaman','sort','filter','pick','send','rate','tab']);
 const A={
+  navHome(){S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null},
+  navJobs(){S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null},
   role(v){S.role=v;S.view='list';S.page='main';S.tab='acik';S.quoteFor=null;S.sel=null},
   notifications(){S.page='notifications';},
   closeNotifications(){S.page='main';},
