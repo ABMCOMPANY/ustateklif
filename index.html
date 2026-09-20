@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0D4A5A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="UstaTeklif">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>UstaTeklif</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EDF2F4; --surface:#FFFFFF; --ink:#13242C; --muted:#586C76; --line:#D3DDE2;
+  --petrol:#0D4A5A; --petrol-ink:#FFFFFF; --stub:#0D4A5A; --tint:#E1EDF0; --focus:#0D4A5A;
+  --amber:#F4B31D; --amber-ink:#2A1E00; --amber-bg:#FBE8B4; --amber-fg:#4A3500;
+  --good:#1D7448; --good-bg:#D9F0E4; --err-bg:#FBE0D8; --err-fg:#7A2410;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1418; --surface:#132026; --ink:#E7EFF2; --muted:#94A7B0; --line:#25383F;
+    --petrol:#5CC0D8; --petrol-ink:#06232B; --stub:#1A3A45; --tint:#183039; --focus:#F4B31D;
+    --amber-bg:#4A3A0E; --amber-fg:#FFE08A; --good:#5CCB98; --good-bg:#12362A; --err-bg:#4A1F14; --err-fg:#FFC3B0;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1418; --surface:#132026; --ink:#E7EFF2; --muted:#94A7B0; --line:#25383F;
+  --petrol:#5CC0D8; --petrol-ink:#06232B; --stub:#1A3A45; --tint:#183039; --focus:#F4B31D;
+  --amber-bg:#4A3A0E; --amber-fg:#FFE08A; --good:#5CCB98; --good-bg:#12362A; --err-bg:#4A1F14; --err-fg:#FFC3B0;
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Figtree,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:"Bricolage Grotesque",Figtree,system-ui,sans-serif;margin:0;line-height:1.2}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.app{max-width:560px;margin:0 auto;padding:0 16px 48px}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.brand{font:800 22px "Bricolage Grotesque",Figtree,sans-serif;letter-spacing:-.01em}
+.brand i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--amber);margin-left:3px}
+.hdr-r{display:flex;align-items:center;gap:10px}
+.notifbtn{position:relative;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:18px}.notifbadge{position:absolute;right:-4px;top:-5px;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--amber);color:var(--amber-ink);font-size:11px;font-weight:800;display:grid;place-items:center;border:2px solid var(--bg)}.notif{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}.notif.unread{border-left:4px solid var(--amber)}.notif h3{font-size:16px;margin-bottom:3px}.notif p{margin:0;color:var(--muted);font-size:14px}.notifmeta{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--amber);color:var(--amber-ink);border:0;font-weight:800;font-size:16px;cursor:pointer}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{border:0;background:none;padding:7px 14px;border-radius:999px;font-weight:600;font-size:14px;color:var(--muted);cursor:pointer;min-height:36px}
+.seg button[aria-pressed="true"]{background:var(--petrol);color:var(--petrol-ink)}
+.seg.small button{padding:5px 12px;font-size:13px;min-height:32px}
+
+.pagehead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:24px 0 4px;flex-wrap:wrap}
+.pagehead h1{font-size:30px;font-weight:800}
+.lede{margin:4px 0 8px;color:var(--muted)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 0 4px;flex-wrap:wrap}
+.row h2{font-size:20px}
+.count{display:inline-block;min-width:24px;text-align:center;padding:0 8px;border-radius:999px;background:var(--amber);color:var(--amber-ink);font:700 14px Figtree,sans-serif;margin-left:6px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:12px;border:0;background:var(--amber);color:var(--amber-ink);font-weight:700;cursor:pointer}
+.btn.sm{min-height:40px;padding:0 16px;font-size:15px}
+.btn.block{width:100%}
+.btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.link{background:none;border:0;padding:8px 0;color:var(--petrol);font-weight:600;cursor:pointer;margin-top:12px}
+
+.ticket{position:relative;display:grid;grid-template-columns:76px 1fr;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:12px 0}
+.ticket::before,.ticket::after{content:"";position:absolute;left:67px;width:16px;height:16px;border-radius:50%;background:var(--bg);border:1px solid var(--line)}
+.ticket::before{top:-9px}.ticket::after{bottom:-9px}
+.stub{background:var(--stub);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 6px;border-right:2px dashed rgba(255,255,255,.4);text-align:center}
+.stub .ico{font-size:28px;line-height:1}
+.stub .kn{font-size:12px;font-weight:600}
+.tbody{padding:14px 16px;min-width:0}
+.tbody h3{font-size:18px;font-weight:600;margin-bottom:4px}
+.stretch{background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.stretch::after{content:"";position:absolute;inset:0}
+.stretch:focus-visible{outline:none}
+.stretch:focus-visible::after{outline:3px solid var(--focus);outline-offset:-3px;border-radius:16px}
+.note{margin:0 0 8px;color:var(--muted);font-size:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:14px;color:var(--muted)}
+.meta .pill{margin-left:auto}
+.foot{position:relative;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.muted{color:var(--muted)}.small{font-size:14px}
+
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:600;background:var(--tint);color:var(--ink)}
+.pill.amber{background:var(--amber-bg);color:var(--amber-fg)}
+.pill.good{background:var(--good-bg);color:var(--good)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--amber);display:inline-block;animation:pulse 1.4s ease-in-out infinite}
+.dot.sm{width:8px;height:8px}
+@keyframes pulse{50%{opacity:.3}}
+
+.empty,.wait{background:var(--surface);border:1.5px dashed var(--line);border-radius:16px;padding:22px 18px;margin:16px 0;color:var(--muted);display:flex;gap:12px;align-items:center}
+.err{background:var(--err-bg);color:var(--err-fg);border-radius:12px;padding:10px 14px;margin:14px 0;font-size:15px}
+.info{background:var(--good-bg);color:var(--good);border-radius:12px;padding:10px 14px;margin:14px 0;font-size:15px}
+
+.field{margin:28px 0}
+.field h2{font-size:20px;margin-bottom:4px}
+.hint{margin:0 0 12px;color:var(--muted);font-size:15px}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:10px;margin-top:12px}
+.cat{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-weight:600;font-size:14px;min-height:88px}
+.cat .ico{font-size:28px;line-height:1}
+.cat[aria-pressed="true"]{border-color:var(--petrol);background:var(--tint);box-shadow:inset 0 0 0 1px var(--petrol)}
+.catresults{margin-top:14px}.catgroup{margin-top:18px}.catgroup:first-child{margin-top:0}.catgroup h3{margin:0 0 8px;font-size:14px;color:var(--muted);font-weight:700}.catgroup .cats{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-weight:500;font-size:15px}
+.chip[aria-pressed="true"]{background:var(--petrol);border-color:var(--petrol);color:var(--petrol-ink)}
+label.lb,span.lb{display:block;font-weight:600;margin:0 0 6px;font-size:15px}
+.in{width:100%;min-height:48px;padding:10px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface)}
+textarea.in{min-height:92px;resize:vertical}
+.in:focus-visible{outline-offset:0;border-color:var(--focus)}
+.two{display:grid;gap:14px}
+
+.quote{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.quote.chosen{border-color:var(--good)}
+.quote.dim{opacity:.55}
+.qhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.qhead h3{font-size:18px;font-weight:600}
+.sub{margin:0;color:var(--muted);font-size:14px}
+.rating{margin:6px 0 0;font-size:14px}
+.star-i{color:var(--amber)}
+.pr{text-align:right;flex:none}
+.price{font:800 28px "Bricolage Grotesque",Figtree,sans-serif;line-height:1.1}
+.qnote{margin:12px 0;font-size:15px}
+.procard{margin:12px 0;padding:12px;border-radius:14px;background:var(--tint);border:1px solid var(--line)}
+.protop{display:flex;align-items:center;gap:10px}.proavatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--amber);color:var(--amber-ink);font-weight:800;flex:none}
+.probio{margin:8px 0 0;font-size:14px;color:var(--muted)}.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.badge{font-size:12px;font-weight:600;padding:3px 8px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.checks{display:grid;gap:8px}.check{display:flex;gap:8px;align-items:flex-start}.check b{color:var(--good)}
+.photo-picker{display:grid;gap:10px}.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.photo-thumb{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;background:var(--tint);border:1px solid var(--line)}.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block}.photo-thumb button{position:absolute;right:5px;top:5px;width:30px;height:30px;border:0;border-radius:50%;background:rgba(0,0,0,.72);color:#fff;font-weight:800;cursor:pointer}.photo-strip{display:flex;gap:8px;overflow:auto;margin:10px 0 2px;scroll-snap-type:x proximity}.photo-strip img{width:112px;height:86px;object-fit:cover;border-radius:10px;border:1px solid var(--line);flex:none;scroll-snap-align:start}.photo-strip.detail img{width:168px;height:126px}.uploadbox{display:block;border:1.5px dashed var(--line);background:var(--surface);border-radius:14px;padding:16px;text-align:center;cursor:pointer;font-weight:600}.uploadbox input{position:absolute;opacity:0;pointer-events:none}
+
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin:16px 0}
+.chat h2{font-size:18px;margin-bottom:12px}
+.msgs{display:flex;flex-direction:column;gap:8px;max-height:300px;overflow:auto;margin-bottom:12px}
+.msgs p{margin:0}
+.m{max-width:82%;padding:8px 12px;border-radius:14px;font-size:15px;overflow-wrap:anywhere}
+.m.ben{align-self:flex-end;background:var(--petrol);color:var(--petrol-ink)}
+.m.usta{align-self:flex-start;background:var(--tint)}
+.send{display:flex;gap:8px}
+.rate{margin:16px 0;text-align:center}
+.rate p{margin:0 0 4px;color:var(--muted)}
+.star{font-size:34px;background:none;border:0;color:var(--amber);cursor:pointer;padding:2px 4px;line-height:1}
+
+.tabs{display:flex;gap:6px;margin:18px 0 8px}
+.tabs .chip{min-height:40px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:600;font-size:15px;z-index:10;max-width:90%;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">UstaTeklif<i></i></div>
+    <div class="hdr-r" id="hdr-r" hidden>
+      <div class="seg" role="group" aria-label="Kullanıcı türü">
+        <button data-a="role" data-v="musteri" aria-pressed="true">Müşteri</button>
+        <button data-a="role" data-v="usta" aria-pressed="false">Usta</button>
+      </div>
+      <button class="notifbtn" id="notifbtn" data-a="notifications" aria-label="Bildirimler">🔔<span class="notifbadge" id="notifbadge" hidden>0</span></button>
+      <button class="avatar" id="avatar" data-a="account" aria-label="Hesabım">K</button>
+    </div>
+  </header>
+  <main id="app"></main>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const tl=n=>Number(n).toLocaleString('tr-TR')+' ₺';
+
+const KAT={
+  boya:{ad:'Boya & Badana',ikon:'🎨',grup:'Ev & Tadilat',sorunlar:['İç cephe boya','Dış cephe boya','Tek oda boya','Tavan boya','Duvar kağıdı sökme / uygulama','Alçı / sıva tamiri','Rutubet sonrası boya']},
+  tesisat:{ad:'Su Tesisatı',ikon:'🚰',grup:'Ev & Tadilat',sorunlar:['Su kaçağı','Tıkanıklık açma','Musluk / batarya','Rezervuar arızası','Lavabo / klozet montajı','Petek / tesisat işi','Kombi bağlantısı']},
+  elektrik:{ad:'Elektrik',ikon:'⚡',grup:'Ev & Tadilat',sorunlar:['Sigorta atıyor','Priz / anahtar','Avize / aydınlatma montajı','Kısa devre','Elektrik tesisatı','Pano / sayaç','Diafon / zil']},
+  mobilya:{ad:'Mobilya & Montaj',ikon:'🪑',grup:'Ev & Tadilat',sorunlar:['Mobilya montajı','Dolap montajı','Mutfak dolabı','Kapı / menteşe tamiri','Raf / TV ünitesi montajı','Mobilya tamiri','Özel ölçü mobilya']},
+  fayans:{ad:'Fayans & Seramik',ikon:'🧱',grup:'Ev & Tadilat',sorunlar:['Fayans döşeme','Seramik döşeme','Derz yenileme','Kırık fayans değişimi','Banyo tadilatı','Mutfak tezgah arası']},
+  klima:{ad:'Klima',ikon:'❄️',grup:'Teknik Servis',sorunlar:['Soğutmuyor / ısıtmıyor','Su damlatıyor','Garip ses yapıyor','Açılmıyor','Gaz dolumu','Yıllık bakım / temizlik','Montaj / demontaj']},
+  beyaz:{ad:'Beyaz Eşya',ikon:'🧺',grup:'Teknik Servis',sorunlar:['Çamaşır makinesi','Bulaşık makinesi','Buzdolabı','Fırın / ocak','Kurutma makinesi','Derin dondurucu']},
+  kombi:{ad:'Kombi & Isıtma',ikon:'🔥',grup:'Teknik Servis',sorunlar:['Kombi arızası','Kombi bakımı','Petek temizliği','Petek ısınmıyor','Termostat montajı','Kombi montajı / değişimi']},
+  elektronik:{ad:'TV & Elektronik',ikon:'📺',grup:'Teknik Servis',sorunlar:['TV arızası','TV duvar montajı','Uydu / anten','İnternet kablolama','Güvenlik kamerası','Modem / ağ kurulumu']},
+  lastik:{ad:'Lastik & Jant',ikon:'🛞',grup:'Oto & Yol',sorunlar:['Patlak / delik','Lastik değişimi','Rot balans','Sübap değişimi','Mevsimlik lastik takma','Jant düzeltme','Yerinde lastik hizmeti']},
+  oto:{ad:'Oto Servis',ikon:'🚗',grup:'Oto & Yol',sorunlar:['Periyodik bakım','Akü değişimi','Fren bakımı','Yağ / filtre değişimi','Arıza tespiti','Oto elektrik','Yol yardım']},
+  temizlik:{ad:'Temizlik',ikon:'🧹',grup:'Ev & Yaşam',sorunlar:['Ev temizliği','Boş ev temizliği','İnşaat sonrası temizlik','Ofis temizliği','Koltuk yıkama','Halı yıkama','Cam temizliği']},
+  nakliyat:{ad:'Nakliyat',ikon:'🚚',grup:'Ev & Yaşam',sorunlar:['Evden eve nakliyat','Parça eşya taşıma','Şehirler arası taşıma','Ofis taşıma','Eşya paketleme','Eşya depolama']},
+  bahce:{ad:'Bahçe & Peyzaj',ikon:'🌿',grup:'Ev & Yaşam',sorunlar:['Bahçe bakımı','Çim biçme','Ağaç budama','Peyzaj düzenleme','Sulama sistemi','Bahçe temizliği']},
+  diger:{ad:'Diğer Hizmet',ikon:'🛠️',grup:'Diğer',sorunlar:['Montaj / kurulum','Tamir / bakım','Taşıma','Temizlik','Tadilat','Keşif / danışma','Diğer']}
+};
+const ILLER=["Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Isparta", "Mersin", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce"];
+const SURE=['Bugün, 2 saat içinde','Bugün akşam','Yarın','2-3 gün içinde'];
+const ZAMAN=['Bugün','Yarın','Bu hafta'];
+
+/* ---------- bağlantı ---------- */
+function readCfg(){
+  const c=window.USTATEKLIF_CONFIG||{};
+  let url=c.SUPABASE_URL,key=c.SUPABASE_KEY;
+  if(!url||!key){try{const s=JSON.parse(localStorage.getItem('ut_cfg')||'null');if(s){url=s.url;key=s.key}}catch(e){}}
+  return {url,key};
+}
+const cfg=readCfg();
+let sb=null;
+if(cfg.url&&cfg.key&&window.supabase){
+  try{sb=window.supabase.createClient(cfg.url,cfg.key,{auth:{persistSession:true,autoRefreshToken:true}})}catch(e){console.error(e)}
+}
+
+/* ---------- durum ---------- */
+const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
+  draft:null,quoteFor:null,q:null,tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
+  authMode:'in',authErr:'',authInfo:'',auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
+const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},notifications:[],blocks:[],sig:'',qMine:undefined});
+let D=emptyD();
+
+const uid=()=>S.user&&S.user.id;
+const qsOf=id=>Object.values(D.quotes).filter(q=>q.listing_id===id);
+const prof=id=>D.profiles[id]||{name:'Kullanıcı',title:'',bio:'',services:[],service_areas:[],service_city:'',service_districts:[],created_at:null,phone_verified:false,identity_verified:false,account_status:'active'};
+const stat=id=>D.stats[id]||{jobs:0,rating:null};
+const csv=s=>String(s||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,12);
+const initials=n=>String(n||'U').trim().charAt(0).toLocaleUpperCase('tr-TR');
+function proCard(id){const p=prof(id),st=stat(id),sv=p.services||[],ar=(p.service_districts&&p.service_districts.length?p.service_districts:p.service_areas)||[];const complete=!!(p.bio&&sv.length&&p.service_city);const loc=p.service_city?[p.service_city,...ar.slice(0,3)]:ar.slice(0,3);const trust=(p.phone_verified?'<span class="badge">✓ Telefon doğrulandı</span>':'')+(p.identity_verified?'<span class="badge">✓ Kimlik doğrulandı</span>':'');const safety=id!==uid()?`<div class="foot"><button class="link" data-a="reportUser" data-v="${id}">Şikâyet et</button><button class="link" data-a="blockUser" data-v="${id}">Engelle</button></div>`:'';return `<div class="procard"><div class="protop"><div class="proavatar">${esc(initials(p.name))}</div><div><strong>${esc(p.name)}</strong><div class="muted small">${esc(p.title||'Servis ve tamir')}</div></div></div>${p.bio?`<p class="probio">${esc(p.bio)}</p>`:''}<div class="badges">${st.rating!=null?`<span class="badge">★ ${Number(st.rating).toFixed(1)} · ${st.jobs} iş</span>`:`<span class="badge">Yeni usta</span>`}${trust}${sv.slice(0,4).map(x=>`<span class="badge">${esc(x)}</span>`).join('')}${loc.map(x=>`<span class="badge">📍 ${esc(x)}</span>`).join('')}${complete?'<span class="badge">✓ Profil tamamlandı</span>':''}</div>${safety}</div>`}
+const myQuote=id=>Object.values(D.quotes).find(q=>q.listing_id===id&&q.pro===uid());
+const chosenQ=l=>l.chosen_quote?D.quotes[l.chosen_quote]:null;
+function photoStrip(id,detail=false){const a=D.photos[id]||[];return a.length?`<div class="photo-strip ${detail?'detail':''}">${a.map(x=>`<img src="${esc(x.url)}" alt="İlan fotoğrafı" loading="lazy">`).join('')}</div>`:''}
+function ago(t){
+  const m=Math.floor((Date.now()-new Date(t).getTime())/60000);
+  if(m<1)return 'şimdi';if(m<60)return m+' dk önce';
+  const h=Math.floor(m/60);if(h<24)return h+' sa önce';
+  return Math.floor(h/24)+' gün önce';
+}
+const canPub=d=>d&&d.kat&&d.sorunlar.length&&d.city&&d.district.trim().length>1&&d.neighborhood.trim().length>1;
+const norm=s=>String(s||'').trim().toLocaleLowerCase('tr-TR');
+const locText=l=>[l.neighborhood,l.district,l.city].filter(Boolean).join(', ')||l.area||'Konum belirtilmedi';
+function locationMatch(l,p){if(!p||!p.service_city)return true;if(norm(l.city)!==norm(p.service_city))return false;const ds=p.service_districts||[];return !ds.length||ds.some(x=>norm(x)===norm(l.district));}
+
+let tt;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),3400)}
+
+function authMsg(e){
+  const m=(e&&e.message||'').toLowerCase();
+  if(m.includes('invalid login'))return 'E-posta veya şifre hatalı.';
+  if(m.includes('already registered')||m.includes('already been registered'))return 'Bu e-posta ile zaten kayıt var. Giriş yapmayı dene.';
+  if(m.includes('not confirmed'))return 'E-postanı doğrulaman gerekiyor. Gelen kutunu kontrol et.';
+  if(m.includes('rate limit')||m.includes('too many'))return 'Çok fazla deneme yapıldı. Biraz bekleyip tekrar dene.';
+  if(m.includes('fetch')||m.includes('network'))return 'Sunucuya ulaşılamadı. İnternetini ve bağlantı ayarını kontrol et.';
+  return 'İşlem yapılamadı. Bilgileri kontrol edip tekrar dene.';
+}
+function errMsg(e){
+  const m=(e&&e.message||'').toLowerCase();
+  if(e&&e.code==='23505')return 'Bu ilana zaten teklif verdin.';
+  if(m.includes('fetch')||m.includes('network'))return 'Bağlantı yok gibi görünüyor. İnternetini kontrol et.';
+  if(m.includes('row-level security')||m.includes('permission'))return 'Bu işlem için yetkin yok.';
+  return 'Bir sorun oluştu. Tekrar dene.';
+}
+
+/* ---------- veri ---------- */
+async function refresh(){
+  const me=uid();if(!sb||!me)return false;
+  const chk=r=>{if(r.error)throw r.error;return r.data||[]};
+  const [mine,open,myq]=await Promise.all([
+    sb.from('listings').select('*').eq('owner',me).order('created_at',{ascending:false}).then(chk),
+    sb.from('listings').select('*').eq('status','open').neq('owner',me).order('created_at',{ascending:false}).limit(100).then(chk),
+    sb.from('quotes').select('*').eq('pro',me).then(chk)
+  ]);
+  const nr=await sb.from('notifications').select('*').eq('user_id',me).order('created_at',{ascending:false}).limit(50);
+  const notifications=chk(nr);
+  const br=await sb.from('user_blocks').select('blocked_id').eq('blocker_id',me);
+  const blocks=chk(br).map(x=>x.blocked_id);
+  const mineIds=mine.map(l=>l.id);
+  const known=new Set([...mine,...open].map(l=>l.id));
+  const extraIds=[...new Set(myq.map(q=>q.listing_id))].filter(i=>!known.has(i));
+  const openIds=open.map(l=>l.id);
+  const [qMine,extra,cnt]=await Promise.all([
+    mineIds.length?sb.from('quotes').select('*').in('listing_id',mineIds).then(chk):[],
+    extraIds.length?sb.from('listings').select('*').in('id',extraIds).then(chk):[],
+    openIds.length?sb.from('quote_counts').select('*').in('listing_id',openIds).then(chk):[]
+  ]);
+  const listings={};[...mine,...open,...extra].forEach(l=>{listings[l.id]=l});
+  const quotes={};[...qMine,...myq].forEach(q=>{quotes[q.id]=q});
+  const counts={};cnt.forEach(c=>{counts[c.listing_id]=c.n});
+  const pids=new Set([me]);
+  Object.values(quotes).forEach(q=>pids.add(q.pro));
+  Object.values(listings).forEach(l=>pids.add(l.owner));
+  const ids=[...pids];
+  const partyIds=Object.values(listings).filter(l=>l.status!=='open'&&(l.owner===me||(quotes[l.chosen_quote]&&quotes[l.chosen_quote].pro===me))).map(l=>l.id);
+  const listingIds=Object.keys(listings).map(Number);
+  const [pr,st,ms,ph]=await Promise.all([
+    sb.from('profiles').select('id,name,title,bio,services,service_areas,service_city,service_districts,phone_verified,identity_verified,account_status,created_at').in('id',ids).then(chk),
+    sb.from('pro_stats').select('*').in('pro_id',ids).then(chk),
+    partyIds.length?sb.from('messages').select('*').in('listing_id',partyIds).order('created_at').then(chk):[],
+    listingIds.length?sb.from('listing_photos').select('id,listing_id,path,sort_order').in('listing_id',listingIds).order('sort_order').then(chk):[]
+  ]);
+  const photos={};
+  if(ph.length){
+    const signed=await Promise.all(ph.map(async x=>{const r=await sb.storage.from('listing-photos').createSignedUrl(x.path,3600);return {...x,url:r.data&&r.data.signedUrl||''}}));
+    signed.filter(x=>x.url).forEach(x=>{(photos[x.listing_id]=photos[x.listing_id]||[]).push(x)});
+  }
+  const profiles={};pr.forEach(p=>{profiles[p.id]=p});
+  const stats={};st.forEach(s=>{stats[s.pro_id]=s});
+  const msgs={};ms.forEach(m=>{(msgs[m.listing_id]=msgs[m.listing_id]||[]).push(m)});
+  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
+  const changed=sig!==D.sig;
+  if(D.qMine!==undefined&&qMine.length>D.qMine)toast('Yeni teklif geldi');
+  D={listings,mine,open,quotes,counts,profiles,stats,msgs,photos,notifications,blocks,sig,qMine:qMine.length};
+  if(profiles[me])S.profile=profiles[me];
+  return changed;
+}
+async function boot(){
+  S.loading=true;render();
+  try{await refresh();const ar=await sb.rpc('is_admin');S.isAdmin=!ar.error&&ar.data===true}catch(e){console.error(e);toast(errMsg(e))}
+  S.loading=false;render();subscribe();
+}
+let kickT;
+function kick(){
+  clearTimeout(kickT);
+  kickT=setTimeout(async()=>{
+    if(!S.user||S.busy)return;
+    try{if(await refresh())render()}catch(e){console.error(e)}
+  },400);
+}
+let chan=null;
+function subscribe(){
+  if(!sb||!S.user)return;
+  try{
+    if(chan)sb.removeChannel(chan);
+    chan=sb.channel('ut-live')
+      .on('postgres_changes',{event:'*',schema:'public',table:'listings'},kick)
+      .on('postgres_changes',{event:'*',schema:'public',table:'quotes'},kick)
+      .on('postgres_changes',{event:'*',schema:'public',table:'messages'},kick)
+      .on('postgres_changes',{event:'*',schema:'public',table:'notifications',filter:`user_id=eq.${uid()}`},kick)
+      .subscribe();
+  }catch(e){console.error(e)}
+}
+function unsubscribe(){try{if(chan&&sb)sb.removeChannel(chan)}catch(e){}chan=null}
+
+/* ---------- görünümler ---------- */
+function pillMine(l){
+  const n=qsOf(l.id).length;
+  if(l.status==='done')return '<span class="pill">Tamamlandı</span>';
+  if(l.status==='chosen')return '<span class="pill good">Usta seçildi</span>';
+  return n?`<span class="pill amber">${n} teklif geldi</span>`:'<span class="pill"><span class="dot sm"></span>Teklif bekleniyor</span>';
+}
+function ticket(l,o={}){
+  const k=KAT[l.category]||{ad:'Diğer',ikon:'🛠️'};
+  const title=esc((l.problems||[]).join(', '));
+  return `<article class="ticket">
+    <div class="stub"><span class="ico" aria-hidden="true">${k.ikon}</span><span class="kn">${esc(k.ad)}</span></div>
+    <div class="tbody">
+      <h3>${o.act?`<button class="stretch" data-a="${o.act}" data-v="${l.id}">${title}</button>`:title}</h3>
+      ${l.note?`<p class="note">${esc(l.note)}</p>`:''}
+      ${photoStrip(l.id)}
+      <div class="meta"><span>📍 ${esc(locText(l))}</span><span>🕒 ${esc(l.when_text)}</span><span>${ago(l.created_at)}</span>${o.pill||''}</div>
+      ${o.extra||''}
+    </div></article>`;
+}
+function chatBox(l,partner,canSend){
+  const ms=D.msgs[l.id]||[];
+  return `<section class="chat"><h2>${esc(partner)} ile mesajlaş</h2>
+    <div class="msgs" id="msgs">${ms.length?ms.map(m=>`<div class="m ${m.sender===uid()?'ben':'usta'}">${esc(m.body)}</div>`).join(''):'<p class="muted small">Henüz mesaj yok. İlk mesajı sen yaz.</p>'}</div>`+
+    (canSend?`<div class="send"><input class="in" id="chat-input" placeholder="Mesaj yaz" autocomplete="off" maxlength="1000"><button class="btn sm" data-a="send">Gönder</button></div>`:'')+`</section>`;
+}
+
+function vSetup(){
+  return `<div class="pagehead"><h1>Bağlantı ayarı</h1></div>
+  <p class="lede">Uygulama henüz veritabanına bağlı değil. Supabase proje adresini ve genel (anon veya publishable) anahtarını gir.</p>
+  <div class="field two">
+    <div><label class="lb" for="s-url">Proje adresi</label><input class="in" id="s-url" inputmode="url" autocapitalize="off" autocomplete="off" placeholder="https://xxxx.supabase.co" value="${esc(S.cfgDraft.url)}"></div>
+    <div><label class="lb" for="s-key">Genel anahtar</label><input class="in" id="s-key" autocapitalize="off" autocomplete="off" placeholder="eyJ... veya sb_publishable_..." value="${esc(S.cfgDraft.key)}"></div>
+  </div>
+  <button class="btn block" data-a="saveCfg">Kaydet</button>
+  <p class="muted small">Gizli (service_role veya secret) anahtarı asla girme.</p>`;
+}
+function vAuth(){
+  const up=S.authMode==='up';
+  return `<div class="pagehead"><h1>${up?'Kayıt ol':'Giriş yap'}</h1></div>
+  <p class="lede">İlan aç, teklif al veya usta olarak teklif ver.</p>
+  <div class="field two">
+    ${up?`<div><label class="lb" for="au-name">Adın</label><input class="in" id="au-name" autocomplete="name" value="${esc(S.auth.name)}"></div>`:''}
+    <div><label class="lb" for="au-email">E-posta</label><input class="in" id="au-email" type="email" inputmode="email" autocapitalize="off" autocomplete="email" value="${esc(S.auth.email)}"></div>
+    <div><label class="lb" for="au-pass">Şifre</label><input class="in" id="au-pass" type="password" autocomplete="${up?'new-password':'current-password'}" placeholder="En az 6 karakter" value="${esc(S.auth.pass)}"></div>
+  </div>
+  ${S.authErr?`<div class="err" role="alert">${esc(S.authErr)}</div>`:''}
+  ${S.authInfo?`<div class="info">${esc(S.authInfo)}</div>`:''}
+  <button class="btn block" data-a="authGo">${up?'Kayıt ol':'Giriş yap'}</button>
+  <button class="link" data-a="authMode">${up?'Hesabın var mı? Giriş yap':'Hesabın yok mu? Kayıt ol'}</button>`;
+}
+function vAccount(){
+  return `<button class="link" data-a="closeAcct">Geri</button>
+  <div class="pagehead"><h1>Hesabım</h1></div>
+  <p class="lede">${esc(S.user.email||'')}</p>
+  <div class="field two">
+    <div><label class="lb" for="ac-name">Adın / işletme adın</label><input class="in" id="ac-name" maxlength="80" value="${esc(S.acct.name)}"></div>
+    <div><label class="lb" for="ac-title">Kısa uzmanlık başlığı</label><input class="in" id="ac-title" maxlength="100" placeholder="Örn. Klima ve soğutma ustası" value="${esc(S.acct.title)}"></div>
+    <div><label class="lb" for="ac-services">Verdiğin hizmetler</label><input class="in" id="ac-services" maxlength="300" placeholder="Klima bakımı, klima montajı, gaz dolumu" value="${esc(S.acct.services)}"><p class="muted small">Virgülle ayır.</p></div>
+    <div><label class="lb" for="ac-city">Hizmet verdiğin il</label><select class="in" id="ac-city"><option value="">İl seç</option>${ILLER.map(x=>`<option value="${esc(x)}" ${S.acct.city===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
+    <div><label class="lb" for="ac-districts">Hizmet verdiğin ilçeler</label><input class="in" id="ac-districts" maxlength="400" placeholder="Seyhan, Çukurova, Yüreğir" value="${esc(S.acct.districts)}"><p class="muted small">Virgülle ayır. Boş bırakırsan seçtiğin ilin tüm ilçeleri kabul edilir.</p></div>
+    <div><label class="lb" for="ac-bio">Kendini ve hizmetini tanıt</label><textarea class="in" id="ac-bio" maxlength="600" placeholder="Deneyimin, çalışma şeklin ve müşterinin bilmesini istediğin noktalar...">${esc(S.acct.bio)}</textarea></div>
+  </div>
+  <div class="field"><h2>Güven & doğrulama</h2><div class="checks"><div class="check"><b>${(S.profile||{}).phone_verified?'✓':'i'}</b><span>Telefon: ${(S.profile||{}).phone_verified?'doğrulandı':'henüz doğrulanmadı'}. Supabase Auth telefon doğrulaması tamamlanınca durum otomatik eşitlenebilir.</span></div><div class="check"><b>${(S.profile||{}).identity_verified?'✓':'i'}</b><span>Kimlik: ${(S.profile||{}).identity_verified?'doğrulandı':'henüz doğrulanmadı'}. Bu rozet yalnızca yönetici tarafından verilebilir.</span></div><div class="check"><b>✓</b><span>Tamamlanan işler ve müşteri puanı sistem tarafından otomatik hesaplanır.</span></div></div><button class="btn ghost sm" data-a="syncVerify">Doğrulama durumunu yenile</button></div>
+  ${S.isAdmin?'<button class="btn block ghost" style="margin-bottom:12px" data-a="admin">Yönetici paneli</button>':''}<button class="btn block" data-a="saveAcct">Profili kaydet</button>
+  <button class="btn block ghost" style="margin-top:12px" data-a="logout">Çıkış yap</button>
+  <p class="muted small" style="margin-top:24px">Uygulama gibi kullanmak için tarayıcı menüsünden "Ana ekrana ekle" seçeneğini kullan.</p>`;
+}
+
+/* müşteri */
+function vList(){
+  return `<div class="pagehead"><h1>İlanların</h1><button class="btn" data-a="newIlan">Yeni ilan aç</button></div>
+  <p class="lede">Sorununu seç, ustalardan teklif al.</p>`+
+  (D.mine.length?D.mine.map(l=>ticket(l,{act:'open',pill:pillMine(l)})).join(''):'<div class="empty">Henüz ilanın yok. Yeni ilan açarak başlayabilirsin.</div>');
+}
+function vNew(){
+  const d=S.draft,q=S.catSearch.trim().toLocaleLowerCase('tr-TR');
+  const entries=Object.entries(KAT).filter(([k,v])=>!q||v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q)));
+  const groups=[...new Set(entries.map(([,v])=>v.grup))];
+  const cats=groups.map(g=>`<div class="catgroup"><h3>${esc(g)}</h3><div class="cats">${entries.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="cat" data-a="pickKat" data-v="${k}" aria-pressed="${d.kat===k}"><span class="ico" aria-hidden="true">${v.ikon}</span>${v.ad}</button>`).join('')}</div></div>`).join('');
+  const sorun=d.kat?`<div class="field"><h2>Hangi hizmete ihtiyacın var?</h2><p class="hint">Birden fazla seçebilirsin.</p>
+    <div class="chips">${KAT[d.kat].sorunlar.map(s=>`<button class="chip" data-a="toggleSorun" data-v="${esc(s)}" aria-pressed="${d.sorunlar.includes(s)}">${esc(s)}</button>`).join('')}</div></div>`:'';
+  return `<button class="link" data-a="back">İlanlarıma dön</button>
+  <div class="pagehead"><h1>Yeni ilan</h1></div>
+  <div class="field"><h2>Ne için hizmet arıyorsun?</h2><p class="hint">Kategori veya hizmet adıyla ara.</p>
+    <input class="in" id="cat-search" value="${esc(S.catSearch)}" placeholder="Örn. boya, su kaçağı, lastik..." autocomplete="off">
+    <div class="catresults">${cats||'<div class="empty">Aramana uygun hizmet bulunamadı.</div>'}</div></div>
+  ${sorun}
+  <div class="field"><label class="lb" for="d-not">Eklemek istediğin bir not var mı?</label>
+    <textarea class="in" id="d-not" maxlength="500" placeholder="Cihazın yaşı, ne zamandır olduğu, varsa hata kodu...">${esc(d.not)}</textarea></div>
+  <div class="field"><h2>Fotoğraf ekle</h2><p class="hint">Ustanın işi daha doğru değerlendirmesi için en fazla 5 fotoğraf ekleyebilirsin. Fotoğraf başına en fazla 8 MB.</p>
+    <div class="photo-picker"><label class="uploadbox" for="d-photos">📷 Fotoğraf seç<input id="d-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
+    ${d.photos&&d.photos.length?`<div class="photo-grid">${d.photos.map((x,i)=>`<div class="photo-thumb"><img src="${esc(x.preview)}" alt="Seçilen fotoğraf ${i+1}"><button type="button" data-a="removePhoto" data-v="${i}" aria-label="Fotoğrafı kaldır">×</button></div>`).join('')}</div>`:''}</div></div>
+  <div class="field"><h2>Hizmet konumu</h2><p class="hint">Ustaları doğru bölgeyle eşleştirmek için konumu yapılandırılmış seç.</p><div class="field two">
+    <div><label class="lb" for="d-city">İl</label><select class="in" id="d-city"><option value="">İl seç</option>${ILLER.map(x=>`<option value="${esc(x)}" ${d.city===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
+    <div><label class="lb" for="d-district">İlçe</label><input class="in" id="d-district" maxlength="80" value="${esc(d.district)}" placeholder="Örn. Çukurova" autocomplete="address-level2"></div>
+    <div><label class="lb" for="d-neighborhood">Mahalle</label><input class="in" id="d-neighborhood" maxlength="100" value="${esc(d.neighborhood)}" placeholder="Örn. Güzelyalı" autocomplete="address-level3"></div>
+    <div><span class="lb">Ne zaman gelsin?</span><div class="chips">${ZAMAN.map(z=>`<button class="chip" data-a="zaman" data-v="${z}" aria-pressed="${d.zaman===z}">${z}</button>`).join('')}</div></div>
+  </div></div>
+  <button class="btn block" id="pub" data-a="publish" ${canPub(d)?'':'disabled'}>İlanı yayınla</button>`;
+}
+function vDetail(){
+  const l=D.listings[S.sel];
+  if(!l){S.view='list';return vList()}
+  const all=qsOf(l.id),n=all.length;
+  let h=`<button class="link" data-a="back">İlanlarıma dön</button>`+ticket(l,{pill:pillMine(l)});
+  h+=`<div class="row"><h2>Gelen teklifler<span class="count">${n}</span></h2>`+
+    (l.status==='open'&&n>1?`<div class="seg small" role="group" aria-label="Sırala"><button data-a="sort" data-v="fiyat" aria-pressed="${S.sort==='fiyat'}">En ucuz</button><button data-a="sort" data-v="puan" aria-pressed="${S.sort==='puan'}">En yüksek puan</button></div>`:'')+`</div>`;
+  if(!n)h+='<div class="wait"><span class="dot"></span>Ustalar ilanını inceliyor. Teklifler gelince burada görünecek.</div>';
+  const rt=q=>Number(stat(q.pro).rating)||0;
+  const rest=all.filter(q=>q.id!==l.chosen_quote).sort(S.sort==='puan'?(a,b)=>rt(b)-rt(a):(a,b)=>a.price-b.price);
+  const ch=chosenQ(l);
+  h+=(ch?[ch,...rest]:rest).map(q=>{
+    const chosen=l.chosen_quote===q.id,dim=l.chosen_quote&&!chosen;
+    const p=prof(q.pro),s=stat(q.pro);
+    const rating=s.rating!=null?`<span class="star-i">★</span> ${Number(s.rating).toFixed(1)} <span class="muted">(${s.jobs} iş)</span>`:'<span class="muted">Yeni usta, henüz puanı yok</span>';
+    return `<article class="quote ${chosen?'chosen':''} ${dim?'dim':''}">
+      <div class="qhead"><div><h3>${esc(p.name)}</h3><p class="sub">${esc(p.title||'Servis ve tamir')}</p><p class="rating">${rating}</p></div>
+      <div class="pr"><div class="price">${tl(q.price)}</div><div class="muted small">${esc(q.eta)}</div></div></div>
+      ${q.note?`<p class="qnote">${esc(q.note)}</p>`:''}
+      ${proCard(q.pro)}
+      ${chosen?'<span class="pill good">Seçildi</span>':(l.status==='open'?`<button class="btn block" data-a="pick" data-v="${q.id}">Bu teklifi seç</button>`:'')}
+    </article>`;
+  }).join('');
+  if(ch){
+    h+=chatBox(l,prof(ch.pro).name,l.status==='chosen');
+    if(l.status==='chosen')h+=`<div class="rate"><p>İş bittiyse ustayı puanla</p><div>${[1,2,3,4,5].map(i=>`<button class="star" data-a="rate" data-v="${i}" aria-label="${i} yıldız">★</button>`).join('')}</div></div>`;
+    else h+=`<p class="rate"><span class="pill good">Tamamlandı. Puanın: ${'★'.repeat(l.rating||0)}${'☆'.repeat(5-(l.rating||0))}</span></p>`;
+  }
+  return h;
+}
+
+/* usta */
+function vUsta(){
+  const tabs=`<div class="tabs"><button class="chip" data-a="tab" data-v="acik" aria-pressed="${S.tab==='acik'}">Açık ilanlar</button><button class="chip" data-a="tab" data-v="teklifler" aria-pressed="${S.tab==='teklifler'}">Tekliflerim</button></div>`;
+  let h=`<div class="pagehead"><h1>${S.tab==='acik'?'Açık ilanlar':'Tekliflerim'}</h1></div><p class="lede">Usta olarak bakıyorsun. Konum profilin doluysa uygun bölgedeki işler öne çıkar.</p>`+tabs;
+  if(S.tab==='acik'){
+    h+=`<div class="chips"><button class="chip" data-a="filter" data-v="hepsi" aria-pressed="${S.filter==='hepsi'}">Hepsi</button>`+
+      Object.entries(KAT).map(([k,v])=>`<button class="chip" data-a="filter" data-v="${k}" aria-pressed="${S.filter===k}">${v.ad}</button>`).join('')+`</div>`;
+    const pp=S.profile||{};const list=D.open.filter(l=>!D.blocks.includes(l.owner)&&(S.filter==='hepsi'||l.category===S.filter)&&locationMatch(l,pp));
+    h+=list.length?list.map(l=>{
+      const my=myQuote(l.id);
+      const extra=`<div class="foot"><span class="muted small">${D.counts[l.id]||0} teklif var</span>`+
+        (my?`<span class="pill good">Teklifin: ${tl(my.price)}</span>`:`<button class="btn sm" data-a="quote" data-v="${l.id}">Teklif ver</button>`)+`</div>`;
+      return ticket(l,{extra});
+    }).join(''):'<div class="empty">Şu an açık ilan yok. Yeni ilanlar geldikçe burada görünür.</div>';
+  }else{
+    const mine=Object.values(D.quotes).filter(q=>q.pro===uid()).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    const items=mine.map(q=>({q,l:D.listings[q.listing_id]})).filter(x=>x.l);
+    h+=items.length?items.map(({q,l})=>{
+      let st='<span class="pill amber">Müşteri karar veriyor</span>',act=null;
+      if(l.chosen_quote===q.id){st=l.status==='done'?'<span class="pill">Tamamlandı</span>':'<span class="pill good">Müşteri seni seçti</span>';act='openPro'}
+      else if(l.status!=='open')st='<span class="pill">Başka usta seçildi</span>';
+      return ticket(l,{act,extra:`<div class="foot"><span><strong>${tl(q.price)}</strong> <span class="muted small">${esc(q.eta)}</span></span>${st}</div>`});
+    }).join(''):'<div class="empty">Henüz teklif vermedin. Açık ilanlardan birini seçip teklif verebilirsin.</div>';
+  }
+  return h;
+}
+function vProDetail(){
+  const l=D.listings[S.sel];
+  if(!l){S.view='list';return vUsta()}
+  const q=chosenQ(l);
+  let h=`<button class="link" data-a="back">Tekliflerime dön</button>`+ticket(l,{pill:l.status==='done'?'<span class="pill">Tamamlandı</span>':'<span class="pill good">Seçildin</span>'});
+  if(q)h+=`<p class="lede">Teklifin: <strong>${tl(q.price)}</strong>, ${esc(q.eta)}</p>`;
+  h+=chatBox(l,prof(l.owner).name,l.status==='chosen');
+  if(l.status==='done')h+=`<p class="rate"><span class="pill good">Müşteri puanı: ${'★'.repeat(l.rating||0)}${'☆'.repeat(5-(l.rating||0))}</span></p>`;
+  return h;
+}
+function vQuote(){
+  const l=D.listings[S.quoteFor];
+  if(!l){S.quoteFor=null;return vUsta()}
+  return `<button class="link" data-a="cancelQuote">İlanlara dön</button>
+  <div class="pagehead"><h1>Teklif ver</h1></div>`+ticket(l)+
+  `<div class="field two"><div><label class="lb" for="q-fiyat">Fiyatın (₺)</label>
+    <input class="in" id="q-fiyat" inputmode="numeric" autocomplete="off" placeholder="Örn. 900" value="${esc(S.q.fiyat)}"></div>
+   <div><label class="lb" for="q-sure">Ne zaman gelebilirsin?</label>
+    <select class="in" id="q-sure">${SURE.map(s=>`<option ${S.q.sure===s?'selected':''}>${s}</option>`).join('')}</select></div>
+   <div><label class="lb" for="q-not">Teklif notu</label>
+    <textarea class="in" id="q-not" maxlength="500" placeholder="Neyi kapsıyor? Parça ücreti dahil mi?">${esc(S.q.not)}</textarea></div></div>
+  <button class="btn block" id="qsend" data-a="sendQuote" disabled>Teklifi gönder</button>`;
+}
+
+function vAdmin(){
+  const a=S.admin||{stats:{},reports:[],profiles:{}};const st=a.stats||{};
+  const cards=`<div class="field two"><div class="check"><b>${st.users||0}</b><span>Kullanıcı</span></div><div class="check"><b>${st.open_reports||0}</b><span>Açık şikâyet</span></div><div class="check"><b>${st.open_listings||0}</b><span>Açık ilan</span></div><div class="check"><b>${st.done_listings||0}</b><span>Tamamlanan iş</span></div></div>`;
+  const rows=(a.reports||[]).map(r=>{const p=a.profiles[r.reported_id]||{};return `<article class="quote"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${esc(r.status)} · ${ago(r.created_at)}</p></div><span class="pill ${p.account_status==='suspended'?'amber':''}">${p.account_status==='suspended'?'Askıda':'Aktif'}</span></div><p class="qnote">${esc(r.reason)}</p><div class="badges">${p.phone_verified?'<span class="badge">✓ Telefon</span>':''}${p.identity_verified?'<span class="badge">✓ Kimlik</span>':''}</div><div class="foot"><button class="btn ghost sm" data-a="adminReport" data-v="${r.id}|${r.status==='resolved'?'open':'resolved'}">${r.status==='resolved'?'Yeniden aç':'Çözüldü yap'}</button><button class="btn ghost sm" data-a="adminIdentity" data-v="${r.reported_id}|${p.identity_verified?'0':'1'}">${p.identity_verified?'Kimlik onayını kaldır':'Kimliği onayla'}</button><button class="btn sm" data-a="adminSuspend" data-v="${r.reported_id}|${p.account_status==='suspended'?'active':'suspended'}">${p.account_status==='suspended'?'Hesabı aç':'Hesabı askıya al'}</button></div></article>`}).join('');
+  return `<button class="link" data-a="closeAdmin">Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}<h2>Şikâyetler</h2>${rows||'<div class="empty">Şikâyet kaydı yok.</div>'}`;
+}
+async function loadAdmin(){
+  if(!S.isAdmin)return;const [dr,rr]=await Promise.all([sb.rpc('admin_dashboard'),sb.from('reports').select('*').order('created_at',{ascending:false}).limit(100)]);if(dr.error)throw dr.error;if(rr.error)throw rr.error;const ids=[...new Set((rr.data||[]).flatMap(x=>[x.reported_id,x.reporter_id]))];let ps=[];if(ids.length){const pr=await sb.from('profiles').select('id,name,phone_verified,identity_verified,account_status').in('id',ids);if(pr.error)throw pr.error;ps=pr.data||[]}const profiles={};ps.forEach(x=>profiles[x.id]=x);S.admin={stats:dr.data||{},reports:rr.data||[],profiles};
+}
+function vNotifications(){
+  const ns=D.notifications||[], unread=ns.filter(n=>!n.read_at).length;
+  return `<button class="link" data-a="closeNotifications">Ana sayfaya dön</button><div class="pagehead"><div><h1>Bildirimler</h1><p class="lede">Teklifler, mesajlar ve bölgendeki yeni işler burada.</p></div>${unread?'<button class="btn ghost sm" data-a="readAll">Tümünü okundu yap</button>':''}</div>`+
+    (ns.length?ns.map(n=>`<article class="notif ${n.read_at?'':'unread'}"><h3>${esc(n.title)}</h3><p>${esc(n.body)}</p><div class="notifmeta"><span class="muted small">${ago(n.created_at)}</span>${n.listing_id?`<button class="link" data-a="openNotification" data-v="${n.id}">İlana git</button>`:''}</div></article>`).join(''):'<div class="empty">Henüz bildirimin yok.</div>');
+}
+
+/* ---------- çizim ---------- */
+function upd(){
+  const p=$('#pub');if(p&&S.draft)p.disabled=!canPub(S.draft);
+  const q=$('#qsend');if(q&&S.q)q.disabled=!(parseInt(S.q.fiyat,10)>0);
+}
+function render(){
+  const act=document.activeElement;
+  const id=act&&act.id,val=act&&act.value;let ss=null;
+  try{ss=act.selectionStart}catch(e){}
+  let h;
+  if(S.setup)h=vSetup();
+  else if(S.loading)h='<div class="wait"><span class="dot"></span>Yükleniyor...</div>';
+  else if(!S.user)h=vAuth();
+  else if((S.profile||{}).account_status==='suspended')h='<div class="pagehead"><h1>Hesap askıya alındı</h1></div><p class="lede">Bu hesap moderasyon nedeniyle geçici olarak kısıtlandı.</p><button class="btn ghost" data-a="logout">Çıkış yap</button>';
+  else if(S.page==='account')h=vAccount();
+  else if(S.page==='notifications')h=vNotifications();
+  else if(S.page==='admin')h=vAdmin();
+  else if(S.role==='musteri')h=S.view==='new'?vNew():S.view==='detail'?vDetail():vList();
+  else h=S.quoteFor?vQuote():S.view==='prodetail'?vProDetail():vUsta();
+  $('#app').innerHTML=h;
+  const signed=!!(S.user&&!S.setup&&!S.loading);
+  $('#hdr-r').hidden=!signed;
+  if(signed){
+    document.querySelectorAll('.seg button[data-a="role"]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.role)));
+    const nm=(S.profile&&S.profile.name)||S.user.email||'K';
+    $('#avatar').textContent=nm.trim().charAt(0).toLocaleUpperCase('tr-TR')||'K';
+    const nb=(D.notifications||[]).filter(n=>!n.read_at).length,b=$('#notifbadge');if(b){b.hidden=!nb;b.textContent=nb>99?'99+':String(nb)}
+  }
+  if(id){const n=document.getElementById(id);if(n){if(val!==undefined&&n.tagName!=='BUTTON')n.value=val;n.focus({preventScroll:true});try{if(ss!=null)n.setSelectionRange(ss,ss)}catch(e){}}}
+  const m=$('#msgs');if(m)m.scrollTop=m.scrollHeight;
+  upd();
+}
+
+/* ---------- eylemler ---------- */
+const NET=new Set(['authGo','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
+const KEEP=new Set(['pickKat','toggleSorun','zaman','sort','filter','pick','send','rate','tab']);
+const A={
+  role(v){S.role=v;S.view='list';S.page='main';S.tab='acik';S.quoteFor=null;S.sel=null},
+  notifications(){S.page='notifications';},
+  closeNotifications(){S.page='main';},
+  async readAll(){const r=await sb.from('notifications').update({read_at:new Date().toISOString()}).eq('user_id',uid()).is('read_at',null);if(r.error)throw r.error;await refresh();},
+  async openNotification(v){const n=(D.notifications||[]).find(x=>String(x.id)===String(v));if(!n)return;if(!n.read_at)await sb.from('notifications').update({read_at:new Date().toISOString()}).eq('id',n.id).eq('user_id',uid());S.page='main';if(n.listing_id){const l=D.listings[n.listing_id];if(l){S.role=l.owner===uid()?'musteri':'usta';S.sel=n.listing_id;S.view=l.owner===uid()?'detail':'prodetail';}}await refresh();},
+  account(){const p=S.profile||{};S.page='account';S.acct={name:p.name||'',title:p.title||'',bio:p.bio||'',services:(p.services||[]).join(', '),areas:(p.service_areas||[]).join(', '),city:p.service_city||'',districts:(p.service_districts||[]).join(', ')}},
+  closeAcct(){S.page='main'},
+  async admin(){if(!S.isAdmin)return;await loadAdmin();S.page='admin'},
+  closeAdmin(){S.page='account'},
+  async adminRefresh(){await loadAdmin();},
+  async adminReport(v){const [id,status]=String(v).split('|');const r=await sb.from('reports').update({status}).eq('id',id);if(r.error)throw r.error;await loadAdmin();toast('Şikâyet durumu güncellendi.');},
+  async adminIdentity(v){const [id,x]=String(v).split('|');const r=await sb.rpc('admin_set_identity',{p_user_id:id,p_verified:x==='1'});if(r.error)throw r.error;await loadAdmin();await refresh();toast('Kimlik doğrulama durumu güncellendi.');},
+  async adminSuspend(v){const [id,status]=String(v).split('|');if(status==='suspended'&&!confirm('Bu hesabı askıya almak istiyor musun?'))return;const r=await sb.rpc('admin_set_account_status',{p_user_id:id,p_status:status});if(r.error)throw r.error;await loadAdmin();await refresh();toast(status==='suspended'?'Hesap askıya alındı.':'Hesap yeniden açıldı.');},
+  async syncVerify(){const r=await sb.rpc('sync_my_verification');if(r.error)throw r.error;await refresh();toast('Doğrulama durumu yenilendi.');},
+  async reportUser(v){if(!v||v===uid())return;const reason=prompt('Şikâyet nedenini kısaca yaz (en az 10 karakter):');if(!reason)return;if(reason.trim().length<10){toast('Şikâyet nedeni en az 10 karakter olmalı.');return}const r=await sb.from('reports').insert({reporter_id:uid(),reported_id:v,reason:reason.trim().slice(0,500)});if(r.error)throw r.error;toast('Şikâyetin alındı. İnceleme kaydına eklendi.');},
+  async blockUser(v){if(!v||v===uid())return;if(!confirm('Bu kullanıcıyı engellemek istiyor musun? Birbirinizle yeni etkileşim kuramayacaksınız.'))return;const r=await sb.from('user_blocks').insert({blocker_id:uid(),blocked_id:v});if(r.error&&r.error.code!=='23505')throw r.error;await refresh();toast('Kullanıcı engellendi.');},
+  async saveAcct(){
+    const n=S.acct.name.trim(),t=S.acct.title.trim(),bio=S.acct.bio.trim(),services=csv(S.acct.services),areas=csv(S.acct.areas),city=S.acct.city,districts=csv(S.acct.districts);
+    if(n.length<2){toast('Adın en az 2 harf olmalı.');return}
+    const r=await sb.from('profiles').update({name:n,title:t||'Servis ve tamir',bio,services,service_areas:areas,service_city:city,service_districts:districts}).eq('id',uid());
+    if(r.error)throw r.error;
+    await refresh();S.page='main';toast('Profilin kaydedildi.');
+  },
+  async logout(){await sb.auth.signOut()},
+  saveCfg(){
+    const url=S.cfgDraft.url.trim().replace(/\/+$/,''),key=S.cfgDraft.key.trim();
+    if(!/^https:\/\/.+/.test(url)||key.length<20){toast('Adres ve anahtarı kontrol et.');return}
+    try{localStorage.setItem('ut_cfg',JSON.stringify({url,key}))}catch(e){}
+    location.reload();
+  },
+  authMode(){S.authMode=S.authMode==='in'?'up':'in';S.authErr='';S.authInfo=''},
+  async authGo(){
+    const {name,email,pass}=S.auth;S.authErr='';S.authInfo='';
+    if(!/^\S+@\S+\.\S+$/.test(email.trim())){S.authErr='Geçerli bir e-posta gir.';return}
+    if(pass.length<6){S.authErr='Şifre en az 6 karakter olmalı.';return}
+    if(S.authMode==='up'){
+      if(name.trim().length<2){S.authErr='Adını yaz.';return}
+      const r=await sb.auth.signUp({email:email.trim(),password:pass,options:{data:{name:name.trim()}}});
+      if(r.error){S.authErr=authMsg(r.error);return}
+      if(!r.data.session){S.authInfo='Kayıt oluşturuldu. E-postana gelen doğrulama bağlantısına tıkla, sonra giriş yap.';S.authMode='in';S.auth.pass=''}
+    }else{
+      const r=await sb.auth.signInWithPassword({email:email.trim(),password:pass});
+      if(r.error){S.authErr=authMsg(r.error);return}
+    }
+  },
+  newIlan(){S.draft={kat:null,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
+  pickKat(v){if(S.draft.kat!==v){S.draft.kat=v;S.draft.sorunlar=[]}},
+  toggleSorun(v){const s=S.draft.sorunlar,x=s.indexOf(v);x<0?s.push(v):s.splice(x,1)},
+  zaman(v){S.draft.zaman=v},
+  removePhoto(v){const i=+v,x=S.draft.photos[i];if(x){URL.revokeObjectURL(x.preview);S.draft.photos.splice(i,1)}},
+  async publish(){
+    const d=S.draft;if(!canPub(d))return;
+    const r=await sb.from('listings').insert({owner:uid(),category:d.kat,problems:d.sorunlar,note:d.not.trim(),area:[d.neighborhood,d.district,d.city].filter(Boolean).join(', '),city:d.city,district:d.district.trim(),neighborhood:d.neighborhood.trim(),when_text:d.zaman}).select().single();
+    if(r.error)throw r.error;
+    let photoFailed=false;
+    const files=(d.photos||[]).map(x=>x.file);
+    for(let i=0;i<files.length;i++){
+      const f=files[i],ext=(f.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+      const path=`${uid()}/${r.data.id}/${crypto.randomUUID()}.${ext}`;
+      const up=await sb.storage.from('listing-photos').upload(path,f,{contentType:f.type,upsert:false});
+      if(up.error){photoFailed=true;continue}
+      const pr=await sb.from('listing_photos').insert({listing_id:r.data.id,owner:uid(),path,sort_order:i});
+      if(pr.error){photoFailed=true;await sb.storage.from('listing-photos').remove([path])}
+    }
+    (d.photos||[]).forEach(x=>URL.revokeObjectURL(x.preview));
+    await refresh();
+    S.sel=r.data.id;S.view='detail';S.sort='fiyat';S.draft=null;
+    toast(photoFailed?'İlan yayınlandı; bazı fotoğraflar yüklenemedi.':'İlanın yayında. Ustalar teklif verdikçe burada görünecek.');
+  },
+  open(v){S.sel=+v;S.view='detail'},
+  openPro(v){S.sel=+v;S.view='prodetail'},
+  back(){S.view='list';S.draft=null;S.sel=null},
+  sort(v){S.sort=v},
+  async pick(v){
+    const l=D.listings[S.sel];
+    const r=await sb.rpc('choose_quote',{p_listing_id:l.id,p_quote_id:+v});
+    if(r.error)throw r.error;
+    toast('Usta seçildi. Artık mesajlaşabilirsin.');
+    await refresh();
+  },
+  async send(){
+    const inp=$('#chat-input'),t=inp&&inp.value.trim();if(!t)return;
+    inp.value='';
+    const r=await sb.from('messages').insert({listing_id:S.sel,sender:uid(),body:t});
+    if(r.error){inp.value=t;throw r.error}
+    await refresh();
+  },
+  async rate(v){
+    const r=await sb.rpc('complete_listing',{p_listing_id:S.sel,p_rating:+v});
+    if(r.error)throw r.error;
+    toast('Puanın kaydedildi.');await refresh();
+  },
+  tab(v){S.tab=v},
+  filter(v){S.filter=v},
+  quote(v){S.quoteFor=+v;S.q={fiyat:'',sure:SURE[0],not:''}},
+  cancelQuote(){S.quoteFor=null;S.q=null},
+  async sendQuote(){
+    const f=parseInt(S.q.fiyat,10);if(!(f>0))return;
+    const r=await sb.from('quotes').insert({listing_id:S.quoteFor,pro:uid(),price:f,eta:S.q.sure,note:S.q.not.trim()});
+    if(r.error)throw r.error;
+    S.quoteFor=null;S.q=null;toast('Teklifin gönderildi.');await refresh();
+  }
+};
+async function run(a,v,el){
+  const f=A[a];if(!f)return;
+  if(NET.has(a)){if(S.busy)return;S.busy=true;document.body.style.cursor='progress'}
+  try{await f(v)}catch(e){console.error(e);toast(a==='authGo'?authMsg(e):errMsg(e))}
+  finally{S.busy=false;document.body.style.cursor=''}
+  render();
+  if(a==='send'){const c=$('#chat-input');c&&c.focus({preventScroll:true})}
+  else if(KEEP.has(a)&&el){
+    const again=[...document.querySelectorAll('[data-a]')].find(x=>x.dataset.a===a&&x.dataset.v===v);
+    if(again)again.focus({preventScroll:true});
+  }
+  if(!KEEP.has(a))window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el)run(el.dataset.a,el.dataset.v,el)});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter'||e.target.tagName==='TEXTAREA')return;
+  const id=e.target.id;
+  if(id==='chat-input'){e.preventDefault();run('send')}
+  else if(id==='au-name'||id==='au-email'||id==='au-pass'){e.preventDefault();run('authGo')}
+});
+const F={
+  'd-not':v=>{S.draft.not=v},'d-city':v=>{S.draft.city=v},'d-district':v=>{S.draft.district=v},'d-neighborhood':v=>{S.draft.neighborhood=v},'cat-search':v=>{S.catSearch=v},
+  'q-fiyat':v=>{S.q.fiyat=v.replace(/\D/g,'')},'q-sure':v=>{S.q.sure=v},'q-not':v=>{S.q.not=v},
+  'au-name':v=>{S.auth.name=v},'au-email':v=>{S.auth.email=v},'au-pass':v=>{S.auth.pass=v},
+  'ac-name':v=>{S.acct.name=v},'ac-title':v=>{S.acct.title=v},'ac-bio':v=>{S.acct.bio=v},'ac-services':v=>{S.acct.services=v},'ac-city':v=>{S.acct.city=v},'ac-districts':v=>{S.acct.districts=v},
+  's-url':v=>{S.cfgDraft.url=v},'s-key':v=>{S.cfgDraft.key=v}
+};
+function onField(e){const f=F[e.target.id];if(f){f(e.target.value);upd()}}
+document.addEventListener('input',onField);
+document.addEventListener('change',e=>{
+  if(e.target.id==='d-photos'&&S.draft){
+    const good=[...e.target.files].filter(f=>['image/jpeg','image/png','image/webp'].includes(f.type)&&f.size<=8*1024*1024);
+    const room=Math.max(0,5-(S.draft.photos||[]).length),chosen=good.slice(0,room);
+    if(!S.draft.photos)S.draft.photos=[];
+    chosen.forEach(file=>S.draft.photos.push({file,preview:URL.createObjectURL(file)}));
+    if([...e.target.files].some(f=>f.size>8*1024*1024))toast('8 MB üzerindeki fotoğraflar eklenmedi.');
+    else if(good.length>room)toast('En fazla 5 fotoğraf ekleyebilirsin.');
+    render();return;
+  }
+  onField(e);
+});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)kick()});
+setInterval(()=>{if(!document.hidden&&S.user)kick()},30000);
+
+/* ---------- başlangıç ---------- */
+if(sb){
+  sb.auth.onAuthStateChange((ev,session)=>{
+    const u=session&&session.user||null;
+    if(u){
+      if(!S.user||S.user.id!==u.id){
+        S.user=u;S.page='main';S.view='list';S.role='musteri';S.auth.pass='';S.authErr='';S.authInfo='';
+        setTimeout(boot,0);
+      }
+    }else{
+      if(S.user){S.user=null;S.profile=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:''};S.authErr='';S.authInfo=''}
+      S.loading=false;
+      setTimeout(render,0);
+    }
+  });
+}else{render()}
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+})();
+</script>
+</body>
+</html>
