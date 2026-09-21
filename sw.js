@@ -1,5 +1,5 @@
 // Basit çevrimdışı kabuk: önce ağ, olmazsa önbellek.
-const CACHE = 'ustateklif-v9';
+const CACHE = 'tamisim-v10';
 const SHELL = ['./', 'index.html', 'config.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', (e) => {
