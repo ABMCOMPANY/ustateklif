@@ -252,7 +252,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
   draft:null,quoteFor:null,q:null,tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
-  authMode:'in',authErr:'',authInfo:'',auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
+  authMode:'in',authErr:'',authInfo:'',recovery:false,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
 const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
@@ -426,7 +426,7 @@ function vAuth(){
   ${S.authErr?`<div class="err" role="alert">${esc(S.authErr)}</div>`:''}
   ${S.authInfo?`<div class="info">${esc(S.authInfo)}</div>`:''}
   <button class="btn block" data-a="authGo">${up?'Kayıt ol':'Giriş yap'}</button>
-  <button class="link" data-a="authMode">${up?'Hesabın var mı? Giriş yap':'Hesabın yok mu? Kayıt ol'}</button>`;
+  <button class="link" data-a="authMode">${up?'Hesabın var mı? Giriş yap':'Hesabın yok mu? Kayıt ol'}</button>${!up?'<button class="link" data-a="forgotPass">Şifremi unuttum</button>':''}`;
 }
 function vAccount(){
   return `<button class="link" data-a="closeAcct">Geri</button>
@@ -582,6 +582,7 @@ function render(){
   let h;
   if(S.setup)h=vSetup();
   else if(S.loading)h='<div class="wait"><span class="dot"></span>Yükleniyor...</div>';
+  else if(S.recovery)h='<div class="pagehead"><h1>Yeni şifre belirle</h1></div><p class="lede">Hesabın için yeni bir şifre oluştur.</p><div class="field"><label class="lb" for="au-pass">Yeni şifre</label><input class="in" id="au-pass" type="password" autocomplete="new-password" placeholder="En az 8 karakter" value="'+esc(S.auth.pass)+'"></div>'+(S.authErr?'<div class="err" role="alert">'+esc(S.authErr)+'</div>':'')+'<button class="btn block" data-a="setNewPass">Şifreyi güncelle</button>';
   else if(!S.user)h=vAuth();
   else if((S.profile||{}).account_status==='suspended')h='<div class="pagehead"><h1>Hesap askıya alındı</h1></div><p class="lede">Bu hesap moderasyon nedeniyle geçici olarak kısıtlandı.</p><button class="btn ghost" data-a="logout">Çıkış yap</button>';
   else if(S.page==='account')h=vAccount();
@@ -605,7 +606,7 @@ function render(){
 }
 
 /* ---------- eylemler ---------- */
-const NET=new Set(['authGo','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
+const NET=new Set(['authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
 const KEEP=new Set(['pickKat','toggleSorun','zaman','sort','filter','pick','send','rate','tab']);
 const A={
   navHome(){S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null},
@@ -641,6 +642,21 @@ const A={
     location.reload();
   },
   authMode(){S.authMode=S.authMode==='in'?'up':'in';S.authErr='';S.authInfo=''},
+  async forgotPass(){
+    const email=S.auth.email.trim();S.authErr='';S.authInfo='';
+    if(!/^\S+@\S+\.\S+$/.test(email)){S.authErr='Önce e-posta adresini yaz.';return}
+    const redirectTo=location.origin+location.pathname;
+    const r=await sb.auth.resetPasswordForEmail(email,{redirectTo});
+    if(r.error){S.authErr=authMsg(r.error);return}
+    S.authInfo='Şifre yenileme bağlantısı gönderildi. E-postandaki bağlantıyı aç.';
+  },
+  async setNewPass(){
+    const pass=S.auth.pass;
+    if(pass.length<8){S.authErr='Yeni şifre en az 8 karakter olmalı.';return}
+    const r=await sb.auth.updateUser({password:pass});
+    if(r.error){S.authErr=authMsg(r.error);return}
+    S.recovery=false;S.auth.pass='';S.authErr='';S.authInfo='Şifren güncellendi.';
+  },
   async authGo(){
     const {name,email,pass}=S.auth;S.authErr='';S.authInfo='';
     if(!/^\S+@\S+\.\S+$/.test(email.trim())){S.authErr='Geçerli bir e-posta gir.';return}
@@ -761,6 +777,7 @@ setInterval(()=>{if(!document.hidden&&S.user)kick()},30000);
 /* ---------- başlangıç ---------- */
 if(sb){
   sb.auth.onAuthStateChange((ev,session)=>{
+    if(ev==='PASSWORD_RECOVERY'){S.recovery=true;S.loading=false;S.authErr='';S.authInfo='';setTimeout(render,0);return}
     const u=session&&session.user||null;
     if(u){
       if(!S.user||S.user.id!==u.id){
