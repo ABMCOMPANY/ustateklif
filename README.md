@@ -1,5 +1,7 @@
-# UstaTeklif
+# Tamİşim
 
-Hizmet arayan müşteriler ile ustaları buluşturan pazar yeri uygulaması.
+İhtiyacın neyse, uzmanı burada.
 
-Bu depo UstaTeklif v9 kaynak kodunu içerir.
+Hizmet arayan müşteriler ile hizmet uzmanlarını teklif, mesajlaşma, doğrulama ve değerlendirme akışında buluşturan mobil öncelikli hizmet pazaryeri.
+
+Bu depo Tamİşim web/PWA kaynak kodunu içerir. Proje Supabase altyapısını kullanır.
