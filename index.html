@@ -17,7 +17,9 @@
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
-  --bg:#F7F9FC; --surface:#FFFFFF; --ink:#102A56; --muted:#6B7C93; --line:#E2E8F0;\n  --petrol:#1457D9; --petrol-ink:#FFFFFF; --stub:#1457D9; --tint:#EAF2FF; --focus:#1457D9;\n  --amber:#2F80ED; --amber-ink:#FFFFFF; --amber-bg:#EAF2FF; --amber-fg:#1457D9;
+  --bg:#F7F9FC; --surface:#FFFFFF; --ink:#102A56; --muted:#6B7C93; --line:#E2E8F0;
+  --petrol:#1457D9; --petrol-ink:#FFFFFF; --stub:#1457D9; --tint:#EAF2FF; --focus:#1457D9;
+  --amber:#2F80ED; --amber-ink:#FFFFFF; --amber-bg:#EAF2FF; --amber-fg:#1457D9;
   --good:#1D7448; --good-bg:#D9F0E4; --err-bg:#FBE0D8; --err-fg:#7A2410;
 }
 @media (prefers-color-scheme: dark){
@@ -590,7 +592,7 @@ function render(){
   $('#app').innerHTML=h;
   const signed=!!(S.user&&!S.setup&&!S.loading);
   $('#hdr-r').hidden=!signed;
-  const bn=$('#bottomnav');if(bn){const topLevel=signed&&S.page!=='admin'&&((S.page==='main'&&((S.role==='musteri'&&S.view==='list')||(S.role==='usta'&&S.view==='list'&&!S.quoteFor)))||S.page==='notifications'||S.page==='account');bn.hidden=!topLevel;document.body.classList.toggle('has-bottomnav',topLevel);bn.querySelectorAll('button').forEach(x=>x.classList.remove('active'));const active=S.page==='notifications'?'notifications':S.page==='account'?'account':(S.page==='main'&&S.role==='musteri'?'navHome':null);if(active){const x=bn.querySelector(`[data-a="${active}"]`);if(x)x.classList.add('active')}}
+  const bn=$('#bottomnav');if(bn){const topLevel=signed&&S.page!=='admin'&&((S.page==='main'&&((S.role==='musteri'&&S.view==='list')||(S.role==='usta'&&S.view==='list'&&!S.quoteFor)))||S.page==='notifications'||S.page==='account');bn.hidden=!topLevel;document.body.classList.toggle('has-bottomnav',topLevel);bn.querySelectorAll('button').forEach(x=>x.classList.remove('active'));const active=S.page==='notifications'?'notifications':S.page==='account'?'account':(S.page==='main'&&S.role==='musteri'?'navHome':null);if(active){const x=bn.querySelector('[data-a="'+active+'"]');if(x)x.classList.add('active')}}
   if(signed){
     document.querySelectorAll('.seg button[data-a="role"]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.role)));
     const nm=(S.profile&&S.profile.name)||S.user.email||'K';
