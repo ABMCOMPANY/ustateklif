@@ -1,7 +1,7 @@
 {
   "name": "Tamİşim",
   "short_name": "Tamİşim",
-  "description": "Sorununu ilan et, ustalardan teklif al.",
+  "description": "İhtiyacını ilan et, uzmanlardan teklif al ve güvenle karşılaştır.",
   "lang": "tr",
   "start_url": "./",
   "scope": "./",
