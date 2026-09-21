@@ -1,0 +1,23 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tamİşim Güvenlik Testi</title>
+<style>body{font:16px system-ui;background:#0b1418;color:#e7eff2;margin:0;padding:24px}.box{max-width:560px;margin:auto}.card{background:#132026;border:1px solid #25383f;border-radius:16px;padding:18px;margin:14px 0}button{width:100%;padding:15px;border:0;border-radius:12px;font-weight:700;font-size:16px;background:#5cc0d8;color:#06232b}.ok{color:#5ccb98}.bad{color:#ff9b83}.muted{color:#94a7b0}code{word-break:break-word}</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script></head><body><main class="box"><h1>Tamİşim güvenlik testi</h1><p class="muted">Normal oturumunla kritik yetkileri negatif olarak sınar. Test değerleri mevcut değerlerle aynı gönderilir; başarılı olsa bile içerik değiştirmemeyi amaçlar.</p><div class="card" id="who">Oturum kontrol ediliyor…</div><button id="run">Testleri çalıştır</button><div id="out"></div></main>
+<script>
+const cfg=window.USTATEKLIF_CONFIG||{}; const sb=supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_KEY);
+const out=document.getElementById('out'),who=document.getElementById('who');
+function row(name,blocked,detail){const d=document.createElement('div');d.className='card';d.innerHTML='<b>'+name+'</b><p class="'+(blocked?'ok':'bad')+'">'+(blocked?'ENGELLENDİ ✅':'KRİTİK ❌')+'</p><small class="muted"></small>';d.querySelector('small').textContent=detail||'';out.appendChild(d)}
+(async()=>{const {data:{user}}=await sb.auth.getUser();who.textContent=user?'Oturum: '+user.email:'Oturum bulunamadı. Önce ana sitede Uzman B ile giriş yap.'})();
+document.getElementById('run').onclick=async()=>{
+ out.innerHTML=''; const {data:{user},error:ue}=await sb.auth.getUser(); if(ue||!user){row('Oturum',false,'Uzman B oturumu bulunamadı');return}
+ // 1: başka kullanıcının ilanını aynı değerle UPDATE etmeyi dene.
+ const {data:ls,error:le}=await sb.from('listings').select('id,note,owner').neq('owner',user.id).limit(1);
+ if(le||!ls||!ls.length){row('Yabancı ilan testi',true,le?le.message:'Test edilecek yabancı ilan bulunamadı');}
+ else {const l=ls[0]; const {error}=await sb.from('listings').update({note:l.note}).eq('id',l.id); row('Başkasının ilanını UPDATE',!!error,error?error.message:'UPDATE isteği kabul edildi');}
+ // 2: kendi kritik profil doğrulama alanını aynı değerle değiştirmeyi dene.
+ const {data:p,error:pe}=await sb.from('profiles').select('identity_verified').eq('id',user.id).single();
+ if(pe){row('Profil doğrulama testi',true,pe.message)}
+ else {const {error}=await sb.from('profiles').update({identity_verified:!!p.identity_verified}).eq('id',user.id);row('identity_verified UPDATE',!!error,error?error.message:'Kritik kolon UPDATE kabul edildi');}
+ // 3: admin RPC normal kullanıcıdan çağrılamamalı. Aynı kullanıcıya aynı değer göndererek yan etkiyi azalt.
+ const {error:ae}=await sb.rpc('admin_set_identity',{p_user_id:user.id,p_verified:!!(p&&p.identity_verified)});
+ row('Admin kimlik RPC',!!ae,ae?ae.message:'Normal kullanıcı admin RPC çağırabildi');
+};
+</script></body></html>
