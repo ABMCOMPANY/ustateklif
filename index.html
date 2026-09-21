@@ -180,7 +180,7 @@ body{background:linear-gradient(180deg,#fbfdff 0,#f5f8fc 100%);padding-bottom:84
 .stub{background:#1457D9}.pill{background:#EAF2FF;color:#1457D9}.pill.amber{background:#EAF2FF;color:#1457D9}
 .pill.good{background:#E8F7F0;color:#147A50}.star-i,.star{color:#2F80ED}
 .seg{border:0;box-shadow:0 4px 14px rgba(16,42,86,.06)}.seg button[aria-pressed="true"]{background:#1457D9;color:#fff}
-.field:first-of-type h2::before{content:"İhtiyacın neyse, uzmanı burada.";display:block;font:800 28px/1.15 "Bricolage Grotesque",Figtree,sans-serif;color:#102A56;letter-spacing:-.035em;margin-bottom:10px}
+
 @media(max-width:420px){.seg button{padding:7px 10px}.pagehead h1{font-size:29px}.cats{grid-template-columns:repeat(3,1fr)}}
 
 </style>
@@ -192,7 +192,7 @@ body{background:linear-gradient(180deg,#fbfdff 0,#f5f8fc 100%);padding-bottom:84
     <div class="hdr-r" id="hdr-r" hidden>
       <div class="seg" role="group" aria-label="Kullanıcı türü">
         <button data-a="role" data-v="musteri" aria-pressed="true">Müşteri</button>
-        <button data-a="role" data-v="usta" aria-pressed="false">Usta</button>
+        <button data-a="role" data-v="usta" aria-pressed="false">Uzman</button>
       </div>
       <button class="notifbtn" id="notifbtn" data-a="notifications" aria-label="Bildirimler">🔔<span class="notifbadge" id="notifbadge" hidden>0</span></button>
       <button class="avatar" id="avatar" data-a="account" aria-label="Hesabım">K</button>
@@ -378,7 +378,7 @@ function unsubscribe(){try{if(chan&&sb)sb.removeChannel(chan)}catch(e){}chan=nul
 function pillMine(l){
   const n=qsOf(l.id).length;
   if(l.status==='done')return '<span class="pill">Tamamlandı</span>';
-  if(l.status==='chosen')return '<span class="pill good">Usta seçildi</span>';
+  if(l.status==='chosen')return '<span class="pill good">Uzman seçildi</span>';
   return n?`<span class="pill amber">${n} teklif geldi</span>`:'<span class="pill"><span class="dot sm"></span>Teklif bekleniyor</span>';
 }
 function ticket(l,o={}){
@@ -414,7 +414,7 @@ function vSetup(){
 function vAuth(){
   const up=S.authMode==='up';
   return `<div class="pagehead"><h1>${up?'Kayıt ol':'Giriş yap'}</h1></div>
-  <p class="lede">İlan aç, teklif al veya usta olarak teklif ver.</p>
+  <p class="lede">İlan aç, teklif al veya uzman olarak teklif ver.</p>
   <div class="field two">
     ${up?`<div><label class="lb" for="au-name">Adın</label><input class="in" id="au-name" autocomplete="name" value="${esc(S.auth.name)}"></div>`:''}
     <div><label class="lb" for="au-email">E-posta</label><input class="in" id="au-email" type="email" inputmode="email" autocapitalize="off" autocomplete="email" value="${esc(S.auth.email)}"></div>
@@ -430,7 +430,7 @@ function vAccount(){
   <div class="account-hero"><div class="proavatar">${esc(initials((S.profile||{}).name||'K'))}</div><div><h1>${esc((S.profile||{}).name||'Profilim')}</h1><p>${esc((S.profile||{}).title||S.user.email||'')}</p></div></div>
   <div class="field two">
     <div><label class="lb" for="ac-name">Adın / işletme adın</label><input class="in" id="ac-name" maxlength="80" value="${esc(S.acct.name)}"></div>
-    <div><label class="lb" for="ac-title">Kısa uzmanlık başlığı</label><input class="in" id="ac-title" maxlength="100" placeholder="Örn. Klima ve soğutma ustası" value="${esc(S.acct.title)}"></div>
+    <div><label class="lb" for="ac-title">Kısa uzmanlık başlığı</label><input class="in" id="ac-title" maxlength="100" placeholder="Örn. Klima ve soğutma uzmanı" value="${esc(S.acct.title)}"></div>
     <div><label class="lb" for="ac-services">Verdiğin hizmetler</label><input class="in" id="ac-services" maxlength="300" placeholder="Klima bakımı, klima montajı, gaz dolumu" value="${esc(S.acct.services)}"><p class="muted small">Virgülle ayır.</p></div>
     <div><label class="lb" for="ac-city">Hizmet verdiğin il</label><select class="in" id="ac-city"><option value="">İl seç</option>${ILLER.map(x=>`<option value="${esc(x)}" ${S.acct.city===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
     <div><label class="lb" for="ac-districts">Hizmet verdiğin ilçeler</label><input class="in" id="ac-districts" maxlength="400" placeholder="Seyhan, Çukurova, Yüreğir" value="${esc(S.acct.districts)}"><p class="muted small">Virgülle ayır. Boş bırakırsan seçtiğin ilin tüm ilçeleri kabul edilir.</p></div>
@@ -486,14 +486,14 @@ function vDetail(){
   let h=`<button class="link" data-a="back">İlanlarıma dön</button>`+ticket(l,{pill:pillMine(l)});
   h+=`<div class="row"><h2>Gelen teklifler<span class="count">${n}</span></h2>`+
     (l.status==='open'&&n>1?`<div class="seg small" role="group" aria-label="Sırala"><button data-a="sort" data-v="fiyat" aria-pressed="${S.sort==='fiyat'}">En ucuz</button><button data-a="sort" data-v="puan" aria-pressed="${S.sort==='puan'}">En yüksek puan</button></div>`:'')+`</div>`;
-  if(!n)h+='<div class="wait"><span class="dot"></span>Ustalar ilanını inceliyor. Teklifler gelince burada görünecek.</div>';
+  if(!n)h+='<div class="wait"><span class="dot"></span>Uzmanlar ilanını inceliyor. Teklifler gelince burada görünecek.</div>';
   const rt=q=>Number(stat(q.pro).rating)||0;
   const rest=all.filter(q=>q.id!==l.chosen_quote).sort(S.sort==='puan'?(a,b)=>rt(b)-rt(a):(a,b)=>a.price-b.price);
   const ch=chosenQ(l);
   h+=(ch?[ch,...rest]:rest).map(q=>{
     const chosen=l.chosen_quote===q.id,dim=l.chosen_quote&&!chosen;
     const p=prof(q.pro),s=stat(q.pro);
-    const rating=s.rating!=null?`<span class="star-i">★</span> ${Number(s.rating).toFixed(1)} <span class="muted">(${s.jobs} iş)</span>`:'<span class="muted">Yeni usta, henüz puanı yok</span>';
+    const rating=s.rating!=null?`<span class="star-i">★</span> ${Number(s.rating).toFixed(1)} <span class="muted">(${s.jobs} iş)</span>`:'<span class="muted">Yeni uzman, henüz puanı yok</span>';
     return `<article class="quote ${chosen?'chosen':''} ${dim?'dim':''}">
       <div class="qhead"><div><h3>${esc(p.name)}</h3><p class="sub">${esc(p.title||'Servis ve tamir')}</p><p class="rating">${rating}</p></div>
       <div class="pr"><div class="price">${tl(q.price)}</div><div class="muted small">${esc(q.eta)}</div></div></div>
@@ -504,7 +504,7 @@ function vDetail(){
   }).join('');
   if(ch){
     h+=chatBox(l,prof(ch.pro).name,l.status==='chosen');
-    if(l.status==='chosen')h+=`<div class="rate"><p>İş bittiyse ustayı puanla</p><div>${[1,2,3,4,5].map(i=>`<button class="star" data-a="rate" data-v="${i}" aria-label="${i} yıldız">★</button>`).join('')}</div></div>`;
+    if(l.status==='chosen')h+=`<div class="rate"><p>İş bittiyse uzmanı puanla</p><div>${[1,2,3,4,5].map(i=>`<button class="star" data-a="rate" data-v="${i}" aria-label="${i} yıldız">★</button>`).join('')}</div></div>`;
     else h+=`<p class="rate"><span class="pill good">Tamamlandı. Puanın: ${'★'.repeat(l.rating||0)}${'☆'.repeat(5-(l.rating||0))}</span></p>`;
   }
   return h;
@@ -675,7 +675,7 @@ const A={
     (d.photos||[]).forEach(x=>URL.revokeObjectURL(x.preview));
     await refresh();
     S.sel=r.data.id;S.view='detail';S.sort='fiyat';S.draft=null;
-    toast(photoFailed?'İlan yayınlandı; bazı fotoğraflar yüklenemedi.':'İlanın yayında. Ustalar teklif verdikçe burada görünecek.');
+    toast(photoFailed?'İlan yayınlandı; bazı fotoğraflar yüklenemedi.':'İlanın yayında. Uzmanlar teklif verdikçe burada görünecek.');
   },
   open(v){S.sel=+v;S.view='detail'},
   openPro(v){S.sel=+v;S.view='prodetail'},
@@ -685,7 +685,7 @@ const A={
     const l=D.listings[S.sel];
     const r=await sb.rpc('choose_quote',{p_listing_id:l.id,p_quote_id:+v});
     if(r.error)throw r.error;
-    toast('Usta seçildi. Artık mesajlaşabilirsin.');
+    toast('Uzman seçildi. Artık mesajlaşabilirsin.');
     await refresh();
   },
   async send(){
