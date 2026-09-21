@@ -23,7 +23,7 @@ const {error:ne}=await sb.from('notifications').insert({user_id:user.id,type:'te
 
 // Başka kullanıcının profil doğrulamasını değiştirme.
 const other=foreign[0].owner;const {data:op,error:ope}=await sb.from('profiles').select('identity_verified').eq('id',other).single();
-if(ope)row('Başkasının profilini değiştirme','ok',ope.message);else{const {error}=await sb.from('profiles').update({name:'NEGATIVE SECURITY TEST'}).eq('id',other);row('Başkasının profilini değiştirme',error?'ok':'bad',error?error.message:'UPDATE isteği hata vermedi');}
+if(ope)row('Başkasının profilini değiştirme','ok',ope.message);else{const {data:changed,error}=await sb.from('profiles').update({name:'NEGATIVE SECURITY TEST'}).eq('id',other).select('id');row('Başkasının profilini değiştirme',error||!changed||changed.length===0?'ok':'bad',error?error.message:(!changed||changed.length===0?'RLS nedeniyle 0 satır güncellendi':'Başkasının profil satırı gerçekten güncellendi'));}
 
 // Mesaj okuma: yalnızca seçili iş dışındaki mesajların sızıp sızmadığını kontrol et.
 // RLS yüzünden görünmeyen kayıtlar 0 satır döner; mevcut seçili iş hariç tutulur.
