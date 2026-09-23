@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html id="create-step-2">
 <html lang="tr">
 <head>
 <meta charset="utf-8">
@@ -187,6 +187,7 @@ body{background:linear-gradient(180deg,#fbfdff 0,#f5f8fc 100%);padding-bottom:84
 @media(max-width:420px){.seg button{padding:7px 10px}.pagehead h1{font-size:29px}.cats{grid-template-columns:repeat(3,1fr)}}
 
 
+.create-card{scroll-margin-top:90px}
 /* Tamİşim dark-mode contrast fix */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]) .pro-tabs{background:var(--tint)}
@@ -733,7 +734,7 @@ const A={
   },
   newIlan(){S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.draft={kat:null,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
   quickCat(v){S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.draft={kat:v,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
-  pickKat(v){if(S.draft.kat!==v){S.draft.kat=v;S.draft.sorunlar=[]}},
+  pickKat(v){if(S.draft.kat!==v){S.draft.kat=v;S.draft.sorunlar=[]}setTimeout(()=>{const x=document.getElementById('create-step-2');if(x)x.scrollIntoView({behavior:'smooth',block:'start'})},0)},
   toggleSorun(v){const s=S.draft.sorunlar,x=s.indexOf(v);x<0?s.push(v):s.splice(x,1)},
   zaman(v){S.draft.zaman=v},
   removePhoto(v){const i=+v,x=S.draft.photos[i];if(x){URL.revokeObjectURL(x.preview);S.draft.photos.splice(i,1)}},
