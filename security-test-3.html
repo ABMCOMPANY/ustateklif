@@ -1,0 +1,35 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tamİşim Güvenlik Testi — Paket 3</title>
+<style>body{font:16px system-ui;background:#0b1418;color:#e7eff2;margin:0;padding:24px}.box{max-width:560px;margin:auto}.card{background:#132026;border:1px solid #25383f;border-radius:16px;padding:18px;margin:14px 0}button{width:100%;padding:15px;border:0;border-radius:12px;font-weight:700;font-size:16px;background:#5cc0d8;color:#06232b}.ok{color:#5ccb98}.bad{color:#ff9b83}.skip{color:#f4b31d}.muted{color:#94a7b0}</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script></head><body><main class="box"><h1>Tamİşim güvenlik testi — Paket 3</h1><p class="muted">Uzman B oturumuyla ilan fotoğrafı metadata ve Storage yetkilerini sınar. Test için yalnızca küçük, geçici bir dosya kullanılır; beklenmedik kabul olursa temizleme denenir.</p><div class="card" id="who">Oturum kontrol ediliyor…</div><button id="run">Paket 3'ü çalıştır</button><div id="out"></div></main>
+<script>
+const cfg=window.USTATEKLIF_CONFIG||{},sb=supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_KEY),out=document.getElementById('out'),who=document.getElementById('who');
+function row(name,state,detail){const d=document.createElement('div');d.className='card';const cls=state==='ok'?'ok':state==='skip'?'skip':'bad',txt=state==='ok'?'ENGELLENDİ / GİZLENDİ ✅':state==='skip'?'TEST EDİLEMEDİ ⚠️':'KRİTİK ❌';d.innerHTML='<b>'+name+'</b><p class="'+cls+'">'+txt+'</p><small class="muted"></small>';d.querySelector('small').textContent=detail||'';out.appendChild(d)}
+(async()=>{const {data:{user}}=await sb.auth.getUser();who.textContent=user?'Oturum: '+user.email:'Oturum bulunamadı.'})();
+document.getElementById('run').onclick=async()=>{out.innerHTML='';const {data:{user},error:ue}=await sb.auth.getUser();if(ue||!user){row('Oturum','bad','Uzman B oturumu bulunamadı');return}
+const {data:foreign,error:fe}=await sb.from('listings').select('id,owner,status').neq('owner',user.id).eq('status','open').limit(10);
+if(fe||!foreign?.length){row('Açık yabancı ilan bulma','skip',fe?.message||'Açık yabancı ilan yok');return}
+const l=foreign[0],tag=Date.now(),fakePath=user.id+'/'+l.id+'/negative-'+tag+'.png';
+
+// 1) Metadata owner sahteciliği: owner alanını gerçek ilan sahibine zorla.
+const {data:m1,error:e1}=await sb.from('listing_photos').insert({listing_id:l.id,owner:l.owner,path:'negative-owner-'+tag+'.png',sort_order:0}).select('id');
+row('Başkasının ilanına sahte fotoğraf kaydı',e1?'ok':'bad',e1?e1.message:'INSERT kabul edildi');
+if(!e1&&m1?.length)await sb.from('listing_photos').delete().in('id',m1.map(x=>x.id));
+
+// 2) Kendi owner kimliğiyle yabancı listing_id metadata kaydı.
+const {data:m2,error:e2}=await sb.from('listing_photos').insert({listing_id:l.id,owner:user.id,path:'negative-listing-'+tag+'.png',sort_order:0}).select('id');
+row('Kendi kimliğiyle yabancı ilana metadata',e2?'ok':'bad',e2?e2.message:'INSERT kabul edildi');
+if(!e2&&m2?.length)await sb.from('listing_photos').delete().in('id',m2.map(x=>x.id));
+
+// 3) Storage: kendi UID klasörü altında yabancı listing_id kullan. v10 politikası bunu reddetmeli.
+const blob=new Blob([new Uint8Array([137,80,78,71,13,10,26,10])],{type:'image/png'});
+const {error:e3}=await sb.storage.from('listing-photos').upload(fakePath,blob,{contentType:'image/png',upsert:false});
+row('Yabancı ilan ID ile Storage yükleme',e3?'ok':'bad',e3?e3.message:'Dosya yüklemesi kabul edildi');
+if(!e3)await sb.storage.from('listing-photos').remove([fakePath]);
+
+// 4) Storage: doğrudan başka kullanıcının UID klasörüne yaz.
+const foreignPath=l.owner+'/'+l.id+'/negative-'+tag+'.png';
+const {error:e4}=await sb.storage.from('listing-photos').upload(foreignPath,blob,{contentType:'image/png',upsert:false});
+row('Başkasının Storage klasörüne yükleme',e4?'ok':'bad',e4?e4.message:'Dosya yüklemesi kabul edildi');
+if(!e4)await sb.storage.from('listing-photos').remove([foreignPath]);
+};
+</script></body></html>
