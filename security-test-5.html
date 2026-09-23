@@ -20,7 +20,7 @@ if(chosen) await ins('Askıdayken mesaj gönderme',sb.from('messages').insert({l
 
 const target=foreign?.[0]?.owner;
 if(target){
- await ins('Askıdayken kullanıcı engelleme',sb.from('user_blocks').insert({blocker_id:user.id,blocked_id:target}).select('id'),async d=>{if(d?.length)await sb.from('user_blocks').delete().in('id',d.map(x=>x.id))});
+ await ins('Askıdayken kullanıcı engelleme',sb.from('user_blocks').insert({blocker_id:user.id,blocked_id:target}).select('blocker_id,blocked_id'),async d=>{if(d?.length)await sb.from('user_blocks').delete().eq('blocker_id',user.id).eq('blocked_id',target)});
  await ins('Askıdayken rapor oluşturma',sb.from('reports').insert({reporter_id:user.id,reported_id:target,reason:'NEGATIVE SECURITY TEST'}).select('id'),async d=>{if(d?.length)await sb.from('reports').delete().in('id',d.map(x=>x.id))});
 }else{row('Askıdayken kullanıcı engelleme','skip','Hedef kullanıcı bulunamadı');row('Askıdayken rapor oluşturma','skip','Hedef kullanıcı bulunamadı')}
 
