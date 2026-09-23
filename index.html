@@ -247,6 +247,45 @@ body{background:linear-gradient(180deg,#fbfdff 0,#f5f8fc 100%);padding-bottom:84
 :root[data-theme="dark"] .modern-chat .m.usta{color:var(--ink)}
 :root[data-theme="dark"] .bottomnav{background:rgba(19,32,38,.96);border-color:var(--line)}
 
+
+/* Tamİşim final contrast hardening */
+html{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){color-scheme:dark}
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .create-card h2,
+  :root:not([data-theme="light"]) .create-card h3,
+  :root:not([data-theme="light"]) .create-card label,
+  :root:not([data-theme="light"]) .detail-title,
+  :root:not([data-theme="light"]) .quotes-title,
+  :root:not([data-theme="light"]) .quote-card h3,
+  :root:not([data-theme="light"]) .quote-card strong{color:var(--ink)!important}
+  :root:not([data-theme="light"]) .create-card p,
+  :root:not([data-theme="light"]) .create-card small,
+  :root:not([data-theme="light"]) .detail-meta,
+  :root:not([data-theme="light"]) .quote-card p,
+  :root:not([data-theme="light"]) .quote-card small{color:var(--muted)!important}
+  :root:not([data-theme="light"]) input,
+  :root:not([data-theme="light"]) textarea,
+  :root:not([data-theme="light"]) select{color:var(--ink);background:var(--bg);border-color:var(--line)}
+  :root:not([data-theme="light"]) input::placeholder,
+  :root:not([data-theme="light"]) textarea::placeholder{color:var(--muted)!important;opacity:1}
+  :root:not([data-theme="light"]) .cat,
+  :root:not([data-theme="light"]) .problem{color:#f7fbff!important}
+}
+:root[data-theme="dark"] .create-card h2,
+:root[data-theme="dark"] .create-card h3,
+:root[data-theme="dark"] .create-card label,
+:root[data-theme="dark"] .detail-title,
+:root[data-theme="dark"] .quotes-title,
+:root[data-theme="dark"] .quote-card h3,
+:root[data-theme="dark"] .quote-card strong{color:var(--ink)!important}
+:root[data-theme="dark"] input,:root[data-theme="dark"] textarea,:root[data-theme="dark"] select{color:var(--ink);background:var(--bg);border-color:var(--line)}
+:root[data-theme="dark"] input::placeholder,:root[data-theme="dark"] textarea::placeholder{color:var(--muted)!important;opacity:1}
+:root[data-theme="dark"] .cat,:root[data-theme="dark"] .problem{color:#f7fbff!important}
+
 </style>
 </head>
 <body>
