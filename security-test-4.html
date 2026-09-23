@@ -1,0 +1,39 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tamİşim Güvenlik Testi — Paket 4</title>
+<style>body{font:16px system-ui;background:#0b1418;color:#e7eff2;margin:0;padding:24px}.box{max-width:560px;margin:auto}.card{background:#132026;border:1px solid #25383f;border-radius:16px;padding:18px;margin:14px 0}button{width:100%;padding:15px;border:0;border-radius:12px;font-weight:700;font-size:16px;background:#5cc0d8;color:#06232b}.ok{color:#5ccb98}.bad{color:#ff9b83}.skip{color:#f4b31d}.muted{color:#94a7b0}</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script></head><body><main class="box"><h1>Tamİşim güvenlik testi — Paket 4</h1><p class="muted">Engelleme ve moderasyon yetkilerini sınar. Test, Uzman B'nin A'yı geçici olarak engellemesini kullanır ve sonunda engeli otomatik kaldırır.</p><div class="card" id="who">Oturum kontrol ediliyor…</div><button id="run">Paket 4'ü çalıştır</button><div id="out"></div></main>
+<script>
+const cfg=window.USTATEKLIF_CONFIG||{},sb=supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_KEY),out=document.getElementById('out'),who=document.getElementById('who');
+function row(name,state,detail){const d=document.createElement('div');d.className='card';const cls=state==='ok'?'ok':state==='skip'?'skip':'bad',txt=state==='ok'?'ENGELLENDİ / GİZLENDİ ✅':state==='skip'?'TEST EDİLEMEDİ ⚠️':'KRİTİK ❌';d.innerHTML='<b>'+name+'</b><p class="'+cls+'">'+txt+'</p><small class="muted"></small>';d.querySelector('small').textContent=detail||'';out.appendChild(d)}
+(async()=>{const {data:{user}}=await sb.auth.getUser();who.textContent=user?'Oturum: '+user.email:'Oturum bulunamadı.'})();
+document.getElementById('run').onclick=async()=>{out.innerHTML='';const {data:{user},error:ue}=await sb.auth.getUser();if(ue||!user){row('Oturum','bad','Uzman B oturumu bulunamadı');return}
+const {data:foreign,error:fe}=await sb.from('listings').select('id,owner,status').neq('owner',user.id).limit(30);
+if(fe||!foreign?.length){row('Test kullanıcısı bulma','skip',fe?.message||'Yabancı ilan yok');return}
+const open=foreign.find(x=>x.status==='open'),chosen=foreign.find(x=>x.status==='chosen'),target=(open||chosen||foreign[0]).owner;
+
+// Normal kullanıcının kendini admin RPC ile askıya almaya çalışması reddedilmeli.
+const {error:ae}=await sb.rpc('admin_set_account_status',{p_user_id:user.id,p_status:'suspended'});
+row('Yetkisiz hesap askıya alma RPC',ae?'ok':'bad',ae?ae.message:'Normal kullanıcı admin RPC ile hesap durumunu değiştirebildi');
+
+const {error:be}=await sb.from('user_blocks').insert({blocker_id:user.id,blocked_id:target});
+if(be){row('Geçici engel oluşturma','skip',be.message);return}
+try{
+  // Engellenen kullanıcının ilanı artık okunamamalı.
+  const targetListing=(open||chosen||foreign[0]);
+  const {data:vis,error:ve}=await sb.from('listings').select('id').eq('id',targetListing.id);
+  row('Engellenen kullanıcının ilanını okuma',ve?'ok':(!vis||vis.length===0?'ok':'bad'),ve?ve.message:(!vis||vis.length===0?'İlan RLS nedeniyle görünmedi':'Engellenen kullanıcının ilanı görünmeye devam etti'));
+
+  if(open){
+    const {error:qe}=await sb.from('quotes').insert({listing_id:open.id,pro:user.id,price:987654321,eta:'Güvenlik testi',note:'NEGATIVE SECURITY TEST'});
+    row('Engellenen kullanıcıya teklif gönderme',qe?'ok':'bad',qe?qe.message:'Teklif INSERT kabul edildi');
+  } else row('Engellenen kullanıcıya teklif gönderme','skip','Açık yabancı ilan yok');
+
+  if(chosen){
+    const {error:me}=await sb.from('messages').insert({listing_id:chosen.id,sender:user.id,body:'NEGATIVE SECURITY TEST'});
+    row('Engellenmiş ilişkide mesaj gönderme',me?'ok':'bad',me?me.message:'Mesaj INSERT kabul edildi');
+  } else row('Engellenmiş ilişkide mesaj gönderme','skip','Seçili yabancı ilan yok');
+} finally {
+  const {error:de}=await sb.from('user_blocks').delete().eq('blocker_id',user.id).eq('blocked_id',target);
+  row('Test engelini temizleme',de?'bad':'ok',de?de.message:'Geçici engel kaldırıldı');
+}
+};
+</script></body></html>
