@@ -186,6 +186,66 @@ body{background:linear-gradient(180deg,#fbfdff 0,#f5f8fc 100%);padding-bottom:84
 
 @media(max-width:420px){.seg button{padding:7px 10px}.pagehead h1{font-size:29px}.cats{grid-template-columns:repeat(3,1fr)}}
 
+
+/* Tamİşim dark-mode contrast fix */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .pro-tabs{background:var(--tint)}
+  :root:not([data-theme="light"]) .pro-tabs button{color:var(--muted)}
+  :root:not([data-theme="light"]) .pro-tabs button[aria-pressed="true"]{background:var(--surface);color:var(--petrol);box-shadow:none}
+  :root:not([data-theme="light"]) .pro-section-title h2,
+  :root:not([data-theme="light"]) .quote-head h1,
+  :root:not([data-theme="light"]) .notification-head h1,
+  :root:not([data-theme="light"]) .create-head h1,
+  :root:not([data-theme="light"]) .chathead h2,
+  :root:not([data-theme="light"]) .jobs-empty h3,
+  :root:not([data-theme="light"]) .notif-empty h3,
+  :root:not([data-theme="light"]) .pro-empty h3,
+  :root:not([data-theme="light"]) .notif-title h3,
+  :root:not([data-theme="light"]) .chatempty b{color:var(--ink)}
+  :root:not([data-theme="light"]) .pro-section-title p,
+  :root:not([data-theme="light"]) .quote-head p,
+  :root:not([data-theme="light"]) .notification-head p,
+  :root:not([data-theme="light"]) .create-head p,
+  :root:not([data-theme="light"]) .chathead p,
+  :root:not([data-theme="light"]) .jobs-empty p,
+  :root:not([data-theme="light"]) .notif-empty p,
+  :root:not([data-theme="light"]) .pro-empty p,
+  :root:not([data-theme="light"]) .notif-title span,
+  :root:not([data-theme="light"]) .notif-content p,
+  :root:not([data-theme="light"]) .chatempty,
+  :root:not([data-theme="light"]) .chatclosed,
+  :root:not([data-theme="light"]) .jobcount,
+  :root:not([data-theme="light"]) .pro-job-foot small{color:var(--muted)}
+  :root:not([data-theme="light"]) .notif-card,
+  :root:not([data-theme="light"]) .chathead,
+  :root:not([data-theme="light"]) .modern-send,
+  :root:not([data-theme="light"]) .modern-chat .m.usta,
+  :root:not([data-theme="light"]) .create-card{background:var(--surface);border-color:var(--line)}
+  :root:not([data-theme="light"]) .notif-card.unread{background:var(--tint);border-color:var(--petrol)}
+  :root:not([data-theme="light"]) .modern-chat,
+  :root:not([data-theme="light"]) .modern-chat .msgs{background:var(--bg)}
+  :root:not([data-theme="light"]) .modern-chat .m.usta{color:var(--ink)}
+  :root:not([data-theme="light"]) .modern-send .in,
+  :root:not([data-theme="light"]) .create-card .in{background:var(--bg)}
+  :root:not([data-theme="light"]) .create-card .uploadbox{background:var(--surface);border-color:var(--line);color:var(--petrol)}
+  :root:not([data-theme="light"]) .pro-job-foot,
+  :root:not([data-theme="light"]) .chathead,
+  :root:not([data-theme="light"]) .modern-send,
+  :root:not([data-theme="light"]) .chatclosed{border-color:var(--line)}
+  :root:not([data-theme="light"]) .bottomnav{background:rgba(19,32,38,.96);border-color:var(--line);box-shadow:0 12px 38px rgba(0,0,0,.35)}
+  :root:not([data-theme="light"]) .bottomnav button{color:var(--muted)}
+  :root:not([data-theme="light"]) .bottomnav button.active{color:var(--petrol)}
+  :root:not([data-theme="light"]) .bottomnav button.active:not(.navplus) span{background:var(--tint)}
+}
+:root[data-theme="dark"] .pro-tabs{background:var(--tint)}
+:root[data-theme="dark"] .pro-tabs button{color:var(--muted)}
+:root[data-theme="dark"] .pro-tabs button[aria-pressed="true"]{background:var(--surface);color:var(--petrol);box-shadow:none}
+:root[data-theme="dark"] .pro-section-title h2,:root[data-theme="dark"] .quote-head h1,:root[data-theme="dark"] .notification-head h1,:root[data-theme="dark"] .create-head h1,:root[data-theme="dark"] .chathead h2,:root[data-theme="dark"] .jobs-empty h3,:root[data-theme="dark"] .notif-empty h3,:root[data-theme="dark"] .pro-empty h3,:root[data-theme="dark"] .notif-title h3,:root[data-theme="dark"] .chatempty b{color:var(--ink)}
+:root[data-theme="dark"] .notif-card,:root[data-theme="dark"] .chathead,:root[data-theme="dark"] .modern-send,:root[data-theme="dark"] .modern-chat .m.usta,:root[data-theme="dark"] .create-card{background:var(--surface);border-color:var(--line)}
+:root[data-theme="dark"] .modern-chat,:root[data-theme="dark"] .modern-chat .msgs,:root[data-theme="dark"] .modern-send .in,:root[data-theme="dark"] .create-card .in{background:var(--bg)}
+:root[data-theme="dark"] .modern-chat .m.usta{color:var(--ink)}
+:root[data-theme="dark"] .bottomnav{background:rgba(19,32,38,.96);border-color:var(--line)}
+
 </style>
 </head>
 <body>
