@@ -1,4 +1,4 @@
-<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tamİşim Güvenlik Testi — Paket 7 v17</title><style>body{font:16px system-ui;background:#0b1418;color:#e7eff2;margin:0;padding:24px}.box{max-width:560px;margin:auto}.card{background:#132026;border:1px solid #25383f;border-radius:16px;padding:18px;margin:14px 0}button{width:100%;padding:15px;border:0;border-radius:12px;font-weight:700;font-size:16px;background:#5cc0d8;color:#06232b}.ok{color:#5ccb98}.bad{color:#ff9b83}.skip{color:#f4b31d}.allow{color:#5cc0d8}.muted{color:#94a7b0}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script></head><body><main class="box"><h1>Tamİşim güvenlik testi — Paket 7 v17</h1><p class="muted">Yetkisiz özel veri ile normal açık-ilan fotoğraf erişimini birbirinden ayırır.</p><div class="card" id="who">Oturum kontrol ediliyor…</div><button id="run">Paket 7 v17'yi çalıştır</button><div id="out"></div></main><script>
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tamİşim Güvenlik Testi — Paket 7 v18</title><style>body{font:16px system-ui;background:#0b1418;color:#e7eff2;margin:0;padding:24px}.box{max-width:560px;margin:auto}.card{background:#132026;border:1px solid #25383f;border-radius:16px;padding:18px;margin:14px 0}button{width:100%;padding:15px;border:0;border-radius:12px;font-weight:700;font-size:16px;background:#5cc0d8;color:#06232b}.ok{color:#5ccb98}.bad{color:#ff9b83}.skip{color:#f4b31d}.allow{color:#5cc0d8}.muted{color:#94a7b0}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script></head><body><main class="box"><h1>Tamİşim güvenlik testi — Paket 7 v18</h1><p class="muted">Yetkisiz özel veri ile normal açık-ilan fotoğraf erişimini birbirinden ayırır.</p><div class="card" id="who">Oturum kontrol ediliyor…</div><button id="run">Paket 7 v18'yi çalıştır</button><div id="out"></div></main><script>
 const cfg=window.USTATEKLIF_CONFIG||{},sb=supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_KEY),out=document.getElementById('out'),who=document.getElementById('who');
 function row(n,s,d){const x=document.createElement('div');x.className='card';const map={ok:['ok','ENGELLENDİ / GİZLENDİ ✅'],bad:['bad','KRİTİK ❌'],skip:['skip','TEST EDİLEMEDİ ⚠️'],allow:['allow','BEKLENEN ERİŞİM ✅']},m=map[s];x.innerHTML='<b>'+n+'</b><p class="'+m[0]+'">'+m[1]+'</p><small class="muted"></small>';x.querySelector('small').textContent=d||'';out.appendChild(x)}
 (async()=>{const {data:{user}}=await sb.auth.getUser();who.textContent=user?'Oturum: '+user.email:'Oturum bulunamadı.'})();
@@ -23,5 +23,16 @@ else {const r=await sb.from('listing_photos').select('listing_id,owner,path').in
 // Bunun yerine bilinen yetkisiz listing path'ini doğrudan listelemeyi deneriz.
 if(!unauthorizedIds.length) row('Yetkisiz Storage klasörü listeleme','skip','Test edilecek yetkisiz ilan ID yok');
 else {let bad=0,detail='';for(const lid of unauthorizedIds.slice(0,10)){const owner=(closed||[]).find(x=>x.id===lid)?.owner;if(!owner)continue;const r=await sb.storage.from('listing-photos').list(owner+'/'+lid,{limit:10});if(r.error){detail=r.error.message;continue}if(r.data?.length)bad+=r.data.length}row('Yetkisiz Storage klasörü listeleme',bad?'bad':'ok',bad?bad+' yetkisiz nesne görüldü':(detail||'Yetkisiz klasörde nesne görünmedi'))}
+// v17: Sunucu tarafı fotoğraf yetki kararını doğrudan doğrula.
+let denied=0, allowed=0, checked=0;
+const {data:allForeign}=await sb.from('listings').select('id,owner,status').neq('owner',user.id).limit(100);
+for(const l of allForeign||[]){
+  const {data:can,error:e}=await sb.rpc('can_view_listing_photo',{p_listing_id:l.id});
+  if(e) continue;
+  checked++;
+  if(can) allowed++; else denied++;
+}
+row('v17 fotoğraf yetki kararı',checked?(denied?'ok':'allow'):'skip',checked?('Kontrol edilen: '+checked+' · izinli: '+allowed+' · reddedilen: '+denied):'Kontrol edilecek yabancı ilan yok');
+
 };
 </script></body></html>
