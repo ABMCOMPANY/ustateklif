@@ -1,4 +1,4 @@
-<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tamİşim Güvenlik Testi — Paket 8 v19</title><style>body{font:16px system-ui;background:#0b1418;color:#e7eff2;margin:0;padding:24px}.box{max-width:560px;margin:auto}.card{background:#132026;border:1px solid #25383f;border-radius:16px;padding:18px;margin:14px 0}button{width:100%;padding:15px;border:0;border-radius:12px;font-weight:700;font-size:16px;background:#5cc0d8;color:#06232b}.ok{color:#5ccb98}.bad{color:#ff9b83}.skip{color:#f4b31d}.allow{color:#5cc0d8}.muted{color:#94a7b0}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script></head><body><main class="box"><h1>Tamİşim güvenlik testi — Paket 8 v19</h1><p class="muted">Yetkisiz özel veri ile normal açık-ilan fotoğraf erişimini birbirinden ayırır.</p><div class="card" id="who">Oturum kontrol ediliyor…</div><button id="run">Paket 8 v19'yi çalıştır</button><div id="out"></div></main><script>
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tamİşim Güvenlik Testi — Paket 9 v20</title><style>body{font:16px system-ui;background:#0b1418;color:#e7eff2;margin:0;padding:24px}.box{max-width:560px;margin:auto}.card{background:#132026;border:1px solid #25383f;border-radius:16px;padding:18px;margin:14px 0}button{width:100%;padding:15px;border:0;border-radius:12px;font-weight:700;font-size:16px;background:#5cc0d8;color:#06232b}.ok{color:#5ccb98}.bad{color:#ff9b83}.skip{color:#f4b31d}.allow{color:#5cc0d8}.muted{color:#94a7b0}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script></head><body><main class="box"><h1>Tamİşim güvenlik testi — Paket 9 v20</h1><p class="muted">Yetkisiz özel veri ile normal açık-ilan fotoğraf erişimini birbirinden ayırır.</p><div class="card" id="who">Oturum kontrol ediliyor…</div><button id="run">Paket 9 v20'yi çalıştır</button><div id="out"></div></main><script>
 const cfg=window.USTATEKLIF_CONFIG||{},sb=supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_KEY),out=document.getElementById('out'),who=document.getElementById('who');
 function row(n,s,d){const x=document.createElement('div');x.className='card';const map={ok:['ok','ENGELLENDİ / GİZLENDİ ✅'],bad:['bad','KRİTİK ❌'],skip:['skip','TEST EDİLEMEDİ ⚠️'],allow:['allow','BEKLENEN ERİŞİM ✅']},m=map[s];x.innerHTML='<b>'+n+'</b><p class="'+m[0]+'">'+m[1]+'</p><small class="muted"></small>';x.querySelector('small').textContent=d||'';out.appendChild(x)}
 (async()=>{const {data:{user}}=await sb.auth.getUser();who.textContent=user?'Oturum: '+user.email:'Oturum bulunamadı.'})();
@@ -50,6 +50,23 @@ row('Yönetici listesini okuma',r.error||!r.data?.length?'ok':'bad',r.error?r.er
 
 r=await sb.from('profiles').delete().in('id',ids).select('id');
 row('Başkasının profilini silme',r.error||!r.data?.length?'ok':'bad',r.error?r.error.message:(!r.data?.length?'RLS nedeniyle 0 satır silindi':r.data.length+' profil silindi'));
+
+
+// Paket 9: doğrudan iş-akışı manipülasyonu ve sahiplik saldırıları.
+let p9=await sb.from('listings').update({status:'done'}).neq('owner',user.id).select('id');
+row('Başkasının ilan durumunu değiştirme',p9.error||!p9.data?.length?'ok':'bad',p9.error?p9.error.message:(!p9.data?.length?'0 satır güncellendi':p9.data.length+' ilan değiştirildi'));
+
+p9=await sb.from('listings').update({chosen_quote:999999999}).neq('owner',user.id).select('id');
+row('Başkasının seçili teklifini değiştirme',p9.error||!p9.data?.length?'ok':'bad',p9.error?p9.error.message:(!p9.data?.length?'0 satır güncellendi':p9.data.length+' ilan değiştirildi'));
+
+p9=await sb.from('quotes').delete().neq('pro',user.id).select('id');
+row('Başkasının teklifini silme',p9.error||!p9.data?.length?'ok':'bad',p9.error?p9.error.message:(!p9.data?.length?'0 satır silindi':p9.data.length+' teklif silindi'));
+
+p9=await sb.from('messages').delete().neq('sender',user.id).select('id');
+row('Başkasının mesajını silme',p9.error||!p9.data?.length?'ok':'bad',p9.error?p9.error.message:(!p9.data?.length?'0 satır silindi':p9.data.length+' mesaj silindi'));
+
+p9=await sb.from('listing_photos').delete().neq('owner',user.id).select('id');
+row('Başkasının fotoğraf kaydını silme',p9.error||!p9.data?.length?'ok':'bad',p9.error?p9.error.message:(!p9.data?.length?'0 satır silindi':p9.data.length+' fotoğraf kaydı silindi'));
 
 };
 </script></body></html>
