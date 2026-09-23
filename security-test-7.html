@@ -1,0 +1,34 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tamİşim Güvenlik Testi — Paket 7</title><style>body{font:16px system-ui;background:#0b1418;color:#e7eff2;margin:0;padding:24px}.box{max-width:560px;margin:auto}.card{background:#132026;border:1px solid #25383f;border-radius:16px;padding:18px;margin:14px 0}button{width:100%;padding:15px;border:0;border-radius:12px;font-weight:700;font-size:16px;background:#5cc0d8;color:#06232b}.ok{color:#5ccb98}.bad{color:#ff9b83}.skip{color:#f4b31d}.muted{color:#94a7b0}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script></head><body><main class="box"><h1>Tamİşim güvenlik testi — Paket 7</h1><p class="muted">Normal kullanıcıyla başka kullanıcılara ait özel verileri okumayı dener.</p><div class="card" id="who">Oturum kontrol ediliyor…</div><button id="run">Paket 7'yi çalıştır</button><div id="out"></div></main><script>
+const cfg=window.USTATEKLIF_CONFIG||{},sb=supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_KEY),out=document.getElementById('out'),who=document.getElementById('who');
+function row(n,s,d){const x=document.createElement('div');x.className='card';const cls=s==='ok'?'ok':s==='skip'?'skip':'bad',txt=s==='ok'?'ENGELLENDİ / GİZLENDİ ✅':s==='skip'?'TEST EDİLEMEDİ ⚠️':'KRİTİK ❌';x.innerHTML='<b>'+n+'</b><p class="'+cls+'">'+txt+'</p><small class="muted"></small>';x.querySelector('small').textContent=d||'';out.appendChild(x)}
+(async()=>{const {data:{user}}=await sb.auth.getUser();who.textContent=user?'Oturum: '+user.email:'Oturum bulunamadı.'})();
+document.getElementById('run').onclick=async()=>{out.innerHTML='';const {data:{user}}=await sb.auth.getUser();if(!user){row('Oturum','bad','Normal kullanıcı oturumu yok');return}
+const {data:others}=await sb.from('profiles').select('id').neq('id',user.id).limit(10);const ids=(others||[]).map(x=>x.id);if(!ids.length){row('Hedef kullanıcı','skip','Başka kullanıcı bulunamadı');return}
+
+// Başkasının bildirimleri hiçbir satır döndürmemeli.
+let {data,error}=await sb.from('notifications').select('id,user_id,title,body').in('user_id',ids).limit(20);row('Başkasının bildirimlerini okuma',error||!data?.length?'ok':'bad',error?error.message:(!data?.length?'Yabancı bildirim satırı görünmedi':data.length+' yabancı bildirim görüldü'));
+
+// Kullanıcının taraf olmadığı mesajlar görünmemeli.
+({data,error}=await sb.from('messages').select('id,listing_id,sender,body').neq('sender',user.id).limit(100));
+let leaked=[];
+for(const m of data||[]){const {data:party}=await sb.rpc('can_message_listing',{p_listing_id:m.listing_id});if(!party)leaked.push(m)}
+row('Taraf olmadığı mesajları okuma',error||!leaked.length?'ok':'bad',error?error.message:(!leaked.length?'Yetkisiz mesaj satırı görünmedi':leaked.length+' yetkisiz mesaj görüldü'));
+
+// Teklifler: sadece kendi teklifleri veya kendi ilanlarına gelen teklifler görünmeli.
+({data,error}=await sb.from('quotes').select('id,listing_id,pro,price,note').limit(100));
+let qleak=[];
+for(const q of data||[]){if(q.pro===user.id)continue;const {data:l}=await sb.from('listings').select('owner').eq('id',q.listing_id).maybeSingle();if(!l||l.owner!==user.id)qleak.push(q)}
+row('Başkasının teklif detaylarını okuma',error||!qleak.length?'ok':'bad',error?error.message:(!qleak.length?'Yetkisiz teklif detayı görünmedi':qleak.length+' yetkisiz teklif görüldü'));
+
+// Fotoğraf metadata: başka kullanıcıya ait satırların görünürlüğünü test et.
+({data,error}=await sb.from('listing_photos').select('listing_id,owner,path').neq('owner',user.id).limit(10));
+if(error) row('Başkasının fotoğraf metadata okuma','ok',error.message);
+else if(!data?.length) row('Başkasının fotoğraf metadata okuma','skip','Başka kullanıcıya ait fotoğraf kaydı yok');
+else row('Başkasının fotoğraf metadata okuma','bad',data.length+' yabancı fotoğraf yolu görüldü');
+
+// Storage doğrudan listeleme: yabancı klasör nesnesi görünmemeli.
+const {data:root,error:se}=await sb.storage.from('listing-photos').list('',{limit:100});
+if(se) row('Storage yabancı nesne listeleme','ok',se.message);
+else {const foreign=(root||[]).filter(x=>x.name&&x.name!==user.id);row('Storage yabancı nesne listeleme',foreign.length?'bad':'ok',foreign.length?foreign.length+' yabancı kök klasör/nesne göründü':'Yabancı kök nesne görünmedi')}
+};
+</script></body></html>
