@@ -8,7 +8,7 @@ function row(name,state,detail){const d=document.createElement('div');d.classNam
 document.getElementById('run').onclick=async()=>{out.innerHTML='';const {data:{user},error:ue}=await sb.auth.getUser();if(ue||!user){row('Oturum','bad','Uzman B oturumu bulunamadı');return}
 const {data:foreign,error:fe}=await sb.from('listings').select('id,owner,status').neq('owner',user.id).limit(30);
 if(fe||!foreign?.length){row('Test kullanıcısı bulma','skip',fe?.message||'Yabancı ilan yok');return}
-const open=foreign.find(x=>x.status==='open'),chosen=foreign.find(x=>x.status==='chosen'),target=(open||chosen||foreign[0]).owner;
+const seed=foreign.find(x=>x.status==='chosen')||foreign.find(x=>x.status==='open')||foreign[0],target=seed.owner; const open=foreign.find(x=>x.owner===target&&x.status==='open'),chosen=foreign.find(x=>x.owner===target&&x.status==='chosen');
 
 // Normal kullanıcının kendini admin RPC ile askıya almaya çalışması reddedilmeli.
 const {error:ae}=await sb.rpc('admin_set_account_status',{p_user_id:user.id,p_status:'suspended'});
@@ -18,7 +18,7 @@ const {error:be}=await sb.from('user_blocks').insert({blocker_id:user.id,blocked
 if(be){row('Geçici engel oluşturma','skip',be.message);return}
 try{
   // Engellenen kullanıcının ilanı artık okunamamalı.
-  const targetListing=(open||chosen||foreign[0]);
+  const targetListing=(open||chosen||seed);
   const {data:vis,error:ve}=await sb.from('listings').select('id').eq('id',targetListing.id);
   row('Engellenen kullanıcının ilanını okuma',ve?'ok':(!vis||vis.length===0?'ok':'bad'),ve?ve.message:(!vis||vis.length===0?'İlan RLS nedeniyle görünmedi':'Engellenen kullanıcının ilanı görünmeye devam etti'));
 
