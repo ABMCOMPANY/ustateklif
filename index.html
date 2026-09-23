@@ -285,6 +285,31 @@ html{color-scheme:light}
 :root[data-theme="dark"] input::placeholder,:root[data-theme="dark"] textarea::placeholder{color:var(--muted)!important;opacity:1}
 :root[data-theme="dark"] .cat,:root[data-theme="dark"] .problem{color:#f7fbff!important}
 
+
+/* Tamİşim Android auto-dark final override */
+/* Android/Chrome may auto-dark individual controls even while the page stays light.
+   Keep Tamİşim light unless an explicit data-theme=dark is chosen. */
+:root:not([data-theme="dark"]){color-scheme:light!important}
+:root:not([data-theme="dark"]) .create-card h2,
+:root:not([data-theme="dark"]) .create-card h3,
+:root:not([data-theme="dark"]) .create-card label,
+:root:not([data-theme="dark"]) .quotes-title,
+:root:not([data-theme="dark"]) .quote-card h3,
+:root:not([data-theme="dark"]) .quote-card strong{color:#123568!important;opacity:1!important}
+:root:not([data-theme="dark"]) .create-card p,
+:root:not([data-theme="dark"]) .create-card small,
+:root:not([data-theme="dark"]) .quote-card p,
+:root:not([data-theme="dark"]) .quote-card small{color:#74879a!important;opacity:1!important}
+:root:not([data-theme="dark"]) .cat,
+:root:not([data-theme="dark"]) .problem{background:#11252d!important;color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important}
+:root:not([data-theme="dark"]) .cat *,
+:root:not([data-theme="dark"]) .problem *{color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important}
+:root:not([data-theme="dark"]) input,
+:root:not([data-theme="dark"]) textarea,
+:root:not([data-theme="dark"]) select{color:#23364d!important;-webkit-text-fill-color:#23364d!important;background:#f8fbff!important}
+:root:not([data-theme="dark"]) input::placeholder,
+:root:not([data-theme="dark"]) textarea::placeholder{color:#74879a!important;-webkit-text-fill-color:#74879a!important;opacity:1!important}
+
 </style>
 </head>
 <body>
