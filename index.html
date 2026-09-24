@@ -383,6 +383,9 @@ html{color-scheme:only light!important}
 
 /* auth-flow-v22 */
 .auth-welcome{margin:18px 0 22px}.auth-welcome h1{margin:8px 0 8px;color:#102A56;font-size:34px;line-height:1.08}.auth-welcome p{margin:0;color:#6B7C93;font-size:17px;line-height:1.55}.auth-benefit{margin:0 0 18px}.auth-links{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 12px;margin-top:12px}.auth-links .link{margin:0}.auth-note{text-align:center;margin:16px 8px 0}
+
+/* quote-polish-v24 */
+html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,.quote-head .section-kicker{-webkit-text-fill-color:currentColor!important;opacity:1!important}.quote-head h1{color:#102A56!important}.quote-head p{color:#64758C!important}.quote-head .section-kicker{color:#1457D9!important}.ticket .meta .posted{display:none}
 </style>
 </head>
 <body>
@@ -594,7 +597,7 @@ function ticket(l,o={}){
       <h3>${o.act?`<button class="stretch" data-a="${o.act}" data-v="${l.id}">${title}</button>`:title}</h3>
       ${l.note?`<p class="note">${esc(l.note)}</p>`:''}
       ${photoStrip(l.id)}
-      <div class="meta"><span>📍 ${esc(locText(l))}</span><span>🕒 ${esc(l.when_text)}</span><span>${ago(l.created_at)}</span>${o.pill||''}</div>
+      <div class="meta"><span>📍 ${esc(locText(l))}</span><span>🕒 ${esc(l.when_text)}</span><span class="posted">${ago(l.created_at)}</span>${o.pill||''}</div>
       ${o.extra||''}
     </div></article>`;
 }
@@ -761,14 +764,20 @@ function vProDetail(){
 function vQuote(){
   const l=D.listings[S.quoteFor];
   if(!l){S.quoteFor=null;return vUsta()}
+  const copy={
+    ozelders:{time:'Derse ne zaman başlayabilirsin?',note:'Ders süresi, ders şekli (online/yüz yüze) ve teklif kapsamını belirt.'},
+    guzellik:{time:'Ne zaman hizmet verebilirsin?',note:'Hizmetin kapsamını, tahmini süreyi ve varsa dahil olan uygulamaları belirt.'},
+    evcilhayvan:{time:'Ne zaman uygun olursun?',note:'Hizmet süresini, kapsamını ve önemli detayları belirt.'},
+    kucukisler:{time:'Ne zaman gelebilirsin?',note:'Teklif neleri kapsıyor? Gerekli malzeme dahil mi? İşin tahmini süresi nedir?'}
+  }[l.category]||{time:'Ne zaman gelebilirsin?',note:'Teklif neleri kapsıyor? Malzeme/parça dahil mi? İşin tahmini süresi nedir?'};
   return `<button class="link" data-a="cancelQuote">İlanlara dön</button>
   <div class="quote-head"><span class="section-kicker">Yeni teklif</span><h1>Net ve güven veren bir teklif hazırla</h1><p>Fiyatını, uygun olduğun zamanı ve teklif kapsamını açıkça belirt.</p></div>`+ticket(l)+
   `<div class="field two"><div><label class="lb" for="q-fiyat">Fiyatın (₺)</label>
     <input class="in" id="q-fiyat" inputmode="numeric" autocomplete="off" placeholder="Örn. 900" value="${esc(S.q.fiyat)}"></div>
-   <div><label class="lb" for="q-sure">Ne zaman gelebilirsin?</label>
+   <div><label class="lb" for="q-sure">${copy.time}</label>
     <select class="in" id="q-sure">${SURE.map(s=>`<option ${S.q.sure===s?'selected':''}>${s}</option>`).join('')}</select></div>
    <div><label class="lb" for="q-not">Teklif notu</label>
-    <textarea class="in" id="q-not" maxlength="500" placeholder="Teklif neleri kapsıyor? Malzeme/parça dahil mi? İşin tahmini süresi nedir?">${esc(S.q.not)}</textarea></div></div>
+    <textarea class="in" id="q-not" maxlength="500" placeholder="${copy.note}">${esc(S.q.not)}</textarea></div></div>
   <button class="btn block" id="qsend" data-a="sendQuote" disabled>Teklifi gönder</button>`;
 }
 
