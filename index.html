@@ -765,13 +765,28 @@ function vQuote(){
   const l=D.listings[S.quoteFor];
   if(!l){S.quoteFor=null;return vUsta()}
   const copy={
-    ozelders:{time:'Derse ne zaman başlayabilirsin?',note:'Ders süresi, ders şekli (online/yüz yüze) ve teklif kapsamını belirt.'},
-    guzellik:{time:'Ne zaman hizmet verebilirsin?',note:'Hizmetin kapsamını, tahmini süreyi ve varsa dahil olan uygulamaları belirt.'},
-    evcilhayvan:{time:'Ne zaman uygun olursun?',note:'Hizmet süresini, kapsamını ve önemli detayları belirt.'},
-    kucukisler:{time:'Ne zaman gelebilirsin?',note:'Teklif neleri kapsıyor? Gerekli malzeme dahil mi? İşin tahmini süresi nedir?'}
-  }[l.category]||{time:'Ne zaman gelebilirsin?',note:'Teklif neleri kapsıyor? Malzeme/parça dahil mi? İşin tahmini süresi nedir?'};
+    boya:{time:'Ne zaman başlayabilirsin?',intro:'Metrekareyi, hazırlık ihtiyacını ve boya dahil olup olmadığını netleştir.',note:'Kaç kat boya uygulanacak? Boya ve malzeme dahil mi? Tahmini iş süresi nedir?'},
+    tesisat:{time:'Ne zaman gelebilirsin?',intro:'Arıza tespiti, işçilik ve varsa parça dahilini açıkça belirt.',note:'Arıza tespiti dahil mi? Parça/malzeme ücrete dahil mi? Tahmini işlem süresi nedir?'},
+    elektrik:{time:'Ne zaman gelebilirsin?',intro:'İşçilik, gerekli malzeme ve güvenlik kapsamını netleştir.',note:'İşçilik neleri kapsıyor? Kablo/priz/sigorta gibi malzemeler dahil mi? Tahmini süre nedir?'},
+    mobilya:{time:'Ne zaman gelebilirsin?',intro:'Montaj, tamir veya özel ölçü işinin kapsamını açıkça belirt.',note:'Montaj/tamir kapsamı nedir? Vida, bağlantı elemanı veya ek malzeme dahil mi? Tahmini süre nedir?'},
+    fayans:{time:'Ne zaman başlayabilirsin?',intro:'Alan, söküm, uygulama ve malzeme kapsamını netleştir.',note:'Söküm ve zemin hazırlığı dahil mi? Yapıştırıcı/derz malzemesi dahil mi? Kaç günde tamamlanır?'},
+    klima:{time:'Ne zaman gelebilirsin?',intro:'Bakım, arıza tespiti, gaz veya parça kapsamını açıkça belirt.',note:'Servis ücretine bakım/arıza tespiti dahil mi? Gaz veya parça ayrıca mı? Tahmini işlem süresi nedir?'},
+    beyaz:{time:'Ne zaman gelebilirsin?',intro:'Servis, arıza tespiti ve olası parça ücretlerini netleştir.',note:'Arıza tespiti ücrete dahil mi? Parça gerekirse nasıl fiyatlanır? Tahmini tamir süresi nedir?'},
+    kombi:{time:'Ne zaman gelebilirsin?',intro:'Bakım, temizlik, arıza tespiti ve parça kapsamını açıkça belirt.',note:'Bakım/arıza tespiti neleri kapsıyor? Parça veya kimyasal dahil mi? Tahmini süre nedir?'},
+    elektronik:{time:'Ne zaman gelebilirsin?',intro:'Kurulum veya tamirin kapsamını ve ek parça ihtimalini netleştir.',note:'Arıza tespiti/kurulum dahil mi? Kablo, aparat veya parça ayrıca mı? Tahmini süre nedir?'},
+    lastik:{time:'Ne zaman hizmet verebilirsin?',intro:'Lastik, jant ve yol hizmetinin kapsamını açıkça belirt.',note:'Yerinde hizmet dahil mi? Balans, sökme-takma veya tamir ücrete dahil mi? Tahmini süre nedir?'},
+    oto:{time:'Aracı ne zaman kabul edebilirsin?',intro:'Bakım, işçilik ve parça kapsamını netleştir.',note:'İşçilik neleri kapsıyor? Yağ, filtre veya diğer parçalar dahil mi? Araç yaklaşık ne kadar kalır?'},
+    temizlik:{time:'Ne zaman gelebilirsin?',intro:'Süreyi, kişi sayısını ve temizlik kapsamını açıkça belirt.',note:'Kaç saat/kaç kişi hizmet verecek? Temizlik malzemeleri dahil mi? Hangi alanlar temizlenecek?'},
+    nakliyat:{time:'Taşımayı ne zaman yapabilirsin?',intro:'Araç, ekip, kat durumu ve paketleme kapsamını netleştir.',note:'Kaç kişilik ekip ve hangi araçla geleceksin? Paketleme, taşıma ve montaj dahil mi? Ek ücret çıkabilecek durumları belirt.'},
+    bahce:{time:'Ne zaman gelebilirsin?',intro:'Bahçe işinin kapsamını, ekipmanı ve atık toplama durumunu belirt.',note:'Hangi işlemler dahil? Ekipman sende mi? Budama/biçme sonrası atıkların toplanması dahil mi? Tahmini süre nedir?'},
+    ozelders:{time:'Derse ne zaman başlayabilirsin?',intro:'Ders süresi, yöntemi ve eğitim planını açıkça belirt.',note:'Ders kaç dakika/saat? Online mı yüz yüze mi? Haftalık plan, seviye ve kullanılacak kaynaklar hakkında bilgi ver.'},
+    guzellik:{time:'Ne zaman hizmet verebilirsin?',intro:'Uygulamanın kapsamını, süresini ve dahil olan ürünleri belirt.',note:'Hangi uygulamalar dahil? Kullanılacak ürünler fiyata dahil mi? İşlem ne kadar sürer ve hizmet nerede verilir?'},
+    kucukisler:{time:'Ne zaman gelebilirsin?',intro:'Montaj veya küçük tamirin kapsamını ve gerekli malzemeyi netleştir.',note:'Hangi montaj/tamir işlemleri dahil? Dübel, vida, aparat gibi malzemeler dahil mi? Tahmini süre nedir?'},
+    evcilhayvan:{time:'Ne zaman uygun olursun?',intro:'Bakım süresini, ziyaret sıklığını ve hizmet kapsamını açıkça belirt.',note:'Hizmet kaç saat/gün sürecek? Gezdirme, mama-su, bakım veya taşıma neleri kapsıyor? Evcil hayvan deneyimini kısaca belirt.'},
+    diger:{time:'Ne zaman hizmet verebilirsin?',intro:'Hizmetin kapsamını, süreyi ve varsa ek masrafları açıkça belirt.',note:'Teklifin tam olarak neleri kapsıyor? Malzeme, ulaşım veya ek hizmet ücrete dahil mi? Tahmini süre nedir?'}
+  }[l.category]||{time:'Ne zaman hizmet verebilirsin?',intro:'Fiyatını, uygun olduğun zamanı ve teklif kapsamını açıkça belirt.',note:'Teklifin neleri kapsadığını, tahmini süreyi ve varsa ek masrafları belirt.'};
   return `<button class="link" data-a="cancelQuote">İlanlara dön</button>
-  <div class="quote-head"><span class="section-kicker">Yeni teklif</span><h1>Net ve güven veren bir teklif hazırla</h1><p>Fiyatını, uygun olduğun zamanı ve teklif kapsamını açıkça belirt.</p></div>`+ticket(l)+
+  <div class="quote-head"><span class="section-kicker">Yeni teklif</span><h1>Net ve güven veren bir teklif hazırla</h1><p>${copy.intro}</p></div>`+ticket(l)+
   `<div class="field two"><div><label class="lb" for="q-fiyat">Fiyatın (₺)</label>
     <input class="in" id="q-fiyat" inputmode="numeric" autocomplete="off" placeholder="Örn. 900" value="${esc(S.q.fiyat)}"></div>
    <div><label class="lb" for="q-sure">${copy.time}</label>
