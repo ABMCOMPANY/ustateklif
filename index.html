@@ -377,6 +377,9 @@ html{color-scheme:only light!important}
 :root:not([data-theme="dark"]) .pro-empty{background:#fff!important;color:#102A56!important;border:1px solid #E2E8F0!important}
 :root:not([data-theme="dark"]) .pro-empty h3{color:#102A56!important;-webkit-text-fill-color:#102A56!important}
 :root:not([data-theme="dark"]) .pro-empty p{color:#6B7C93!important;-webkit-text-fill-color:#6B7C93!important}
+
+/* guest-catalog-v17 */
+.guest-group{margin-top:18px!important}.guest-group .home-title{margin-bottom:10px}.guest-group .homecats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.guest-group .homecat{min-height:92px}.searchbox input{width:100%;border:0;outline:0;background:transparent;color:#102A56;font:inherit;font-weight:650}.searchbox input::placeholder{color:#7A899E;opacity:1}
 </style>
 </head>
 <body>
@@ -443,7 +446,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
   draft:null,quoteFor:null,q:null,tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
-  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
+  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
 const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
@@ -606,11 +609,14 @@ function vSetup(){
   <p class="muted small">Gizli (service_role veya secret) anahtarı asla girme.</p>`;
 }
 function vGuest(){
-  const popular=['boya','tesisat','elektrik','klima','temizlik','nakliyat','mobilya','oto'];
-  const cats=popular.map(k=>{const v=KAT[k];return `<button class="homecat" data-a="guestCat" data-v="${k}"><span>${v.ikon}</span><b>${esc(v.ad)}</b></button>`}).join('');
-  return `<section class="hero"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet. İlan vermek ve hesabındaki ilanları görmek istediğinde ücretsiz kayıt ol.</p><button class="searchbox" data-a="requireAuth" data-v="newIlan"><span>⌕</span> Hangi hizmete ihtiyacın var?</button></section>
-  <section class="home-section"><div class="home-title"><h2>Popüler hizmetler</h2><button class="link" data-a="requireAuth" data-v="newIlan">İlan ver</button></div><div class="homecats">${cats}</div></section>
-  <section class="trustbox"><div class="trusticon">✓</div><div><h3>Önce keşfet, sonra karar ver</h3><p>Kategorilere göz atabilirsin. İlan oluşturma, ilanlarını görme, teklif ve mesajlaşma için hesap gerekir.</p></div></section>
+  if(S.guestCat&&KAT[S.guestCat]){
+    const v=KAT[S.guestCat];
+    return `<button class="link" data-a="guestBack">← Tüm hizmetler</button><section class="create-head"><span class="eyebrow">${esc(v.grup)}</span><h1>${v.ikon} ${esc(v.ad)}</h1><p>İhtiyacına uygun hizmeti seç, detayları incele. İlan vermek istediğinde ücretsiz hesap açabilirsin.</p></section><div class="field create-card"><h2>Hangi hizmete ihtiyacın var?</h2><div class="chips">${v.sorunlar.map(x=>`<button class="chip" data-a="guestService" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div></div><section class="trustbox"><div class="trusticon">✓</div><div><h3>${esc(v.ad)} için teklif al</h3><p>İşini anlat, uygun uzmanlardan gelen teklifleri karşılaştır.</p></div></section><button class="btn block" data-a="requireAuth" data-v="newIlan">Bu hizmet için ilan ver</button>`;
+  }
+  const groups=[...new Set(Object.values(KAT).map(v=>v.grup))];
+  const sections=groups.map(g=>`<section class="home-section guest-group"><div class="home-title"><h2>${esc(g)}</h2></div><div class="homecats">${Object.entries(KAT).filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="homecat" data-a="guestCat" data-v="${k}"><span>${v.ikon}</span><b>${esc(v.ad)}</b></button>`).join('')}</div></section>`).join('');
+  return `<section class="hero"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet, ihtiyacını bul. İlan vermek istediğinde ücretsiz kayıt ol.</p><div class="searchbox"><span>⌕</span><input id="guest-search" placeholder="Hizmet ara: su kaçağı, klima, boya..." autocomplete="off"></div></section>
+  <section class="home-section"><div class="home-title"><div><span class="section-kicker">Hizmetler</span><h2>Tüm kategoriler</h2></div></div></section>${sections}
   <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Ücretsiz hesap açıp ilanını oluştur.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section>
   <button class="btn block" data-a="requireAuth" data-v="newIlan">Ücretsiz ilan ver</button><button class="link" data-a="showAuth">Zaten hesabın var mı? Giriş yap</button>`;
 }
@@ -810,7 +816,9 @@ const NET=new Set(['authGo','forgotPass','setNewPass','saveAcct','logout','publi
 const KEEP=new Set(['pickKat','toggleSorun','zaman','sort','filter','pick','send','rate','tab']);
 const A={
   showAuth(){S.guestAuth=true;S.pendingAction=null;S.authErr='';S.authInfo=''},
-  guestCat(v){toast(KAT[v]?KAT[v].ad+' hizmeti Tamİşim’de mevcut. İlan vermek için giriş yap veya kayıt ol.':'Bu hizmet Tamİşim’de mevcut.')},
+  guestCat(v){if(KAT[v])S.guestCat=v},
+  guestBack(){S.guestCat=null},
+  guestService(v){toast(v+' seçildi. İlan vermek için aşağıdaki butonu kullanabilirsin.')},
   requireAuth(v){S.pendingAction=v||null;S.guestAuth=true;S.authErr='';S.authInfo=''},
   navHome(){S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null},
   navJobs(){S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null;setTimeout(()=>{const x=document.getElementById('myjobs');if(x)x.scrollIntoView({behavior:'smooth',block:'start'})},0)},
