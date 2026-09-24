@@ -310,6 +310,19 @@ html{color-scheme:light}
 :root:not([data-theme="dark"]) input::placeholder,
 :root:not([data-theme="dark"]) textarea::placeholder{color:#74879a!important;-webkit-text-fill-color:#74879a!important;opacity:1!important}
 
+
+/* force-light-v3 */
+@media(prefers-color-scheme:dark){
+:root:not([data-theme=dark]) body{background:#f7f9fc!important;color:#102a56!important}
+:root:not([data-theme=dark]) .create-card{background:#fff!important;border-color:#e2e8f0!important}
+:root:not([data-theme=dark]) .create-head h1,:root:not([data-theme=dark]) .create-card h2,:root:not([data-theme=dark]) .create-card h3,:root:not([data-theme=dark]) .create-card label,:root:not([data-theme=dark]) .quotes-title{color:#102a56!important}
+:root:not([data-theme=dark]) .create-head p,:root:not([data-theme=dark]) .create-card p,:root:not([data-theme=dark]) .create-card small{color:#6b7c93!important}
+:root:not([data-theme=dark]) .cat,:root:not([data-theme=dark]) .problem{background:#fff!important;color:#102a56!important;border-color:#e2e8f0!important}
+:root:not([data-theme=dark]) .cat *,:root:not([data-theme=dark]) .problem *{color:#102a56!important}
+:root:not([data-theme=dark]) .bottomnav{background:#fff!important;border-color:#e2e8f0!important}
+:root:not([data-theme=dark]) .bottomnav button{color:#6b7c93!important}
+:root:not([data-theme=dark]) .bottomnav button.active{color:#1457d9!important}
+}
 </style>
 </head>
 <body>
