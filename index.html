@@ -385,7 +385,7 @@ html{color-scheme:only light!important}
 .auth-welcome{margin:18px 0 22px}.auth-welcome h1{margin:8px 0 8px;color:#102A56;font-size:34px;line-height:1.08}.auth-welcome p{margin:0;color:#6B7C93;font-size:17px;line-height:1.55}.auth-benefit{margin:0 0 18px}.auth-links{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 12px;margin-top:12px}.auth-links .link{margin:0}.auth-note{text-align:center;margin:16px 8px 0}
 
 /* quote-polish-v24 */
-html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,.quote-head .section-kicker{-webkit-text-fill-color:currentColor!important;opacity:1!important}.quote-head h1{color:#102A56!important}.quote-head p{color:#64758C!important}.quote-head .section-kicker{color:#1457D9!important}.ticket .meta .posted{display:none}
+html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,.quote-head .section-kicker{opacity:1!important}.quote-head h1{color:#102A56!important;-webkit-text-fill-color:#102A56!important}.quote-head p{color:#64758C!important;-webkit-text-fill-color:#64758C!important}.quote-head .section-kicker{color:#1457D9!important;-webkit-text-fill-color:#1457D9!important}.ticket .meta .posted{display:none}
 </style>
 </head>
 <body>
@@ -1054,7 +1054,7 @@ if(sb){
   });
 }else{render()}
 if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=25',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));
 }
 })();
 </script>
