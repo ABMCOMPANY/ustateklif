@@ -443,7 +443,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
   draft:null,quoteFor:null,q:null,tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
-  authMode:'in',authErr:'',authInfo:'',recovery:false,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
+  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
 const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
@@ -604,6 +604,15 @@ function vSetup(){
   </div>
   <button class="btn block" data-a="saveCfg">Kaydet</button>
   <p class="muted small">Gizli (service_role veya secret) anahtarı asla girme.</p>`;
+}
+function vGuest(){
+  const popular=['boya','tesisat','elektrik','klima','temizlik','nakliyat','mobilya','oto'];
+  const cats=popular.map(k=>{const v=KAT[k];return `<button class="homecat" data-a="guestCat" data-v="${k}"><span>${v.ikon}</span><b>${esc(v.ad)}</b></button>`}).join('');
+  return `<section class="hero"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet. İlan vermek ve hesabındaki ilanları görmek istediğinde ücretsiz kayıt ol.</p><button class="searchbox" data-a="requireAuth" data-v="newIlan"><span>⌕</span> Hangi hizmete ihtiyacın var?</button></section>
+  <section class="home-section"><div class="home-title"><h2>Popüler hizmetler</h2><button class="link" data-a="requireAuth" data-v="newIlan">İlan ver</button></div><div class="homecats">${cats}</div></section>
+  <section class="trustbox"><div class="trusticon">✓</div><div><h3>Önce keşfet, sonra karar ver</h3><p>Kategorilere göz atabilirsin. İlan oluşturma, ilanlarını görme, teklif ve mesajlaşma için hesap gerekir.</p></div></section>
+  <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Ücretsiz hesap açıp ilanını oluştur.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section>
+  <button class="btn block" data-a="requireAuth" data-v="newIlan">Ücretsiz ilan ver</button><button class="link" data-a="showAuth">Zaten hesabın var mı? Giriş yap</button>`;
 }
 function vAuth(){
   const up=S.authMode==='up';
@@ -774,7 +783,7 @@ function render(){
   if(S.setup)h=vSetup();
   else if(S.loading)h='<div class="wait"><span class="dot"></span>Yükleniyor...</div>';
   else if(S.recovery)h='<div class="pagehead"><h1>Yeni şifre belirle</h1></div><p class="lede">Hesabın için yeni bir şifre oluştur.</p><div class="field"><label class="lb" for="au-pass">Yeni şifre</label><input class="in" id="au-pass" type="password" autocomplete="new-password" placeholder="En az 8 karakter" value="'+esc(S.auth.pass)+'"></div>'+(S.authErr?'<div class="err" role="alert">'+esc(S.authErr)+'</div>':'')+'<button class="btn block" data-a="setNewPass">Şifreyi güncelle</button>';
-  else if(!S.user)h=vAuth();
+  else if(!S.user)h=S.guestAuth?vAuth():vGuest();
   else if((S.profile||{}).account_status==='suspended')h='<div class="pagehead"><h1>Hesap askıya alındı</h1></div><p class="lede">Bu hesap moderasyon nedeniyle geçici olarak kısıtlandı.</p><button class="btn ghost" data-a="logout">Çıkış yap</button>';
   else if(S.page==='account')h=vAccount();
   else if(S.page==='notifications')h=vNotifications();
@@ -800,6 +809,9 @@ function render(){
 const NET=new Set(['authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
 const KEEP=new Set(['pickKat','toggleSorun','zaman','sort','filter','pick','send','rate','tab']);
 const A={
+  showAuth(){S.guestAuth=true;S.pendingAction=null;S.authErr='';S.authInfo=''},
+  guestCat(v){toast(KAT[v]?KAT[v].ad+' hizmeti Tamİşim’de mevcut. İlan vermek için giriş yap veya kayıt ol.':'Bu hizmet Tamİşim’de mevcut.')},
+  requireAuth(v){S.pendingAction=v||null;S.guestAuth=true;S.authErr='';S.authInfo=''},
   navHome(){S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null},
   navJobs(){S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null;setTimeout(()=>{const x=document.getElementById('myjobs');if(x)x.scrollIntoView({behavior:'smooth',block:'start'})},0)},
   role(v){S.role=v;S.view='list';S.page='main';S.tab='acik';S.quoteFor=null;S.sel=null},
@@ -825,7 +837,7 @@ const A={
     if(r.error)throw r.error;
     await refresh();S.page='main';toast('Profilin kaydedildi.');
   },
-  async logout(){await sb.auth.signOut()},
+  async logout(){S.guestAuth=false;S.pendingAction=null;await sb.auth.signOut()},
   saveCfg(){
     const url=S.cfgDraft.url.trim().replace(/\/+$/,''),key=S.cfgDraft.key.trim();
     if(!/^https:\/\/.+/.test(url)||key.length<20){toast('Adres ve anahtarı kontrol et.');return}
@@ -972,8 +984,9 @@ if(sb){
     const u=session&&session.user||null;
     if(u){
       if(!S.user||S.user.id!==u.id){
-        S.user=u;S.page='main';S.view='list';S.role='musteri';S.auth.pass='';S.authErr='';S.authInfo='';
-        setTimeout(boot,0);
+        S.user=u;S.page='main';S.view='list';S.role='musteri';S.auth.pass='';S.authErr='';S.authInfo='';S.guestAuth=false;
+        const pending=S.pendingAction;S.pendingAction=null;
+        setTimeout(async()=>{await boot();if(pending==='newIlan'){A.newIlan();render()}},0);
       }
     }else{
       if(S.user){S.user=null;S.profile=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:''};S.authErr='';S.authInfo=''}
