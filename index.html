@@ -618,7 +618,7 @@ function vGuest(){
   const groups=[...new Set(matches.map(([,v])=>v.grup))];
   const sections=groups.map(g=>`<section class="home-section guest-group"><div class="home-title"><h2>${esc(g)}</h2></div><div class="homecats">${matches.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="homecat" data-a="guestCat" data-v="${k}"><span>${v.ikon}</span><b>${esc(v.ad)}</b><small>${q?esc(v.sorunlar.filter(x=>x.toLocaleLowerCase('tr-TR').includes(q)).slice(0,2).join(' · ')):''}</small></button>`).join('')}</div></section>`).join('') || `<div class="empty"><span>⌕</span><h3>Hizmet bulunamadı</h3><p>Başka bir hizmet adı veya sorun yazarak tekrar ara.</p></div>`;
   return `<section class="hero"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet, ihtiyacını bul. İlan vermek istediğinde ücretsiz kayıt ol.</p><div class="searchbox"><span>⌕</span><input id="guest-search" value="${esc(S.guestSearch)}" placeholder="Hizmet ara: su kaçağı, klima, boya..." autocomplete="off"></div></section>
-  <section class="home-section"><div class="home-title"><div><span class="section-kicker">Hizmetler</span><h2>Tüm kategoriler</h2></div></div></section>${sections}
+  <section class="home-section guest-catalog-title"><div class="home-title"><div><span class="section-kicker">Hizmetler</span><h2>${q?'Arama sonuçları':'Tüm kategoriler'}</h2></div></div></section>${sections}
   <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Ücretsiz hesap açıp ilanını oluştur.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section>
   <button class="btn block" data-a="requireAuth" data-v="newIlan">Ücretsiz ilan ver</button><button class="link" data-a="showAuth">Zaten hesabın var mı? Giriş yap</button>`;
 }
@@ -964,7 +964,7 @@ document.addEventListener('keydown',e=>{
   else if(id==='au-name'||id==='au-email'||id==='au-pass'){e.preventDefault();run('authGo')}
 });
 const F={
-  'guest-search':v=>{S.guestSearch=v;render()},
+  'guest-search':v=>{S.guestSearch=v},
   'd-not':v=>{S.draft.not=v},'d-city':v=>{S.draft.city=v},'d-district':v=>{S.draft.district=v},'d-neighborhood':v=>{S.draft.neighborhood=v},'cat-search':v=>{S.catSearch=v},
   'q-fiyat':v=>{S.q.fiyat=v.replace(/\D/g,'')},'q-sure':v=>{S.q.sure=v},'q-not':v=>{S.q.not=v},
   'au-name':v=>{S.auth.name=v},'au-email':v=>{S.auth.email=v},'au-pass':v=>{S.auth.pass=v},
@@ -972,7 +972,25 @@ const F={
   's-url':v=>{S.cfgDraft.url=v},'s-key':v=>{S.cfgDraft.key=v}
 };
 function onField(e){const f=F[e.target.id];if(f){f(e.target.value);upd()}}
-document.addEventListener('input',onField);
+document.addEventListener('input',e=>{
+  if(e.target.id==='guest-search'){
+    S.guestSearch=e.target.value;
+    const q=S.guestSearch.trim().toLocaleLowerCase('tr-TR');
+    document.querySelectorAll('.guest-group').forEach(sec=>{
+      let any=false;
+      sec.querySelectorAll('.homecat').forEach(card=>{
+        const k=card.dataset.v,v=KAT[k];
+        const hit=!q||(v&&(v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q))));
+        card.hidden=!hit;if(hit)any=true;
+      });
+      sec.hidden=!any;
+    });
+    const title=document.querySelector('.guest-catalog-title h2');
+    if(title)title.textContent=q?'Arama sonuçları':'Tüm kategoriler';
+    return;
+  }
+  onField(e);
+});
 document.addEventListener('change',e=>{
   if(e.target.id==='d-photos'&&S.draft){
     const good=[...e.target.files].filter(f=>['image/jpeg','image/png','image/webp'].includes(f.type)&&f.size<=8*1024*1024);
