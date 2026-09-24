@@ -1,5 +1,5 @@
 // Basit çevrimdışı kabuk: önce ağ, olmazsa önbellek.
-const CACHE = 'tamisim-v24';
+const CACHE = 'tamisim-v25';
 const SHELL = ['./', 'index.html', 'config.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', (e) => {
@@ -20,7 +20,7 @@ self.addEventListener('fetch', (e) => {
   // Supabase ve diğer dış istekler her zaman doğrudan ağa gider.
   if (req.method !== 'GET' || url.origin !== self.location.origin) return;
   e.respondWith(
-    fetch(req)
+    fetch(req,{cache:'no-store'})
       .then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put(req, copy));
