@@ -380,6 +380,9 @@ html{color-scheme:only light!important}
 
 /* guest-catalog-v17 */
 .guest-group{margin-top:18px!important}.guest-group .home-title{margin-bottom:10px}.guest-group .homecats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.guest-group .homecat{min-height:92px}.searchbox input{width:100%;border:0;outline:0;background:transparent;color:#102A56;font:inherit;font-weight:650}.searchbox input::placeholder{color:#7A899E;opacity:1}
+
+/* auth-flow-v22 */
+.auth-welcome{margin:18px 0 22px}.auth-welcome h1{margin:8px 0 8px;color:#102A56;font-size:34px;line-height:1.08}.auth-welcome p{margin:0;color:#6B7C93;font-size:17px;line-height:1.55}.auth-benefit{margin:0 0 18px}.auth-links{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 12px;margin-top:12px}.auth-links .link{margin:0}.auth-note{text-align:center;margin:16px 8px 0}
 </style>
 </head>
 <body>
@@ -623,18 +626,20 @@ function vGuest(){
   <button class="btn block" data-a="requireAuth" data-v="newIlan">Ücretsiz ilan ver</button><button class="link" data-a="showAuth">Zaten hesabın var mı? Giriş yap</button>`;
 }
 function vAuth(){
-  const up=S.authMode==='up';
-  return `<div class="pagehead"><h1>${up?'Kayıt ol':'Giriş yap'}</h1></div>
-  <p class="lede">İlan aç, teklif al veya uzman olarak teklif ver.</p>
+  const up=S.authMode==='up',fromListing=S.pendingAction==='newIlan';
+  return `<button class="link" data-a="backGuest">← Hizmetlere dön</button>
+  <section class="auth-welcome"><span class="eyebrow">Tamİşim</span><h1>${up?'Ücretsiz hesabını oluştur':'Tekrar hoş geldin'}</h1><p>${fromListing?'İlanını yayınlamak ve uzmanlardan teklif almak için hesabına giriş yap veya ücretsiz kayıt ol.':'İlanlarını, tekliflerini ve mesajlarını tek yerden yönet.'}</p></section>
+  ${fromListing?'<div class="trustbox auth-benefit"><div class="trusticon">✓</div><div><h3>İlanın için hazırsın</h3><p>Kayıt sonrası doğrudan ilan oluşturma adımına devam edeceksin.</p></div></div>':''}
   <div class="field two">
-    ${up?`<div><label class="lb" for="au-name">Adın</label><input class="in" id="au-name" autocomplete="name" value="${esc(S.auth.name)}"></div>`:''}
-    <div><label class="lb" for="au-email">E-posta</label><input class="in" id="au-email" type="email" inputmode="email" autocapitalize="off" autocomplete="email" value="${esc(S.auth.email)}"></div>
-    <div><label class="lb" for="au-pass">Şifre</label><input class="in" id="au-pass" type="password" autocomplete="${up?'new-password':'current-password'}" placeholder="En az 6 karakter" value="${esc(S.auth.pass)}"></div>
+    ${up?`<div><label class="lb" for="au-name">Adın</label><input class="in" id="au-name" autocomplete="name" placeholder="Adın veya işletme adın" value="${esc(S.auth.name)}"></div>`:''}
+    <div><label class="lb" for="au-email">E-posta</label><input class="in" id="au-email" type="email" inputmode="email" autocapitalize="off" autocomplete="email" placeholder="ornek@email.com" value="${esc(S.auth.email)}"></div>
+    <div><label class="lb" for="au-pass">Şifre</label><input class="in" id="au-pass" type="password" autocomplete="${up?'new-password':'current-password'}" placeholder="${up?'En az 6 karakter':'Şifren'}" value="${esc(S.auth.pass)}"></div>
   </div>
   ${S.authErr?`<div class="err" role="alert">${esc(S.authErr)}</div>`:''}
   ${S.authInfo?`<div class="info">${esc(S.authInfo)}</div>`:''}
-  <button class="btn block" data-a="authGo">${up?'Kayıt ol':'Giriş yap'}</button>
-  <button class="link" data-a="authMode">${up?'Hesabın var mı? Giriş yap':'Hesabın yok mu? Kayıt ol'}</button>${!up?'<button class="link" data-a="forgotPass">Şifremi unuttum</button>':''}`;
+  <button class="btn block" data-a="authGo">${up?'Ücretsiz kayıt ol':'Giriş yap'}</button>
+  <div class="auth-links"><button class="link" data-a="authMode">${up?'Zaten hesabın var mı? Giriş yap':'Hesabın yok mu? Ücretsiz kayıt ol'}</button>${!up?'<button class="link" data-a="forgotPass">Şifremi unuttum</button>':''}</div>
+  ${up?'<p class="muted small auth-note">Kayıt olarak Tamİşim’i ilan, teklif ve mesajlaşma için kullanabilirsin.</p>':''}`;
 }
 function vAccount(){
   return `<button class="link" data-a="closeAcct">Geri</button>
@@ -818,6 +823,7 @@ const NET=new Set(['authGo','forgotPass','setNewPass','saveAcct','logout','publi
 const KEEP=new Set(['pickKat','toggleSorun','zaman','sort','filter','pick','send','rate','tab']);
 const A={
   showAuth(){S.guestAuth=true;S.pendingAction=null;S.authErr='';S.authInfo=''},
+  backGuest(){S.guestAuth=false;S.pendingAction=null;S.authErr='';S.authInfo='';S.auth.pass=''},
   guestCat(v){if(KAT[v])S.guestCat=v},
   guestBack(){S.guestCat=null},
   guestService(v){toast(v+' seçildi. İlan vermek için aşağıdaki butonu kullanabilirsin.')},
