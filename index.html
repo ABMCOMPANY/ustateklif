@@ -446,7 +446,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
   draft:null,quoteFor:null,q:null,tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
-  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
+  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
 const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
@@ -613,9 +613,11 @@ function vGuest(){
     const v=KAT[S.guestCat];
     return `<button class="link" data-a="guestBack">← Tüm hizmetler</button><section class="create-head"><span class="eyebrow">${esc(v.grup)}</span><h1>${v.ikon} ${esc(v.ad)}</h1><p>İhtiyacına uygun hizmeti seç, detayları incele. İlan vermek istediğinde ücretsiz hesap açabilirsin.</p></section><div class="field create-card"><h2>Hangi hizmete ihtiyacın var?</h2><div class="chips">${v.sorunlar.map(x=>`<button class="chip" data-a="guestService" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div></div><section class="trustbox"><div class="trusticon">✓</div><div><h3>${esc(v.ad)} için teklif al</h3><p>İşini anlat, uygun uzmanlardan gelen teklifleri karşılaştır.</p></div></section><button class="btn block" data-a="requireAuth" data-v="newIlan">Bu hizmet için ilan ver</button>`;
   }
-  const groups=[...new Set(Object.values(KAT).map(v=>v.grup))];
-  const sections=groups.map(g=>`<section class="home-section guest-group"><div class="home-title"><h2>${esc(g)}</h2></div><div class="homecats">${Object.entries(KAT).filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="homecat" data-a="guestCat" data-v="${k}"><span>${v.ikon}</span><b>${esc(v.ad)}</b></button>`).join('')}</div></section>`).join('');
-  return `<section class="hero"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet, ihtiyacını bul. İlan vermek istediğinde ücretsiz kayıt ol.</p><div class="searchbox"><span>⌕</span><input id="guest-search" placeholder="Hizmet ara: su kaçağı, klima, boya..." autocomplete="off"></div></section>
+  const q=(S.guestSearch||'').trim().toLocaleLowerCase('tr-TR');
+  const matches=Object.entries(KAT).filter(([,v])=>!q||v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q)));
+  const groups=[...new Set(matches.map(([,v])=>v.grup))];
+  const sections=groups.map(g=>`<section class="home-section guest-group"><div class="home-title"><h2>${esc(g)}</h2></div><div class="homecats">${matches.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="homecat" data-a="guestCat" data-v="${k}"><span>${v.ikon}</span><b>${esc(v.ad)}</b><small>${q?esc(v.sorunlar.filter(x=>x.toLocaleLowerCase('tr-TR').includes(q)).slice(0,2).join(' · ')):''}</small></button>`).join('')}</div></section>`).join('') || `<div class="empty"><span>⌕</span><h3>Hizmet bulunamadı</h3><p>Başka bir hizmet adı veya sorun yazarak tekrar ara.</p></div>`;
+  return `<section class="hero"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet, ihtiyacını bul. İlan vermek istediğinde ücretsiz kayıt ol.</p><div class="searchbox"><span>⌕</span><input id="guest-search" value="${esc(S.guestSearch)}" placeholder="Hizmet ara: su kaçağı, klima, boya..." autocomplete="off"></div></section>
   <section class="home-section"><div class="home-title"><div><span class="section-kicker">Hizmetler</span><h2>Tüm kategoriler</h2></div></div></section>${sections}
   <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Ücretsiz hesap açıp ilanını oluştur.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section>
   <button class="btn block" data-a="requireAuth" data-v="newIlan">Ücretsiz ilan ver</button><button class="link" data-a="showAuth">Zaten hesabın var mı? Giriş yap</button>`;
@@ -962,6 +964,7 @@ document.addEventListener('keydown',e=>{
   else if(id==='au-name'||id==='au-email'||id==='au-pass'){e.preventDefault();run('authGo')}
 });
 const F={
+  'guest-search':v=>{S.guestSearch=v;render()},
   'd-not':v=>{S.draft.not=v},'d-city':v=>{S.draft.city=v},'d-district':v=>{S.draft.district=v},'d-neighborhood':v=>{S.draft.neighborhood=v},'cat-search':v=>{S.catSearch=v},
   'q-fiyat':v=>{S.q.fiyat=v.replace(/\D/g,'')},'q-sure':v=>{S.q.sure=v},'q-not':v=>{S.q.not=v},
   'au-name':v=>{S.auth.name=v},'au-email':v=>{S.auth.email=v},'au-pass':v=>{S.auth.pass=v},
