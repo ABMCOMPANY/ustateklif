@@ -678,6 +678,27 @@ function vList(){
 }
 function vNew(){
   const d=S.draft,q=S.catSearch.trim().toLocaleLowerCase('tr-TR');
+  const detailCopy={
+    boya:{label:'Boya işini biraz daha anlat',placeholder:'Boyanacak alan yaklaşık kaç m²? Duvarların durumu nasıl? Boya rengi/markası belli mi? Eşyalar taşınacak mı?'},
+    tesisat:{label:'Tesisat sorununu biraz daha anlat',placeholder:'Sorun tam olarak nerede? Ne zamandır var? Su kaçağı, tıkanıklık veya arıza sürekli mi? Varsa fotoğraf ekleyebilirsin.'},
+    elektrik:{label:'Elektrik işini biraz daha anlat',placeholder:'Sorun veya yapılacak iş nedir? Kaç priz/anahtar/avize var? Elektrik tamamen kesik mi? Varsa sigorta/pano bilgisi ekle.'},
+    mobilya:{label:'Mobilya işini biraz daha anlat',placeholder:'Hangi mobilya kurulacak veya tamir edilecek? Ölçü, marka/model ve eksik parça varsa belirt.'},
+    fayans:{label:'Fayans işini biraz daha anlat',placeholder:'Uygulama yapılacak alan yaklaşık kaç m²? Eski fayans sökülecek mi? Fayans/seramik hazır mı?'},
+    klima:{label:'Klima ihtiyacını biraz daha anlat',placeholder:'Klima marka/modeli nedir? Sorun ne zaman başladı? Soğutmama, su akıtma, ses veya hata kodu varsa belirt.'},
+    beyaz:{label:'Cihaz sorununu biraz daha anlat',placeholder:'Cihazın marka/modeli ve yaklaşık yaşı nedir? Sorun ne zamandır var? Varsa hata kodunu yaz.'},
+    kombi:{label:'Kombi sorununu biraz daha anlat',placeholder:'Kombi marka/modeli nedir? Isıtma veya sıcak su sorunu var mı? Basınç, hata kodu veya ses gibi belirtileri yaz.'},
+    elektronik:{label:'Elektronik ihtiyacını biraz daha anlat',placeholder:'Cihaz veya kurulum nedir? Marka/model, yaşanan sorun ve varsa hata/bağlantı bilgilerini yaz.'},
+    lastik:{label:'Lastik / jant ihtiyacını biraz daha anlat',placeholder:'Araç modeli, lastik ölçüsü ve sorun nedir? Patlak, değişim, balans veya yerinde hizmet ihtiyacını belirt.'},
+    oto:{label:'Araç ihtiyacını biraz daha anlat',placeholder:'Araç marka/model/yıl nedir? Sorun veya bakım ihtiyacı ne? Varsa uyarı lambası, ses veya belirtiyi yaz.'},
+    temizlik:{label:'Temizlik ihtiyacını biraz daha anlat',placeholder:'Ev/ofis kaç oda veya yaklaşık kaç m²? Boş mu eşyalı mı? Cam, koltuk, detaylı temizlik gibi özel istekleri belirt.'},
+    nakliyat:{label:'Taşıma işini biraz daha anlat',placeholder:'Nereden nereye taşınacak? Yaklaşık eşya miktarı, kat/asansör durumu ve paketleme ihtiyacını belirt.'},
+    bahce:{label:'Bahçe işini biraz daha anlat',placeholder:'Bahçenin yaklaşık büyüklüğü nedir? Çim biçme, budama, temizlik veya düzenleme ihtiyacını ve varsa özel durumları yaz.'},
+    ozelders:{label:'Ders ihtiyacını biraz daha anlat',placeholder:'Öğrencinin sınıfı/seviyesi nedir? Hedefi ne? Online mı yüz yüze mı tercih ediyorsun? Haftada kaç ders düşünüyorsun?'},
+    guzellik:{label:'Bakım ihtiyacını biraz daha anlat',placeholder:'Hangi uygulamayı istiyorsun? Saç uzunluğu, istenen model/renk veya özel gün detayı varsa belirt. Hizmet evde mi olsun?'},
+    kucukisler:{label:'Montaj / küçük işi biraz daha anlat',placeholder:'Ne monte edilecek veya ne tamir edilecek? Adet, yaklaşık ölçü ve duvar/yüzey türünü belirt. Gerekli aparat sende mi?'},
+    evcilhayvan:{label:'Evcil hayvan ihtiyacını biraz daha anlat',placeholder:'Hayvanın türü, yaşı ve karakteri nasıl? Kaç saat/gün bakım gerekiyor? Gezdirme, mama, bakım veya taşıma detaylarını yaz.'},
+    diger:{label:'İhtiyacını biraz daha anlat',placeholder:'Yapılmasını istediğin işi mümkün olduğunca açık anlat. Ölçü, adet, süre veya özel bir durum varsa ekle.'}
+  }[d.kat]||{label:'İşi biraz daha anlat',placeholder:'Yapılmasını istediğin işi, önemli detayları ve varsa özel durumları yaz.'};
   const entries=Object.entries(KAT).filter(([k,v])=>!q||v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q)));
   const groups=[...new Set(entries.map(([,v])=>v.grup))];
   const cats=groups.map(g=>`<div class="catgroup"><h3>${esc(g)}</h3><div class="cats">${entries.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="cat" data-a="pickKat" data-v="${k}" aria-pressed="${d.kat===k}"><span class="ico" aria-hidden="true">${v.ikon}</span>${v.ad}</button>`).join('')}</div></div>`).join('');
@@ -689,8 +710,8 @@ function vNew(){
     <input class="in" id="cat-search" value="${esc(S.catSearch)}" placeholder="Örn. boya, su kaçağı, lastik..." autocomplete="off">
     <div class="catresults">${cats||'<div class="empty">Aramana uygun hizmet bulunamadı.</div>'}</div></div>
   ${sorun}
-  <div class="field create-card"><span class="stepno">3</span><label class="lb" for="d-not">İşi biraz daha anlat</label>
-    <textarea class="in" id="d-not" maxlength="500" placeholder="Cihazın yaşı, ne zamandır olduğu, varsa hata kodu...">${esc(d.not)}</textarea></div>
+  <div class="field create-card"><span class="stepno">3</span><label class="lb" for="d-not">${detailCopy.label}</label>
+    <textarea class="in" id="d-not" maxlength="500" placeholder="${detailCopy.placeholder}">${esc(d.not)}</textarea></div>
   <div class="field create-card"><span class="stepno">4</span><h2>Fotoğraf ekle <small class="optional">İsteğe bağlı</small></h2><p class="hint">Uzmanın işi daha doğru değerlendirmesi için en fazla 5 fotoğraf ekleyebilirsin. Fotoğraf başına en fazla 8 MB.</p>
     <div class="photo-picker"><label class="uploadbox" for="d-photos">📷 Fotoğraf seç<input id="d-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
     ${d.photos&&d.photos.length?`<div class="photo-grid">${d.photos.map((x,i)=>`<div class="photo-thumb"><img src="${esc(x.preview)}" alt="Seçilen fotoğraf ${i+1}"><button type="button" data-a="removePhoto" data-v="${i}" aria-label="Fotoğrafı kaldır">×</button></div>`).join('')}</div>`:''}</div></div>
@@ -1069,7 +1090,7 @@ if(sb){
   });
 }else{render()}
 if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=25',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=27',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));
 }
 })();
 </script>
