@@ -976,15 +976,11 @@ document.addEventListener('input',e=>{
   if(e.target.id==='cat-search'){
     S.catSearch=e.target.value;
     const q=S.catSearch.trim().toLocaleLowerCase('tr-TR');
-    document.querySelectorAll('.catgroup').forEach(group=>{
-      let any=false;
-      group.querySelectorAll('.cat').forEach(card=>{
-        const k=card.dataset.v,v=KAT[k];
-        const hit=!q||(v&&(v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q))));
-        card.hidden=!hit;if(hit)any=true;
-      });
-      group.hidden=!any;
-    });
+    const entries=Object.entries(KAT).filter(([,v])=>!q||v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q)));
+    const groups=[...new Set(entries.map(([,v])=>v.grup))];
+    const html=groups.map(g=>'<div class="catgroup"><h3>'+esc(g)+'</h3><div class="cats">'+entries.filter(([,v])=>v.grup===g).map(([k,v])=>'<button class="cat" data-a="pickKat" data-v="'+k+'" aria-pressed="'+(S.draft&&S.draft.kat===k)+'"><span class="ico" aria-hidden="true">'+v.ikon+'</span>'+esc(v.ad)+'</button>').join('')+'</div></div>').join('');
+    const box=document.querySelector('.catresults');
+    if(box)box.innerHTML=html||'<div class="empty">Aramana uygun hizmet bulunamadı.</div>';
     return;
   }
   if(e.target.id==='guest-search'){
