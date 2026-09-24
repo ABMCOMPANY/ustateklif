@@ -973,6 +973,20 @@ const F={
 };
 function onField(e){const f=F[e.target.id];if(f){f(e.target.value);upd()}}
 document.addEventListener('input',e=>{
+  if(e.target.id==='cat-search'){
+    S.catSearch=e.target.value;
+    const q=S.catSearch.trim().toLocaleLowerCase('tr-TR');
+    document.querySelectorAll('.catgroup').forEach(group=>{
+      let any=false;
+      group.querySelectorAll('.cat').forEach(card=>{
+        const k=card.dataset.v,v=KAT[k];
+        const hit=!q||(v&&(v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q))));
+        card.hidden=!hit;if(hit)any=true;
+      });
+      group.hidden=!any;
+    });
+    return;
+  }
   if(e.target.id==='guest-search'){
     S.guestSearch=e.target.value;
     const q=S.guestSearch.trim().toLocaleLowerCase('tr-TR');
