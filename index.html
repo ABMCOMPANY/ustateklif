@@ -390,6 +390,9 @@ html{color-scheme:only light!important}
 
 /* quote-polish-v24 */
 html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,.quote-head .section-kicker{opacity:1!important}.quote-head h1{color:#102A56!important;-webkit-text-fill-color:#102A56!important}.quote-head p{color:#64758C!important;-webkit-text-fill-color:#64758C!important}.quote-head .section-kicker{color:#1457D9!important;-webkit-text-fill-color:#1457D9!important}.ticket .meta .posted{display:none}
+
+/* service-icons-v28 */
+.svc-icon{width:28px;height:28px;display:inline-grid;place-items:center;color:#1457D9;flex:0 0 28px}.svc-icon svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.homecat .svc-icon,.cat .svc-icon{width:30px;height:30px}.stub .svc-icon{color:currentColor;width:26px;height:26px}
 </style>
 </head>
 <body>
@@ -420,26 +423,49 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 const tl=n=>Number(n).toLocaleString('tr-TR')+' ₺';
 
 const KAT={
-  boya:{ad:'Boya & Badana',ikon:'🎨',grup:'Ev & Tadilat',sorunlar:['İç cephe boya','Dış cephe boya','Tek oda boya','Tavan boya','Duvar kağıdı sökme / uygulama','Alçı / sıva tamiri','Rutubet sonrası boya']},
-  tesisat:{ad:'Su Tesisatı',ikon:'🚰',grup:'Ev & Tadilat',sorunlar:['Su kaçağı','Tıkanıklık açma','Musluk / batarya','Rezervuar arızası','Lavabo / klozet montajı','Petek / tesisat işi','Kombi bağlantısı']},
-  elektrik:{ad:'Elektrik',ikon:'⚡',grup:'Ev & Tadilat',sorunlar:['Sigorta atıyor','Priz / anahtar','Avize / aydınlatma montajı','Kısa devre','Elektrik tesisatı','Pano / sayaç','Diafon / zil']},
-  mobilya:{ad:'Mobilya & Montaj',ikon:'🪑',grup:'Ev & Tadilat',sorunlar:['Mobilya montajı','Dolap montajı','Mutfak dolabı','Kapı / menteşe tamiri','Raf / TV ünitesi montajı','Mobilya tamiri','Özel ölçü mobilya']},
-  fayans:{ad:'Fayans & Seramik',ikon:'🧱',grup:'Ev & Tadilat',sorunlar:['Fayans döşeme','Seramik döşeme','Derz yenileme','Kırık fayans değişimi','Banyo tadilatı','Mutfak tezgah arası']},
-  klima:{ad:'Klima',ikon:'❄️',grup:'Teknik Servis',sorunlar:['Soğutmuyor / ısıtmıyor','Su damlatıyor','Garip ses yapıyor','Açılmıyor','Gaz dolumu','Yıllık bakım / temizlik','Montaj / demontaj']},
-  beyaz:{ad:'Beyaz Eşya',ikon:'🧺',grup:'Teknik Servis',sorunlar:['Çamaşır makinesi','Bulaşık makinesi','Buzdolabı','Fırın / ocak','Kurutma makinesi','Derin dondurucu']},
-  kombi:{ad:'Kombi & Isıtma',ikon:'🔥',grup:'Teknik Servis',sorunlar:['Kombi arızası','Kombi bakımı','Petek temizliği','Petek ısınmıyor','Termostat montajı','Kombi montajı / değişimi']},
-  elektronik:{ad:'TV & Elektronik',ikon:'📺',grup:'Teknik Servis',sorunlar:['TV arızası','TV duvar montajı','Uydu / anten','İnternet kablolama','Güvenlik kamerası','Modem / ağ kurulumu']},
-  lastik:{ad:'Lastik & Jant',ikon:'🛞',grup:'Oto & Yol',sorunlar:['Patlak / delik','Lastik değişimi','Rot balans','Sübap değişimi','Mevsimlik lastik takma','Jant düzeltme','Yerinde lastik hizmeti']},
-  oto:{ad:'Oto Servis',ikon:'🚗',grup:'Oto & Yol',sorunlar:['Periyodik bakım','Akü değişimi','Fren bakımı','Yağ / filtre değişimi','Arıza tespiti','Oto elektrik','Yol yardım']},
-  temizlik:{ad:'Temizlik',ikon:'🧹',grup:'Ev & Yaşam',sorunlar:['Ev temizliği','Boş ev temizliği','İnşaat sonrası temizlik','Ofis temizliği','Koltuk yıkama','Halı yıkama','Cam temizliği']},
-  nakliyat:{ad:'Nakliyat',ikon:'🚚',grup:'Ev & Yaşam',sorunlar:['Evden eve nakliyat','Parça eşya taşıma','Şehirler arası taşıma','Ofis taşıma','Eşya paketleme','Eşya depolama']},
-  bahce:{ad:'Bahçe & Peyzaj',ikon:'🌿',grup:'Ev & Yaşam',sorunlar:['Bahçe bakımı','Çim biçme','Ağaç budama','Peyzaj düzenleme','Sulama sistemi','Bahçe temizliği']},
-  ozelders:{ad:'Özel Ders & Eğitim',ikon:'📚',grup:'Eğitim',sorunlar:['Matematik özel ders','Türkçe özel ders','İngilizce özel ders','Fen bilimleri özel ders','İlkokul ders desteği','LGS hazırlık','YKS hazırlık','Okuma yazma desteği','Bilgisayar / yazılım dersi','Müzik / enstrüman dersi']},
-  guzellik:{ad:'Güzellik & Bakım',ikon:'💇',grup:'Kişisel Bakım',sorunlar:['Evde kuaför','Saç kesimi / şekillendirme','Saç boyama','Makyaj','Gelin saçı / makyajı','Manikür / pedikür','Cilt bakımı']},
-  kucukisler:{ad:'Küçük İşler & Montaj',ikon:'🔩',grup:'Ev & Tadilat',sorunlar:['Perde / korniş montajı','TV duvar montajı','Tablo / ayna asma','Raf montajı','Mobilya kurulumu','Avize montajı','Duvara montaj / delme','Küçük ev tamiratı']},
-  evcilhayvan:{ad:'Evcil Hayvan Hizmetleri',ikon:'🐾',grup:'Ev & Yaşam',sorunlar:['Köpek gezdirme','Evde kedi bakımı','Evde köpek bakımı','Mama / su ziyareti','Pet kuaförü','Tırnak kesimi / bakım','Evcil hayvan taşıma']},
-  diger:{ad:'Diğer Hizmet',ikon:'🛠️',grup:'Diğer',sorunlar:['Montaj / kurulum','Tamir / bakım','Taşıma','Temizlik','Tadilat','Keşif / danışma','Diğer']}
+  boya:{ad:'Boya & Badana',ikon:'',grup:'Ev & Tadilat',sorunlar:['İç cephe boya','Dış cephe boya','Tek oda boya','Tavan boya','Duvar kağıdı sökme / uygulama','Alçı / sıva tamiri','Rutubet sonrası boya']},
+  tesisat:{ad:'Su Tesisatı',ikon:'',grup:'Ev & Tadilat',sorunlar:['Su kaçağı','Tıkanıklık açma','Musluk / batarya','Rezervuar arızası','Lavabo / klozet montajı','Petek / tesisat işi','Kombi bağlantısı']},
+  elektrik:{ad:'Elektrik',ikon:'',grup:'Ev & Tadilat',sorunlar:['Sigorta atıyor','Priz / anahtar','Avize / aydınlatma montajı','Kısa devre','Elektrik tesisatı','Pano / sayaç','Diafon / zil']},
+  mobilya:{ad:'Mobilya & Montaj',ikon:'',grup:'Ev & Tadilat',sorunlar:['Mobilya montajı','Dolap montajı','Mutfak dolabı','Kapı / menteşe tamiri','Raf / TV ünitesi montajı','Mobilya tamiri','Özel ölçü mobilya']},
+  fayans:{ad:'Fayans & Seramik',ikon:'',grup:'Ev & Tadilat',sorunlar:['Fayans döşeme','Seramik döşeme','Derz yenileme','Kırık fayans değişimi','Banyo tadilatı','Mutfak tezgah arası']},
+  klima:{ad:'Klima',ikon:'',grup:'Teknik Servis',sorunlar:['Soğutmuyor / ısıtmıyor','Su damlatıyor','Garip ses yapıyor','Açılmıyor','Gaz dolumu','Yıllık bakım / temizlik','Montaj / demontaj']},
+  beyaz:{ad:'Beyaz Eşya',ikon:'',grup:'Teknik Servis',sorunlar:['Çamaşır makinesi','Bulaşık makinesi','Buzdolabı','Fırın / ocak','Kurutma makinesi','Derin dondurucu']},
+  kombi:{ad:'Kombi & Isıtma',ikon:'',grup:'Teknik Servis',sorunlar:['Kombi arızası','Kombi bakımı','Petek temizliği','Petek ısınmıyor','Termostat montajı','Kombi montajı / değişimi']},
+  elektronik:{ad:'TV & Elektronik',ikon:'',grup:'Teknik Servis',sorunlar:['TV arızası','TV duvar montajı','Uydu / anten','İnternet kablolama','Güvenlik kamerası','Modem / ağ kurulumu']},
+  lastik:{ad:'Lastik & Jant',ikon:'',grup:'Oto & Yol',sorunlar:['Patlak / delik','Lastik değişimi','Rot balans','Sübap değişimi','Mevsimlik lastik takma','Jant düzeltme','Yerinde lastik hizmeti']},
+  oto:{ad:'Oto Servis',ikon:'',grup:'Oto & Yol',sorunlar:['Periyodik bakım','Akü değişimi','Fren bakımı','Yağ / filtre değişimi','Arıza tespiti','Oto elektrik','Yol yardım']},
+  temizlik:{ad:'Temizlik',ikon:'',grup:'Ev & Yaşam',sorunlar:['Ev temizliği','Boş ev temizliği','İnşaat sonrası temizlik','Ofis temizliği','Koltuk yıkama','Halı yıkama','Cam temizliği']},
+  nakliyat:{ad:'Nakliyat',ikon:'',grup:'Ev & Yaşam',sorunlar:['Evden eve nakliyat','Parça eşya taşıma','Şehirler arası taşıma','Ofis taşıma','Eşya paketleme','Eşya depolama']},
+  bahce:{ad:'Bahçe & Peyzaj',ikon:'',grup:'Ev & Yaşam',sorunlar:['Bahçe bakımı','Çim biçme','Ağaç budama','Peyzaj düzenleme','Sulama sistemi','Bahçe temizliği']},
+  ozelders:{ad:'Özel Ders & Eğitim',ikon:'',grup:'Eğitim',sorunlar:['Matematik özel ders','Türkçe özel ders','İngilizce özel ders','Fen bilimleri özel ders','İlkokul ders desteği','LGS hazırlık','YKS hazırlık','Okuma yazma desteği','Bilgisayar / yazılım dersi','Müzik / enstrüman dersi']},
+  guzellik:{ad:'Güzellik & Bakım',ikon:'',grup:'Kişisel Bakım',sorunlar:['Evde kuaför','Saç kesimi / şekillendirme','Saç boyama','Makyaj','Gelin saçı / makyajı','Manikür / pedikür','Cilt bakımı']},
+  kucukisler:{ad:'Küçük İşler & Montaj',ikon:'',grup:'Ev & Tadilat',sorunlar:['Perde / korniş montajı','TV duvar montajı','Tablo / ayna asma','Raf montajı','Mobilya kurulumu','Avize montajı','Duvara montaj / delme','Küçük ev tamiratı']},
+  evcilhayvan:{ad:'Evcil Hayvan Hizmetleri',ikon:'',grup:'Ev & Yaşam',sorunlar:['Köpek gezdirme','Evde kedi bakımı','Evde köpek bakımı','Mama / su ziyareti','Pet kuaförü','Tırnak kesimi / bakım','Evcil hayvan taşıma']},
+  diger:{ad:'Diğer Hizmet',ikon:'',grup:'Diğer',sorunlar:['Montaj / kurulum','Tamir / bakım','Taşıma','Temizlik','Tadilat','Keşif / danışma','Diğer']}
 };
+const ICONS={
+  boya:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10a2 2 0 0 1 2 2v2H8a2 2 0 0 1-2-2V6Z"/><path d="M16 9h2a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-5"/><path d="M13 14v6"/><path d="M10 20h6"/></svg>',
+  tesisat:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s5 5.5 5 10a5 5 0 1 1-10 0c0-4.5 5-10 5-10Z"/></svg>',
+  elektrik:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M8.5 14.5A6 6 0 1 1 15.5 14c-.9.7-1.5 1.7-1.5 2.8h-4c0-1.1-.6-2.1-1.5-2.8Z"/></svg>',
+  mobilya:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="8" width="16" height="10" rx="2"/><path d="M8 8V6h8v2"/><path d="M9 12h6"/><path d="M7 18v2M17 18v2"/></svg>',
+  fayans:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/></svg>',
+  klima:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5.6 6.5l12.8 11M18.4 6.5l-12.8 11"/><path d="M8.5 4.8 12 7l3.5-2.2M8.5 19.2 12 17l3.5 2.2M4.8 9l2.2 3-2.2 3M19.2 9 17 12l2.2 3"/></svg>',
+  beyaz:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="7" height="16" rx="1.5"/><path d="M3 10h7M7.5 7h.01"/><rect x="13" y="7" width="8" height="13" rx="1.5"/><circle cx="17" cy="14" r="2.5"/><path d="M15 10h4"/></svg>',
+  kombi:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="8" r="2"/><path d="M9 14c0 1 1 1.5 1 2.5S9 18 9 19M12 14c0 1 1 1.5 1 2.5S12 18 12 19M15 14c0 1 1 1.5 1 2.5S15 18 15 19"/></svg>',
+  elektronik:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="13" rx="2"/><path d="M8 21h8M12 18v3"/></svg>',
+  lastik:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 4v4M12 16v4M4 12h4M16 12h4M6.3 6.3 9 9M15 15l2.7 2.7M17.7 6.3 15 9M9 15l-2.7 2.7"/></svg>',
+  oto:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14l2-6h12l2 6"/><path d="M3 14h18v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4Z"/><circle cx="7" cy="17" r="1"/><circle cx="17" cy="17" r="1"/></svg>',
+  temizlik:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3 8 20"/><path d="M7 14h7l3 6H4l3-6Z"/></svg>',
+  nakliyat:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v11H3z"/><path d="M14 10h4l3 3v4h-7z"/><circle cx="7" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>',
+  bahce:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V10"/><path d="M12 13c-4 0-7-2-7-6 4 0 7 2 7 6ZM12 10c4 0 7-2 7-6-4 0-7 2-7 6Z"/><path d="M6 21h12"/></svg>',
+  ozelders:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5v-16Z"/></svg>',
+  guzellik:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4c5 1 8 5 8 10"/><path d="M17 4c-5 1-8 5-8 10"/><path d="M9 14c0 3 1.5 5 3 6 1.5-1 3-3 3-6"/><path d="M6 8c2 0 3-1 4-3M18 8c-2 0-3-1-4-3"/></svg>',
+  kucukisler:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4l6 6-2 2-6-6 2-2Z"/><path d="M12 6 5 13"/><path d="M4 14l6 6"/><path d="M3 18l3 3"/></svg>',
+  evcilhayvan:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="2"/><circle cx="16" cy="8" r="2"/><circle cx="6" cy="13" r="2"/><circle cx="18" cy="13" r="2"/><path d="M12 12c-3 0-5 2.5-5 5 0 2 2 3 5 3s5-1 5-3c0-2.5-2-5-5-5Z"/></svg>',
+  diger:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5a4 4 0 0 0 5 5l-8 8-4-4 8-8Z"/><path d="M5 16l3 3-2 2-3-3 2-2Z"/></svg>'
+};
+const iconFor=k=>'<span class="svc-icon">'+(ICONS[k]||ICONS.diger)+'</span>';
+
 const ILLER=["Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Isparta", "Mersin", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce"];
 const SURE=['Bugün, 2 saat içinde','Bugün akşam','Yarın','2-3 gün içinde'];
 const ZAMAN=['Bugün','Yarın','Bu hafta'];
@@ -596,7 +622,7 @@ function ticket(l,o={}){
   const k=KAT[l.category]||{ad:'Diğer',ikon:'🛠️'};
   const title=esc((l.problems||[]).join(', '));
   return `<article class="ticket">
-    <div class="stub"><span class="ico" aria-hidden="true">${k.ikon}</span><span class="kn">${esc(k.ad)}</span></div>
+    <div class="stub"><span class="ico" aria-hidden="true">${iconFor(l.category)}</span><span class="kn">${esc(k.ad)}</span></div>
     <div class="tbody">
       <h3>${o.act?`<button class="stretch" data-a="${o.act}" data-v="${l.id}">${title}</button>`:title}</h3>
       ${l.note?`<p class="note">${esc(l.note)}</p>`:''}
@@ -625,12 +651,12 @@ function vSetup(){
 function vGuest(){
   if(S.guestCat&&KAT[S.guestCat]){
     const v=KAT[S.guestCat];
-    return `<button class="link" data-a="guestBack">← Tüm hizmetler</button><section class="create-head"><span class="eyebrow">${esc(v.grup)}</span><h1>${v.ikon} ${esc(v.ad)}</h1><p>İhtiyacına uygun hizmeti seç, detayları incele. İlan vermek istediğinde ücretsiz hesap açabilirsin.</p></section><div class="field create-card"><h2>Hangi hizmete ihtiyacın var?</h2><div class="chips">${v.sorunlar.map(x=>`<button class="chip" data-a="guestService" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div></div><section class="trustbox"><div class="trusticon">✓</div><div><h3>${esc(v.ad)} için teklif al</h3><p>İşini anlat, uygun uzmanlardan gelen teklifleri karşılaştır.</p></div></section><button class="btn block" data-a="requireAuth" data-v="newIlan">Bu hizmet için ilan ver</button>`;
+    return `<button class="link" data-a="guestBack">← Tüm hizmetler</button><section class="create-head"><span class="eyebrow">${esc(v.grup)}</span><h1>${iconFor(k)} ${esc(v.ad)}</h1><p>İhtiyacına uygun hizmeti seç, detayları incele. İlan vermek istediğinde ücretsiz hesap açabilirsin.</p></section><div class="field create-card"><h2>Hangi hizmete ihtiyacın var?</h2><div class="chips">${v.sorunlar.map(x=>`<button class="chip" data-a="guestService" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div></div><section class="trustbox"><div class="trusticon">✓</div><div><h3>${esc(v.ad)} için teklif al</h3><p>İşini anlat, uygun uzmanlardan gelen teklifleri karşılaştır.</p></div></section><button class="btn block" data-a="requireAuth" data-v="newIlan">Bu hizmet için ilan ver</button>`;
   }
   const q=(S.guestSearch||'').trim().toLocaleLowerCase('tr-TR');
   const matches=Object.entries(KAT).filter(([,v])=>!q||v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q)));
   const groups=[...new Set(matches.map(([,v])=>v.grup))];
-  const sections=groups.map(g=>`<section class="home-section guest-group"><div class="home-title"><h2>${esc(g)}</h2></div><div class="homecats">${matches.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="homecat" data-a="guestCat" data-v="${k}"><span>${v.ikon}</span><b>${esc(v.ad)}</b><small>${q?esc(v.sorunlar.filter(x=>x.toLocaleLowerCase('tr-TR').includes(q)).slice(0,2).join(' · ')):''}</small></button>`).join('')}</div></section>`).join('') || `<div class="empty"><span>⌕</span><h3>Hizmet bulunamadı</h3><p>Başka bir hizmet adı veya sorun yazarak tekrar ara.</p></div>`;
+  const sections=groups.map(g=>`<section class="home-section guest-group"><div class="home-title"><h2>${esc(g)}</h2></div><div class="homecats">${matches.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="homecat" data-a="guestCat" data-v="${k}"><span>${iconFor(k)}</span><b>${esc(v.ad)}</b><small>${q?esc(v.sorunlar.filter(x=>x.toLocaleLowerCase('tr-TR').includes(q)).slice(0,2).join(' · ')):''}</small></button>`).join('')}</div></section>`).join('') || `<div class="empty"><span>⌕</span><h3>Hizmet bulunamadı</h3><p>Başka bir hizmet adı veya sorun yazarak tekrar ara.</p></div>`;
   return `<section class="hero"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet, ihtiyacını bul. İlan vermek istediğinde ücretsiz kayıt ol.</p><div class="searchbox"><span>⌕</span><input id="guest-search" value="${esc(S.guestSearch)}" placeholder="Hizmet ara: su kaçağı, klima, boya..." autocomplete="off"></div></section>
   <section class="home-section guest-catalog-title"><div class="home-title"><div><span class="section-kicker">Hizmetler</span><h2>${q?'Arama sonuçları':'Tüm kategoriler'}</h2></div></div></section>${sections}
   <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Ücretsiz hesap açıp ilanını oluştur.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section>
@@ -672,7 +698,7 @@ function vAccount(){
 /* müşteri */
 function vList(){
   const popular=['boya','tesisat','elektrik','klima','temizlik','nakliyat','mobilya','oto'];
-  const cats=popular.map(k=>{const v=KAT[k];return `<button class="homecat" data-a="quickCat" data-v="${k}"><span>${v.ikon}</span><b>${esc(v.ad)}</b></button>`}).join('');
+  const cats=popular.map(k=>{const v=KAT[k];return `<button class="homecat" data-a="quickCat" data-v="${k}"><span>${iconFor(k)}</span><b>${esc(v.ad)}</b></button>`}).join('');
   const jobs=D.mine.length?D.mine.map(l=>ticket(l,{act:'open',pill:pillMine(l)})).join(''):'<div class="empty jobs-empty"><span>▤</span><h3>Henüz ilanın yok</h3><p>İlk ilanını ver, uygun uzmanlardan teklifler almaya başla.</p><button class="btn sm" data-a="newIlan">İlk ilanımı ver</button></div>';
   return `<section class="hero"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>İşini anlat, teklif al, karşılaştır ve güvenle seç.</p><button class="searchbox" data-a="newIlan"><span>⌕</span> Hangi hizmete ihtiyacın var?</button></section>
   <section class="home-section"><div class="home-title"><h2>Popüler hizmetler</h2><button class="link" data-a="newIlan">Tümünü gör</button></div><div class="homecats">${cats}</div></section>
@@ -705,7 +731,7 @@ function vNew(){
   }[d.kat]||{label:'İşi biraz daha anlat',placeholder:'Yapılmasını istediğin işi, önemli detayları ve varsa özel durumları yaz.'};
   const entries=Object.entries(KAT).filter(([k,v])=>!q||v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q)));
   const groups=[...new Set(entries.map(([,v])=>v.grup))];
-  const cats=groups.map(g=>`<div class="catgroup"><h3>${esc(g)}</h3><div class="cats">${entries.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="cat" data-a="pickKat" data-v="${k}" aria-pressed="${d.kat===k}"><span class="ico" aria-hidden="true">${v.ikon}</span>${v.ad}</button>`).join('')}</div></div>`).join('');
+  const cats=groups.map(g=>`<div class="catgroup"><h3>${esc(g)}</h3><div class="cats">${entries.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="cat" data-a="pickKat" data-v="${k}" aria-pressed="${d.kat===k}"><span class="ico" aria-hidden="true">${iconFor(k)}</span>${v.ad}</button>`).join('')}</div></div>`).join('');
   const sorun=d.kat?`<div class="field create-card"><span class="stepno">2</span><h2>Hangi hizmete ihtiyacın var?</h2><p class="hint">Birden fazla seçebilirsin.</p>
     <div class="chips">${KAT[d.kat].sorunlar.map(s=>`<button class="chip" data-a="toggleSorun" data-v="${esc(s)}" aria-pressed="${d.sorunlar.includes(s)}">${esc(s)}</button>`).join('')}</div></div>`:'';
   return `<button class="link" data-a="back">İlanlarıma dön</button>
