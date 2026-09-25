@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v32-promotions">
+<meta name="tamisim-build" content="v33-promo-live">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1089,7 +1089,8 @@ const A={
     if(r.error)throw r.error;
     const dep=chosen==='deposit_cash'?quoteDeposit(q):null;
     try{
-      const pr=await sb.from('listing_payment_choices').insert({listing_id:l.id,quote_id:+v,customer_id:uid(),method:chosen,deposit_percent:dep});
+      const promo=S.promoApplied[+v]||null;
+      const pr=await sb.from('listing_payment_choices').insert({listing_id:l.id,quote_id:+v,customer_id:uid(),method:chosen,deposit_percent:dep,promotion_id:promo&&promo.id||null,discount_amount:promo&&promo.discount||0});
       if(pr.error)throw pr.error;
     }catch(e){
       try{localStorage.setItem('tamisim_pay_'+l.id,JSON.stringify({quote_id:+v,method:chosen,deposit_percent:dep,promotion:S.promoApplied[+v]||null}))}catch(_){}
