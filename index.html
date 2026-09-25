@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v61-draft-expert-preview">
+<meta name="tamisim-build" content="v62-menu-expert-directory">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -558,6 +558,29 @@ button{-webkit-tap-highlight-color:transparent}.link{color:#1457D9!important}.pa
 .draft-experts-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.draft-experts-head h3{margin:3px 0 0;color:#102A56;font-size:16px;letter-spacing:-.02em}.draft-live{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:#EAF2FF;color:#1457D9;font-size:8px;font-weight:900;white-space:nowrap}.draft-live i{width:6px;height:6px;border-radius:50%;background:#2F80ED}.draft-experts-note{margin:7px 0 12px;color:#718198;font-size:9px;line-height:1.45}
 .draft-expert-list{display:grid;gap:8px}.draft-expert{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center;padding:10px;border:1px solid #E5EBF3;border-radius:14px;background:#fff}.draft-avatar{width:40px;height:40px;border-radius:13px;background:#EAF2FF;color:#1457D9;display:grid;place-items:center;font-size:13px;font-weight:900}.draft-expert-main{min-width:0}.draft-expert-main>b{display:block;color:#17365F;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.draft-expert-main>small{display:block;color:#7C8B9E;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}.draft-expert-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}.draft-expert-meta span{padding:3px 6px;border-radius:999px;background:#F1F5FA;color:#60738C;font-size:7px;font-weight:800}.draft-expert-meta .verified-mini{background:#E5F4EB;color:#17653E}
 @media(max-width:390px){.draft-experts{padding:14px}.draft-experts-head{align-items:center}}
+
+/* compact-menu-and-expert-directory-v62 */
+.menubtn{width:40px;height:40px;border-radius:50%;border:1px solid #E0E7F0;background:#fff;display:grid;place-content:center;gap:3px;padding:0;cursor:pointer;box-shadow:0 5px 16px rgba(16,42,86,.05)}
+.menubtn span{display:block;width:16px;height:2px;border-radius:99px;background:#17365F}
+.menu-backdrop{position:fixed;inset:0;z-index:18;border:0;background:rgba(9,24,43,.18);backdrop-filter:blur(1.5px)}
+.quick-menu{position:fixed;z-index:19;top:calc(env(safe-area-inset-top,0px) + 64px);right:max(16px,calc((100vw - 560px)/2 + 16px));width:min(330px,calc(100vw - 32px));max-height:calc(100dvh - 90px);overflow:auto;padding:12px;border:1px solid #DDE6F0;border-radius:22px;background:#fff;box-shadow:0 24px 60px rgba(16,42,86,.2)}
+.quick-menu-user{display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:center;padding:6px 5px 11px}
+.quick-menu-avatar{width:42px;height:42px;border-radius:14px;background:#EAF2FF;color:#1457D9;display:grid;place-items:center;font-weight:900}
+.quick-menu-user b{display:block;color:#102A56;font-size:12px}.quick-menu-user small{display:block;color:#8290A3;font-size:9px;margin-top:1px}
+.quick-menu-primary{width:100%;border:0;border-radius:15px;background:#1457D9;color:#fff;display:grid;grid-template-columns:28px 1fr 20px;gap:8px;align-items:center;text-align:left;padding:12px;cursor:pointer}
+.quick-menu-primary>span{font-size:20px}.quick-menu-primary b{display:block;font-size:11px}.quick-menu-primary small{display:block;font-size:8px;opacity:.82;margin-top:2px}.quick-menu-primary i{font-style:normal;font-size:16px}
+.quick-menu-list{display:grid;gap:3px;margin-top:8px}.quick-menu-list>button{width:100%;border:0;background:transparent;border-radius:13px;display:grid;grid-template-columns:34px 1fr 16px;gap:9px;align-items:center;text-align:left;padding:9px;cursor:pointer}.quick-menu-list>button:active{background:#F4F7FB}
+.qm-ico{width:34px;height:34px;border-radius:11px;background:#F0F5FB;color:#1457D9;display:grid;place-items:center;font-size:15px;font-weight:900}
+.quick-menu-list b{display:block;color:#203C61;font-size:10px}.quick-menu-list small{display:block;color:#8290A3;font-size:8px;margin-top:1px}.quick-menu-list i{font-style:normal;color:#91A0B2;font-size:18px}
+.quick-menu-logout{width:100%;margin-top:7px;padding:9px;border:0;border-top:1px solid #EDF1F5;background:transparent;color:#7B899A;font:inherit;font-size:9px;font-weight:800;cursor:pointer}
+.experts-head{margin:9px 0 15px}.experts-head h1{font-size:28px;line-height:1.08;color:#102A56;letter-spacing:-.035em;margin:4px 0 7px}.experts-head p{margin:0;color:#718198;font-size:11px;line-height:1.5}
+.expert-filter-row{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}.expert-filter-row::-webkit-scrollbar{display:none}.expert-filter-row button{border:1px solid #DDE6F1;background:#fff;color:#5E718B;border-radius:999px;padding:8px 11px;white-space:nowrap;font:inherit;font-size:9px;font-weight:800;cursor:pointer}.expert-filter-row button[aria-pressed="true"]{background:#1457D9;border-color:#1457D9;color:#fff}
+.expert-directory{display:grid;gap:10px}.directory-expert{padding:14px;border:1px solid #E0E7F0;border-radius:19px;background:#fff;box-shadow:0 7px 22px rgba(16,42,86,.05)}
+.directory-expert-top{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center}.directory-avatar{width:44px;height:44px;border-radius:14px;background:#EAF2FF;color:#1457D9;display:grid;place-items:center;font-weight:900}.directory-main{min-width:0}.directory-main h3{font-size:13px;color:#17365F;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.directory-main p{margin:2px 0 0;color:#7C8B9E;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.directory-verified{padding:5px 7px;border-radius:999px;background:#E4F4EA;color:#17653E;font-size:7px;font-weight:900;white-space:nowrap}
+.directory-meta,.directory-services{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}.directory-meta span{font-size:8px;color:#65778F;font-weight:750}.directory-services span{padding:5px 7px;border-radius:999px;background:#F2F6FB;color:#536A86;font-size:7px;font-weight:800}
+.directory-cta{width:100%;margin-top:11px;border:0;border-top:1px solid #EDF1F5;background:transparent;color:#1457D9;padding:10px 2px 0;display:flex;align-items:center;justify-content:space-between;font:inherit;font-size:9px;font-weight:900;cursor:pointer}
+.draft-experts-more{width:100%;margin-top:10px;border:0;border-top:1px solid #E8EEF5;background:transparent;color:#1457D9;padding:10px 2px 0;display:flex;justify-content:space-between;font:inherit;font-size:8px;font-weight:900;cursor:pointer}
+@media(max-width:390px){.quick-menu{right:12px;width:calc(100vw - 24px)}.directory-expert-top{grid-template-columns:42px 1fr}.directory-verified{grid-column:2;justify-self:start}}
 </style>
 </head>
 <body>
@@ -574,9 +597,11 @@ button{-webkit-tap-highlight-color:transparent}.link{color:#1457D9!important}.pa
         <button data-a="role" data-v="usta" aria-pressed="false">Uzman</button>
       </div>
       <button class="notifbtn" id="notifbtn" data-a="notifications" aria-label="Bildirimler">🔔<span class="notifbadge" id="notifbadge" hidden>0</span></button>
-      <button class="avatar" id="avatar" data-a="account" aria-label="Hesabım">K</button>
+      <button class="menubtn" id="menubtn" data-a="menuToggle" aria-label="Menüyü aç" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </header>
+  <button class="menu-backdrop" id="menu-backdrop" data-a="menuClose" aria-label="Menüyü kapat" hidden></button>
+  <aside class="quick-menu" id="quick-menu" hidden aria-label="Hızlı menü"></aside>
   <div class="beta-strip"><b>Beta</b><span>Kart tahsilatı henüz aktif değil · Diğer akışlar test edilebilir</span></div>
   <div id="offline-banner" class="offline-banner" hidden>İnternet bağlantın kesildi. Bağlantı gelince işlemlerine devam edebilirsin.</div>
   <main id="app"></main>
@@ -657,7 +682,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
   draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
-  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:'',terms:false},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[],supportRequests:[],supportDraft:{category:'general',subject:'',message:''},bootError:''};
+  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:'',terms:false},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[],supportRequests:[],supportDraft:{category:'general',subject:'',message:''},bootError:'',menuOpen:false,expertFilter:'hepsi',expertsLoaded:false};
 const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},paymentChoices:{},paymentRecords:{},verifications:[],partners:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
@@ -678,7 +703,55 @@ function draftExpertPreview(k){
     .sort((a,b)=>{const sa=stat(a[0]),sb=stat(b[0]);return Number(sb.rating||0)-Number(sa.rating||0)||Number(sb.jobs||0)-Number(sa.jobs||0)})
     .slice(0,3);
   if(!rows.length)return '';
-  return `<section class="draft-experts"><div class="draft-experts-head"><div><span class="section-kicker">Bu hizmette uzmanlar</span><h3>${esc(KAT[k].ad)} alanında profiller</h3></div><span class="draft-live"><i></i> Tamİşim</span></div><p class="draft-experts-note">İlan detaylarını tamamladıkça konum ve ihtiyacına göre daha ilgili uzmanları görebilirsin.</p><div class="draft-expert-list">${rows.map(([id,p])=>{const st=stat(id),verified=!!(p.identity_verified&&p.vocational_verified),loc=p.service_city||'';return `<div class="draft-expert"><div class="draft-avatar">${esc(initials(p.name))}</div><div class="draft-expert-main"><b>${esc(p.name)}</b><small>${esc(p.title||KAT[k].ad)}${loc?' · '+esc(loc):''}</small><div class="draft-expert-meta">${st.rating!=null?'<span>★ '+Number(st.rating).toFixed(1)+'</span>':'<span>Yeni uzman</span>'}${st.jobs?'<span>'+st.jobs+' iş</span>':''}${verified?'<span class="verified-mini">✓ Doğrulanmış</span>':''}</div></div></div>`}).join('')}</div></section>`;
+  return `<section class="draft-experts"><div class="draft-experts-head"><div><span class="section-kicker">Bu hizmette uzmanlar</span><h3>${esc(KAT[k].ad)} alanında profiller</h3></div><span class="draft-live"><i></i> Tamİşim</span></div><p class="draft-experts-note">İlan detaylarını tamamladıkça konum ve ihtiyacına göre daha ilgili uzmanları görebilirsin.</p><div class="draft-expert-list">${rows.map(([id,p])=>{const st=stat(id),verified=!!(p.identity_verified&&p.vocational_verified),loc=p.service_city||'';return `<div class="draft-expert"><div class="draft-avatar">${esc(initials(p.name))}</div><div class="draft-expert-main"><b>${esc(p.name)}</b><small>${esc(p.title||KAT[k].ad)}${loc?' · '+esc(loc):''}</small><div class="draft-expert-meta">${st.rating!=null?'<span>★ '+Number(st.rating).toFixed(1)+'</span>':'<span>Yeni uzman</span>'}${st.jobs?'<span>'+st.jobs+' iş</span>':''}${verified?'<span class="verified-mini">✓ Doğrulanmış</span>':''}</div></div></div>`}).join('')}</div><button class="draft-experts-more" data-a="expertCategory" data-v="${k}">Bu alandaki uzmanları gör <span>→</span></button></section>`;
+}
+
+let expertLoadP=null;
+async function loadExpertDirectory(){
+  if(S.expertsLoaded)return;
+  if(expertLoadP)return expertLoadP;
+  expertLoadP=(async()=>{
+    const pr=await sb.from('profiles').select('id,name,title,bio,services,service_areas,service_city,service_districts,phone_verified,identity_verified,vocational_verified,business_verified,account_status,created_at').limit(120);
+    if(pr.error)throw pr.error;
+    const ids=(pr.data||[]).map(x=>x.id);
+    let stats=[];
+    if(ids.length){
+      const st=await sb.from('pro_stats').select('*').in('pro_id',ids);
+      if(!st.error)stats=st.data||[];
+    }
+    (pr.data||[]).forEach(p=>{D.profiles[p.id]=p});
+    stats.forEach(s=>{D.stats[s.pro_id]=s});
+    S.expertsLoaded=true;
+  })();
+  try{return await expertLoadP}finally{expertLoadP=null}
+}
+function directoryExpertIds(){
+  return Object.entries(D.profiles||{}).filter(([id,p])=>{
+    if(id===uid()||!p||p.account_status==='disabled'||p.account_status==='suspended')return false;
+    const sv=Array.isArray(p.services)?p.services:[];
+    const st=stat(id);
+    return sv.length||p.vocational_verified||p.business_verified||Number(st.jobs||0)>0;
+  }).filter(([id,p])=>S.expertFilter==='hepsi'||serviceMatch(p,S.expertFilter))
+    .sort((a,b)=>{const sa=stat(a[0]),sb=stat(b[0]);return Number(sb.rating||0)-Number(sa.rating||0)||Number(sb.jobs||0)-Number(sa.jobs||0)})
+    .map(([id])=>id);
+}
+function directoryExpertCard(id){
+  const p=prof(id),st=stat(id),sv=Array.isArray(p.services)?p.services:[],verified=!!(p.identity_verified&&p.vocational_verified);
+  const areas=(p.service_districts&&p.service_districts.length?p.service_districts:p.service_areas)||[];
+  const loc=[p.service_city,...areas.slice(0,2)].filter(Boolean).join(' · ');
+  return `<article class="directory-expert">
+    <div class="directory-expert-top"><div class="directory-avatar">${esc(initials(p.name))}</div><div class="directory-main"><h3>${esc(p.name||'Uzman')}</h3><p>${esc(p.title||'Tamİşim uzmanı')}</p></div>${verified?'<span class="directory-verified">✓ Doğrulanmış</span>':''}</div>
+    <div class="directory-meta">${st.rating!=null?`<span>★ ${Number(st.rating).toFixed(1)}</span>`:'<span>Yeni uzman</span>'}${Number(st.jobs||0)?`<span>${st.jobs} tamamlanan iş</span>`:''}${loc?`<span>📍 ${esc(loc)}</span>`:''}</div>
+    ${sv.length?`<div class="directory-services">${sv.slice(0,4).map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:''}
+    <button class="directory-cta" data-a="${S.expertFilter==='hepsi'?'newIlan':'quickCat'}" ${S.expertFilter==='hepsi'?'':'data-v="'+S.expertFilter+'"'}>Bu hizmet için ilan oluştur <span>→</span></button>
+  </article>`;
+}
+function vExperts(){
+  const ids=directoryExpertIds();
+  return `<button class="page-back" data-a="closeExperts">← Ana sayfaya dön</button>
+    <section class="experts-head"><span class="section-kicker">Uzmanları keşfet</span><h1>Doğru uzmanı daha kolay bul.</h1><p>Hizmet alanı, tamamlanan işler ve doğrulama bilgilerine göz at. Teklif almak için ilan oluşturman yeterli.</p></section>
+    <div class="expert-filter-row"><button data-a="expertFilter" data-v="hepsi" aria-pressed="${S.expertFilter==='hepsi'}">Tümü</button>${Object.entries(KAT).map(([k,v])=>`<button data-a="expertFilter" data-v="${k}" aria-pressed="${S.expertFilter===k}">${esc(v.ad)}</button>`).join('')}</div>
+    <div class="expert-directory">${ids.length?ids.map(directoryExpertCard).join(''):'<div class="empty pro-empty"><span>⌕</span><h3>Bu alanda profil görünmüyor</h3><p>Başka bir hizmet seçebilir veya ilan vererek uzmanlardan teklif bekleyebilirsin.</p></div>'}</div>`;
 }
 function proCard(id){const p=prof(id),st=stat(id),sv=p.services||[],ar=(p.service_districts&&p.service_districts.length?p.service_districts:p.service_areas)||[];const complete=!!(p.bio&&sv.length&&p.service_city);const loc=p.service_city?[p.service_city,...ar.slice(0,3)]:ar.slice(0,3);const fullVerified=!!(p.identity_verified&&p.vocational_verified);const trust=(fullVerified?'<span class="badge verified-pro">✓ Doğrulanmış Uzman</span>':'')+(!fullVerified&&p.identity_verified?'<span class="badge">✓ Kimlik doğrulandı</span>':'')+(!fullVerified&&p.vocational_verified?'<span class="badge">✓ Mesleki belge doğrulandı</span>':'')+(p.business_verified?'<span class="badge">✓ İşletme doğrulandı</span>':'')+(p.phone_verified?'<span class="badge">✓ Telefon doğrulandı</span>':'');const safety=id!==uid()?`<div class="foot"><button class="link" data-a="reportUser" data-v="${id}">Şikâyet et</button><button class="link" data-a="blockUser" data-v="${id}">Engelle</button></div>`:'';return `<div class="procard expert-card"><div class="protop expert-head"><div class="proavatar expert-avatar">${esc(initials(p.name))}</div><div><strong>${esc(p.name)}</strong><div class="muted small">${esc(p.title||'Servis ve tamir')}</div></div></div>${p.bio?`<p class="probio">${esc(p.bio)}</p>`:''}<div class="badges expert-badges">${st.rating!=null?`<span class="badge">★ ${Number(st.rating).toFixed(1)} · ${st.jobs} tamamlanan iş</span>`:`<span class="badge">Yeni uzman</span>`}${trust}${sv.slice(0,4).map(x=>`<span class="badge">${esc(x)}</span>`).join('')}${loc.map(x=>`<span class="badge">📍 ${esc(x)}</span>`).join('')}${complete?'<span class="badge">✓ Profil tamamlandı</span>':''}</div>${safety}</div>`}
 const PAYMENTS={
@@ -1337,6 +1410,7 @@ function render(){
   else if((S.profile||{}).account_status==='suspended')h='<div class="pagehead"><h1>Hesap askıya alındı</h1></div><p class="lede">Bu hesap moderasyon nedeniyle geçici olarak kısıtlandı.</p><button class="btn ghost" data-a="logout">Çıkış yap</button>';
   else if(S.page==='account')h=vAccount();
   else if(S.page==='notifications')h=vNotifications();
+  else if(S.page==='experts')h=vExperts();
   else if(S.page==='admin')h=vAdmin();
   else if(S.page==='partner')h=vPartnerPanel();
   else if(S.role==='musteri')h=S.view==='new'?vNew():S.view==='detail'?vDetail():vList();
@@ -1345,11 +1419,25 @@ function render(){
   const signed=!!(S.user&&!S.setup&&!S.loading);
   $('#hdr-r').hidden=!signed;
   const gh=$('#guest-hdr');if(gh)gh.hidden=signed||S.setup||S.loading||S.recovery;
+  const qm=$('#quick-menu'),mb=$('#menu-backdrop'),mt=$('#menubtn');
+  if(qm&&mb&&mt){
+    const nm=(S.profile&&S.profile.name)||S.user&&S.user.email||'Kullanıcı';
+    qm.innerHTML=`<div class="quick-menu-user"><div class="quick-menu-avatar">${esc(initials(nm))}</div><div><b>${esc(nm)}</b><small>${S.role==='usta'?'Uzman görünümü':'Müşteri görünümü'}</small></div></div>
+      <button class="quick-menu-primary" data-a="newIlan"><span>＋</span><div><b>Yeni ilan oluştur</b><small>Uzmanlardan teklif almaya başla</small></div><i>→</i></button>
+      <div class="quick-menu-list">
+        <button data-a="account"><span class="qm-ico">○</span><div><b>Profilim</b><small>Bilgiler, doğrulama ve hesap</small></div><i>›</i></button>
+        <button data-a="experts"><span class="qm-ico">✦</span><div><b>Uzmanları keşfet</b><small>Hizmet alanlarına göre profiller</small></div><i>›</i></button>
+        <button data-a="navJobs"><span class="qm-ico">▤</span><div><b>İlanlarım</b><small>İlan ve teklif durumlarını gör</small></div><i>›</i></button>
+        <button data-a="support"><span class="qm-ico">?</span><div><b>Yardım & destek</b><small>Destek talebi oluştur</small></div><i>›</i></button>
+        ${S.partnerCtx?'<button data-a="partnerPanel"><span class="qm-ico">▦</span><div><b>Partner paneli</b><small>Kurumsal işler ve performans</small></div><i>›</i></button>':''}
+        ${S.isAdmin?'<button data-a="admin"><span class="qm-ico">⚙</span><div><b>Yönetici paneli</b><small>Operasyon ve moderasyon</small></div><i>›</i></button>':''}
+      </div>
+      <button class="quick-menu-logout" data-a="logout">Çıkış yap</button>`;
+    qm.hidden=!signed||!S.menuOpen;mb.hidden=!signed||!S.menuOpen;mt.setAttribute('aria-expanded',String(!!S.menuOpen));
+  }
   const bn=$('#bottomnav');if(bn){if(window.scrollY<90)bn.classList.remove('nav-hidden');const topLevel=signed&&S.page!=='admin'&&((S.page==='main'&&((S.role==='musteri'&&S.view==='list')||(S.role==='usta'&&S.view==='list'&&!S.quoteFor)))||S.page==='notifications'||S.page==='account');bn.hidden=!topLevel;document.body.classList.toggle('has-bottomnav',topLevel);bn.querySelectorAll('button').forEach(x=>x.classList.remove('active'));const active=S.page==='notifications'?'notifications':S.page==='account'?'account':(S.page==='main'&&S.role==='musteri'?'navHome':null);if(active){const x=bn.querySelector('[data-a="'+active+'"]');if(x)x.classList.add('active')}}
   if(signed){
     document.querySelectorAll('.seg button[data-a="role"]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.role)));
-    const nm=(S.profile&&S.profile.name)||S.user.email||'K';
-    $('#avatar').textContent=nm.trim().charAt(0).toLocaleUpperCase('tr-TR')||'K';
     const nb=(D.notifications||[]).filter(n=>!n.read_at).length,b=$('#notifbadge');if(b){b.hidden=!nb;b.textContent=nb>99?'99+':String(nb)}
   }
   if(id){const n=document.getElementById(id);if(n){if(val!==undefined&&n.tagName!=='BUTTON')n.value=val;n.focus({preventScroll:true});try{if(ss!=null)n.setSelectionRange(ss,ss)}catch(e){}}}
@@ -1358,11 +1446,17 @@ function render(){
 }
 
 /* ---------- eylemler ---------- */
-const NET=new Set(['sendSupport','supportRefresh','adminSupport','adminDeletion','requestDeletion','startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
-const KEEP=new Set(['pickKat','toggleSorun','scrollCreate','choosePay','togglePayment','zaman','sort','filter','pick','send','rate','tab']);
+const NET=new Set(['experts','expertCategory','sendSupport','supportRefresh','adminSupport','adminDeletion','requestDeletion','startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
+const KEEP=new Set(['menuToggle','menuClose','expertFilter','pickKat','toggleSorun','scrollCreate','choosePay','togglePayment','zaman','sort','filter','pick','send','rate','tab']);
 const A={
+  menuToggle(){S.menuOpen=!S.menuOpen},
+  menuClose(){S.menuOpen=false},
+  async experts(){S.menuOpen=false;if(!S.expertsLoaded)await loadExpertDirectory();S.page='experts';S.expertFilter='hepsi'},
+  async expertCategory(v){S.menuOpen=false;if(!S.expertsLoaded)await loadExpertDirectory();S.page='experts';S.expertFilter=KAT[v]?v:'hepsi'},
+  closeExperts(){S.page='main';S.menuOpen=false},
+  expertFilter(v){S.expertFilter=KAT[v]?v:'hepsi'},
   showAuth(){S.guestAuth=true;S.pendingAction=null;S.authErr='';S.authInfo=''},
-  async support(){await A.supportRefresh();S.page='support'},
+  async support(){S.menuOpen=false;await A.supportRefresh();S.page='support'},
   closeSupport(){S.page='account'},
   async supportRefresh(){
     const r=await sb.from('support_requests').select('*').eq('user_id',uid()).order('created_at',{ascending:false}).limit(50);
@@ -1395,17 +1489,17 @@ const A={
   guestBack(){S.guestCat=null},
   guestService(v){toast(v+' seçildi. İlan vermek için aşağıdaki butonu kullanabilirsin.')},
   requireAuth(v){S.pendingAction=v||null;S.guestAuth=true;S.authErr='';S.authInfo=''},
-  navHome(){S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null},
-  navJobs(){S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null;setTimeout(()=>{const x=document.getElementById('myjobs');if(x)x.scrollIntoView({behavior:'smooth',block:'start'})},0)},
+  navHome(){S.menuOpen=false;S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null},
+  navJobs(){S.menuOpen=false;S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null;setTimeout(()=>{const x=document.getElementById('myjobs');if(x)x.scrollIntoView({behavior:'smooth',block:'start'})},0)},
   role(v){S.role=v;S.view='list';S.page='main';S.tab='acik';S.quoteFor=null;S.sel=null},
-  notifications(){S.page='notifications';},
+  notifications(){S.menuOpen=false;S.page='notifications';},
   closeNotifications(){S.page='main';},
   async readAll(){const r=await sb.from('notifications').update({read_at:new Date().toISOString()}).eq('user_id',uid()).is('read_at',null);if(r.error)throw r.error;await refresh();},
   async openNotification(v){const n=(D.notifications||[]).find(x=>String(x.id)===String(v));if(!n)return;if(!n.read_at)await sb.from('notifications').update({read_at:new Date().toISOString()}).eq('id',n.id).eq('user_id',uid());S.page='main';if(n.listing_id){const l=D.listings[n.listing_id];if(l){S.role=l.owner===uid()?'musteri':'usta';S.sel=n.listing_id;S.view=l.owner===uid()?'detail':'prodetail';}}await refresh();},
-  account(){const p=S.profile||{};S.page='account';S.acct={name:p.name||'',title:p.title||'',bio:p.bio||'',services:(p.services||[]).join(', '),areas:(p.service_areas||[]).join(', '),city:p.service_city||'',districts:(p.service_districts||[]).join(', ')}},
+  account(){S.menuOpen=false;const p=S.profile||{};S.page='account';S.acct={name:p.name||'',title:p.title||'',bio:p.bio||'',services:(p.services||[]).join(', '),areas:(p.service_areas||[]).join(', '),city:p.service_city||'',districts:(p.service_districts||[]).join(', ')}},
   closeAcct(){S.page='main'},
-  async admin(){if(!S.isAdmin)return;await loadAdmin();S.page='admin'},
-  async partnerPanel(){if(!S.partnerCtx)return;await loadPartnerPanel();S.page='partner'},
+  async admin(){S.menuOpen=false;if(!S.isAdmin)return;await loadAdmin();S.page='admin'},
+  async partnerPanel(){S.menuOpen=false;if(!S.partnerCtx)return;await loadPartnerPanel();S.page='partner'},
   closePartnerPanel(){S.page='account'},
   async partnerRefresh(){await loadPartnerPanel();},
   closeAdmin(){S.page='account'},
@@ -1531,10 +1625,11 @@ const A={
       if(r.error){S.authErr=authMsg(r.error);return}
     }
   },
-  newIlan(){S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.draft={kat:null,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
-  quickCat(v){S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.draft={kat:v,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
+  newIlan(){S.menuOpen=false;S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.draft={kat:null,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
+  quickCat(v){S.menuOpen=false;S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.draft={kat:v,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
   pickKat(v){
     if(S.draft.kat!==v){S.draft.kat=v;S.draft.sorunlar=[]}
+    if(!S.expertsLoaded)loadExpertDirectory().then(()=>{if(S.view==='new'&&S.draft&&S.draft.kat===v)render()}).catch(()=>{});
     smoothTo('create-step-2',900);
   },
   toggleSorun(v){
