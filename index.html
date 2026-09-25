@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v62-menu-expert-directory">
+<meta name="tamisim-build" content="v63-partner-categories-back">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -581,6 +581,17 @@ button{-webkit-tap-highlight-color:transparent}.link{color:#1457D9!important}.pa
 .directory-cta{width:100%;margin-top:11px;border:0;border-top:1px solid #EDF1F5;background:transparent;color:#1457D9;padding:10px 2px 0;display:flex;align-items:center;justify-content:space-between;font:inherit;font-size:9px;font-weight:900;cursor:pointer}
 .draft-experts-more{width:100%;margin-top:10px;border:0;border-top:1px solid #E8EEF5;background:transparent;color:#1457D9;padding:10px 2px 0;display:flex;justify-content:space-between;font:inherit;font-size:8px;font-weight:900;cursor:pointer}
 @media(max-width:390px){.quick-menu{right:12px;width:calc(100vw - 24px)}.directory-expert-top{grid-template-columns:42px 1fr}.directory-verified{grid-column:2;justify-self:start}}
+
+/* partner-categories-and-back-v63 */
+.partner-back{width:100%;min-height:58px;margin:10px 0 16px;border:1px solid #DCE6F2;border-radius:17px;background:linear-gradient(145deg,#fff,#F7FAFF);display:grid;grid-template-columns:40px 1fr;gap:11px;align-items:center;text-align:left;padding:9px 12px;color:#18385F;font:inherit;cursor:pointer;box-shadow:0 7px 20px rgba(16,42,86,.05)}
+.partner-back-ico{width:40px;height:40px;border-radius:12px;background:#EAF2FF;color:#1457D9;display:grid;place-items:center;font-size:18px;font-weight:900}.partner-back b{display:block;font-size:12px}.partner-back small{display:block;color:#8190A3;font-size:8px;margin-top:2px}.partner-back:active{transform:translateY(1px)}
+.partner-pagehead{margin-top:4px}
+.partner-cat-picker{margin:13px 0;border:1px solid #E0E7F0;border-radius:16px;background:#F9FBFE;overflow:hidden}.partner-cat-picker>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 13px}.partner-cat-picker>summary::-webkit-details-marker{display:none}.partner-cat-picker>summary b{display:block;color:#294361;font-size:10px}.partner-cat-picker>summary small{display:block;color:#8290A3;font-size:8px;margin-top:2px}.partner-cat-picker>summary i{font-style:normal;color:#1457D9;font-size:18px;transition:.15s}.partner-cat-picker[open]>summary i{transform:rotate(45deg)}
+.partner-cat-body{padding:0 12px 12px;border-top:1px solid #E8EDF4}.partner-all-choice{display:grid;grid-template-columns:18px 1fr;gap:8px;align-items:flex-start;padding:11px 2px;border-bottom:1px solid #E8EDF4}.partner-all-choice input{margin-top:2px}.partner-all-choice b{display:block;color:#24415F;font-size:9px}.partner-all-choice small{display:block;color:#8492A4;font-size:7px;margin-top:1px}
+.partner-cat-group{margin-top:10px}.partner-cat-group>b{display:block;color:#63758D;font-size:8px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}.partner-cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.partner-cat-grid label{position:relative}.partner-cat-grid input{position:absolute;opacity:0;pointer-events:none}.partner-cat-grid span{min-height:38px;border:1px solid #DFE6EF;border-radius:11px;background:#fff;display:flex;align-items:center;gap:6px;padding:7px 8px;color:#455D79;font-size:8px;font-weight:800;cursor:pointer}.partner-cat-grid .svc-icon{width:17px;height:17px;flex:0 0 17px}.partner-cat-grid input:checked+span{border-color:#79A7ED;background:#EAF2FF;color:#1457D9;box-shadow:0 0 0 1px #79A7ED inset}
+.partner-category-badges{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0}.partner-category-badges>span{padding:5px 7px;border-radius:999px;background:#EEF4FC;color:#526984;font-size:7px;font-weight:850}.partner-category-badges .partner-cat-all{background:#E9F3FF;color:#1457D9}.partner-category-badges .partner-cat-empty{background:#FFF1D6;color:#8A5A00}.partner-category-badges.panel{margin:8px 0 0}
+.partner-cat-save{margin-top:-4px}.partner-add-btn{width:100%;margin-top:3px}.partner-form .partner-cat-picker{margin-top:14px}
+@media(max-width:390px){.partner-cat-grid{grid-template-columns:1fr}.partner-back{min-height:56px}}
 </style>
 </head>
 <body>
@@ -769,6 +780,29 @@ const VERIFY_TYPES={
 };
 const VERIFY_STATUS={pending:'İncelemede',approved:'Onaylandı',rejected:'Reddedildi',expired:'Süresi doldu'};
 const verifyCategoryLabel=k=>k==='general'?'Genel':(KAT[k]&&KAT[k].ad||k);
+function partnerCategoryPicker(prefix,selected,allDefault=false){
+  const all=selected===null?true:allDefault;
+  const picked=Array.isArray(selected)?selected:[];
+  const groups=[...new Set(Object.values(KAT).map(v=>v.grup))];
+  return `<details class="partner-cat-picker">
+    <summary><span><b>Hizmet alanları</b><small>${all?'Tüm hizmetler':picked.length?picked.length+' alan seçili':'Seçim yap'}</small></span><i>＋</i></summary>
+    <div class="partner-cat-body">
+      <label class="partner-all-choice"><input type="checkbox" id="${prefix}-all" data-partner-all="${prefix}" ${all?'checked':''}><span><b>Tüm hizmetler</b><small>Partner tüm hizmet kategorilerinde çalışabilir</small></span></label>
+      ${groups.map(g=>`<div class="partner-cat-group"><b>${esc(g)}</b><div class="partner-cat-grid">${Object.entries(KAT).filter(([,v])=>v.grup===g).map(([k,v])=>`<label><input type="checkbox" data-partner-cat="${prefix}" value="${k}" ${picked.includes(k)?'checked':''}><span>${iconFor(k)} ${esc(v.ad)}</span></label>`).join('')}</div></div>`).join('')}
+    </div>
+  </details>`;
+}
+function readPartnerCategories(prefix){
+  const all=document.getElementById(prefix+'-all');
+  if(all&&all.checked)return null;
+  return [...document.querySelectorAll('[data-partner-cat]')].filter(x=>x.dataset.partnerCat===prefix&&x.checked).map(x=>x.value);
+}
+function partnerCategoryBadges(p){
+  const a=p&&p.service_categories;
+  if(a===null||a===undefined)return '<span class="partner-cat-all">Tüm hizmetler</span>';
+  if(!Array.isArray(a)||!a.length)return '<span class="partner-cat-empty">Hizmet alanı seçilmemiş</span>';
+  return a.slice(0,4).map(k=>`<span>${esc(KAT[k]&&KAT[k].ad||k)}</span>`).join('')+(a.length>4?`<span>+${a.length-4}</span>`:'');
+}
 
 function quotePayments(q){
   const out=[];
@@ -932,7 +966,7 @@ async function refresh(){
     listingIds.length?sb.from('listing_payment_choices').select('listing_id,quote_id,method,deposit_percent,promotion_id,discount_amount,customer_cash_confirmed_at,pro_cash_confirmed_at,cash_confirmed_at,created_at').in('listing_id',listingIds).then(chk):[],
     listingIds.length?sb.from('payment_transactions').select('id,listing_id,method,currency,gross_amount,discount_amount,payable_amount,deposit_percent,provider_amount,cash_amount,commission_percent,platform_commission_amount,partner_promo_contribution,provider,provider_status,status,paid_at,refunded_at,updated_at').in('listing_id',listingIds).then(chk):[],
     sb.from('professional_verifications').select('id,user_id,category,verification_type,document_type,status,review_note,reviewed_at,expires_at,created_at').eq('user_id',me).order('created_at',{ascending:false}).then(chk),
-    sb.from('partners').select('id,name,slug,status,created_at').eq('status','active').then(chk)
+    sb.from('partners').select('id,name,slug,status,created_at,service_categories').eq('status','active').then(chk)
   ]);
   const photos={};
   if(ph.length){
@@ -1333,7 +1367,7 @@ function vAdmin(){
   const cards=`<div class="field two"><div class="check"><b>${st.users||0}</b><span>Kullanıcı</span></div><div class="check"><b>${st.open_reports||0}</b><span>Açık şikâyet</span></div><div class="check"><b>${st.open_listings||0}</b><span>Açık ilan</span></div><div class="check"><b>${st.done_listings||0}</b><span>Tamamlanan iş</span></div></div>`;
   const rows=(a.reports||[]).map(r=>{const p=a.profiles[r.reported_id]||{};return `<article class="quote"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${esc(r.status)} · ${ago(r.created_at)}</p></div><span class="pill ${p.account_status==='suspended'?'amber':''}">${p.account_status==='suspended'?'Askıda':'Aktif'}</span></div><p class="qnote">${esc(r.reason)}</p><div class="badges">${p.phone_verified?'<span class="badge">✓ Telefon</span>':''}${p.identity_verified?'<span class="badge">✓ Kimlik</span>':''}</div><div class="foot"><button class="btn ghost sm" data-a="adminReport" data-v="${r.id}|${r.status==='resolved'?'open':'resolved'}">${r.status==='resolved'?'Yeniden aç':'Çözüldü yap'}</button><button class="btn ghost sm" data-a="adminIdentity" data-v="${r.reported_id}|${p.identity_verified?'0':'1'}">${p.identity_verified?'Kimlik onayını kaldır':'Kimliği onayla'}</button><button class="btn sm" data-a="adminSuspend" data-v="${r.reported_id}|${p.account_status==='suspended'?'active':'suspended'}">${p.account_status==='suspended'?'Hesabı aç':'Hesabı askıya al'}</button></div></article>`}).join('');
   const vers=(a.verifications||[]).map(v=>{const p=a.profiles[v.user_id]||{};return `<article class="quote verify-admin"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${esc(VERIFY_TYPES[v.verification_type]||v.verification_type)} · ${esc(verifyCategoryLabel(v.category))}</p></div><span class="pill ${v.status==='approved'?'good':v.status==='pending'?'amber':''}">${esc(VERIFY_STATUS[v.status]||v.status)}</span></div><p class="qnote">${esc(v.document_type)}</p><div class="foot"><button class="btn ghost sm" data-a="openVerificationDoc" data-v="${v.id}">Belgeyi aç</button>${v.status==='pending'?`<button class="btn ghost sm" data-a="reviewVerification" data-v="${v.id}|approved">Onayla</button><button class="btn ghost sm" data-a="reviewVerification" data-v="${v.id}|rejected">Reddet</button>`:''}</div></article>`}).join('');
-  const partners=(a.partners||[]).map(p=>{const st=(a.partnerStats||[]).find(x=>x.partner_id===p.id)||{};return `<article class="quote partner-admin"><div class="qhead"><div><h3>${esc(p.name)}</h3><p class="muted small">@${esc(p.slug)}</p></div><span class="pill ${p.status==='active'?'good':p.status==='paused'?'amber':''}">${p.status==='active'?'Aktif':p.status==='paused'?'Duraklatıldı':'Kapalı'}</span></div><div class="partner-stats"><div><b>${st.listings||0}</b><small>İlan</small></div><div><b>${st.chosen||0}</b><small>Seçilen</small></div><div><b>${st.done||0}</b><small>Tamamlanan</small></div><div><b>${tl(st.gross_volume||0)}</b><small>Hacim</small></div></div><div class="partner-terms"><label>Komisyon %<input class="in" id="pc-${p.id}" type="number" min="0" max="50" step="0.5" value="${Number(p.commission_percent||0)}"></label><label>Partner indirim katkısı %<input class="in" id="pp-${p.id}" type="number" min="0" max="100" step="1" value="${Number(p.promo_share_percent||0)}"></label><button class="btn ghost sm" data-a="savePartnerTerms" data-v="${p.id}">Oranları kaydet</button></div><div class="partner-money"><span>Tahmini Tamİşim komisyonu <b>${tl(st.platform_commission_estimate||0)}</b></span><span>Partner kampanya katkısı <b>${tl(st.partner_promo_contribution_estimate||0)}</b></span></div><div class="foot"><button class="btn ghost sm" data-a="partnerStatus" data-v="${p.id}|${p.status==='active'?'paused':'active'}">${p.status==='active'?'Duraklat':'Aktif et'}</button><button class="btn ghost sm" data-a="partnerStatus" data-v="${p.id}|disabled">Kapat</button></div></article>`}).join('');
+  const partners=(a.partners||[]).map(p=>{const st=(a.partnerStats||[]).find(x=>x.partner_id===p.id)||{};return `<article class="quote partner-admin"><div class="qhead"><div><h3>${esc(p.name)}</h3><p class="muted small">@${esc(p.slug)}</p></div><span class="pill ${p.status==='active'?'good':p.status==='paused'?'amber':''}">${p.status==='active'?'Aktif':p.status==='paused'?'Duraklatıldı':'Kapalı'}</span></div><div class="partner-category-badges">${partnerCategoryBadges(p)}</div><div class="partner-stats"><div><b>${st.listings||0}</b><small>İlan</small></div><div><b>${st.chosen||0}</b><small>Seçilen</small></div><div><b>${st.done||0}</b><small>Tamamlanan</small></div><div><b>${tl(st.gross_volume||0)}</b><small>Hacim</small></div></div>${partnerCategoryPicker('partner-'+p.id,p.service_categories)}<button class="btn ghost sm partner-cat-save" data-a="savePartnerCategories" data-v="${p.id}">Hizmet alanlarını kaydet</button><div class="partner-terms"><label>Komisyon %<input class="in" id="pc-${p.id}" type="number" min="0" max="50" step="0.5" value="${Number(p.commission_percent||0)}"></label><label>Partner indirim katkısı %<input class="in" id="pp-${p.id}" type="number" min="0" max="100" step="1" value="${Number(p.promo_share_percent||0)}"></label><button class="btn ghost sm" data-a="savePartnerTerms" data-v="${p.id}">Oranları kaydet</button></div><div class="partner-money"><span>Tahmini Tamİşim komisyonu <b>${tl(st.platform_commission_estimate||0)}</b></span><span>Partner kampanya katkısı <b>${tl(st.partner_promo_contribution_estimate||0)}</b></span></div><div class="foot"><button class="btn ghost sm" data-a="partnerStatus" data-v="${p.id}|${p.status==='active'?'paused':'active'}">${p.status==='active'?'Duraklat':'Aktif et'}</button><button class="btn ghost sm" data-a="partnerStatus" data-v="${p.id}|disabled">Kapat</button></div></article>`}).join('');
   const payments=a.payments||[],payStats=a.paymentStats||{},attempts=a.paymentAttempts||[];
   const latestAttempt={};attempts.forEach(x=>{if(!latestAttempt[x.payment_id])latestAttempt[x.payment_id]=x});
   const payGross=Number(payStats.net_volume||0);
@@ -1344,7 +1378,7 @@ function vAdmin(){
   const deletionRows=(a.deletions||[]).map(x=>{const p=a.profiles[x.user_id]||{};return `<article class="quote deletion-admin"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${ago(x.created_at)} · ${esc(x.status)}</p></div><span class="pill ${x.status==='completed'?'good':x.status==='pending'?'amber':''}">${x.status==='pending'?'Bekliyor':x.status==='processing'?'İşleniyor':x.status==='completed'?'Tamamlandı':'Reddedildi'}</span></div>${x.reason?`<p class="qnote">${esc(x.reason)}</p>`:''}${x.admin_note?`<p class="muted small">Not: ${esc(x.admin_note)}</p>`:''}<div class="foot">${x.status==='pending'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|processing">İşleme al</button>':''}${x.status!=='completed'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|completed">Tamamlandı</button>':''}${x.status==='pending'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|rejected">Reddet</button>':''}</div></article>`}).join('');
   return `<button class="link" data-a="closeAdmin">Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}
   <h2>Ödeme operasyonu</h2><div class="field payment-admin-summary"><div><span>Kayıtlı ödeme</span><b>${Number(payStats.payments||payments.length)}</b></div><div><span>Bekleyen</span><b>${payPending}</b></div><div><span>Net hacim</span><b>${tl(payGross)}</b></div><div><span>Tahmini komisyon</span><b>${tl(payCommission)}</b></div></div>${payRows||'<div class="empty">Henüz ödeme kaydı yok.</div>'}
-  <h2>Kurumsal partnerler</h2><div class="field partner-form"><div class="two"><div><label class="lb" for="partner-name">Şirket adı</label><input class="in" id="partner-name" placeholder="Örn. Koçtaş"></div><div><label class="lb" for="partner-slug">Kısa ad</label><input class="in" id="partner-slug" placeholder="koctas" autocapitalize="off"></div></div><button class="btn ghost sm" data-a="addPartner">Partner ekle</button></div>${partners||'<div class="empty">Henüz kurumsal partner yok.</div>'}
+  <h2>Kurumsal partnerler</h2><div class="field partner-form"><div class="two"><div><label class="lb" for="partner-name">Şirket adı</label><input class="in" id="partner-name" placeholder="Örn. Koçtaş"></div><div><label class="lb" for="partner-slug">Kısa ad</label><input class="in" id="partner-slug" placeholder="koctas" autocapitalize="off"></div></div>${partnerCategoryPicker('partner-new',[],false)}<button class="btn partner-add-btn" data-a="addPartner">Partner ekle</button></div>${partners||'<div class="empty">Henüz kurumsal partner yok.</div>'}
   <h2>Destek talepleri</h2>${supportRows||'<div class="empty">Destek talebi yok.</div>'}
   <h2>Hesap silme talepleri</h2>${deletionRows||'<div class="empty">Açık hesap silme talebi yok.</div>'}
   <h2>Belge doğrulama</h2>${vers||'<div class="empty">Doğrulama başvurusu yok.</div>'}<h2>Şikâyetler</h2>${rows||'<div class="empty">Şikâyet kaydı yok.</div>'}`;
@@ -1374,7 +1408,8 @@ function vPartnerPanel(){
   const cards=`<div class="partner-portal-stats"><div><b>${d.listings||0}</b><small>Toplam ilan</small></div><div><b>${d.open_listings||0}</b><small>Açık</small></div><div><b>${d.chosen||0}</b><small>Seçilen</small></div><div><b>${d.done||0}</b><small>Tamamlanan</small></div></div>`;
   const money=`<div class="field partner-portal-money"><div><span>İş hacmi</span><b>${tl(d.gross_volume||0)}</b></div><div><span>Toplam indirim</span><b>${tl(d.discount_total||0)}</b></div><div><span>Tahmini Tamİşim komisyonu</span><b>${tl(d.commission_estimate||0)}</b></div><div><span>Partner kampanya katkısı</span><b>${tl(d.partner_promo_contribution||0)}</b></div></div>`;
   const rows=jobs.map(j=>`<article class="quote partner-job"><div class="qhead"><div><h3>${esc((j.problems||[]).join(', ')||verifyCategoryLabel(j.category))}</h3><p class="muted small">${esc(j.external_order_ref||'Referans yok')} · ${esc([j.district,j.city].filter(Boolean).join(', '))}</p></div><span class="pill ${j.status==='done'?'good':j.status==='chosen'?'amber':''}">${j.status==='done'?'Tamamlandı':j.status==='chosen'?'Uzman seçildi':'Açık'}</span></div><div class="partner-job-meta"><span>${j.chosen_price?tl(j.chosen_price):'—'}</span>${Number(j.discount_amount)>0?`<span>İndirim: -${tl(j.discount_amount)}</span>`:''}</div></article>`).join('');
-  return `<button class="page-back" data-a="closePartnerPanel">← Hesabıma dön</button><div class="pagehead"><div><span class="section-kicker">Kurumsal partner</span><h1>${esc(x.partner_name||'Partner paneli')}</h1><p>@${esc(x.partner_slug||'')} · ${esc(x.member_role||'viewer')}</p></div><button class="btn ghost sm" data-a="partnerRefresh">Yenile</button></div>${cards}${money}<h2>Yönlendirilen işler</h2>${rows||'<div class="empty">Henüz partner işi yok.</div>'}`;
+  const partnerRow=(D.partners||{})[x.partner_id]||{};
+  return `<button class="partner-back" data-a="closePartnerPanel"><span class="partner-back-ico">←</span><span><b>Hesabıma dön</b><small>Profil ve hesap ayarlarına geri git</small></span></button><div class="pagehead partner-pagehead"><div><span class="section-kicker">Kurumsal partner</span><h1>${esc(x.partner_name||'Partner paneli')}</h1><p>@${esc(x.partner_slug||'')} · ${esc(x.member_role||'viewer')}</p><div class="partner-category-badges panel">${partnerCategoryBadges(partnerRow)}</div></div><button class="btn ghost sm" data-a="partnerRefresh">Yenile</button></div>${cards}${money}<h2>Yönlendirilen işler</h2>${rows||'<div class="empty">Henüz partner işi yok.</div>'}`;
 }
 async function loadPartnerPanel(){
   if(!S.partnerCtx)return;
@@ -1448,7 +1483,7 @@ function render(){
 }
 
 /* ---------- eylemler ---------- */
-const NET=new Set(['experts','expertCategory','sendSupport','supportRefresh','adminSupport','adminDeletion','requestDeletion','startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
+const NET=new Set(['experts','expertCategory','sendSupport','supportRefresh','savePartnerCategories','adminSupport','adminDeletion','requestDeletion','startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
 const KEEP=new Set(['menuToggle','menuClose','expertFilter','pickKat','toggleSorun','scrollCreate','choosePay','togglePayment','zaman','sort','filter','pick','send','rate','tab']);
 const A={
   menuToggle(){S.menuOpen=!S.menuOpen},
@@ -1509,10 +1544,20 @@ const A={
   async addPartner(){
     const name=(document.getElementById('partner-name')||{}).value||'';
     const slug=((document.getElementById('partner-slug')||{}).value||'').trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-+|-+$/g,'');
+    const cats=readPartnerCategories('partner-new');
     if(name.trim().length<2||slug.length<2){toast('Şirket adı ve kısa ad gerekli.');return}
-    const r=await sb.rpc('admin_upsert_partner',{p_name:name.trim(),p_slug:slug,p_status:'active'});
+    if(Array.isArray(cats)&&!cats.length){toast('En az bir hizmet alanı seç veya Tüm hizmetler seçeneğini kullan.');return}
+    const r=await sb.rpc('admin_upsert_partner_with_categories',{p_name:name.trim(),p_slug:slug,p_status:'active',p_service_categories:cats});
     if(r.error)throw r.error;
-    await loadAdmin();await refresh();toast('Kurumsal partner eklendi.');
+    await loadAdmin();await refresh();toast('Kurumsal partner ve hizmet alanları kaydedildi.');
+  },
+  async savePartnerCategories(v){
+    if(!v)return;
+    const cats=readPartnerCategories('partner-'+v);
+    if(Array.isArray(cats)&&!cats.length){toast('En az bir hizmet alanı seç veya Tüm hizmetler seçeneğini kullan.');return}
+    const r=await sb.rpc('admin_set_partner_categories',{p_partner_id:v,p_service_categories:cats});
+    if(r.error)throw r.error;
+    await loadAdmin();await refresh();toast('Partner hizmet alanları güncellendi.');
   },
   async partnerStatus(v){
     const [id,status]=String(v).split('|');if(!id||!status)return;
