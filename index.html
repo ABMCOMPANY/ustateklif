@@ -2028,6 +2028,16 @@ document.addEventListener('input',e=>{
   onField(e);
 });
 document.addEventListener('change',e=>{
+  const prefix=e.target.dataset.partnerAll||e.target.dataset.partnerCat;
+  if(prefix){
+    const all=document.getElementById(prefix+'-all');
+    const choices=[...document.querySelectorAll('[data-partner-cat]')].filter(x=>x.dataset.partnerCat===prefix);
+    if(e.target.dataset.partnerAll&&all.checked)choices.forEach(x=>{x.checked=false});
+    if(e.target.dataset.partnerCat&&e.target.checked&&all)all.checked=false;
+    const hint=e.target.closest('.partner-cat-picker')?.querySelector('summary small');
+    if(hint)hint.textContent=all?.checked?'Tüm hizmetler':choices.filter(x=>x.checked).length?choices.filter(x=>x.checked).length+' alan seçili':'Seçim yap';
+    return;
+  }
   if(e.target.id==='sup-category'){S.supportDraft.category=e.target.value;return}
   if(e.target.id==='au-terms'){S.auth.terms=!!e.target.checked;return}
   if(e.target.id==='d-photos'&&S.draft){
