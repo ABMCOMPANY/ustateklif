@@ -393,6 +393,9 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* service-icons-v28 */
 .svc-icon{width:28px;height:28px;display:inline-grid;place-items:center;color:#1457D9;flex:0 0 28px}.svc-icon svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.homecat .svc-icon,.cat .svc-icon{width:30px;height:30px}.stub .svc-icon{color:currentColor;width:26px;height:26px}
+
+/* quote-payment-v30 */
+.payment-box{margin-top:14px}.payment-title{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}.payment-title h2{font-size:18px;color:#102A56;margin:0}.payment-title p{font-size:12px;color:#718198;margin:3px 0 0}.payment-options{display:grid;gap:9px}.payment-option{width:100%;border:1px solid #DFE7F2;background:#fff;border-radius:16px;padding:13px;display:grid;grid-template-columns:38px 1fr 24px;gap:10px;align-items:center;text-align:left;color:#213B5D}.payment-option[aria-pressed="true"]{border-color:#1457D9;background:#F5F9FF;box-shadow:0 0 0 1px #1457D9 inset}.payment-icon{width:38px;height:38px;border-radius:12px;background:#EEF4FF;display:grid;place-items:center;font-size:20px}.payment-option b{display:block;font-size:14px}.payment-option small{display:block;color:#718198;font-size:11px;line-height:1.35;margin-top:2px}.payment-check{width:22px;height:22px;border-radius:50%;border:1px solid #CBD6E5;color:transparent;display:grid;place-items:center;font-size:12px;font-weight:900}.payment-option[aria-pressed="true"] .payment-check{background:#1457D9;border-color:#1457D9;color:#fff}.deposit-row{margin-top:12px;padding-top:12px;border-top:1px solid #E9EEF5}.payment-badges{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.pay-badge{font-size:11px;font-weight:750;color:#1457D9;background:#EEF4FF;border:1px solid #D7E4FA;border-radius:999px;padding:6px 9px}
 </style>
 </head>
 <body>
@@ -497,6 +500,16 @@ const stat=id=>D.stats[id]||{jobs:0,rating:null};
 const csv=s=>String(s||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,12);
 const initials=n=>String(n||'U').trim().charAt(0).toLocaleUpperCase('tr-TR');
 function proCard(id){const p=prof(id),st=stat(id),sv=p.services||[],ar=(p.service_districts&&p.service_districts.length?p.service_districts:p.service_areas)||[];const complete=!!(p.bio&&sv.length&&p.service_city);const loc=p.service_city?[p.service_city,...ar.slice(0,3)]:ar.slice(0,3);const trust=(p.phone_verified?'<span class="badge">✓ Telefon doğrulandı</span>':'')+(p.identity_verified?'<span class="badge">✓ Kimlik doğrulandı</span>':'');const safety=id!==uid()?`<div class="foot"><button class="link" data-a="reportUser" data-v="${id}">Şikâyet et</button><button class="link" data-a="blockUser" data-v="${id}">Engelle</button></div>`:'';return `<div class="procard expert-card"><div class="protop expert-head"><div class="proavatar expert-avatar">${esc(initials(p.name))}</div><div><strong>${esc(p.name)}</strong><div class="muted small">${esc(p.title||'Servis ve tamir')}</div></div></div>${p.bio?`<p class="probio">${esc(p.bio)}</p>`:''}<div class="badges expert-badges">${st.rating!=null?`<span class="badge">★ ${Number(st.rating).toFixed(1)} · ${st.jobs} tamamlanan iş</span>`:`<span class="badge">Yeni uzman</span>`}${trust}${sv.slice(0,4).map(x=>`<span class="badge">${esc(x)}</span>`).join('')}${loc.map(x=>`<span class="badge">📍 ${esc(x)}</span>`).join('')}${complete?'<span class="badge">✓ Profil tamamlandı</span>':''}</div>${safety}</div>`}
+const PAYMENTS={
+  card:{label:'Kartla ödeme',icon:'💳',desc:'Müşteri Tamİşim üzerinden öder; komisyon otomatik kesilir.'},
+  cash:{label:'Nakit / elden',icon:'💵',desc:'Müşteri iş sonunda sana nakit öder; platform hizmet bedeli hesabına yansır.'},
+  deposit_cash:{label:'Ön ödeme + nakit',icon:'◐',desc:'Müşteri rezervasyon bedelini Tamİşim’e, kalanını iş sonunda sana öder.'}
+};
+const paymentLabels=a=>(Array.isArray(a)?a:[]).filter(x=>PAYMENTS[x]).map(x=>PAYMENTS[x].label);
+const paymentBadges=q=>{
+  const a=Array.isArray(q&&q.payment_methods)?q.payment_methods:[];
+  return a.length?'<div class="payment-badges">'+a.filter(x=>PAYMENTS[x]).map(x=>'<span class="pay-badge">'+PAYMENTS[x].icon+' '+esc(PAYMENTS[x].label)+'</span>').join('')+'</div>':'';
+};
 const myQuote=id=>Object.values(D.quotes).find(q=>q.listing_id===id&&q.pro===uid());
 const chosenQ=l=>l.chosen_quote?D.quotes[l.chosen_quote]:null;
 function photoStrip(id,detail=false){const a=D.photos[id]||[];return a.length?`<div class="photo-strip ${detail?'detail':''}">${a.map(x=>`<img src="${esc(x.url)}" alt="İlan fotoğrafı" loading="lazy">`).join('')}</div>`:''}
@@ -772,6 +785,7 @@ function vDetail(){
       <div class="qhead"><div><h3>${esc(p.name)}</h3><p class="sub">${esc(p.title||'Servis ve tamir')}</p><p class="rating">${rating}</p></div>
       <div class="pr"><div class="price">${tl(q.price)}</div><div class="muted small">${esc(q.eta)}</div></div></div>
       ${q.note?`<p class="qnote">${esc(q.note)}</p>`:''}
+      ${paymentBadges(q)}
       ${proCard(q.pro)}
       ${chosen?'<span class="pill good">Seçildi</span>':(l.status==='open'?`<button class="btn block" data-a="pick" data-v="${q.id}">Bu teklifi seç</button>`:'')}
     </article>`;
@@ -844,6 +858,10 @@ function vQuote(){
     <select class="in" id="q-sure">${SURE.map(s=>`<option ${S.q.sure===s?'selected':''}>${s}</option>`).join('')}</select></div>
    <div><label class="lb" for="q-not">Teklif notu</label>
     <textarea class="in" id="q-not" maxlength="500" placeholder="${copy.note}">${esc(S.q.not)}</textarea></div></div>
+  <div class="field payment-box"><div class="payment-title"><div><h2>Ödeme şekli</h2><p>Bu teklif için kabul ettiğin yöntemleri seçebilirsin.</p></div><span class="optional">En az 1</span></div>
+    <div class="payment-options">${Object.entries(PAYMENTS).map(([k,p])=>`<button type="button" class="payment-option" data-a="togglePayment" data-v="${k}" aria-pressed="${S.q.payments.includes(k)}"><span class="payment-icon">${p.icon}</span><span><b>${p.label}</b><small>${p.desc}</small></span><span class="payment-check">✓</span></button>`).join('')}</div>
+    ${S.q.payments.includes('deposit_cash')?`<div class="deposit-row"><label class="lb" for="q-deposit">Ön ödeme oranı</label><select class="in" id="q-deposit">${[10,20,25,30,40,50].map(x=>`<option value="${x}" ${S.q.deposit===x?'selected':''}>%${x}</option>`).join('')}</select><p class="hint">Kalan tutar iş sonunda nakit ödenir.</p></div>`:''}
+  </div>
   <button class="btn block" id="qsend" data-a="sendQuote" disabled>Teklifi gönder</button>`;
 }
 
@@ -865,7 +883,7 @@ function vNotifications(){
 /* ---------- çizim ---------- */
 function upd(){
   const p=$('#pub');if(p&&S.draft)p.disabled=!canPub(S.draft);
-  const q=$('#qsend');if(q&&S.q)q.disabled=!(parseInt(S.q.fiyat,10)>0);
+  const q=$('#qsend');if(q&&S.q)q.disabled=!(parseInt(S.q.fiyat,10)>0&&S.q.payments&&S.q.payments.length);
 }
 function render(){
   const act=document.activeElement;
@@ -1019,13 +1037,27 @@ const A={
   },
   tab(v){S.tab=v},
   filter(v){S.filter=v},
-  quote(v){S.quoteFor=+v;S.q={fiyat:'',sure:SURE[0],not:''}},
+  quote(v){S.quoteFor=+v;S.q={fiyat:'',sure:SURE[0],not:'',payments:['card'],deposit:20}},
   cancelQuote(){S.quoteFor=null;S.q=null},
+  togglePayment(v){
+    if(!S.q||!PAYMENTS[v])return;
+    const a=S.q.payments||[];
+    if(a.includes(v)){
+      if(a.length===1){toast('En az bir ödeme yöntemi seçmelisin.');return}
+      S.q.payments=a.filter(x=>x!==v);
+    }else S.q.payments=[...a,v];
+  },
   async sendQuote(){
-    const f=parseInt(S.q.fiyat,10);if(!(f>0))return;
-    const r=await sb.from('quotes').insert({listing_id:S.quoteFor,pro:uid(),price:f,eta:S.q.sure,note:S.q.not.trim()});
+    const f=parseInt(S.q.fiyat,10);if(!(f>0)||!S.q.payments||!S.q.payments.length)return;
+    const payload={listing_id:S.quoteFor,pro:uid(),price:f,eta:S.q.sure,note:S.q.not.trim(),payment_methods:S.q.payments,deposit_percent:S.q.payments.includes('deposit_cash')?S.q.deposit:null};
+    let r=await sb.from('quotes').insert(payload);
+    if(r.error&&(/payment_methods|deposit_percent|schema cache|column/i.test(r.error.message||''))){
+      const pay='Ödeme: '+paymentLabels(S.q.payments).join(' / ')+(S.q.payments.includes('deposit_cash')?' (%'+S.q.deposit+' ön ödeme)':'');
+      const fallbackNote=(S.q.not.trim()?S.q.not.trim()+'\n\n':'')+pay;
+      r=await sb.from('quotes').insert({listing_id:S.quoteFor,pro:uid(),price:f,eta:S.q.sure,note:fallbackNote});
+    }
     if(r.error)throw r.error;
-    S.quoteFor=null;S.q=null;toast('Teklifin gönderildi.');await refresh();
+    S.quoteFor=null;S.q=null;toast('Teklifin gönderildi. Ödeme seçeneklerin müşteriye gösterilecek.');await refresh();
   }
 };
 async function run(a,v,el){
@@ -1051,7 +1083,7 @@ document.addEventListener('keydown',e=>{
 const F={
   'guest-search':v=>{S.guestSearch=v},
   'd-not':v=>{S.draft.not=v},'d-city':v=>{S.draft.city=v},'d-district':v=>{S.draft.district=v},'d-neighborhood':v=>{S.draft.neighborhood=v},'cat-search':v=>{S.catSearch=v},
-  'q-fiyat':v=>{S.q.fiyat=v.replace(/\D/g,'')},'q-sure':v=>{S.q.sure=v},'q-not':v=>{S.q.not=v},
+  'q-fiyat':v=>{S.q.fiyat=v.replace(/\D/g,'')},'q-sure':v=>{S.q.sure=v},'q-not':v=>{S.q.not=v},'q-deposit':v=>{S.q.deposit=parseInt(v,10)||20},
   'au-name':v=>{S.auth.name=v},'au-email':v=>{S.auth.email=v},'au-pass':v=>{S.auth.pass=v},
   'ac-name':v=>{S.acct.name=v},'ac-title':v=>{S.acct.title=v},'ac-bio':v=>{S.acct.bio=v},'ac-services':v=>{S.acct.services=v},'ac-city':v=>{S.acct.city=v},'ac-districts':v=>{S.acct.districts=v},
   's-url':v=>{S.cfgDraft.url=v},'s-key':v=>{S.cfgDraft.key=v}
