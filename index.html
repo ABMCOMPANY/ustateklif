@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v49-beta-account-ops">
+<meta name="tamisim-build" content="v50-support-ux">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -439,6 +439,9 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* legal-beta-v48 */
 .terms-check{display:flex;align-items:flex-start;gap:9px;margin:2px 0 14px;font-size:11px;line-height:1.45;color:#607086}.terms-check input{margin-top:3px;width:16px;height:16px;flex:0 0 auto}.inline-link{appearance:none;border:0;background:none;padding:0;color:#1457D9;font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}.account-tools{display:grid;gap:10px;margin-top:12px}.danger-ghost{border-color:#E7B7B7!important;color:#A53A3A!important;background:#FFF9F9!important}.legal-card{background:#fff;border:1px solid #E3E9F1;border-radius:18px;padding:18px;margin:0 0 12px}.legal-card h2{margin:0 0 10px;color:#102A56;font-size:17px}.legal-card p{margin:0 0 10px;color:#5F7087;font-size:12px;line-height:1.65}.legal-card p:last-child{margin-bottom:0}
+
+/* support-ux-v50 */
+.offline-banner{margin:0 20px 10px;padding:9px 12px;border-radius:12px;background:#FFF1F1;border:1px solid #F0CACA;color:#923D3D;font-size:11px;text-align:center}.support-form{display:grid;gap:9px}.support-item{background:#fff;border:1px solid #E3E9F1;border-radius:16px;padding:15px;margin-bottom:10px}.support-reply{margin-top:12px;padding:12px;border-radius:12px;background:#F4F7FB}.support-reply b{font-size:11px;color:#102A56}.support-reply p{margin:5px 0 0;font-size:12px;line-height:1.55;color:#52657D}.fatal-state{text-align:center;padding:64px 20px}.fatal-icon{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;margin:0 auto 14px;background:#FFF1F1;color:#A53A3A;font-weight:900;font-size:24px}.fatal-state h1{margin:0 0 8px}.fatal-state p{color:#6A7A8F;max-width:420px;margin:0 auto 18px;line-height:1.55}@media(max-width:520px){.offline-banner{margin-left:12px;margin-right:12px}}
 </style>
 </head>
 <body>
@@ -455,6 +458,7 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
     </div>
   </header>
   <div class="beta-strip"><b>Beta</b><span>Kart tahsilatı henüz aktif değil · Diğer akışlar test edilebilir</span></div>
+  <div id="offline-banner" class="offline-banner" hidden>İnternet bağlantın kesildi. Bağlantı gelince işlemlerine devam edebilirsin.</div>
   <main id="app"></main>
   <nav class="bottomnav" id="bottomnav" hidden aria-label="Ana menü"><button data-a="navHome"><span>⌂</span><small>Ana Sayfa</small></button><button data-a="navJobs"><span>▤</span><small>İlanlarım</small></button><button class="navplus" data-a="newIlan"><span>＋</span></button><button data-a="notifications"><span>♢</span><small>Bildirimler</small></button><button data-a="account"><span>○</span><small>Profil</small></button></nav>
 </div>
@@ -533,7 +537,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
   draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
-  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:'',terms:false},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[]};
+  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:'',terms:false},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[],supportRequests:[],supportDraft:{category:'general',subject:'',message:''},bootError:''};
 const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},paymentChoices:{},paymentRecords:{},verifications:[],partners:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
@@ -743,8 +747,8 @@ async function boot(){
     const [ar,pc]=await Promise.all([sb.rpc('is_admin'),sb.rpc('my_partner_context')]);
     S.isAdmin=!ar.error&&ar.data===true;
     S.partnerCtx=!pc.error&&Array.isArray(pc.data)&&pc.data.length?pc.data[0]:null;
-  }catch(e){console.error(e);toast(errMsg(e))}
-  S.loading=false;render();subscribe();
+  }catch(e){console.error(e);S.bootError=errMsg(e)}
+  S.loading=false;render();if(!S.bootError)subscribe();
 }
 let kickT;
 function kick(){
@@ -837,6 +841,18 @@ function vAuth(){
   <div class="auth-links"><button class="link" data-a="authMode">${up?'Zaten hesabın var mı? Giriş yap':'Hesabın yok mu? Ücretsiz kayıt ol'}</button>${!up?'<button class="link" data-a="forgotPass">Şifremi unuttum</button>':''}</div>
   ${up?'<p class="muted small auth-note">Beta döneminde gerçek kart tahsilatı aktif değildir.</p>':''}`;
 }
+function vSupport(){
+  const rows=(S.supportRequests||[]).map(x=>`<article class="support-item"><div class="qhead"><div><h3>${esc(x.subject)}</h3><p class="muted small">${esc({general:'Genel',payment:'Ödeme',account:'Hesap',safety:'Güvenlik',technical:'Teknik',partner:'Partner'}[x.category]||x.category)} · ${ago(x.created_at)}</p></div><span class="pill ${x.status==='resolved'||x.status==='closed'?'good':x.status==='in_progress'?'amber':''}">${x.status==='open'?'Açık':x.status==='in_progress'?'İnceleniyor':x.status==='resolved'?'Çözüldü':'Kapalı'}</span></div><p class="qnote">${esc(x.message)}</p>${x.admin_response?`<div class="support-reply"><b>Tamİşim yanıtı</b><p>${esc(x.admin_response)}</p></div>`:''}</article>`).join('');
+  return `<button class="link" data-a="closeSupport">Hesabıma dön</button>
+  <div class="pagehead"><div><span class="eyebrow">Yardım</span><h1>Destek merkezi</h1><p class="lede">Teknik sorun, hesap, ödeme veya güvenlik konularını buradan iletebilirsin.</p></div><button class="btn ghost sm" data-a="supportRefresh">Yenile</button></div>
+  <section class="legal-card support-form"><h2>Yeni destek talebi</h2>
+    <label class="lb" for="sup-category">Konu</label><select class="in" id="sup-category"><option value="general">Genel</option><option value="technical">Teknik sorun</option><option value="account">Hesap</option><option value="payment">Ödeme</option><option value="safety">Güvenlik / şikâyet</option><option value="partner">Kurumsal partner</option></select>
+    <label class="lb" for="sup-subject">Başlık</label><input class="in" id="sup-subject" maxlength="120" placeholder="Sorunu kısaca yaz" value="${esc(S.supportDraft.subject)}">
+    <label class="lb" for="sup-message">Açıklama</label><textarea class="in" id="sup-message" maxlength="2000" placeholder="Ne olduğunu ve mümkünse hangi ekranda olduğunu anlat...">${esc(S.supportDraft.message)}</textarea>
+    <button class="btn block" data-a="sendSupport">Destek talebi gönder</button>
+  </section>
+  <h2>Taleplerim</h2>${rows||'<div class="empty">Henüz destek talebin yok.</div>'}`;
+}
 function vLegal(){
   const back=S.user?'Hesabıma dön':'Hizmetlere dön';
   return `<button class="link" data-a="closeLegal">← ${back}</button>
@@ -876,7 +892,7 @@ function vAccount(){
     <button class="btn ghost sm" data-a="syncVerify">Doğrulama durumunu yenile</button>
   </div>
   ${S.partnerCtx?'<button class="btn block ghost" style="margin-bottom:12px" data-a="partnerPanel">Kurumsal partner paneli</button>':''}${S.isAdmin?'<button class="btn block ghost" style="margin-bottom:12px" data-a="admin">Yönetici paneli</button>':''}<button class="btn block" data-a="saveAcct">Profili kaydet</button>
-  <div class="account-tools"><button class="btn block ghost" data-a="legal">Yasal bilgiler & gizlilik</button><button class="btn block danger-ghost" data-a="requestDeletion">Hesap silme talebi gönder</button></div>
+  <div class="account-tools"><button class="btn block ghost" data-a="support">Destek merkezi</button><button class="btn block ghost" data-a="legal">Yasal bilgiler & gizlilik</button><button class="btn block danger-ghost" data-a="requestDeletion">Hesap silme talebi gönder</button></div>
   <button class="btn block ghost" style="margin-top:12px" data-a="logout">Çıkış yap</button>
   <p class="muted small" style="margin-top:24px">Uygulama gibi kullanmak için tarayıcı menüsünden "Ana ekrana ekle" seçeneğini kullan.</p>`;
 }
@@ -1056,16 +1072,18 @@ function vAdmin(){
   const payCommission=Number(payStats.commission||0);
   const payPending=Number(payStats.pending||0);
   const payRows=payments.map(x=>{const cu=a.profiles[x.customer_id]||{},pr=a.profiles[x.pro_id]||{},at=latestAttempt[x.id];return `<article class="quote payment-admin"><div class="qhead"><div><h3>İş #${x.listing_id}</h3><p class="muted small">${esc(cu.name||'Müşteri')} → ${esc(pr.name||'Uzman')} · ${ago(x.created_at)}</p></div><span class="pill ${x.status==='paid'?'good':x.status==='failed'?'amber':''}">${esc(PAYMENT_STATUS[x.status]||x.status)}</span></div><div class="payment-admin-grid"><span>Net tutar <b>${tl(x.payable_amount)}</b></span><span>Kart/online <b>${tl(x.provider_amount||0)}</b></span><span>Nakit <b>${tl(x.cash_amount||0)}</b></span><span>Komisyon <b>${tl(x.platform_commission_amount||0)}</b></span></div><p class="muted small">${esc(PAYMENTS[x.method]&&PAYMENTS[x.method].label||x.method)}${x.provider?' · '+esc(x.provider):''}</p>${at?`<div class="attempt-note"><span>Son ödeme denemesi</span><b>${esc(at.status)}</b><small>${ago(at.created_at)}${at.error_message?' · '+esc(at.error_message):''}</small></div>`:''}</article>`}).join('');
+  const supportRows=(a.support||[]).map(x=>{const p=a.profiles[x.user_id]||{};return `<article class="quote support-admin"><div class="qhead"><div><h3>${esc(x.subject)}</h3><p class="muted small">${esc(p.name||'Kullanıcı')} · ${ago(x.created_at)}</p></div><span class="pill ${x.status==='resolved'||x.status==='closed'?'good':x.status==='in_progress'?'amber':''}">${x.status}</span></div><p class="qnote">${esc(x.message)}</p>${x.admin_response?`<p class="muted small">Yanıt: ${esc(x.admin_response)}</p>`:''}<div class="foot">${x.status==='open'?'<button class="btn ghost sm" data-a="adminSupport" data-v="'+x.id+'|in_progress">İşleme al</button>':''}${!['resolved','closed'].includes(x.status)?'<button class="btn ghost sm" data-a="adminSupport" data-v="'+x.id+'|resolved">Yanıtla & çöz</button>':''}</div></article>`}).join('');
   const deletionRows=(a.deletions||[]).map(x=>{const p=a.profiles[x.user_id]||{};return `<article class="quote deletion-admin"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${ago(x.created_at)} · ${esc(x.status)}</p></div><span class="pill ${x.status==='completed'?'good':x.status==='pending'?'amber':''}">${x.status==='pending'?'Bekliyor':x.status==='processing'?'İşleniyor':x.status==='completed'?'Tamamlandı':'Reddedildi'}</span></div>${x.reason?`<p class="qnote">${esc(x.reason)}</p>`:''}${x.admin_note?`<p class="muted small">Not: ${esc(x.admin_note)}</p>`:''}<div class="foot">${x.status==='pending'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|processing">İşleme al</button>':''}${x.status!=='completed'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|completed">Tamamlandı</button>':''}${x.status==='pending'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|rejected">Reddet</button>':''}</div></article>`}).join('');
   return `<button class="link" data-a="closeAdmin">Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}
   <h2>Ödeme operasyonu</h2><div class="field payment-admin-summary"><div><span>Kayıtlı ödeme</span><b>${Number(payStats.payments||payments.length)}</b></div><div><span>Bekleyen</span><b>${payPending}</b></div><div><span>Net hacim</span><b>${tl(payGross)}</b></div><div><span>Tahmini komisyon</span><b>${tl(payCommission)}</b></div></div>${payRows||'<div class="empty">Henüz ödeme kaydı yok.</div>'}
   <h2>Kurumsal partnerler</h2><div class="field partner-form"><div class="two"><div><label class="lb" for="partner-name">Şirket adı</label><input class="in" id="partner-name" placeholder="Örn. Koçtaş"></div><div><label class="lb" for="partner-slug">Kısa ad</label><input class="in" id="partner-slug" placeholder="koctas" autocapitalize="off"></div></div><button class="btn ghost sm" data-a="addPartner">Partner ekle</button></div>${partners||'<div class="empty">Henüz kurumsal partner yok.</div>'}
+  <h2>Destek talepleri</h2>${supportRows||'<div class="empty">Destek talebi yok.</div>'}
   <h2>Hesap silme talepleri</h2>${deletionRows||'<div class="empty">Açık hesap silme talebi yok.</div>'}
   <h2>Belge doğrulama</h2>${vers||'<div class="empty">Doğrulama başvurusu yok.</div>'}<h2>Şikâyetler</h2>${rows||'<div class="empty">Şikâyet kaydı yok.</div>'}`;
 }
 async function loadAdmin(){
   if(!S.isAdmin)return;
-  const [dr,rr,vr,pa,partnerStatsRes,pay,payStats,attempts,deletions]=await Promise.all([
+  const [dr,rr,vr,pa,partnerStatsRes,pay,payStats,attempts,deletions,support]=await Promise.all([
     sb.rpc('admin_dashboard'),
     sb.from('reports').select('*').order('created_at',{ascending:false}).limit(100),
     sb.from('professional_verifications').select('*').order('created_at',{ascending:false}).limit(100),
@@ -1074,13 +1092,14 @@ async function loadAdmin(){
     sb.from('payment_transactions').select('id,listing_id,quote_id,customer_id,pro_id,method,gross_amount,discount_amount,payable_amount,provider_amount,cash_amount,platform_commission_amount,partner_promo_contribution,provider,status,created_at,updated_at').order('created_at',{ascending:false}).limit(100),
     sb.rpc('admin_payment_stats'),
     sb.from('payment_attempts').select('id,payment_id,provider,amount,currency,status,error_code,error_message,created_at,updated_at').order('created_at',{ascending:false}).limit(200),
-    sb.from('account_deletion_requests').select('*').order('created_at',{ascending:false}).limit(100)
+    sb.from('account_deletion_requests').select('*').order('created_at',{ascending:false}).limit(100),
+    sb.from('support_requests').select('*').order('created_at',{ascending:false}).limit(100)
   ]);
-  if(dr.error)throw dr.error;if(rr.error)throw rr.error;if(vr.error)throw vr.error;if(pa.error)throw pa.error;if(partnerStatsRes.error)throw partnerStatsRes.error;if(pay.error)throw pay.error;if(payStats.error)throw payStats.error;if(attempts.error)throw attempts.error;if(deletions.error)throw deletions.error;
-  const ids=[...new Set([...(rr.data||[]).flatMap(x=>[x.reported_id,x.reporter_id]),...(vr.data||[]).map(x=>x.user_id),...(pay.data||[]).flatMap(x=>[x.customer_id,x.pro_id]),...(deletions.data||[]).map(x=>x.user_id)])];
+  if(dr.error)throw dr.error;if(rr.error)throw rr.error;if(vr.error)throw vr.error;if(pa.error)throw pa.error;if(partnerStatsRes.error)throw partnerStatsRes.error;if(pay.error)throw pay.error;if(payStats.error)throw payStats.error;if(attempts.error)throw attempts.error;if(deletions.error)throw deletions.error;if(support.error)throw support.error;
+  const ids=[...new Set([...(rr.data||[]).flatMap(x=>[x.reported_id,x.reporter_id]),...(vr.data||[]).map(x=>x.user_id),...(pay.data||[]).flatMap(x=>[x.customer_id,x.pro_id]),...(deletions.data||[]).map(x=>x.user_id),...(support.data||[]).map(x=>x.user_id)])];
   let profileRows=[];if(ids.length){const pr=await sb.from('profiles').select('id,name,phone_verified,identity_verified,vocational_verified,business_verified,account_status').in('id',ids);if(pr.error)throw pr.error;profileRows=pr.data||[]}
   const profiles={};profileRows.forEach(x=>profiles[x.id]=x);
-  S.admin={stats:dr.data||{},reports:rr.data||[],verifications:vr.data||[],partners:pa.data||[],partnerStats:partnerStatsRes.data||[],payments:pay.data||[],paymentStats:payStats.data||{},paymentAttempts:attempts.data||[],deletions:deletions.data||[],profiles};
+  S.admin={stats:dr.data||{},reports:rr.data||[],verifications:vr.data||[],partners:pa.data||[],partnerStats:partnerStatsRes.data||[],payments:pay.data||[],paymentStats:payStats.data||{},paymentAttempts:attempts.data||[],deletions:deletions.data||[],support:support.data||[],profiles};
 }
 function vPartnerPanel(){
   const x=S.partnerCtx||{},d=(S.partnerDash&&S.partnerDash[0])||{},jobs=S.partnerJobs||[];
@@ -1113,7 +1132,9 @@ function render(){
   let h;
   if(S.setup)h=vSetup();
   else if(S.loading)h='<div class="wait"><span class="dot"></span>Yükleniyor...</div>';
+  else if(S.bootError)h='<div class="fatal-state"><div class="fatal-icon">!</div><h1>Bağlantı kurulamadı</h1><p>'+esc(S.bootError)+'</p><button class="btn" data-a="retryBoot">Tekrar dene</button></div>';
   else if(S.recovery)h='<div class="pagehead"><h1>Yeni şifre belirle</h1></div><p class="lede">Hesabın için yeni bir şifre oluştur.</p><div class="field"><label class="lb" for="au-pass">Yeni şifre</label><input class="in" id="au-pass" type="password" autocomplete="new-password" placeholder="En az 8 karakter" value="'+esc(S.auth.pass)+'"></div>'+(S.authErr?'<div class="err" role="alert">'+esc(S.authErr)+'</div>':'')+'<button class="btn block" data-a="setNewPass">Şifreyi güncelle</button>';
+  else if(S.page==='support')h=vSupport();
   else if(S.page==='legal')h=vLegal();
   else if(!S.user)h=S.guestAuth?vAuth():vGuest();
   else if((S.profile||{}).account_status==='suspended')h='<div class="pagehead"><h1>Hesap askıya alındı</h1></div><p class="lede">Bu hesap moderasyon nedeniyle geçici olarak kısıtlandı.</p><button class="btn ghost" data-a="logout">Çıkış yap</button>';
@@ -1139,10 +1160,25 @@ function render(){
 }
 
 /* ---------- eylemler ---------- */
-const NET=new Set(['adminDeletion','requestDeletion','startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
+const NET=new Set(['sendSupport','supportRefresh','adminSupport','adminDeletion','requestDeletion','startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
 const KEEP=new Set(['pickKat','toggleSorun','zaman','sort','filter','pick','send','rate','tab']);
 const A={
   showAuth(){S.guestAuth=true;S.pendingAction=null;S.authErr='';S.authInfo=''},
+  async support(){await A.supportRefresh();S.page='support'},
+  closeSupport(){S.page='account'},
+  async supportRefresh(){
+    const r=await sb.from('support_requests').select('*').eq('user_id',uid()).order('created_at',{ascending:false}).limit(50);
+    if(r.error)throw r.error;S.supportRequests=r.data||[];
+  },
+  async sendSupport(){
+    const d=S.supportDraft,subject=String(d.subject||'').trim(),message=String(d.message||'').trim();
+    if(subject.length<3){toast('Başlık en az 3 karakter olmalı.');return}
+    if(message.length<10){toast('Açıklama en az 10 karakter olmalı.');return}
+    const r=await sb.from('support_requests').insert({user_id:uid(),category:d.category,subject:subject.slice(0,120),message:message.slice(0,2000)});
+    if(r.error)throw r.error;
+    S.supportDraft={category:'general',subject:'',message:''};await A.supportRefresh();toast('Destek talebin alındı.');
+  },
+  retryBoot(){S.bootError='';boot()},
   legal(){S.page='legal'},
   closeLegal(){S.page=S.user?'account':'main';if(!S.user)S.guestAuth=true},
   async requestDeletion(){
@@ -1198,6 +1234,12 @@ const A={
     const r=await sb.rpc('admin_set_partner_terms',{p_partner_id:v,p_commission_percent:commission,p_promo_share_percent:promo});
     if(r.error)throw r.error;
     await loadAdmin();await refresh();toast('Partner oranları kaydedildi.');
+  },
+  async adminSupport(v){
+    const [id,status]=String(v).split('|');if(!id||!status)return;
+    let response=null;if(status==='resolved')response=prompt('Kullanıcıya gönderilecek yanıt:')||null;
+    const r=await sb.rpc('admin_update_support_request',{p_request_id:id,p_status:status,p_response:response});
+    if(r.error)throw r.error;await loadAdmin();toast('Destek talebi güncellendi.');
   },
   async adminDeletion(v){
     const [id,status]=String(v).split('|');if(!id||!status)return;
@@ -1438,6 +1480,7 @@ const F={
   'd-not':v=>{S.draft.not=v},'d-city':v=>{S.draft.city=v},'d-district':v=>{S.draft.district=v},'d-neighborhood':v=>{S.draft.neighborhood=v},'cat-search':v=>{S.catSearch=v},
   'q-fiyat':v=>{S.q.fiyat=v.replace(/\D/g,'')},'q-sure':v=>{S.q.sure=v},'q-not':v=>{S.q.not=v},'q-deposit':v=>{S.q.deposit=parseInt(v,10)||20},
   'au-name':v=>{S.auth.name=v},'au-email':v=>{S.auth.email=v},'au-pass':v=>{S.auth.pass=v},
+  'sup-subject':v=>{S.supportDraft.subject=v},'sup-message':v=>{S.supportDraft.message=v},
   'ac-name':v=>{S.acct.name=v},'ac-title':v=>{S.acct.title=v},'ac-bio':v=>{S.acct.bio=v},'ac-services':v=>{S.acct.services=v},'ac-city':v=>{S.acct.city=v},'ac-districts':v=>{S.acct.districts=v},
   's-url':v=>{S.cfgDraft.url=v},'s-key':v=>{S.cfgDraft.key=v}
 };
@@ -1472,6 +1515,7 @@ document.addEventListener('input',e=>{
   onField(e);
 });
 document.addEventListener('change',e=>{
+  if(e.target.id==='sup-category'){S.supportDraft.category=e.target.value;return}
   if(e.target.id==='au-terms'){S.auth.terms=!!e.target.checked;return}
   if(e.target.id==='d-photos'&&S.draft){
     const good=[...e.target.files].filter(f=>['image/jpeg','image/png','image/webp'].includes(f.type)&&f.size<=8*1024*1024);
@@ -1484,6 +1528,10 @@ document.addEventListener('change',e=>{
   }
   onField(e);
 });
+function syncOnlineBanner(){const b=document.getElementById('offline-banner');if(b)b.hidden=navigator.onLine}
+window.addEventListener('online',()=>{syncOnlineBanner();if(S.user)kick()});
+window.addEventListener('offline',syncOnlineBanner);
+syncOnlineBanner();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)kick()});
 setInterval(()=>{if(!document.hidden&&S.user)kick()},30000);
 
