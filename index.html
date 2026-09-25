@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v51-account-redesign">
+<meta name="tamisim-build" content="v52-mobile-scroll-polish">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -453,6 +453,25 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 .account-settings{padding-bottom:9px}.account-menu-row{width:100%;border:0;border-top:1px solid #EEF2F6;background:transparent;padding:12px 1px;display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;text-align:left;color:inherit;cursor:pointer}.account-menu-row:first-of-type{border-top:0}.account-menu-row .menu-icon{width:34px;height:34px;border-radius:11px;background:#F0F5FD;color:#1457D9;display:grid;place-items:center;font-size:15px;font-weight:800}.account-menu-row>span:nth-child(2){display:flex;flex-direction:column}.account-menu-row b{font-size:12px;color:#19334F}.account-menu-row small{font-size:9px;color:#8593A6;margin-top:2px}.account-menu-row i{font-style:normal;color:#9AA7B8;font-size:20px}.account-menu-row.danger .menu-icon{background:#FFF2F2;color:#A94545}.account-menu-row.danger b{color:#8E3A3A}.account-logout{margin-top:12px;min-height:48px}.account-install-note{text-align:center;color:#93A0B0;font-size:9px;line-height:1.45;margin:13px 20px 0}
 
 @media(max-width:390px){.account-cover{grid-template-columns:auto 1fr;padding:16px}.profile-score{grid-column:2;text-align:left;display:flex;gap:5px;align-items:baseline}.profile-score b{font-size:13px}.account-form-grid{grid-template-columns:1fr}}
+
+/* mobile-polish-scroll-v52 */
+body.has-bottomnav main{padding-bottom:76px}
+.bottomnav{height:62px;grid-template-columns:1fr 1fr 64px 1fr 1fr;padding:4px 6px;border-radius:20px;bottom:max(8px,env(safe-area-inset-bottom));transition:transform .24s ease,opacity .2s ease;will-change:transform,opacity}
+.bottomnav button{min-height:48px}
+.bottomnav button>span{font-size:20px}
+.bottomnav small{font-size:9px}
+.bottomnav .navplus{width:54px;height:54px;min-height:54px;border-radius:18px;transform:translateY(-8px)}
+.bottomnav .navplus span{font-size:28px}
+.bottomnav.nav-hidden{transform:translate(-50%,calc(100% + 26px));opacity:.08;pointer-events:none}
+.account-cover{margin-top:8px}
+.profile-score b{font-size:17px}
+@media(max-width:430px){
+  .account-form-grid{grid-template-columns:1fr}
+  .account-form-grid label>small{margin-bottom:0}
+  .account-section{padding:15px}
+  .account-section-head p{margin-left:35px}
+}
+@media(prefers-reduced-motion:reduce){.bottomnav{transition:none}}
 </style>
 </head>
 <body>
@@ -874,9 +893,11 @@ function vLegal(){
 }
 function vAccount(){
   const p=S.profile||{}, name=p.name||'Profilim';
-  const completed=[S.acct.name,S.acct.title,S.acct.services,S.acct.city,S.acct.bio].filter(x=>String(x||'').trim()).length;
-  const pct=Math.round(completed/5*100);
-  const verCount=[p.identity_verified,p.vocational_verified,p.business_verified].filter(Boolean).length;
+  const profileChecks=[S.acct.name,S.acct.title,S.acct.services,S.acct.city,S.acct.bio].map(x=>!!String(x||'').trim());
+  const verificationChecks=[!!p.identity_verified,!!p.vocational_verified,!!p.business_verified];
+  const completed=[...profileChecks,...verificationChecks].filter(Boolean).length;
+  const pct=Math.round(completed/8*100);
+  const verCount=verificationChecks.filter(Boolean).length;
   const verRows=[
     {ok:p.identity_verified,title:'Kimlik',text:p.identity_verified?'Doğrulandı':'Kimlik belgesiyle doğrula'},
     {ok:p.vocational_verified,title:'Mesleki belge',text:p.vocational_verified?'Doğrulandı':'Ustalık, MYK, diploma veya sertifika'},
@@ -1188,7 +1209,7 @@ function render(){
   $('#app').innerHTML=h;
   const signed=!!(S.user&&!S.setup&&!S.loading);
   $('#hdr-r').hidden=!signed;
-  const bn=$('#bottomnav');if(bn){const topLevel=signed&&S.page!=='admin'&&((S.page==='main'&&((S.role==='musteri'&&S.view==='list')||(S.role==='usta'&&S.view==='list'&&!S.quoteFor)))||S.page==='notifications'||S.page==='account');bn.hidden=!topLevel;document.body.classList.toggle('has-bottomnav',topLevel);bn.querySelectorAll('button').forEach(x=>x.classList.remove('active'));const active=S.page==='notifications'?'notifications':S.page==='account'?'account':(S.page==='main'&&S.role==='musteri'?'navHome':null);if(active){const x=bn.querySelector('[data-a="'+active+'"]');if(x)x.classList.add('active')}}
+  const bn=$('#bottomnav');if(bn){if(window.scrollY<90)bn.classList.remove('nav-hidden');const topLevel=signed&&S.page!=='admin'&&((S.page==='main'&&((S.role==='musteri'&&S.view==='list')||(S.role==='usta'&&S.view==='list'&&!S.quoteFor)))||S.page==='notifications'||S.page==='account');bn.hidden=!topLevel;document.body.classList.toggle('has-bottomnav',topLevel);bn.querySelectorAll('button').forEach(x=>x.classList.remove('active'));const active=S.page==='notifications'?'notifications':S.page==='account'?'account':(S.page==='main'&&S.role==='musteri'?'navHome':null);if(active){const x=bn.querySelector('[data-a="'+active+'"]');if(x)x.classList.add('active')}}
   if(signed){
     document.querySelectorAll('.seg button[data-a="role"]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.role)));
     const nm=(S.profile&&S.profile.name)||S.user.email||'K';
@@ -1570,6 +1591,21 @@ document.addEventListener('change',e=>{
   onField(e);
 });
 function syncOnlineBanner(){const b=document.getElementById('offline-banner');if(b)b.hidden=navigator.onLine}
+
+/* mobile scroll navigation: aşağı kaydırınca alan aç, yukarı kaydırınca menüyü geri getir */
+let lastScrollY=window.scrollY,navScrollTick=false;
+function syncScrollNav(){
+  navScrollTick=false;
+  const nav=document.getElementById('bottomnav');
+  if(!nav||nav.hidden){lastScrollY=window.scrollY;return}
+  const y=Math.max(0,window.scrollY),delta=y-lastScrollY;
+  if(y<90){nav.classList.remove('nav-hidden')}
+  else if(delta>8){nav.classList.add('nav-hidden')}
+  else if(delta<-8){nav.classList.remove('nav-hidden')}
+  lastScrollY=y;
+}
+window.addEventListener('scroll',()=>{if(!navScrollTick){navScrollTick=true;requestAnimationFrame(syncScrollNav)}},{passive:true});
+window.addEventListener('touchstart',()=>{lastScrollY=window.scrollY},{passive:true});
 window.addEventListener('online',()=>{syncOnlineBanner();if(S.user)kick()});
 window.addEventListener('offline',syncOnlineBanner);
 syncOnlineBanner();
