@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v36-verification">
+<meta name="tamisim-build" content="v37-payment-flow">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -409,6 +409,9 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* verification-v36 */
 .verified-pro{background:#E6F7EE!important;border-color:#B9E6CD!important;color:#17603D!important;font-weight:800}.verify-panel{margin-top:14px}.verify-upload{margin-top:16px;padding-top:14px;border-top:1px solid #E5EBF3}.verify-upload h3,.verify-history h3{margin:0 0 8px;color:#102A56}.verify-grid{display:grid;gap:9px;margin:10px 0}.verify-history{margin-top:16px;padding-top:14px;border-top:1px solid #E5EBF3}.verify-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #EEF2F7}.verify-row:last-child{border-bottom:0}.verify-row b{display:block;color:#102A56;font-size:13px}.verify-row small{display:block;color:#73839A;font-size:11px;margin-top:2px}.verify-admin{margin-bottom:10px}
+
+/* payment-flow-v37 */
+.payment-summary .payment-notice{display:block;margin-top:10px;padding:10px 11px;border-radius:12px;background:#FFF8E6;color:#6C5416;font-size:11px;line-height:1.4}.cash-state{margin-top:10px;padding:10px 11px;border-radius:12px;background:#EEF4FF;color:#34506F;font-size:12px;font-weight:700}.cash-state.good{background:#EAF8F0;color:#17603D}.cash-confirm{margin-top:9px}.cash-confirm[disabled]{opacity:.55}
 </style>
 </head>
 <body>
@@ -560,6 +563,34 @@ function promoDiscount(q,p){
   if(p.max_discount!=null)d=Math.min(d,Number(p.max_discount)||0);
   return Math.max(0,Math.min(price,Math.round(d*100)/100));
 }
+function paymentPlan(l,q,pc,side){
+  if(!q||!pc)return '';
+  const d=Number(pc.discount_amount)||0,final=Math.max(0,Number(q.price)-d),pm=PAYMENTS[pc.method]||{label:pc.method,icon:'•'};
+  const dp=Number(pc.deposit_percent)||0;
+  const deposit=pc.method==='deposit_cash'?Math.round(final*dp/100):0;
+  const cashDue=pc.method==='deposit_cash'?Math.max(0,final-deposit):(pc.method==='cash'?final:0);
+  let extra='';
+  if(pc.method==='deposit_cash'){
+    extra+='<div><span>Ön ödeme (%'+dp+')</span><b>'+tl(deposit)+'</b></div><div><span>İş sonunda nakit</span><b>'+tl(cashDue)+'</b></div>';
+    extra+='<div class="payment-notice">Kartla ön ödeme altyapısı henüz ödeme kuruluşuna bağlanmadı. Bu bölüm şimdilik ödeme planını gösterir.</div>';
+  }else if(pc.method==='card'){
+    extra+='<div class="payment-notice">Kart tahsilatı henüz ödeme kuruluşuna bağlanmadı. Ödeme planı kaydedildi.</div>';
+  }
+  if(pc.method==='cash'||pc.method==='deposit_cash'){
+    const mine=side==='customer'?pc.customer_cash_confirmed_at:pc.pro_cash_confirmed_at;
+    const other=side==='customer'?pc.pro_cash_confirmed_at:pc.customer_cash_confirmed_at;
+    const done=!!pc.cash_confirmed_at;
+    const verb=pc.method==='deposit_cash'?(side==='customer'?'Kalan nakdi ödedim':'Kalan nakdi aldım'):(side==='customer'?'Nakit ödemeyi yaptım':'Nakit ödemeyi aldım');
+    if(done)extra+='<div class="cash-state good">✓ Nakit ödeme iki tarafça onaylandı.</div>';
+    else{
+      if(mine&&other)extra+='<div class="cash-state good">✓ Nakit ödeme doğrulandı.</div>';
+      else if(mine)extra+='<div class="cash-state">Sen onayladın. Karşı tarafın onayı bekleniyor.</div>';
+      else if(other)extra+='<div class="cash-state">Karşı taraf onayladı. Sen de doğrula.</div>';
+      extra+='<button class="btn ghost sm cash-confirm" data-a="confirmCash" data-v="'+l.id+'" '+(mine?'disabled':'')+'>'+verb+'</button>';
+    }
+  }
+  return '<section class="payment-summary"><div><span>Hizmet bedeli</span><b>'+tl(q.price)+'</b></div>'+(d>0?'<div class="discount"><span>Promosyon indirimi</span><b>-'+tl(d)+'</b></div>':'')+'<div class="total"><span>Ödenecek tutar</span><b>'+tl(final)+'</b></div><p>'+pm.icon+' '+esc(pm.label)+(pc.method==='deposit_cash'&&pc.deposit_percent?' · %'+pc.deposit_percent+' ön ödeme':'')+'</p>'+extra+'</section>';
+}
 const myQuote=id=>Object.values(D.quotes).find(q=>q.listing_id===id&&q.pro===uid());
 const chosenQ=l=>l.chosen_quote?D.quotes[l.chosen_quote]:null;
 function photoStrip(id,detail=false){const a=D.photos[id]||[];return a.length?`<div class="photo-strip ${detail?'detail':''}">${a.map(x=>`<img src="${esc(x.url)}" alt="İlan fotoğrafı" loading="lazy">`).join('')}</div>`:''}
@@ -630,7 +661,7 @@ async function refresh(){
     sb.from('pro_stats').select('*').in('pro_id',ids).then(chk),
     partyIds.length?sb.from('messages').select('*').in('listing_id',partyIds).order('created_at').then(chk):[],
     listingIds.length?sb.from('listing_photos').select('id,listing_id,path,sort_order').in('listing_id',listingIds).order('sort_order').then(chk):[],
-    listingIds.length?sb.from('listing_payment_choices').select('listing_id,quote_id,method,deposit_percent,promotion_id,discount_amount,created_at').in('listing_id',listingIds).then(chk):[],
+    listingIds.length?sb.from('listing_payment_choices').select('listing_id,quote_id,method,deposit_percent,promotion_id,discount_amount,customer_cash_confirmed_at,pro_cash_confirmed_at,cash_confirmed_at,created_at').in('listing_id',listingIds).then(chk):[],
     sb.from('professional_verifications').select('id,user_id,category,verification_type,document_type,status,review_note,reviewed_at,expires_at,created_at').eq('user_id',me).order('created_at',{ascending:false}).then(chk)
   ]);
   const photos={};
@@ -866,10 +897,7 @@ function vDetail(){
   }).join('');
   if(ch){
     const pc=D.paymentChoices[l.id];
-    if(pc){
-      const d=Number(pc.discount_amount)||0,final=Math.max(0,Number(ch.price)-d),pm=PAYMENTS[pc.method]||{label:pc.method,icon:'•'};
-      h+=`<section class="payment-summary"><div><span>Hizmet bedeli</span><b>${tl(ch.price)}</b></div>${d>0?`<div class="discount"><span>Promosyon indirimi</span><b>-${tl(d)}</b></div>`:''}<div class="total"><span>Ödenecek tutar</span><b>${tl(final)}</b></div><p>${pm.icon} ${esc(pm.label)}${pc.method==='deposit_cash'&&pc.deposit_percent?` · %${pc.deposit_percent} ön ödeme`:''}</p></section>`;
-    }
+    if(pc)h+=paymentPlan(l,ch,pc,'customer');
     h+=chatBox(l,prof(ch.pro).name,l.status==='chosen');
     if(l.status==='chosen')h+=`<div class="rate"><p>İş bittiyse uzmanı puanla</p><div>${[1,2,3,4,5].map(i=>`<button class="star" data-a="rate" data-v="${i}" aria-label="${i} yıldız">★</button>`).join('')}</div></div>`;
     else h+=`<p class="rate"><span class="pill good">Tamamlandı. Puanın: ${'★'.repeat(l.rating||0)}${'☆'.repeat(5-(l.rating||0))}</span></p>`;
@@ -901,6 +929,7 @@ function vProDetail(){
   const q=chosenQ(l);
   let h=`<button class="link" data-a="back">Tekliflerime dön</button>`+ticket(l,{pill:l.status==='done'?'<span class="pill">Tamamlandı</span>':'<span class="pill good">Seçildin</span>'});
   if(q)h+=`<p class="lede">Teklifin: <strong>${tl(q.price)}</strong>, ${esc(q.eta)}</p>`;
+  if(q&&D.paymentChoices[l.id])h+=paymentPlan(l,q,D.paymentChoices[l.id],'pro');
   h+=chatBox(l,prof(l.owner).name,l.status==='chosen');
   if(l.status==='done')h+=`<p class="rate"><span class="pill good">Müşteri puanı: ${'★'.repeat(l.rating||0)}${'☆'.repeat(5-(l.rating||0))}</span></p>`;
   return h;
@@ -1174,6 +1203,12 @@ const A={
     if(r.error){toast(r.error.message||'Teklif seçilemedi.');return}
     toast('Uzman, ödeme yöntemi ve varsa kampanya kaydedildi.');
     await refresh();
+  },
+  async confirmCash(v){
+    if(!confirm('Nakit ödeme durumunu onaylıyor musun?'))return;
+    const r=await sb.rpc('confirm_cash_payment',{p_listing_id:+v});
+    if(r.error){toast(r.error.message||'Nakit ödeme onaylanamadı.');return}
+    await refresh();toast('Nakit ödeme onayın kaydedildi.');
   },
   async send(){
     const inp=$('#chat-input'),t=inp&&inp.value.trim();if(!t)return;
