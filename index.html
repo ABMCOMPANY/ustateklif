@@ -948,8 +948,10 @@ async function refresh(){
   const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,paymentChoices,paymentRecords,verifications:vr,partners,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
   const changed=sig!==D.sig;
   if(D.qMine!==undefined&&qMine.length>D.qMine)toast('Yeni teklif geldi');
-  D={listings,mine,open,quotes,counts,profiles,stats,msgs,photos,paymentChoices,paymentRecords,verifications:vr,partners,notifications,blocks,sig,qMine:qMine.length};
-  if(profiles[me])S.profile=profiles[me];
+  const mergedProfiles=S.expertsLoaded?{...(D.profiles||{}),...profiles}:profiles;
+  const mergedStats=S.expertsLoaded?{...(D.stats||{}),...stats}:stats;
+  D={listings,mine,open,quotes,counts,profiles:mergedProfiles,stats:mergedStats,msgs,photos,paymentChoices,paymentRecords,verifications:vr,partners,notifications,blocks,sig,qMine:qMine.length};
+  if(mergedProfiles[me])S.profile=mergedProfiles[me];
   return changed;
 }
 async function boot(){
