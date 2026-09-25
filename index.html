@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v50-support-ux">
+<meta name="tamisim-build" content="v51-account-redesign">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -442,6 +442,17 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* support-ux-v50 */
 .offline-banner{margin:0 20px 10px;padding:9px 12px;border-radius:12px;background:#FFF1F1;border:1px solid #F0CACA;color:#923D3D;font-size:11px;text-align:center}.support-form{display:grid;gap:9px}.support-item{background:#fff;border:1px solid #E3E9F1;border-radius:16px;padding:15px;margin-bottom:10px}.support-reply{margin-top:12px;padding:12px;border-radius:12px;background:#F4F7FB}.support-reply b{font-size:11px;color:#102A56}.support-reply p{margin:5px 0 0;font-size:12px;line-height:1.55;color:#52657D}.fatal-state{text-align:center;padding:64px 20px}.fatal-icon{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;margin:0 auto 14px;background:#FFF1F1;color:#A53A3A;font-weight:900;font-size:24px}.fatal-state h1{margin:0 0 8px}.fatal-state p{color:#6A7A8F;max-width:420px;margin:0 auto 18px;line-height:1.55}@media(max-width:520px){.offline-banner{margin-left:12px;margin-right:12px}}
+
+/* account-redesign-v51 */
+.account-page{padding-bottom:20px}.account-cover{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:13px;align-items:center;margin:10px 0 16px;padding:18px;background:linear-gradient(140deg,#102A56 0%,#174DAD 55%,#1664E8 100%);border-radius:24px;color:#fff;box-shadow:0 14px 34px rgba(16,42,86,.18);overflow:hidden}.account-cover:after{content:"";position:absolute;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.08);right:-62px;top:-70px}.account-avatar{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;background:#fff;color:#1457D9;font-size:21px;font-weight:900;box-shadow:0 7px 20px rgba(7,32,75,.18)}.account-cover-copy{min-width:0}.account-kicker{display:block;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.72;margin-bottom:3px}.account-cover h1{margin:0;font-size:22px;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.account-cover p{margin:5px 0 0;font-size:11px;opacity:.78;line-height:1.35}.profile-score{position:relative;z-index:1;text-align:right}.profile-score b{display:block;font-size:18px}.profile-score small{display:block;font-size:9px;opacity:.7;margin-top:1px}
+
+.account-section{margin:12px 0;padding:17px;background:#fff;border:1px solid #E4EAF2;border-radius:20px;box-shadow:0 6px 20px rgba(16,42,86,.045)}.account-section-head{margin-bottom:15px}.account-section-head>div{display:flex;align-items:center;gap:9px}.account-section-head>div>span{width:26px;height:26px;display:grid;place-items:center;border-radius:9px;background:#EAF2FF;color:#1457D9;font-size:9px;font-weight:900}.account-section-head h2{margin:0;font-size:18px;letter-spacing:-.02em;color:#102A56}.account-section-head p{margin:5px 0 0 35px;color:#7B8A9F;font-size:11px;line-height:1.4}.account-form{display:grid;gap:14px}.account-form label,.verify-grid.modern label{display:block}.account-form label>span,.verify-grid.modern label>span{display:block;color:#344B69;font-size:11px;font-weight:800;margin:0 0 6px}.account-form label>small{display:block;color:#8B98AA;font-size:9px;margin:5px 2px 0}.account-form .in,.verify-grid.modern .in{min-height:48px;padding:11px 13px;border:1px solid #DEE6F0;border-radius:13px;background:#F8FAFD;box-shadow:none;font-size:13px}.account-form textarea.in{min-height:105px;line-height:1.5}.account-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.account-save{margin-top:16px;min-height:50px;border-radius:14px}
+
+.verify-status-list{display:grid;gap:8px}.verify-status{display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:center;padding:11px;border:1px solid #E6EBF2;border-radius:14px;background:#FAFBFD}.verify-status.done{background:#F2FAF6;border-color:#D4EEDF}.verify-ico{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:#EEF2F7;color:#8391A4;font-weight:900}.verify-status.done .verify-ico{background:#DDF3E7;color:#208253}.verify-status b{display:block;color:#233B59;font-size:12px}.verify-status small{display:block;color:#7D8B9E;font-size:9px;margin-top:2px;line-height:1.35}.verify-details{margin-top:12px;border:1px solid #E1E8F1;border-radius:15px;overflow:hidden;background:#fff}.verify-details summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px}.verify-details summary::-webkit-details-marker{display:none}.verify-details summary span{display:flex;flex-direction:column}.verify-details summary b{font-size:12px;color:#102A56}.verify-details summary small{font-size:9px;color:#8492A5;margin-top:2px}.verify-details summary i{font-style:normal;width:28px;height:28px;border-radius:9px;background:#EAF2FF;color:#1457D9;display:grid;place-items:center;font-size:17px;transition:.2s}.verify-details[open] summary i{transform:rotate(45deg)}.verify-details-body{border-top:1px solid #EDF1F6;padding:14px}.privacy-note{margin:0 0 12px;padding:9px 10px;border-radius:10px;background:#F5F8FC;color:#6F8096;font-size:9px;line-height:1.45}.verify-grid.modern{display:grid;gap:10px;margin:0}.file-drop{position:relative;min-height:92px!important;border:1.5px dashed #BFD0E9!important;border-radius:14px!important;background:#F8FBFF!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;padding:12px!important}.file-drop input{position:absolute;inset:0;opacity:0;cursor:pointer}.file-drop-icon{width:30px;height:30px;border-radius:10px!important;background:#E6F0FF;color:#1457D9;display:grid!important;place-items:center;font-size:17px!important;margin:0 0 5px!important}.file-drop b{font-size:11px;color:#1457D9}.file-drop small{font-size:8px;color:#8A98AB;margin-top:2px}.verify-history.compact{margin-top:14px;padding-top:13px;border-top:1px solid #EEF2F6}.subsection-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}.subsection-title h3{margin:0;font-size:12px;color:#102A56}.subsection-title .link{margin:0;font-size:10px}.empty-inline{color:#8997AA;font-size:10px;margin:10px 0 0}.verify-row{padding:9px 0}.verify-row b{font-size:11px}.verify-row small{font-size:9px}
+
+.account-settings{padding-bottom:9px}.account-menu-row{width:100%;border:0;border-top:1px solid #EEF2F6;background:transparent;padding:12px 1px;display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;text-align:left;color:inherit;cursor:pointer}.account-menu-row:first-of-type{border-top:0}.account-menu-row .menu-icon{width:34px;height:34px;border-radius:11px;background:#F0F5FD;color:#1457D9;display:grid;place-items:center;font-size:15px;font-weight:800}.account-menu-row>span:nth-child(2){display:flex;flex-direction:column}.account-menu-row b{font-size:12px;color:#19334F}.account-menu-row small{font-size:9px;color:#8593A6;margin-top:2px}.account-menu-row i{font-style:normal;color:#9AA7B8;font-size:20px}.account-menu-row.danger .menu-icon{background:#FFF2F2;color:#A94545}.account-menu-row.danger b{color:#8E3A3A}.account-logout{margin-top:12px;min-height:48px}.account-install-note{text-align:center;color:#93A0B0;font-size:9px;line-height:1.45;margin:13px 20px 0}
+
+@media(max-width:390px){.account-cover{grid-template-columns:auto 1fr;padding:16px}.profile-score{grid-column:2;text-align:left;display:flex;gap:5px;align-items:baseline}.profile-score b{font-size:13px}.account-form-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -862,41 +873,71 @@ function vLegal(){
   <section class="legal-card"><h2>Beta ve ödeme bilgilendirmesi</h2><p>Tamİşim şu anda test/beta aşamasındadır. Gerçek kart tahsilatı kapalıdır. Nakit işaretlemeleri tarafların beyanına dayalı işlem kayıtlarıdır.</p><p>Şirket ve ticari ödeme hesabı aktif olduğunda uygulamada işletme bilgileri, ödeme sağlayıcısı ve ilgili sözleşmeler güncellenecektir.</p></section>`;
 }
 function vAccount(){
-  return `<button class="link" data-a="closeAcct">Geri</button>
-  <div class="account-hero"><div class="proavatar">${esc(initials((S.profile||{}).name||'K'))}</div><div><h1>${esc((S.profile||{}).name||'Profilim')}</h1><p>${esc((S.profile||{}).title||S.user.email||'')}</p></div></div>
-  <div class="field two">
-    <div><label class="lb" for="ac-name">Adın / işletme adın</label><input class="in" id="ac-name" maxlength="80" value="${esc(S.acct.name)}"></div>
-    <div><label class="lb" for="ac-title">Kısa uzmanlık başlığı</label><input class="in" id="ac-title" maxlength="100" placeholder="Örn. Klima ve soğutma uzmanı" value="${esc(S.acct.title)}"></div>
-    <div><label class="lb" for="ac-services">Verdiğin hizmetler</label><input class="in" id="ac-services" maxlength="300" placeholder="Klima bakımı, klima montajı, gaz dolumu" value="${esc(S.acct.services)}"><p class="muted small">Virgülle ayır.</p></div>
-    <div><label class="lb" for="ac-city">Hizmet verdiğin il</label><select class="in" id="ac-city"><option value="">İl seç</option>${ILLER.map(x=>`<option value="${esc(x)}" ${S.acct.city===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
-    <div><label class="lb" for="ac-districts">Hizmet verdiğin ilçeler</label><input class="in" id="ac-districts" maxlength="400" placeholder="Seyhan, Çukurova, Yüreğir" value="${esc(S.acct.districts)}"><p class="muted small">Virgülle ayır. Boş bırakırsan seçtiğin ilin tüm ilçeleri kabul edilir.</p></div>
-    <div><label class="lb" for="ac-bio">Kendini ve hizmetini tanıt</label><textarea class="in" id="ac-bio" maxlength="600" placeholder="Deneyimin, çalışma şeklin ve müşterinin bilmesini istediğin noktalar...">${esc(S.acct.bio)}</textarea></div>
-  </div>
-  <div class="field verify-panel"><h2>Güven & doğrulama</h2>
-    <div class="checks">
-      <div class="check"><b>${(S.profile||{}).identity_verified?'✓':'i'}</b><span>Kimlik: ${(S.profile||{}).identity_verified?'doğrulandı':'belge göndererek doğrulayabilirsin'}.</span></div>
-      <div class="check"><b>${(S.profile||{}).vocational_verified?'✓':'i'}</b><span>Mesleki belge: ${(S.profile||{}).vocational_verified?'doğrulandı':'ustalık, kalfalık, MYK, diploma veya uygun sertifika ile doğrulanabilir'}.</span></div>
-      <div class="check"><b>${(S.profile||{}).business_verified?'✓':'i'}</b><span>İşletme: ${(S.profile||{}).business_verified?'doğrulandı':'isteğe bağlı; vergi/işletme belgesi ile doğrulanabilir'}.</span></div>
-    </div>
-    <div class="verify-upload">
-      <h3>Belge gönder</h3><p class="muted small">Belgeler müşterilere gösterilmez; yalnızca doğrulama incelemesinde kullanılır.</p>
-      <div class="verify-grid">
-        <select class="in" id="ver-type"><option value="identity">Kimlik</option><option value="vocational">Ustalık / kalfalık / MYK</option><option value="diploma">Diploma</option><option value="certificate">Mesleki sertifika</option><option value="business">İşletme / vergi belgesi</option></select>
-        <select class="in" id="ver-category"><option value="general">Genel / tüm hizmetler</option>${Object.entries(KAT).map(([k,v])=>`<option value="${k}">${esc(v.ad)}</option>`).join('')}</select>
-        <input class="in" id="ver-doc" maxlength="100" placeholder="Belge adı: Örn. Ustalık belgesi">
-        <input class="in" id="ver-file" type="file" accept="image/jpeg,image/png,image/webp,application/pdf">
-      </div>
-      <button class="btn ghost sm" data-a="submitVerification">Belgeyi incelemeye gönder</button>
-    </div>
-    <div class="verify-history"><h3>Başvurularım</h3>${(D.verifications||[]).length?(D.verifications||[]).map(v=>`<div class="verify-row"><div><b>${esc(VERIFY_TYPES[v.verification_type]||v.verification_type)}</b><small>${esc(verifyCategoryLabel(v.category))} · ${esc(v.document_type)}</small></div><span class="pill ${v.status==='approved'?'good':v.status==='pending'?'amber':''}">${esc(VERIFY_STATUS[v.status]||v.status)}</span></div>`).join(''):'<p class="muted small">Henüz belge göndermedin.</p>'}</div>
-    <button class="btn ghost sm" data-a="syncVerify">Doğrulama durumunu yenile</button>
-  </div>
-  ${S.partnerCtx?'<button class="btn block ghost" style="margin-bottom:12px" data-a="partnerPanel">Kurumsal partner paneli</button>':''}${S.isAdmin?'<button class="btn block ghost" style="margin-bottom:12px" data-a="admin">Yönetici paneli</button>':''}<button class="btn block" data-a="saveAcct">Profili kaydet</button>
-  <div class="account-tools"><button class="btn block ghost" data-a="support">Destek merkezi</button><button class="btn block ghost" data-a="legal">Yasal bilgiler & gizlilik</button><button class="btn block danger-ghost" data-a="requestDeletion">Hesap silme talebi gönder</button></div>
-  <button class="btn block ghost" style="margin-top:12px" data-a="logout">Çıkış yap</button>
-  <p class="muted small" style="margin-top:24px">Uygulama gibi kullanmak için tarayıcı menüsünden "Ana ekrana ekle" seçeneğini kullan.</p>`;
-}
+  const p=S.profile||{}, name=p.name||'Profilim';
+  const completed=[S.acct.name,S.acct.title,S.acct.services,S.acct.city,S.acct.bio].filter(x=>String(x||'').trim()).length;
+  const pct=Math.round(completed/5*100);
+  const verCount=[p.identity_verified,p.vocational_verified,p.business_verified].filter(Boolean).length;
+  const verRows=[
+    {ok:p.identity_verified,title:'Kimlik',text:p.identity_verified?'Doğrulandı':'Kimlik belgesiyle doğrula'},
+    {ok:p.vocational_verified,title:'Mesleki belge',text:p.vocational_verified?'Doğrulandı':'Ustalık, MYK, diploma veya sertifika'},
+    {ok:p.business_verified,title:'İşletme',text:p.business_verified?'Doğrulandı':'Vergi / işletme belgesi (isteğe bağlı)'}
+  ].map(x=>`<div class="verify-status ${x.ok?'done':''}"><span class="verify-ico">${x.ok?'✓':'○'}</span><div><b>${x.title}</b><small>${x.text}</small></div></div>`).join('');
+  return `<div class="account-page">
+    <section class="account-cover">
+      <div class="account-avatar">${esc(initials(name))}</div>
+      <div class="account-cover-copy"><span class="account-kicker">Profilim</span><h1>${esc(name)}</h1><p>${esc(p.title||'Profilini tamamlayarak daha güvenilir görün.')}</p></div>
+      <div class="profile-score"><b>%${pct}</b><small>tamamlandı</small></div>
+    </section>
 
+    <section class="account-section">
+      <div class="account-section-head"><div><span>01</span><h2>Profil bilgileri</h2></div><p>Müşterilerin seni tanıması için temel bilgiler.</p></div>
+      <div class="account-form">
+        <label><span>Adın / işletme adın</span><input class="in" id="ac-name" maxlength="80" value="${esc(S.acct.name)}" placeholder="Adın veya işletme adın"></label>
+        <label><span>Kısa uzmanlık başlığı</span><input class="in" id="ac-title" maxlength="100" placeholder="Örn. Klima ve soğutma uzmanı" value="${esc(S.acct.title)}"></label>
+        <label><span>Verdiğin hizmetler</span><input class="in" id="ac-services" maxlength="300" placeholder="Klima bakımı, montaj, gaz dolumu" value="${esc(S.acct.services)}"><small>Hizmetleri virgülle ayır.</small></label>
+        <div class="account-form-grid">
+          <label><span>Hizmet verdiğin il</span><select class="in" id="ac-city"><option value="">İl seç</option>${ILLER.map(x=>`<option value="${esc(x)}" ${S.acct.city===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label>
+          <label><span>İlçeler</span><input class="in" id="ac-districts" maxlength="400" placeholder="Yenişehir, Mezitli..." value="${esc(S.acct.districts)}"><small>Boş bırakırsan tüm il kabul edilir.</small></label>
+        </div>
+        <label><span>Kendini ve hizmetini tanıt</span><textarea class="in" id="ac-bio" maxlength="600" placeholder="Deneyimini, çalışma şeklini ve müşterinin bilmesini istediğin noktaları yaz...">${esc(S.acct.bio)}</textarea><small>En iyi profiller kısa, net ve güven veren açıklamalar kullanır.</small></label>
+      </div>
+      <button class="btn block account-save" data-a="saveAcct">Değişiklikleri kaydet</button>
+    </section>
+
+    <section class="account-section verification-section">
+      <div class="account-section-head"><div><span>02</span><h2>Güven & doğrulama</h2></div><p>${verCount}/3 doğrulama tamamlandı.</p></div>
+      <div class="verify-status-list">${verRows}</div>
+
+      <details class="verify-details">
+        <summary><span><b>Belge gönder</b><small>Kimlik veya mesleki belgeni güvenli biçimde yükle</small></span><i>＋</i></summary>
+        <div class="verify-details-body">
+          <p class="privacy-note">Belgeler müşterilere gösterilmez; yalnızca doğrulama incelemesinde kullanılır.</p>
+          <div class="verify-grid modern">
+            <label><span>Belge türü</span><select class="in" id="ver-type"><option value="identity">Kimlik</option><option value="vocational">Ustalık / kalfalık / MYK</option><option value="diploma">Diploma</option><option value="certificate">Mesleki sertifika</option><option value="business">İşletme / vergi belgesi</option></select></label>
+            <label><span>Hizmet alanı</span><select class="in" id="ver-category"><option value="general">Genel / tüm hizmetler</option>${Object.entries(KAT).map(([k,v])=>`<option value="${k}">${esc(v.ad)}</option>`).join('')}</select></label>
+            <label><span>Belge adı</span><input class="in" id="ver-doc" maxlength="100" placeholder="Örn. Ustalık belgesi"></label>
+            <label class="file-drop"><input id="ver-file" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"><span class="file-drop-icon">↑</span><b>Dosya seç</b><small>PDF, JPG, PNG veya WEBP · en fazla 8 MB</small></label>
+          </div>
+          <button class="btn block ghost" data-a="submitVerification">İncelemeye gönder</button>
+        </div>
+      </details>
+
+      <div class="verify-history compact"><div class="subsection-title"><h3>Başvurularım</h3><button class="link" data-a="syncVerify">Yenile</button></div>${(D.verifications||[]).length?(D.verifications||[]).map(v=>`<div class="verify-row"><div><b>${esc(VERIFY_TYPES[v.verification_type]||v.verification_type)}</b><small>${esc(verifyCategoryLabel(v.category))} · ${esc(v.document_type)}</small></div><span class="pill ${v.status==='approved'?'good':v.status==='pending'?'amber':''}">${esc(VERIFY_STATUS[v.status]||v.status)}</span></div>`).join(''):'<p class="empty-inline">Henüz belge göndermedin.</p>'}</div>
+    </section>
+
+    <section class="account-section account-settings">
+      <div class="account-section-head"><div><span>03</span><h2>Hesap & destek</h2></div><p>Destek, yasal bilgiler ve hesap işlemleri.</p></div>
+      ${S.partnerCtx?'<button class="account-menu-row" data-a="partnerPanel"><span class="menu-icon">▦</span><span><b>Kurumsal partner paneli</b><small>Partner performansı ve işler</small></span><i>›</i></button>':''}
+      ${S.isAdmin?'<button class="account-menu-row" data-a="admin"><span class="menu-icon">⚙</span><span><b>Yönetici paneli</b><small>Operasyon ve moderasyon</small></span><i>›</i></button>':''}
+      <button class="account-menu-row" data-a="support"><span class="menu-icon">?</span><span><b>Destek merkezi</b><small>Bir sorun bildir veya yardım iste</small></span><i>›</i></button>
+      <button class="account-menu-row" data-a="legal"><span class="menu-icon">§</span><span><b>Yasal bilgiler & gizlilik</b><small>Kullanım ve veri politikaları</small></span><i>›</i></button>
+      <button class="account-menu-row danger" data-a="requestDeletion"><span class="menu-icon">×</span><span><b>Hesap silme talebi</b><small>Hesap kapatma sürecini başlat</small></span><i>›</i></button>
+    </section>
+
+    <button class="btn block ghost account-logout" data-a="logout">Çıkış yap</button>
+    <p class="account-install-note">Tamİşim’i uygulama gibi kullanmak için tarayıcı menüsünden “Ana ekrana ekle” seçeneğini kullanabilirsin.</p>
+  </div>`;
+}
 /* müşteri */
 function vList(){
   const popular=['boya','tesisat','elektrik','klima','temizlik','nakliyat','mobilya','oto'];
