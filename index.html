@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v33-promo-live">
+<meta name="tamisim-build" content="v34-legacy-payments">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -514,12 +514,13 @@ const PAYMENTS={
 };
 const paymentLabels=a=>(Array.isArray(a)?a:[]).filter(x=>PAYMENTS[x]).map(x=>PAYMENTS[x].label);
 function quotePayments(q){
-  if(Array.isArray(q&&q.payment_methods)&&q.payment_methods.length)return q.payment_methods.filter(x=>PAYMENTS[x]);
-  const n=String(q&&q.note||'');
   const out=[];
-  if(/Kartla ödeme/i.test(n))out.push('card');
-  if(/Nakit \/ elden/i.test(n))out.push('cash');
-  if(/Ön ödeme \+ nakit/i.test(n))out.push('deposit_cash');
+  const add=x=>{if(PAYMENTS[x]&&!out.includes(x))out.push(x)};
+  if(Array.isArray(q&&q.payment_methods))q.payment_methods.forEach(add);
+  const n=String(q&&q.note||'');
+  if(/Kartla ödeme/i.test(n))add('card');
+  if(/Nakit \/ elden/i.test(n))add('cash');
+  if(/Ön ödeme \+ nakit/i.test(n))add('deposit_cash');
   return out.length?out:['card'];
 }
 const paymentBadges=q=>{
