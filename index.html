@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v43-payment-ledger">
+<meta name="tamisim-build" content="v44-payment-adapter">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -424,6 +424,9 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* payment-ledger-v43 */
 .payment-ledger{margin-top:10px;padding-top:10px;border-top:1px dashed #DCE5F0}.payment-ledger b{font-size:12px;color:#1457D9!important}.payment-ledger+div{margin-top:3px}
+
+/* payment-adapter-v44 */
+.pay-start-btn{margin-top:12px}
 </style>
 </head>
 <body>
@@ -595,7 +598,12 @@ function paymentPlan(l,q,pc,side){
   const tx=D.paymentRecords&&D.paymentRecords[l.id];
   if(tx){
     extra+='<div class="payment-ledger"><span>Ödeme durumu</span><b>'+esc(PAYMENT_STATUS[tx.status]||tx.status)+'</b></div>';
-    if(Number(tx.provider_amount)>0)extra+='<div><span>Kart/online tahsilat</span><b>'+tl(tx.provider_amount)+'</b></div>';
+    if(Number(tx.provider_amount)>0){
+      extra+='<div><span>Kart/online tahsilat</span><b>'+tl(tx.provider_amount)+'</b></div>';
+      if(side==='customer'&&!['paid','refunded','cancelled'].includes(tx.status)){
+        extra+='<button class="btn block pay-start-btn" data-a="startCardPayment" data-v="'+l.id+'">Kartla ödemeye geç</button>';
+      }
+    }
     if(Number(tx.cash_amount)>0)extra+='<div><span>Nakit kısmı</span><b>'+tl(tx.cash_amount)+'</b></div>';
   }
   if(pc.method==='deposit_cash'){
@@ -1094,7 +1102,7 @@ function render(){
 }
 
 /* ---------- eylemler ---------- */
-const NET=new Set(['partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
+const NET=new Set(['startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
 const KEEP=new Set(['pickKat','toggleSorun','zaman','sort','filter','pick','send','rate','tab']);
 const A={
   showAuth(){S.guestAuth=true;S.pendingAction=null;S.authErr='';S.authInfo=''},
@@ -1288,6 +1296,12 @@ const A={
     if(r.error){toast(r.error.message||'Teklif seçilemedi.');return}
     toast('Uzman, ödeme yöntemi ve varsa kampanya kaydedildi.');
     await refresh();
+  },
+  async startCardPayment(v){
+    const r=await sb.functions.invoke('payment-start',{body:{listing_id:+v}});
+    if(r.error){toast(r.error.message||'Ödeme başlatılamadı.');return}
+    const x=r.data||{};
+    toast(x.message||'Ödeme altyapısı hazır değil.');
   },
   async applySelectedPromo(v){
     const inp=document.getElementById('selected-promo-'+v);
