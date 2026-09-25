@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v60-ticket-color-repair">
+<meta name="tamisim-build" content="v61-draft-expert-preview">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -552,6 +552,12 @@ button{-webkit-tap-highlight-color:transparent}.link{color:#1457D9!important}.pa
 .ticket .pill.amber{background:#FFF1D6!important;color:#8A5A00!important}
 .ticket .partner-pill{background:#EEF2FF!important;color:#536681!important}
 .ticket .dot{background:#2F80ED!important}
+
+/* draft-expert-preview-v61 */
+.draft-experts{margin:14px 0 18px;padding:16px;border:1px solid #DCE7F5;border-radius:20px;background:linear-gradient(145deg,#F7FAFF,#fff);box-shadow:0 7px 22px rgba(16,42,86,.045)}
+.draft-experts-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.draft-experts-head h3{margin:3px 0 0;color:#102A56;font-size:16px;letter-spacing:-.02em}.draft-live{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:#EAF2FF;color:#1457D9;font-size:8px;font-weight:900;white-space:nowrap}.draft-live i{width:6px;height:6px;border-radius:50%;background:#2F80ED}.draft-experts-note{margin:7px 0 12px;color:#718198;font-size:9px;line-height:1.45}
+.draft-expert-list{display:grid;gap:8px}.draft-expert{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center;padding:10px;border:1px solid #E5EBF3;border-radius:14px;background:#fff}.draft-avatar{width:40px;height:40px;border-radius:13px;background:#EAF2FF;color:#1457D9;display:grid;place-items:center;font-size:13px;font-weight:900}.draft-expert-main{min-width:0}.draft-expert-main>b{display:block;color:#17365F;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.draft-expert-main>small{display:block;color:#7C8B9E;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}.draft-expert-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}.draft-expert-meta span{padding:3px 6px;border-radius:999px;background:#F1F5FA;color:#60738C;font-size:7px;font-weight:800}.draft-expert-meta .verified-mini{background:#E5F4EB;color:#17653E}
+@media(max-width:390px){.draft-experts{padding:14px}.draft-experts-head{align-items:center}}
 </style>
 </head>
 <body>
@@ -661,6 +667,19 @@ const prof=id=>D.profiles[id]||{name:'Kullanıcı',title:'',bio:'',services:[],s
 const stat=id=>D.stats[id]||{jobs:0,rating:null};
 const csv=s=>String(s||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,12);
 const initials=n=>String(n||'U').trim().charAt(0).toLocaleUpperCase('tr-TR');
+function serviceMatch(p,k){
+  const hay=[p.title,p.bio,...(Array.isArray(p.services)?p.services:[])].filter(Boolean).join(' ').toLocaleLowerCase('tr-TR');
+  const terms=[KAT[k]&&KAT[k].ad,...((KAT[k]&&KAT[k].sorunlar)||[])].filter(Boolean).map(x=>String(x).toLocaleLowerCase('tr-TR'));
+  return terms.some(t=>hay.includes(t)||t.split(/\s+/).filter(x=>x.length>3).some(x=>hay.includes(x)));
+}
+function draftExpertPreview(k){
+  if(!k)return '';
+  const rows=Object.entries(D.profiles||{}).filter(([id,p])=>id!==uid()&&p&&p.account_status!=='disabled'&&serviceMatch(p,k))
+    .sort((a,b)=>{const sa=stat(a[0]),sb=stat(b[0]);return Number(sb.rating||0)-Number(sa.rating||0)||Number(sb.jobs||0)-Number(sa.jobs||0)})
+    .slice(0,3);
+  if(!rows.length)return '';
+  return `<section class="draft-experts"><div class="draft-experts-head"><div><span class="section-kicker">Bu hizmette uzmanlar</span><h3>${esc(KAT[k].ad)} alanında profiller</h3></div><span class="draft-live"><i></i> Tamİşim</span></div><p class="draft-experts-note">İlan detaylarını tamamladıkça konum ve ihtiyacına göre daha ilgili uzmanları görebilirsin.</p><div class="draft-expert-list">${rows.map(([id,p])=>{const st=stat(id),verified=!!(p.identity_verified&&p.vocational_verified),loc=p.service_city||'';return `<div class="draft-expert"><div class="draft-avatar">${esc(initials(p.name))}</div><div class="draft-expert-main"><b>${esc(p.name)}</b><small>${esc(p.title||KAT[k].ad)}${loc?' · '+esc(loc):''}</small><div class="draft-expert-meta">${st.rating!=null?'<span>★ '+Number(st.rating).toFixed(1)+'</span>':'<span>Yeni uzman</span>'}${st.jobs?'<span>'+st.jobs+' iş</span>':''}${verified?'<span class="verified-mini">✓ Doğrulanmış</span>':''}</div></div></div>`}).join('')}</div></section>`;
+}
 function proCard(id){const p=prof(id),st=stat(id),sv=p.services||[],ar=(p.service_districts&&p.service_districts.length?p.service_districts:p.service_areas)||[];const complete=!!(p.bio&&sv.length&&p.service_city);const loc=p.service_city?[p.service_city,...ar.slice(0,3)]:ar.slice(0,3);const fullVerified=!!(p.identity_verified&&p.vocational_verified);const trust=(fullVerified?'<span class="badge verified-pro">✓ Doğrulanmış Uzman</span>':'')+(!fullVerified&&p.identity_verified?'<span class="badge">✓ Kimlik doğrulandı</span>':'')+(!fullVerified&&p.vocational_verified?'<span class="badge">✓ Mesleki belge doğrulandı</span>':'')+(p.business_verified?'<span class="badge">✓ İşletme doğrulandı</span>':'')+(p.phone_verified?'<span class="badge">✓ Telefon doğrulandı</span>':'');const safety=id!==uid()?`<div class="foot"><button class="link" data-a="reportUser" data-v="${id}">Şikâyet et</button><button class="link" data-a="blockUser" data-v="${id}">Engelle</button></div>`:'';return `<div class="procard expert-card"><div class="protop expert-head"><div class="proavatar expert-avatar">${esc(initials(p.name))}</div><div><strong>${esc(p.name)}</strong><div class="muted small">${esc(p.title||'Servis ve tamir')}</div></div></div>${p.bio?`<p class="probio">${esc(p.bio)}</p>`:''}<div class="badges expert-badges">${st.rating!=null?`<span class="badge">★ ${Number(st.rating).toFixed(1)} · ${st.jobs} tamamlanan iş</span>`:`<span class="badge">Yeni uzman</span>`}${trust}${sv.slice(0,4).map(x=>`<span class="badge">${esc(x)}</span>`).join('')}${loc.map(x=>`<span class="badge">📍 ${esc(x)}</span>`).join('')}${complete?'<span class="badge">✓ Profil tamamlandı</span>':''}</div>${safety}</div>`}
 const PAYMENTS={
   card:{label:'Kartla ödeme',icon:'💳',desc:'Müşteri Tamİşim üzerinden öder; komisyon otomatik kesilir.'},
@@ -1112,6 +1131,7 @@ function vNew(){
   <div class="field create-card"><span class="stepno">1</span><h2>Ne için hizmet arıyorsun?</h2><p class="hint">Kategori veya hizmet adıyla ara.</p>
     <input class="in" id="cat-search" value="${esc(S.catSearch)}" placeholder="Örn. boya, su kaçağı, lastik..." autocomplete="off">
     <div class="catresults">${cats||'<div class="empty">Aramana uygun hizmet bulunamadı.</div>'}</div></div>
+  ${d.kat?draftExpertPreview(d.kat):''}
   ${sorun}
   <div class="field create-card" id="create-step-3"><span class="stepno">3</span><label class="lb" for="d-not">${detailCopy.label}</label>
     <textarea class="in" id="d-not" maxlength="500" placeholder="${detailCopy.placeholder}">${esc(d.not)}</textarea>
@@ -1515,7 +1535,7 @@ const A={
   quickCat(v){S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.draft={kat:v,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
   pickKat(v){
     if(S.draft.kat!==v){S.draft.kat=v;S.draft.sorunlar=[]}
-    smoothTo('create-step-2');
+    smoothTo('create-step-2',900);
   },
   toggleSorun(v){
     const s=S.draft.sorunlar,x=s.indexOf(v);
