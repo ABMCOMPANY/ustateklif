@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v41-post-select-promo">
+<meta name="tamisim-build" content="v42-partner-portal">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -418,6 +418,9 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* partner-commercial-v39 */
 .partner-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.partner-stats>div{background:#F7F9FC;border:1px solid #E5EBF3;border-radius:12px;padding:9px;text-align:center}.partner-stats b{display:block;color:#102A56;font-size:13px}.partner-stats small{font-size:10px;color:#7A899E}.partner-terms{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end}.partner-terms label{font-size:11px;color:#6B7C93}.partner-terms .btn{grid-column:1/-1}.partner-money{display:grid;gap:4px;margin:10px 0;color:#52677F;font-size:11px}.partner-money b{color:#102A56}
+
+/* partner-portal-v42 */
+.partner-portal-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.partner-portal-stats>div{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:12px 6px;text-align:center}.partner-portal-stats b{display:block;color:#102A56;font-size:18px}.partner-portal-stats small{display:block;color:#7A899E;font-size:10px;margin-top:3px}.partner-portal-money{display:grid;gap:8px}.partner-portal-money>div{display:flex;justify-content:space-between;gap:12px}.partner-portal-money span{color:#6B7C93}.partner-portal-money b{color:#102A56}.partner-job{margin-bottom:10px}.partner-job-meta{display:flex;justify-content:space-between;gap:10px;margin-top:10px;color:#52677F;font-size:12px;font-weight:700}
 </style>
 </head>
 <body>
@@ -511,7 +514,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
   draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
-  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
+  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[]};
 const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},paymentChoices:{},verifications:[],partners:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
@@ -693,7 +696,12 @@ async function refresh(){
 }
 async function boot(){
   S.loading=true;render();
-  try{await refresh();const ar=await sb.rpc('is_admin');S.isAdmin=!ar.error&&ar.data===true}catch(e){console.error(e);toast(errMsg(e))}
+  try{
+    await refresh();
+    const [ar,pc]=await Promise.all([sb.rpc('is_admin'),sb.rpc('my_partner_context')]);
+    S.isAdmin=!ar.error&&ar.data===true;
+    S.partnerCtx=!pc.error&&Array.isArray(pc.data)&&pc.data.length?pc.data[0]:null;
+  }catch(e){console.error(e);toast(errMsg(e))}
   S.loading=false;render();subscribe();
 }
 let kickT;
@@ -816,7 +824,7 @@ function vAccount(){
     <div class="verify-history"><h3>Başvurularım</h3>${(D.verifications||[]).length?(D.verifications||[]).map(v=>`<div class="verify-row"><div><b>${esc(VERIFY_TYPES[v.verification_type]||v.verification_type)}</b><small>${esc(verifyCategoryLabel(v.category))} · ${esc(v.document_type)}</small></div><span class="pill ${v.status==='approved'?'good':v.status==='pending'?'amber':''}">${esc(VERIFY_STATUS[v.status]||v.status)}</span></div>`).join(''):'<p class="muted small">Henüz belge göndermedin.</p>'}</div>
     <button class="btn ghost sm" data-a="syncVerify">Doğrulama durumunu yenile</button>
   </div>
-  ${S.isAdmin?'<button class="btn block ghost" style="margin-bottom:12px" data-a="admin">Yönetici paneli</button>':''}<button class="btn block" data-a="saveAcct">Profili kaydet</button>
+  ${S.partnerCtx?'<button class="btn block ghost" style="margin-bottom:12px" data-a="partnerPanel">Kurumsal partner paneli</button>':''}${S.isAdmin?'<button class="btn block ghost" style="margin-bottom:12px" data-a="admin">Yönetici paneli</button>':''}<button class="btn block" data-a="saveAcct">Profili kaydet</button>
   <button class="btn block ghost" style="margin-top:12px" data-a="logout">Çıkış yap</button>
   <p class="muted small" style="margin-top:24px">Uygulama gibi kullanmak için tarayıcı menüsünden "Ana ekrana ekle" seçeneğini kullan.</p>`;
 }
@@ -1009,6 +1017,19 @@ async function loadAdmin(){
   const profiles={};profileRows.forEach(x=>profiles[x.id]=x);
   S.admin={stats:dr.data||{},reports:rr.data||[],verifications:vr.data||[],partners:pa.data||[],partnerStats:partnerStatsRes.data||[],profiles};
 }
+function vPartnerPanel(){
+  const x=S.partnerCtx||{},d=(S.partnerDash&&S.partnerDash[0])||{},jobs=S.partnerJobs||[];
+  const cards=`<div class="partner-portal-stats"><div><b>${d.listings||0}</b><small>Toplam ilan</small></div><div><b>${d.open_listings||0}</b><small>Açık</small></div><div><b>${d.chosen||0}</b><small>Seçilen</small></div><div><b>${d.done||0}</b><small>Tamamlanan</small></div></div>`;
+  const money=`<div class="field partner-portal-money"><div><span>İş hacmi</span><b>${tl(d.gross_volume||0)}</b></div><div><span>Toplam indirim</span><b>${tl(d.discount_total||0)}</b></div><div><span>Tahmini Tamİşim komisyonu</span><b>${tl(d.commission_estimate||0)}</b></div><div><span>Partner kampanya katkısı</span><b>${tl(d.partner_promo_contribution||0)}</b></div></div>`;
+  const rows=jobs.map(j=>`<article class="quote partner-job"><div class="qhead"><div><h3>${esc((j.problems||[]).join(', ')||verifyCategoryLabel(j.category))}</h3><p class="muted small">${esc(j.external_order_ref||'Referans yok')} · ${esc([j.district,j.city].filter(Boolean).join(', '))}</p></div><span class="pill ${j.status==='done'?'good':j.status==='chosen'?'amber':''}">${j.status==='done'?'Tamamlandı':j.status==='chosen'?'Uzman seçildi':'Açık'}</span></div><div class="partner-job-meta"><span>${j.chosen_price?tl(j.chosen_price):'—'}</span>${Number(j.discount_amount)>0?`<span>İndirim: -${tl(j.discount_amount)}</span>`:''}</div></article>`).join('');
+  return `<button class="link" data-a="closePartnerPanel">Hesabıma dön</button><div class="pagehead"><div><span class="section-kicker">Kurumsal partner</span><h1>${esc(x.partner_name||'Partner paneli')}</h1><p>@${esc(x.partner_slug||'')} · ${esc(x.member_role||'viewer')}</p></div><button class="btn ghost sm" data-a="partnerRefresh">Yenile</button></div>${cards}${money}<h2>Yönlendirilen işler</h2>${rows||'<div class="empty">Henüz partner işi yok.</div>'}`;
+}
+async function loadPartnerPanel(){
+  if(!S.partnerCtx)return;
+  const [d,j]=await Promise.all([sb.rpc('my_partner_dashboard'),sb.rpc('my_partner_jobs')]);
+  if(d.error)throw d.error;if(j.error)throw j.error;
+  S.partnerDash=d.data||[];S.partnerJobs=j.data||[];
+}
 function vNotifications(){
   const ns=D.notifications||[], unread=ns.filter(n=>!n.read_at).length;
   const rows=ns.map(n=>`<article class="notif notif-card ${n.read_at?'':'unread'}"><div class="notif-dot">${n.read_at?'✓':'•'}</div><div class="notif-content"><div class="notif-title"><h3>${esc(n.title)}</h3><span>${ago(n.created_at)}</span></div><p>${esc(n.body)}</p>${n.listing_id?`<button class="notif-link" data-a="openNotification" data-v="${n.id}">İlanı görüntüle →</button>`:''}</div></article>`).join('');
@@ -1033,6 +1054,7 @@ function render(){
   else if(S.page==='account')h=vAccount();
   else if(S.page==='notifications')h=vNotifications();
   else if(S.page==='admin')h=vAdmin();
+  else if(S.page==='partner')h=vPartnerPanel();
   else if(S.role==='musteri')h=S.view==='new'?vNew():S.view==='detail'?vDetail():vList();
   else h=S.quoteFor?vQuote():S.view==='prodetail'?vProDetail():vUsta();
   $('#app').innerHTML=h;
@@ -1051,7 +1073,7 @@ function render(){
 }
 
 /* ---------- eylemler ---------- */
-const NET=new Set(['authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
+const NET=new Set(['partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
 const KEEP=new Set(['pickKat','toggleSorun','zaman','sort','filter','pick','send','rate','tab']);
 const A={
   showAuth(){S.guestAuth=true;S.pendingAction=null;S.authErr='';S.authInfo=''},
@@ -1070,6 +1092,9 @@ const A={
   account(){const p=S.profile||{};S.page='account';S.acct={name:p.name||'',title:p.title||'',bio:p.bio||'',services:(p.services||[]).join(', '),areas:(p.service_areas||[]).join(', '),city:p.service_city||'',districts:(p.service_districts||[]).join(', ')}},
   closeAcct(){S.page='main'},
   async admin(){if(!S.isAdmin)return;await loadAdmin();S.page='admin'},
+  async partnerPanel(){if(!S.partnerCtx)return;await loadPartnerPanel();S.page='partner'},
+  closePartnerPanel(){S.page='account'},
+  async partnerRefresh(){await loadPartnerPanel();},
   closeAdmin(){S.page='account'},
   async adminRefresh(){await loadAdmin();},
   async addPartner(){
