@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v37-payment-flow">
+<meta name="tamisim-build" content="v38-partners">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -412,6 +412,9 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* payment-flow-v37 */
 .payment-summary .payment-notice{display:block;margin-top:10px;padding:10px 11px;border-radius:12px;background:#FFF8E6;color:#6C5416;font-size:11px;line-height:1.4}.cash-state{margin-top:10px;padding:10px 11px;border-radius:12px;background:#EEF4FF;color:#34506F;font-size:12px;font-weight:700}.cash-state.good{background:#EAF8F0;color:#17603D}.cash-confirm{margin-top:9px}.cash-confirm[disabled]{opacity:.55}
+
+/* partners-v38 */
+.partner-pill{background:#F0F5FF!important;color:#1457D9!important;border-color:#D6E3FF!important}.partner-form{margin-bottom:12px}.partner-admin{margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -506,7 +509,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
   draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
   authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
-const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},paymentChoices:{},verifications:[],notifications:[],blocks:[],sig:'',qMine:undefined});
+const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},paymentChoices:{},verifications:[],partners:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
 const uid=()=>S.user&&S.user.id;
@@ -656,13 +659,14 @@ async function refresh(){
   const ids=[...pids];
   const partyIds=Object.values(listings).filter(l=>l.status!=='open'&&(l.owner===me||(quotes[l.chosen_quote]&&quotes[l.chosen_quote].pro===me))).map(l=>l.id);
   const listingIds=Object.keys(listings).map(Number);
-  const [pr,st,ms,ph,pc,vr]=await Promise.all([
+  const [pr,st,ms,ph,pc,vr,pa]=await Promise.all([
     sb.from('profiles').select('id,name,title,bio,services,service_areas,service_city,service_districts,phone_verified,identity_verified,vocational_verified,business_verified,account_status,created_at').in('id',ids).then(chk),
     sb.from('pro_stats').select('*').in('pro_id',ids).then(chk),
     partyIds.length?sb.from('messages').select('*').in('listing_id',partyIds).order('created_at').then(chk):[],
     listingIds.length?sb.from('listing_photos').select('id,listing_id,path,sort_order').in('listing_id',listingIds).order('sort_order').then(chk):[],
     listingIds.length?sb.from('listing_payment_choices').select('listing_id,quote_id,method,deposit_percent,promotion_id,discount_amount,customer_cash_confirmed_at,pro_cash_confirmed_at,cash_confirmed_at,created_at').in('listing_id',listingIds).then(chk):[],
-    sb.from('professional_verifications').select('id,user_id,category,verification_type,document_type,status,review_note,reviewed_at,expires_at,created_at').eq('user_id',me).order('created_at',{ascending:false}).then(chk)
+    sb.from('professional_verifications').select('id,user_id,category,verification_type,document_type,status,review_note,reviewed_at,expires_at,created_at').eq('user_id',me).order('created_at',{ascending:false}).then(chk),
+    sb.from('partners').select('id,name,slug,status,created_at').eq('status','active').then(chk)
   ]);
   const photos={};
   if(ph.length){
@@ -673,10 +677,11 @@ async function refresh(){
   const stats={};st.forEach(s=>{stats[s.pro_id]=s});
   const msgs={};ms.forEach(m=>{(msgs[m.listing_id]=msgs[m.listing_id]||[]).push(m)});
   const paymentChoices={};pc.forEach(x=>{paymentChoices[x.listing_id]=x});
-  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,paymentChoices,verifications:vr,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
+  const partners={};pa.forEach(x=>{partners[x.id]=x});
+  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,paymentChoices,verifications:vr,partners,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
   const changed=sig!==D.sig;
   if(D.qMine!==undefined&&qMine.length>D.qMine)toast('Yeni teklif geldi');
-  D={listings,mine,open,quotes,counts,profiles,stats,msgs,photos,paymentChoices,verifications:vr,notifications,blocks,sig,qMine:qMine.length};
+  D={listings,mine,open,quotes,counts,profiles,stats,msgs,photos,paymentChoices,verifications:vr,partners,notifications,blocks,sig,qMine:qMine.length};
   if(profiles[me])S.profile=profiles[me];
   return changed;
 }
@@ -724,7 +729,7 @@ function ticket(l,o={}){
       <h3>${o.act?`<button class="stretch" data-a="${o.act}" data-v="${l.id}">${title}</button>`:title}</h3>
       ${l.note?`<p class="note">${esc(l.note)}</p>`:''}
       ${photoStrip(l.id)}
-      <div class="meta"><span>📍 ${esc(locText(l))}</span><span>🕒 ${esc(l.when_text)}</span><span class="posted">${ago(l.created_at)}</span>${o.pill||''}</div>
+      <div class="meta"><span>📍 ${esc(locText(l))}</span><span>🕒 ${esc(l.when_text)}</span><span class="posted">${ago(l.created_at)}</span>${l.partner_id&&D.partners[l.partner_id]?`<span class="pill partner-pill">🤝 ${esc(D.partners[l.partner_id].name)}</span>`:''}${o.pill||''}</div>
       ${o.extra||''}
     </div></article>`;
 }
@@ -978,20 +983,24 @@ function vAdmin(){
   const cards=`<div class="field two"><div class="check"><b>${st.users||0}</b><span>Kullanıcı</span></div><div class="check"><b>${st.open_reports||0}</b><span>Açık şikâyet</span></div><div class="check"><b>${st.open_listings||0}</b><span>Açık ilan</span></div><div class="check"><b>${st.done_listings||0}</b><span>Tamamlanan iş</span></div></div>`;
   const rows=(a.reports||[]).map(r=>{const p=a.profiles[r.reported_id]||{};return `<article class="quote"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${esc(r.status)} · ${ago(r.created_at)}</p></div><span class="pill ${p.account_status==='suspended'?'amber':''}">${p.account_status==='suspended'?'Askıda':'Aktif'}</span></div><p class="qnote">${esc(r.reason)}</p><div class="badges">${p.phone_verified?'<span class="badge">✓ Telefon</span>':''}${p.identity_verified?'<span class="badge">✓ Kimlik</span>':''}</div><div class="foot"><button class="btn ghost sm" data-a="adminReport" data-v="${r.id}|${r.status==='resolved'?'open':'resolved'}">${r.status==='resolved'?'Yeniden aç':'Çözüldü yap'}</button><button class="btn ghost sm" data-a="adminIdentity" data-v="${r.reported_id}|${p.identity_verified?'0':'1'}">${p.identity_verified?'Kimlik onayını kaldır':'Kimliği onayla'}</button><button class="btn sm" data-a="adminSuspend" data-v="${r.reported_id}|${p.account_status==='suspended'?'active':'suspended'}">${p.account_status==='suspended'?'Hesabı aç':'Hesabı askıya al'}</button></div></article>`}).join('');
   const vers=(a.verifications||[]).map(v=>{const p=a.profiles[v.user_id]||{};return `<article class="quote verify-admin"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${esc(VERIFY_TYPES[v.verification_type]||v.verification_type)} · ${esc(verifyCategoryLabel(v.category))}</p></div><span class="pill ${v.status==='approved'?'good':v.status==='pending'?'amber':''}">${esc(VERIFY_STATUS[v.status]||v.status)}</span></div><p class="qnote">${esc(v.document_type)}</p><div class="foot"><button class="btn ghost sm" data-a="openVerificationDoc" data-v="${v.id}">Belgeyi aç</button>${v.status==='pending'?`<button class="btn ghost sm" data-a="reviewVerification" data-v="${v.id}|approved">Onayla</button><button class="btn ghost sm" data-a="reviewVerification" data-v="${v.id}|rejected">Reddet</button>`:''}</div></article>`}).join('');
-  return `<button class="link" data-a="closeAdmin">Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}<h2>Belge doğrulama</h2>${vers||'<div class="empty">Doğrulama başvurusu yok.</div>'}<h2>Şikâyetler</h2>${rows||'<div class="empty">Şikâyet kaydı yok.</div>'}`;
+  const partners=(a.partners||[]).map(p=>`<article class="quote partner-admin"><div class="qhead"><div><h3>${esc(p.name)}</h3><p class="muted small">@${esc(p.slug)}</p></div><span class="pill ${p.status==='active'?'good':p.status==='paused'?'amber':''}">${p.status==='active'?'Aktif':p.status==='paused'?'Duraklatıldı':'Kapalı'}</span></div><div class="foot"><button class="btn ghost sm" data-a="partnerStatus" data-v="${p.id}|${p.status==='active'?'paused':'active'}">${p.status==='active'?'Duraklat':'Aktif et'}</button><button class="btn ghost sm" data-a="partnerStatus" data-v="${p.id}|disabled">Kapat</button></div></article>`).join('');
+  return `<button class="link" data-a="closeAdmin">Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}
+  <h2>Kurumsal partnerler</h2><div class="field partner-form"><div class="two"><div><label class="lb" for="partner-name">Şirket adı</label><input class="in" id="partner-name" placeholder="Örn. Koçtaş"></div><div><label class="lb" for="partner-slug">Kısa ad</label><input class="in" id="partner-slug" placeholder="koctas" autocapitalize="off"></div></div><button class="btn ghost sm" data-a="addPartner">Partner ekle</button></div>${partners||'<div class="empty">Henüz kurumsal partner yok.</div>'}
+  <h2>Belge doğrulama</h2>${vers||'<div class="empty">Doğrulama başvurusu yok.</div>'}<h2>Şikâyetler</h2>${rows||'<div class="empty">Şikâyet kaydı yok.</div>'}`;
 }
 async function loadAdmin(){
   if(!S.isAdmin)return;
-  const [dr,rr,vr]=await Promise.all([
+  const [dr,rr,vr,pa]=await Promise.all([
     sb.rpc('admin_dashboard'),
     sb.from('reports').select('*').order('created_at',{ascending:false}).limit(100),
-    sb.from('professional_verifications').select('*').order('created_at',{ascending:false}).limit(100)
+    sb.from('professional_verifications').select('*').order('created_at',{ascending:false}).limit(100),
+    sb.from('partners').select('*').order('created_at',{ascending:false})
   ]);
   if(dr.error)throw dr.error;if(rr.error)throw rr.error;if(vr.error)throw vr.error;
   const ids=[...new Set([...(rr.data||[]).flatMap(x=>[x.reported_id,x.reporter_id]),...(vr.data||[]).map(x=>x.user_id)])];
   let ps=[];if(ids.length){const pr=await sb.from('profiles').select('id,name,phone_verified,identity_verified,vocational_verified,business_verified,account_status').in('id',ids);if(pr.error)throw pr.error;ps=pr.data||[]}
   const profiles={};ps.forEach(x=>profiles[x.id]=x);
-  S.admin={stats:dr.data||{},reports:rr.data||[],verifications:vr.data||[],profiles};
+  S.admin={stats:dr.data||{},reports:rr.data||[],verifications:vr.data||[],partners:pa.data||[],profiles};
 }
 function vNotifications(){
   const ns=D.notifications||[], unread=ns.filter(n=>!n.read_at).length;
@@ -1056,6 +1065,20 @@ const A={
   async admin(){if(!S.isAdmin)return;await loadAdmin();S.page='admin'},
   closeAdmin(){S.page='account'},
   async adminRefresh(){await loadAdmin();},
+  async addPartner(){
+    const name=(document.getElementById('partner-name')||{}).value||'';
+    const slug=((document.getElementById('partner-slug')||{}).value||'').trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-+|-+$/g,'');
+    if(name.trim().length<2||slug.length<2){toast('Şirket adı ve kısa ad gerekli.');return}
+    const r=await sb.rpc('admin_upsert_partner',{p_name:name.trim(),p_slug:slug,p_status:'active'});
+    if(r.error)throw r.error;
+    await loadAdmin();await refresh();toast('Kurumsal partner eklendi.');
+  },
+  async partnerStatus(v){
+    const [id,status]=String(v).split('|');if(!id||!status)return;
+    const r=await sb.rpc('admin_set_partner_status',{p_partner_id:id,p_status:status});
+    if(r.error)throw r.error;
+    await loadAdmin();await refresh();toast('Partner durumu güncellendi.');
+  },
   async adminReport(v){const [id,status]=String(v).split('|');const r=await sb.from('reports').update({status}).eq('id',id);if(r.error)throw r.error;await loadAdmin();toast('Şikâyet durumu güncellendi.');},
   async adminIdentity(v){const [id,x]=String(v).split('|');const r=await sb.rpc('admin_set_identity',{p_user_id:id,p_verified:x==='1'});if(r.error)throw r.error;await loadAdmin();await refresh();toast('Kimlik doğrulama durumu güncellendi.');},
   async adminSuspend(v){const [id,status]=String(v).split('|');if(status==='suspended'&&!confirm('Bu hesabı askıya almak istiyor musun?'))return;const r=await sb.rpc('admin_set_account_status',{p_user_id:id,p_status:status});if(r.error)throw r.error;await loadAdmin();await refresh();toast(status==='suspended'?'Hesap askıya alındı.':'Hesap yeniden açıldı.');},
