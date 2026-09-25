@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v47-public-beta">
+<meta name="tamisim-build" content="v48-legal-account-controls">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -436,6 +436,9 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* public-beta-v47 */
 .beta-strip{margin:0 20px 10px;display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 12px;border-radius:12px;background:#FFF7E6;border:1px solid #F4D99A;color:#735615;font-size:11px;text-align:center}.beta-strip b{background:#102A56;color:#fff;border-radius:999px;padding:3px 7px;font-size:9px;letter-spacing:.04em;text-transform:uppercase}.beta-strip span{line-height:1.3}@media(max-width:520px){.beta-strip{margin-left:12px;margin-right:12px}}
+
+/* legal-beta-v48 */
+.terms-check{display:flex;align-items:flex-start;gap:9px;margin:2px 0 14px;font-size:11px;line-height:1.45;color:#607086}.terms-check input{margin-top:3px;width:16px;height:16px;flex:0 0 auto}.inline-link{appearance:none;border:0;background:none;padding:0;color:#1457D9;font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}.account-tools{display:grid;gap:10px;margin-top:12px}.danger-ghost{border-color:#E7B7B7!important;color:#A53A3A!important;background:#FFF9F9!important}.legal-card{background:#fff;border:1px solid #E3E9F1;border-radius:18px;padding:18px;margin:0 0 12px}.legal-card h2{margin:0 0 10px;color:#102A56;font-size:17px}.legal-card p{margin:0 0 10px;color:#5F7087;font-size:12px;line-height:1.65}.legal-card p:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -530,7 +533,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
   draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
-  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[]};
+  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:'',terms:false},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[]};
 const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},paymentChoices:{},paymentRecords:{},verifications:[],partners:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
@@ -829,9 +832,18 @@ function vAuth(){
   </div>
   ${S.authErr?`<div class="err" role="alert">${esc(S.authErr)}</div>`:''}
   ${S.authInfo?`<div class="info">${esc(S.authInfo)}</div>`:''}
+  ${up?'<label class="terms-check"><input id="au-terms" type="checkbox" '+(S.auth.terms?'checked':'')+'> <span><button type="button" class="inline-link" data-a="legal">Kullanım Koşulları</button> ve <button type="button" class="inline-link" data-a="legal">Gizlilik/KVKK bilgilendirmesini</button> okudum ve kabul ediyorum.</span></label>':''}
   <button class="btn block" data-a="authGo">${up?'Ücretsiz kayıt ol':'Giriş yap'}</button>
   <div class="auth-links"><button class="link" data-a="authMode">${up?'Zaten hesabın var mı? Giriş yap':'Hesabın yok mu? Ücretsiz kayıt ol'}</button>${!up?'<button class="link" data-a="forgotPass">Şifremi unuttum</button>':''}</div>
-  ${up?'<p class="muted small auth-note">Kayıt olarak Tamİşim’i ilan, teklif ve mesajlaşma için kullanabilirsin.</p>':''}`;
+  ${up?'<p class="muted small auth-note">Beta döneminde gerçek kart tahsilatı aktif değildir.</p>':''}`;
+}
+function vLegal(){
+  const back=S.user?'Hesabıma dön':'Hizmetlere dön';
+  return `<button class="link" data-a="closeLegal">← ${back}</button>
+  <div class="pagehead"><div><span class="eyebrow">Tamİşim Beta</span><h1>Yasal bilgiler & gizlilik</h1><p class="lede">Bu metinler beta kullanımını açıklar. Şirket ve ödeme kuruluşu devreye alındığında ticari unvan, adres ve ödeme hükümleri güncellenecektir.</p></div></div>
+  <section class="legal-card"><h2>Kullanım Koşulları</h2><p>Tamİşim, hizmet arayan kullanıcılarla bağımsız hizmet sağlayıcıları buluşturan bir platformdur. Kullanıcılar ilan, teklif ve mesaj içeriklerinden kendileri sorumludur.</p><p>Beta döneminde kart tahsilatı aktif değildir. Uygulamada görünen kart tutarları yalnızca ödeme planı ve entegrasyon testleri içindir.</p><p>Yanıltıcı ilan, sahte belge, taciz, hukuka aykırı hizmet veya başkasına ait bilgilerin izinsiz kullanımı yasaktır. Güvenlik ve kötüye kullanım halinde hesaplar kısıtlanabilir.</p></section>
+  <section class="legal-card"><h2>Gizlilik / KVKK Bilgilendirmesi</h2><p>Hesap oluşturduğunda e-posta, profil bilgileri, ilan/teklif içeriği, mesajlar, işlem kayıtları ve yüklediğin belgeler hizmetin çalışması, güvenlik, destek ve kötüye kullanımın önlenmesi amaçlarıyla işlenebilir.</p><p>Doğrulama belgeleri müşterilere açık gösterilmez; inceleme amacıyla sınırlı tutulur. Ödeme sağlayıcısı bağlandığında kart verileri Tamİşim veritabanında tutulmayacak şekilde sağlayıcının güvenli altyapısı kullanılacaktır.</p><p>Verilerine erişim, düzeltme ve silme talebini hesap bölümündeki araçlardan iletebilirsin. Yasal saklama yükümlülükleri doğarsa bazı kayıtlar gereken süre boyunca tutulabilir.</p></section>
+  <section class="legal-card"><h2>Beta ve ödeme bilgilendirmesi</h2><p>Tamİşim şu anda test/beta aşamasındadır. Gerçek kart tahsilatı kapalıdır. Nakit işaretlemeleri tarafların beyanına dayalı işlem kayıtlarıdır.</p><p>Şirket ve ticari ödeme hesabı aktif olduğunda uygulamada işletme bilgileri, ödeme sağlayıcısı ve ilgili sözleşmeler güncellenecektir.</p></section>`;
 }
 function vAccount(){
   return `<button class="link" data-a="closeAcct">Geri</button>
@@ -864,6 +876,7 @@ function vAccount(){
     <button class="btn ghost sm" data-a="syncVerify">Doğrulama durumunu yenile</button>
   </div>
   ${S.partnerCtx?'<button class="btn block ghost" style="margin-bottom:12px" data-a="partnerPanel">Kurumsal partner paneli</button>':''}${S.isAdmin?'<button class="btn block ghost" style="margin-bottom:12px" data-a="admin">Yönetici paneli</button>':''}<button class="btn block" data-a="saveAcct">Profili kaydet</button>
+  <div class="account-tools"><button class="btn block ghost" data-a="legal">Yasal bilgiler & gizlilik</button><button class="btn block danger-ghost" data-a="requestDeletion">Hesap silme talebi gönder</button></div>
   <button class="btn block ghost" style="margin-top:12px" data-a="logout">Çıkış yap</button>
   <p class="muted small" style="margin-top:24px">Uygulama gibi kullanmak için tarayıcı menüsünden "Ana ekrana ekle" seçeneğini kullan.</p>`;
 }
@@ -1098,6 +1111,7 @@ function render(){
   if(S.setup)h=vSetup();
   else if(S.loading)h='<div class="wait"><span class="dot"></span>Yükleniyor...</div>';
   else if(S.recovery)h='<div class="pagehead"><h1>Yeni şifre belirle</h1></div><p class="lede">Hesabın için yeni bir şifre oluştur.</p><div class="field"><label class="lb" for="au-pass">Yeni şifre</label><input class="in" id="au-pass" type="password" autocomplete="new-password" placeholder="En az 8 karakter" value="'+esc(S.auth.pass)+'"></div>'+(S.authErr?'<div class="err" role="alert">'+esc(S.authErr)+'</div>':'')+'<button class="btn block" data-a="setNewPass">Şifreyi güncelle</button>';
+  else if(S.page==='legal')h=vLegal();
   else if(!S.user)h=S.guestAuth?vAuth():vGuest();
   else if((S.profile||{}).account_status==='suspended')h='<div class="pagehead"><h1>Hesap askıya alındı</h1></div><p class="lede">Bu hesap moderasyon nedeniyle geçici olarak kısıtlandı.</p><button class="btn ghost" data-a="logout">Çıkış yap</button>';
   else if(S.page==='account')h=vAccount();
@@ -1122,10 +1136,23 @@ function render(){
 }
 
 /* ---------- eylemler ---------- */
-const NET=new Set(['startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
+const NET=new Set(['requestDeletion','startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
 const KEEP=new Set(['pickKat','toggleSorun','zaman','sort','filter','pick','send','rate','tab']);
 const A={
   showAuth(){S.guestAuth=true;S.pendingAction=null;S.authErr='';S.authInfo=''},
+  legal(){S.page='legal'},
+  closeLegal(){S.page=S.user?'account':'main';if(!S.user)S.guestAuth=false},
+  async requestDeletion(){
+    if(!S.user)return;
+    if(!confirm('Hesap silme talebi göndermek istiyor musun? Aktif işler varsa önce tamamlaman gerekebilir.'))return;
+    const reason=prompt('İstersen ayrılma nedenini yazabilirsin:')||null;
+    const r=await sb.from('account_deletion_requests').insert({user_id:uid(),reason:reason&&reason.trim().slice(0,500)||null});
+    if(r.error){
+      if(String(r.error.message||'').toLowerCase().includes('duplicate')){toast('Zaten açık bir hesap silme talebin var.');return}
+      throw r.error;
+    }
+    toast('Hesap silme talebin alındı.');
+  },
   backGuest(){S.guestAuth=false;S.pendingAction=null;S.authErr='';S.authInfo='';S.auth.pass=''},
   guestCat(v){if(KAT[v])S.guestCat=v},
   guestBack(){S.guestCat=null},
@@ -1245,6 +1272,7 @@ const A={
     if(pass.length<6){S.authErr='Şifre en az 6 karakter olmalı.';return}
     if(S.authMode==='up'){
       if(name.trim().length<2){S.authErr='Adını yaz.';return}
+      if(!S.auth.terms){S.authErr='Devam etmek için kullanım koşulları ve gizlilik bilgilendirmesini kabul et.';return}
       const r=await sb.auth.signUp({email:email.trim(),password:pass,options:{data:{name:name.trim()}}});
       if(r.error){S.authErr=authMsg(r.error);return}
       if(!r.data.session){S.authInfo='Kayıt oluşturuldu. E-postana gelen doğrulama bağlantısına tıkla, sonra giriş yap.';S.authMode='in';S.auth.pass=''}
@@ -1434,6 +1462,7 @@ document.addEventListener('input',e=>{
   onField(e);
 });
 document.addEventListener('change',e=>{
+  if(e.target.id==='au-terms'){S.auth.terms=!!e.target.checked;return}
   if(e.target.id==='d-photos'&&S.draft){
     const good=[...e.target.files].filter(f=>['image/jpeg','image/png','image/webp'].includes(f.type)&&f.size<=8*1024*1024);
     const room=Math.max(0,5-(S.draft.photos||[]).length),chosen=good.slice(0,room);
@@ -1460,7 +1489,7 @@ if(sb){
         setTimeout(async()=>{await boot();if(pending==='newIlan'){A.newIlan();render()}},0);
       }
     }else{
-      if(S.user){S.user=null;S.profile=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:''};S.authErr='';S.authInfo=''}
+      if(S.user){S.user=null;S.profile=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:'',terms:false};S.authErr='';S.authInfo=''}
       S.loading=false;
       setTimeout(render,0);
     }
