@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v55-guest-header-actions">
+<meta name="tamisim-build" content="v56-guest-conversion-card">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -494,6 +494,18 @@ body.has-bottomnav main{padding-bottom:76px}
   .guest-cta-text{display:none}
   .guest-cta-plus{font-size:20px}
 }
+
+/* guest-conversion-card-v56 */
+.guest-convert{position:relative;margin:18px 0 34px;padding:22px;border:1px solid #DCE6F3;border-radius:22px;background:linear-gradient(145deg,#fff 0%,#F6F9FF 100%);box-shadow:0 10px 30px rgba(16,42,86,.07);overflow:hidden}
+.guest-convert:after{content:"";position:absolute;width:130px;height:130px;border-radius:50%;right:-72px;top:-74px;background:#E7F1FF}
+.guest-convert-kicker{position:relative;z-index:1;display:inline-block;color:#1760D9;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px}
+.guest-convert h2{position:relative;z-index:1;margin:0;color:#102A56;font-size:21px;letter-spacing:-.025em}
+.guest-convert>p{position:relative;z-index:1;margin:7px 0 17px;color:#748399;font-size:11px;line-height:1.55;max-width:460px}
+.guest-convert-primary{position:relative;z-index:1;width:100%;min-height:52px;border:0;border-radius:15px;background:#1457D9;color:#fff;display:grid;grid-template-columns:30px 1fr 24px;align-items:center;padding:0 13px;font:inherit;cursor:pointer;box-shadow:0 8px 20px rgba(20,87,217,.18)}
+.guest-convert-primary>span{font-size:23px;font-weight:300}.guest-convert-primary>b{text-align:left;font-size:12px}.guest-convert-primary>i{font-style:normal;font-size:17px}
+.guest-signin-row{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;padding-top:15px}
+.guest-signin-row>span{color:#8795A8;font-size:10px}.guest-signin-row button{border:0;background:transparent;color:#1457D9;font:inherit;font-size:10px;font-weight:900;padding:5px;cursor:pointer}.guest-signin-row i{font-style:normal}
+@media(max-width:390px){.guest-convert{padding:18px}.guest-convert h2{font-size:19px}}
 </style>
 </head>
 <body>
@@ -884,7 +896,13 @@ function vGuest(){
   return `<section class="hero"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet, ihtiyacını bul. İlan vermek istediğinde ücretsiz kayıt ol.</p><div class="searchbox"><span>⌕</span><input id="guest-search" value="${esc(S.guestSearch)}" placeholder="Hizmet ara: su kaçağı, klima, boya..." autocomplete="off"></div></section>
   <section class="home-section guest-catalog-title"><div class="home-title"><div><span class="section-kicker">Hizmetler</span><h2>${q?'Arama sonuçları':'Tüm kategoriler'}</h2></div></div></section>${sections}
   <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Ücretsiz hesap açıp ilanını oluştur.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section>
-  <button class="btn block" data-a="requireAuth" data-v="newIlan">Ücretsiz ilan ver</button><button class="link" data-a="showAuth">Zaten hesabın var mı? Giriş yap</button>`;
+  <section class="guest-convert">
+    <span class="guest-convert-kicker">Başlamaya hazır mısın?</span>
+    <h2>İşini birkaç dakikada yayınla.</h2>
+    <p>İlan vermek ücretsiz. Gelen teklifleri karşılaştır, sana uygun uzmanı seç.</p>
+    <button class="guest-convert-primary" data-a="requireAuth" data-v="newIlan"><span>＋</span><b>Ücretsiz ilan oluştur</b><i>→</i></button>
+    <div class="guest-signin-row"><span>Zaten Tamİşim hesabın var mı?</span><button data-a="showAuth">Giriş yap <i>→</i></button></div>
+  </section>`;
 }
 function vAuth(){
   const up=S.authMode==='up',fromListing=S.pendingAction==='newIlan';
