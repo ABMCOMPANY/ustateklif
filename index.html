@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v39-partner-commercial">
+<meta name="tamisim-build" content="v40-partner-fix">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -993,18 +993,18 @@ function vAdmin(){
 }
 async function loadAdmin(){
   if(!S.isAdmin)return;
-  const [dr,rr,vr,pa,ps]=await Promise.all([
+  const [dr,rr,vr,pa,partnerStatsRes]=await Promise.all([
     sb.rpc('admin_dashboard'),
     sb.from('reports').select('*').order('created_at',{ascending:false}).limit(100),
     sb.from('professional_verifications').select('*').order('created_at',{ascending:false}).limit(100),
     sb.from('partners').select('*').order('created_at',{ascending:false}),
     sb.rpc('admin_partner_stats')
   ]);
-  if(dr.error)throw dr.error;if(rr.error)throw rr.error;if(vr.error)throw vr.error;
+  if(dr.error)throw dr.error;if(rr.error)throw rr.error;if(vr.error)throw vr.error;if(pa.error)throw pa.error;if(partnerStatsRes.error)throw partnerStatsRes.error;
   const ids=[...new Set([...(rr.data||[]).flatMap(x=>[x.reported_id,x.reporter_id]),...(vr.data||[]).map(x=>x.user_id)])];
-  let ps=[];if(ids.length){const pr=await sb.from('profiles').select('id,name,phone_verified,identity_verified,vocational_verified,business_verified,account_status').in('id',ids);if(pr.error)throw pr.error;ps=pr.data||[]}
-  const profiles={};ps.forEach(x=>profiles[x.id]=x);
-  S.admin={stats:dr.data||{},reports:rr.data||[],verifications:vr.data||[],partners:pa.data||[],partnerStats:ps.data||[],profiles};
+  let profileRows=[];if(ids.length){const pr=await sb.from('profiles').select('id,name,phone_verified,identity_verified,vocational_verified,business_verified,account_status').in('id',ids);if(pr.error)throw pr.error;profileRows=pr.data||[]}
+  const profiles={};profileRows.forEach(x=>profiles[x.id]=x);
+  S.admin={stats:dr.data||{},reports:rr.data||[],verifications:vr.data||[],partners:pa.data||[],partnerStats:partnerStatsRes.data||[],profiles};
 }
 function vNotifications(){
   const ns=D.notifications||[], unread=ns.filter(n=>!n.read_at).length;
