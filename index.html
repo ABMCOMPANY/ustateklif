@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v42-partner-portal">
+<meta name="tamisim-build" content="v43-payment-ledger">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -421,6 +421,9 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* partner-portal-v42 */
 .partner-portal-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.partner-portal-stats>div{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:12px 6px;text-align:center}.partner-portal-stats b{display:block;color:#102A56;font-size:18px}.partner-portal-stats small{display:block;color:#7A899E;font-size:10px;margin-top:3px}.partner-portal-money{display:grid;gap:8px}.partner-portal-money>div{display:flex;justify-content:space-between;gap:12px}.partner-portal-money span{color:#6B7C93}.partner-portal-money b{color:#102A56}.partner-job{margin-bottom:10px}.partner-job-meta{display:flex;justify-content:space-between;gap:10px;margin-top:10px;color:#52677F;font-size:12px;font-weight:700}
+
+/* payment-ledger-v43 */
+.payment-ledger{margin-top:10px;padding-top:10px;border-top:1px dashed #DCE5F0}.payment-ledger b{font-size:12px;color:#1457D9!important}.payment-ledger+div{margin-top:3px}
 </style>
 </head>
 <body>
@@ -515,7 +518,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
   draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
   authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[]};
-const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},paymentChoices:{},verifications:[],partners:{},notifications:[],blocks:[],sig:'',qMine:undefined});
+const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},paymentChoices:{},paymentRecords:{},verifications:[],partners:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
 const uid=()=>S.user&&S.user.id;
@@ -572,6 +575,16 @@ function promoDiscount(q,p){
   if(p.max_discount!=null)d=Math.min(d,Number(p.max_discount)||0);
   return Math.max(0,Math.min(price,Math.round(d*100)/100));
 }
+const PAYMENT_STATUS={
+  planned:'Ödeme planlandı',
+  pending_provider:'Kart altyapısı bekleniyor',
+  cash_pending:'Nakit ödeme bekleniyor',
+  partially_paid:'Kısmen ödendi',
+  paid:'Ödeme tamamlandı',
+  failed:'Ödeme başarısız',
+  cancelled:'Ödeme iptal edildi',
+  refunded:'İade edildi'
+};
 function paymentPlan(l,q,pc,side){
   if(!q||!pc)return '';
   const d=Number(pc.discount_amount)||0,final=Math.max(0,Number(q.price)-d),pm=PAYMENTS[pc.method]||{label:pc.method,icon:'•'};
@@ -579,6 +592,12 @@ function paymentPlan(l,q,pc,side){
   const deposit=pc.method==='deposit_cash'?Math.round(final*dp/100):0;
   const cashDue=pc.method==='deposit_cash'?Math.max(0,final-deposit):(pc.method==='cash'?final:0);
   let extra='';
+  const tx=D.paymentRecords&&D.paymentRecords[l.id];
+  if(tx){
+    extra+='<div class="payment-ledger"><span>Ödeme durumu</span><b>'+esc(PAYMENT_STATUS[tx.status]||tx.status)+'</b></div>';
+    if(Number(tx.provider_amount)>0)extra+='<div><span>Kart/online tahsilat</span><b>'+tl(tx.provider_amount)+'</b></div>';
+    if(Number(tx.cash_amount)>0)extra+='<div><span>Nakit kısmı</span><b>'+tl(tx.cash_amount)+'</b></div>';
+  }
   if(pc.method==='deposit_cash'){
     extra+='<div><span>Ön ödeme (%'+dp+')</span><b>'+tl(deposit)+'</b></div><div><span>İş sonunda nakit</span><b>'+tl(cashDue)+'</b></div>';
     extra+='<div class="payment-notice">Kartla ön ödeme altyapısı henüz ödeme kuruluşuna bağlanmadı. Bu bölüm şimdilik ödeme planını gösterir.</div>';
@@ -668,12 +687,13 @@ async function refresh(){
   const ids=[...pids];
   const partyIds=Object.values(listings).filter(l=>l.status!=='open'&&(l.owner===me||(quotes[l.chosen_quote]&&quotes[l.chosen_quote].pro===me))).map(l=>l.id);
   const listingIds=Object.keys(listings).map(Number);
-  const [pr,st,ms,ph,pc,vr,pa]=await Promise.all([
+  const [pr,st,ms,ph,pc,pt,vr,pa]=await Promise.all([
     sb.from('profiles').select('id,name,title,bio,services,service_areas,service_city,service_districts,phone_verified,identity_verified,vocational_verified,business_verified,account_status,created_at').in('id',ids).then(chk),
     sb.from('pro_stats').select('*').in('pro_id',ids).then(chk),
     partyIds.length?sb.from('messages').select('*').in('listing_id',partyIds).order('created_at').then(chk):[],
     listingIds.length?sb.from('listing_photos').select('id,listing_id,path,sort_order').in('listing_id',listingIds).order('sort_order').then(chk):[],
     listingIds.length?sb.from('listing_payment_choices').select('listing_id,quote_id,method,deposit_percent,promotion_id,discount_amount,customer_cash_confirmed_at,pro_cash_confirmed_at,cash_confirmed_at,created_at').in('listing_id',listingIds).then(chk):[],
+    listingIds.length?sb.from('payment_transactions').select('id,listing_id,method,currency,gross_amount,discount_amount,payable_amount,deposit_percent,provider_amount,cash_amount,commission_percent,platform_commission_amount,partner_promo_contribution,provider,provider_status,status,paid_at,refunded_at,updated_at').in('listing_id',listingIds).then(chk):[],
     sb.from('professional_verifications').select('id,user_id,category,verification_type,document_type,status,review_note,reviewed_at,expires_at,created_at').eq('user_id',me).order('created_at',{ascending:false}).then(chk),
     sb.from('partners').select('id,name,slug,status,created_at').eq('status','active').then(chk)
   ]);
@@ -686,11 +706,12 @@ async function refresh(){
   const stats={};st.forEach(s=>{stats[s.pro_id]=s});
   const msgs={};ms.forEach(m=>{(msgs[m.listing_id]=msgs[m.listing_id]||[]).push(m)});
   const paymentChoices={};pc.forEach(x=>{paymentChoices[x.listing_id]=x});
+  const paymentRecords={};pt.forEach(x=>{paymentRecords[x.listing_id]=x});
   const partners={};pa.forEach(x=>{partners[x.id]=x});
-  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,paymentChoices,verifications:vr,partners,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
+  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,paymentChoices,paymentRecords,verifications:vr,partners,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
   const changed=sig!==D.sig;
   if(D.qMine!==undefined&&qMine.length>D.qMine)toast('Yeni teklif geldi');
-  D={listings,mine,open,quotes,counts,profiles,stats,msgs,photos,paymentChoices,verifications:vr,partners,notifications,blocks,sig,qMine:qMine.length};
+  D={listings,mine,open,quotes,counts,profiles,stats,msgs,photos,paymentChoices,paymentRecords,verifications:vr,partners,notifications,blocks,sig,qMine:qMine.length};
   if(profiles[me])S.profile=profiles[me];
   return changed;
 }
