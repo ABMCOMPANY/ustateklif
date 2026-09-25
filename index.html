@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v48-legal-account-controls">
+<meta name="tamisim-build" content="v49-beta-account-ops">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1056,14 +1056,16 @@ function vAdmin(){
   const payCommission=Number(payStats.commission||0);
   const payPending=Number(payStats.pending||0);
   const payRows=payments.map(x=>{const cu=a.profiles[x.customer_id]||{},pr=a.profiles[x.pro_id]||{},at=latestAttempt[x.id];return `<article class="quote payment-admin"><div class="qhead"><div><h3>İş #${x.listing_id}</h3><p class="muted small">${esc(cu.name||'Müşteri')} → ${esc(pr.name||'Uzman')} · ${ago(x.created_at)}</p></div><span class="pill ${x.status==='paid'?'good':x.status==='failed'?'amber':''}">${esc(PAYMENT_STATUS[x.status]||x.status)}</span></div><div class="payment-admin-grid"><span>Net tutar <b>${tl(x.payable_amount)}</b></span><span>Kart/online <b>${tl(x.provider_amount||0)}</b></span><span>Nakit <b>${tl(x.cash_amount||0)}</b></span><span>Komisyon <b>${tl(x.platform_commission_amount||0)}</b></span></div><p class="muted small">${esc(PAYMENTS[x.method]&&PAYMENTS[x.method].label||x.method)}${x.provider?' · '+esc(x.provider):''}</p>${at?`<div class="attempt-note"><span>Son ödeme denemesi</span><b>${esc(at.status)}</b><small>${ago(at.created_at)}${at.error_message?' · '+esc(at.error_message):''}</small></div>`:''}</article>`}).join('');
+  const deletionRows=(a.deletions||[]).map(x=>{const p=a.profiles[x.user_id]||{};return `<article class="quote deletion-admin"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${ago(x.created_at)} · ${esc(x.status)}</p></div><span class="pill ${x.status==='completed'?'good':x.status==='pending'?'amber':''}">${x.status==='pending'?'Bekliyor':x.status==='processing'?'İşleniyor':x.status==='completed'?'Tamamlandı':'Reddedildi'}</span></div>${x.reason?`<p class="qnote">${esc(x.reason)}</p>`:''}${x.admin_note?`<p class="muted small">Not: ${esc(x.admin_note)}</p>`:''}<div class="foot">${x.status==='pending'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|processing">İşleme al</button>':''}${x.status!=='completed'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|completed">Tamamlandı</button>':''}${x.status==='pending'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|rejected">Reddet</button>':''}</div></article>`}).join('');
   return `<button class="link" data-a="closeAdmin">Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}
   <h2>Ödeme operasyonu</h2><div class="field payment-admin-summary"><div><span>Kayıtlı ödeme</span><b>${Number(payStats.payments||payments.length)}</b></div><div><span>Bekleyen</span><b>${payPending}</b></div><div><span>Net hacim</span><b>${tl(payGross)}</b></div><div><span>Tahmini komisyon</span><b>${tl(payCommission)}</b></div></div>${payRows||'<div class="empty">Henüz ödeme kaydı yok.</div>'}
   <h2>Kurumsal partnerler</h2><div class="field partner-form"><div class="two"><div><label class="lb" for="partner-name">Şirket adı</label><input class="in" id="partner-name" placeholder="Örn. Koçtaş"></div><div><label class="lb" for="partner-slug">Kısa ad</label><input class="in" id="partner-slug" placeholder="koctas" autocapitalize="off"></div></div><button class="btn ghost sm" data-a="addPartner">Partner ekle</button></div>${partners||'<div class="empty">Henüz kurumsal partner yok.</div>'}
+  <h2>Hesap silme talepleri</h2>${deletionRows||'<div class="empty">Açık hesap silme talebi yok.</div>'}
   <h2>Belge doğrulama</h2>${vers||'<div class="empty">Doğrulama başvurusu yok.</div>'}<h2>Şikâyetler</h2>${rows||'<div class="empty">Şikâyet kaydı yok.</div>'}`;
 }
 async function loadAdmin(){
   if(!S.isAdmin)return;
-  const [dr,rr,vr,pa,partnerStatsRes,pay,payStats,attempts]=await Promise.all([
+  const [dr,rr,vr,pa,partnerStatsRes,pay,payStats,attempts,deletions]=await Promise.all([
     sb.rpc('admin_dashboard'),
     sb.from('reports').select('*').order('created_at',{ascending:false}).limit(100),
     sb.from('professional_verifications').select('*').order('created_at',{ascending:false}).limit(100),
@@ -1071,13 +1073,14 @@ async function loadAdmin(){
     sb.rpc('admin_partner_stats'),
     sb.from('payment_transactions').select('id,listing_id,quote_id,customer_id,pro_id,method,gross_amount,discount_amount,payable_amount,provider_amount,cash_amount,platform_commission_amount,partner_promo_contribution,provider,status,created_at,updated_at').order('created_at',{ascending:false}).limit(100),
     sb.rpc('admin_payment_stats'),
-    sb.from('payment_attempts').select('id,payment_id,provider,amount,currency,status,error_code,error_message,created_at,updated_at').order('created_at',{ascending:false}).limit(200)
+    sb.from('payment_attempts').select('id,payment_id,provider,amount,currency,status,error_code,error_message,created_at,updated_at').order('created_at',{ascending:false}).limit(200),
+    sb.from('account_deletion_requests').select('*').order('created_at',{ascending:false}).limit(100)
   ]);
-  if(dr.error)throw dr.error;if(rr.error)throw rr.error;if(vr.error)throw vr.error;if(pa.error)throw pa.error;if(partnerStatsRes.error)throw partnerStatsRes.error;if(pay.error)throw pay.error;if(payStats.error)throw payStats.error;if(attempts.error)throw attempts.error;
-  const ids=[...new Set([...(rr.data||[]).flatMap(x=>[x.reported_id,x.reporter_id]),...(vr.data||[]).map(x=>x.user_id),...(pay.data||[]).flatMap(x=>[x.customer_id,x.pro_id])])];
+  if(dr.error)throw dr.error;if(rr.error)throw rr.error;if(vr.error)throw vr.error;if(pa.error)throw pa.error;if(partnerStatsRes.error)throw partnerStatsRes.error;if(pay.error)throw pay.error;if(payStats.error)throw payStats.error;if(attempts.error)throw attempts.error;if(deletions.error)throw deletions.error;
+  const ids=[...new Set([...(rr.data||[]).flatMap(x=>[x.reported_id,x.reporter_id]),...(vr.data||[]).map(x=>x.user_id),...(pay.data||[]).flatMap(x=>[x.customer_id,x.pro_id]),...(deletions.data||[]).map(x=>x.user_id)])];
   let profileRows=[];if(ids.length){const pr=await sb.from('profiles').select('id,name,phone_verified,identity_verified,vocational_verified,business_verified,account_status').in('id',ids);if(pr.error)throw pr.error;profileRows=pr.data||[]}
   const profiles={};profileRows.forEach(x=>profiles[x.id]=x);
-  S.admin={stats:dr.data||{},reports:rr.data||[],verifications:vr.data||[],partners:pa.data||[],partnerStats:partnerStatsRes.data||[],payments:pay.data||[],paymentStats:payStats.data||{},paymentAttempts:attempts.data||[],profiles};
+  S.admin={stats:dr.data||{},reports:rr.data||[],verifications:vr.data||[],partners:pa.data||[],partnerStats:partnerStatsRes.data||[],payments:pay.data||[],paymentStats:payStats.data||{},paymentAttempts:attempts.data||[],deletions:deletions.data||[],profiles};
 }
 function vPartnerPanel(){
   const x=S.partnerCtx||{},d=(S.partnerDash&&S.partnerDash[0])||{},jobs=S.partnerJobs||[];
@@ -1136,12 +1139,12 @@ function render(){
 }
 
 /* ---------- eylemler ---------- */
-const NET=new Set(['requestDeletion','startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
+const NET=new Set(['adminDeletion','requestDeletion','startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
 const KEEP=new Set(['pickKat','toggleSorun','zaman','sort','filter','pick','send','rate','tab']);
 const A={
   showAuth(){S.guestAuth=true;S.pendingAction=null;S.authErr='';S.authInfo=''},
   legal(){S.page='legal'},
-  closeLegal(){S.page=S.user?'account':'main';if(!S.user)S.guestAuth=false},
+  closeLegal(){S.page=S.user?'account':'main';if(!S.user)S.guestAuth=true},
   async requestDeletion(){
     if(!S.user)return;
     if(!confirm('Hesap silme talebi göndermek istiyor musun? Aktif işler varsa önce tamamlaman gerekebilir.'))return;
@@ -1195,6 +1198,13 @@ const A={
     const r=await sb.rpc('admin_set_partner_terms',{p_partner_id:v,p_commission_percent:commission,p_promo_share_percent:promo});
     if(r.error)throw r.error;
     await loadAdmin();await refresh();toast('Partner oranları kaydedildi.');
+  },
+  async adminDeletion(v){
+    const [id,status]=String(v).split('|');if(!id||!status)return;
+    let note=null;if(status==='rejected')note=prompt('Red nedeni (isteğe bağlı):')||null;
+    const r=await sb.rpc('admin_set_deletion_request_status',{p_request_id:id,p_status:status,p_note:note});
+    if(r.error)throw r.error;
+    await loadAdmin();toast('Hesap silme talebi güncellendi.');
   },
   async adminReport(v){const [id,status]=String(v).split('|');const r=await sb.from('reports').update({status}).eq('id',id);if(r.error)throw r.error;await loadAdmin();toast('Şikâyet durumu güncellendi.');},
   async adminIdentity(v){const [id,x]=String(v).split('|');const r=await sb.rpc('admin_set_identity',{p_user_id:id,p_verified:x==='1'});if(r.error)throw r.error;await loadAdmin();await refresh();toast('Kimlik doğrulama durumu güncellendi.');},
