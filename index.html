@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v53-create-step-scroll">
+<meta name="tamisim-build" content="v54-guided-scroll-flows">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -475,6 +475,11 @@ body.has-bottomnav main{padding-bottom:76px}
 
 /* create-step-scroll-v53 */
 #create-step-2{scroll-margin-top:18px}
+
+/* guided-flow-scroll-v54 */
+#create-step-2,#create-step-3,#create-step-4,#create-step-5,#qsend,[id^="pick-quote-"]{scroll-margin-top:18px}
+.step-next{width:100%;margin-top:14px;min-height:43px;border:1px solid #D9E5F6;border-radius:13px;background:#F5F9FF;color:#1457D9;font:inherit;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+.step-next span{font-size:15px;line-height:1}
 </style>
 </head>
 <body>
@@ -694,8 +699,14 @@ const norm=s=>String(s||'').trim().toLocaleLowerCase('tr-TR');
 const locText=l=>[l.neighborhood,l.district,l.city].filter(Boolean).join(', ')||l.area||'Konum belirtilmedi';
 function locationMatch(l,p){if(!p||!p.service_city)return true;if(norm(l.city)!==norm(p.service_city))return false;const ds=p.service_districts||[];return !ds.length||ds.some(x=>norm(x)===norm(l.district));}
 
-let tt;
+let tt,createAdvanceT,quoteAdvanceT;
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),3400)}
+function smoothTo(id,delay=40){
+  setTimeout(()=>{
+    const x=document.getElementById(id);
+    if(x)x.scrollIntoView({behavior:'smooth',block:'start'});
+  },delay);
+}
 
 function authMsg(e){
   const m=(e&&e.message||'').toLowerCase();
@@ -1007,12 +1018,14 @@ function vNew(){
     <input class="in" id="cat-search" value="${esc(S.catSearch)}" placeholder="Örn. boya, su kaçağı, lastik..." autocomplete="off">
     <div class="catresults">${cats||'<div class="empty">Aramana uygun hizmet bulunamadı.</div>'}</div></div>
   ${sorun}
-  <div class="field create-card"><span class="stepno">3</span><label class="lb" for="d-not">${detailCopy.label}</label>
-    <textarea class="in" id="d-not" maxlength="500" placeholder="${detailCopy.placeholder}">${esc(d.not)}</textarea></div>
-  <div class="field create-card"><span class="stepno">4</span><h2>Fotoğraf ekle <small class="optional">İsteğe bağlı</small></h2><p class="hint">Uzmanın işi daha doğru değerlendirmesi için en fazla 5 fotoğraf ekleyebilirsin. Fotoğraf başına en fazla 8 MB.</p>
+  <div class="field create-card" id="create-step-3"><span class="stepno">3</span><label class="lb" for="d-not">${detailCopy.label}</label>
+    <textarea class="in" id="d-not" maxlength="500" placeholder="${detailCopy.placeholder}">${esc(d.not)}</textarea>
+    <button type="button" class="step-next" data-a="scrollCreate" data-v="create-step-4">Devam et <span>↓</span></button></div>
+  <div class="field create-card" id="create-step-4"><span class="stepno">4</span><h2>Fotoğraf ekle <small class="optional">İsteğe bağlı</small></h2><p class="hint">Uzmanın işi daha doğru değerlendirmesi için en fazla 5 fotoğraf ekleyebilirsin. Fotoğraf başına en fazla 8 MB.</p>
     <div class="photo-picker"><label class="uploadbox" for="d-photos">📷 Fotoğraf seç<input id="d-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
-    ${d.photos&&d.photos.length?`<div class="photo-grid">${d.photos.map((x,i)=>`<div class="photo-thumb"><img src="${esc(x.preview)}" alt="Seçilen fotoğraf ${i+1}"><button type="button" data-a="removePhoto" data-v="${i}" aria-label="Fotoğrafı kaldır">×</button></div>`).join('')}</div>`:''}</div></div>
-  <div class="field create-card"><span class="stepno">5</span><h2>Hizmet konumu</h2><p class="hint">Uzmanları doğru bölgeyle eşleştirmek için konumu yapılandırılmış seç.</p><div class="field two">
+    ${d.photos&&d.photos.length?`<div class="photo-grid">${d.photos.map((x,i)=>`<div class="photo-thumb"><img src="${esc(x.preview)}" alt="Seçilen fotoğraf ${i+1}"><button type="button" data-a="removePhoto" data-v="${i}" aria-label="Fotoğrafı kaldır">×</button></div>`).join('')}</div>`:''}</div>
+    <button type="button" class="step-next" data-a="scrollCreate" data-v="create-step-5">${d.photos&&d.photos.length?'Fotoğraflarla devam et':'Fotoğraf eklemeden devam et'} <span>↓</span></button></div>
+  <div class="field create-card" id="create-step-5"><span class="stepno">5</span><h2>Hizmet konumu</h2><p class="hint">Uzmanları doğru bölgeyle eşleştirmek için konumu yapılandırılmış seç.</p><div class="field two">
     <div><label class="lb" for="d-city">İl</label><select class="in" id="d-city"><option value="">İl seç</option>${ILLER.map(x=>`<option value="${esc(x)}" ${d.city===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
     <div><label class="lb" for="d-district">İlçe</label><input class="in" id="d-district" maxlength="80" value="${esc(d.district)}" placeholder="Örn. Çukurova" autocomplete="address-level2"></div>
     <div><label class="lb" for="d-neighborhood">Mahalle</label><input class="in" id="d-neighborhood" maxlength="100" value="${esc(d.neighborhood)}" placeholder="Örn. Güzelyalı" autocomplete="address-level3"></div>
@@ -1044,7 +1057,7 @@ function vDetail(){
       ${!chosen&&l.status==='open'?`<div class="customer-pay"><b>Bu teklif için ödeme yöntemini seç</b><div class="customer-pay-options">${quotePayments(q).map(m=>`<button type="button" class="pay-choice" data-a="choosePay" data-v="${q.id}|${m}" aria-pressed="${S.payPick[q.id]===m}">${PAYMENTS[m].icon} ${PAYMENTS[m].label}${m==='deposit_cash'&&quoteDeposit(q)?` · %${quoteDeposit(q)} ön ödeme`:''}</button>`).join('')}</div>
       <div class="promo-box"><label class="lb" for="promo-${q.id}">Promosyon kodun var mı?</label><div class="promo-row"><input class="in" id="promo-${q.id}" placeholder="Örn. ILKIS100" autocomplete="off" autocapitalize="characters"><button type="button" class="btn ghost sm" data-a="applyPromo" data-v="${q.id}">Uygula</button></div>
       ${S.promoApplied[q.id]?`<div class="promo-success"><b>✓ ${esc(S.promoApplied[q.id].code)}</b><span>-${tl(S.promoApplied[q.id].discount)}</span><small>Yeni tutar: ${tl(Math.max(0,q.price-S.promoApplied[q.id].discount))}</small></div>`:''}</div></div>`:''}
-      ${chosen?'<span class="pill good">Seçildi</span>':(l.status==='open'?`<button class="btn block" data-a="pick" data-v="${q.id}">Bu teklifi seç</button>`:'')}
+      ${chosen?'<span class="pill good">Seçildi</span>':(l.status==='open'?`<button class="btn block" id="pick-quote-${q.id}" data-a="pick" data-v="${q.id}">Bu teklifi seç</button>`:'')}
     </article>`;
   }).join('');
   if(ch){
@@ -1226,7 +1239,7 @@ function render(){
 
 /* ---------- eylemler ---------- */
 const NET=new Set(['sendSupport','supportRefresh','adminSupport','adminDeletion','requestDeletion','startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
-const KEEP=new Set(['pickKat','toggleSorun','zaman','sort','filter','pick','send','rate','tab']);
+const KEEP=new Set(['pickKat','toggleSorun','scrollCreate','choosePay','togglePayment','zaman','sort','filter','pick','send','rate','tab']);
 const A={
   showAuth(){S.guestAuth=true;S.pendingAction=null;S.authErr='';S.authInfo=''},
   async support(){await A.supportRefresh();S.page='support'},
@@ -1402,12 +1415,15 @@ const A={
   quickCat(v){S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.draft={kat:v,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
   pickKat(v){
     if(S.draft.kat!==v){S.draft.kat=v;S.draft.sorunlar=[]}
-    setTimeout(()=>{
-      const x=document.getElementById('create-step-2');
-      if(x)x.scrollIntoView({behavior:'smooth',block:'start'});
-    },30);
+    smoothTo('create-step-2');
   },
-  toggleSorun(v){const s=S.draft.sorunlar,x=s.indexOf(v);x<0?s.push(v):s.splice(x,1)},
+  toggleSorun(v){
+    const s=S.draft.sorunlar,x=s.indexOf(v);
+    x<0?s.push(v):s.splice(x,1);
+    clearTimeout(createAdvanceT);
+    if(s.length)createAdvanceT=setTimeout(()=>smoothTo('create-step-3',0),650);
+  },
+  scrollCreate(v){if(v)smoothTo(v,0)},
   zaman(v){S.draft.zaman=v},
   removePhoto(v){const i=+v,x=S.draft.photos[i];if(x){URL.revokeObjectURL(x.preview);S.draft.photos.splice(i,1)}},
   async publish(){
@@ -1437,6 +1453,7 @@ const A={
     const [qid,m]=String(v||'').split('|');
     if(!qid||!PAYMENTS[m])return;
     S.payPick[+qid]=m;
+    smoothTo('pick-quote-'+qid,180);
   },
   async applyPromo(v){
     const qid=+v,q=D.quotes[qid]||qsOf(S.sel).find(x=>x.id===qid),l=D.listings[S.sel];
@@ -1512,6 +1529,10 @@ const A={
       if(a.length===1){toast('En az bir ödeme yöntemi seçmelisin.');return}
       S.q.payments=a.filter(x=>x!==v);
     }else S.q.payments=[...a,v];
+    clearTimeout(quoteAdvanceT);
+    if(parseInt(S.q.fiyat,10)>0&&S.q.payments.length){
+      quoteAdvanceT=setTimeout(()=>smoothTo('qsend',0),650);
+    }
   },
   async sendQuote(){
     const f=parseInt(S.q.fiyat,10);if(!(f>0)||!S.q.payments||!S.q.payments.length)return;
@@ -1595,7 +1616,9 @@ document.addEventListener('change',e=>{
     chosen.forEach(file=>S.draft.photos.push({file,preview:URL.createObjectURL(file)}));
     if([...e.target.files].some(f=>f.size>8*1024*1024))toast('8 MB üzerindeki fotoğraflar eklenmedi.');
     else if(good.length>room)toast('En fazla 5 fotoğraf ekleyebilirsin.');
-    render();return;
+    render();
+    if(chosen.length)smoothTo('create-step-5',500);
+    return;
   }
   onField(e);
 });
