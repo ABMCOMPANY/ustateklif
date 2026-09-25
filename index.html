@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v54-guided-scroll-flows">
+<meta name="tamisim-build" content="v55-guest-header-actions">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -480,12 +480,30 @@ body.has-bottomnav main{padding-bottom:76px}
 #create-step-2,#create-step-3,#create-step-4,#create-step-5,#qsend,[id^="pick-quote-"]{scroll-margin-top:18px}
 .step-next{width:100%;margin-top:14px;min-height:43px;border:1px solid #D9E5F6;border-radius:13px;background:#F5F9FF;color:#1457D9;font:inherit;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
 .step-next span{font-size:15px;line-height:1}
+
+/* guest-header-actions-v55 */
+.guest-hdr{display:flex;align-items:center;gap:8px;margin-left:auto}
+.guest-hdr[hidden]{display:none!important}
+.guest-login,.guest-cta{border:0;font:inherit;cursor:pointer;white-space:nowrap}
+.guest-login{min-height:38px;padding:0 12px;border-radius:12px;background:transparent;color:#38506F;font-size:11px;font-weight:800}
+.guest-cta{min-height:40px;padding:0 13px;border-radius:13px;background:#1457D9;color:#fff;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;box-shadow:0 7px 18px rgba(20,87,217,.18)}
+.guest-cta-plus{font-size:17px;line-height:1;font-weight:500}
+@media(max-width:380px){
+  .guest-login{padding:0 8px}
+  .guest-cta{padding:0 10px}
+  .guest-cta-text{display:none}
+  .guest-cta-plus{font-size:20px}
+}
 </style>
 </head>
 <body>
 <div class="app">
   <header class="top">
     <div class="brand">Tamİşim<i></i></div>
+    <div class="guest-hdr" id="guest-hdr">
+      <button class="guest-login" data-a="showAuth">Giriş yap</button>
+      <button class="guest-cta" data-a="requireAuth" data-v="newIlan"><span class="guest-cta-plus">＋</span><span class="guest-cta-text">İlan ver</span></button>
+    </div>
     <div class="hdr-r" id="hdr-r" hidden>
       <div class="seg" role="group" aria-label="Kullanıcı türü">
         <button data-a="role" data-v="musteri" aria-pressed="true">Müşteri</button>
@@ -1225,6 +1243,7 @@ function render(){
   $('#app').innerHTML=h;
   const signed=!!(S.user&&!S.setup&&!S.loading);
   $('#hdr-r').hidden=!signed;
+  const gh=$('#guest-hdr');if(gh)gh.hidden=signed||S.setup||S.loading||S.recovery;
   const bn=$('#bottomnav');if(bn){if(window.scrollY<90)bn.classList.remove('nav-hidden');const topLevel=signed&&S.page!=='admin'&&((S.page==='main'&&((S.role==='musteri'&&S.view==='list')||(S.role==='usta'&&S.view==='list'&&!S.quoteFor)))||S.page==='notifications'||S.page==='account');bn.hidden=!topLevel;document.body.classList.toggle('has-bottomnav',topLevel);bn.querySelectorAll('button').forEach(x=>x.classList.remove('active'));const active=S.page==='notifications'?'notifications':S.page==='account'?'account':(S.page==='main'&&S.role==='musteri'?'navHome':null);if(active){const x=bn.querySelector('[data-a="'+active+'"]');if(x)x.classList.add('active')}}
   if(signed){
     document.querySelectorAll('.seg button[data-a="role"]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.role)));
