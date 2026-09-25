@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v52-mobile-scroll-polish">
+<meta name="tamisim-build" content="v53-create-step-scroll">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -472,6 +472,9 @@ body.has-bottomnav main{padding-bottom:76px}
   .account-section-head p{margin-left:35px}
 }
 @media(prefers-reduced-motion:reduce){.bottomnav{transition:none}}
+
+/* create-step-scroll-v53 */
+#create-step-2{scroll-margin-top:18px}
 </style>
 </head>
 <body>
@@ -996,7 +999,7 @@ function vNew(){
   const entries=Object.entries(KAT).filter(([k,v])=>!q||v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q)));
   const groups=[...new Set(entries.map(([,v])=>v.grup))];
   const cats=groups.map(g=>`<div class="catgroup"><h3>${esc(g)}</h3><div class="cats">${entries.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="cat" data-a="pickKat" data-v="${k}" aria-pressed="${d.kat===k}"><span class="ico" aria-hidden="true">${iconFor(k)}</span>${v.ad}</button>`).join('')}</div></div>`).join('');
-  const sorun=d.kat?`<div class="field create-card"><span class="stepno">2</span><h2>Hangi hizmete ihtiyacın var?</h2><p class="hint">Birden fazla seçebilirsin.</p>
+  const sorun=d.kat?`<div class="field create-card" id="create-step-2"><span class="stepno">2</span><h2>Hangi hizmete ihtiyacın var?</h2><p class="hint">Birden fazla seçebilirsin.</p>
     <div class="chips">${KAT[d.kat].sorunlar.map(s=>`<button class="chip" data-a="toggleSorun" data-v="${esc(s)}" aria-pressed="${d.sorunlar.includes(s)}">${esc(s)}</button>`).join('')}</div></div>`:'';
   return `<button class="link" data-a="back">İlanlarıma dön</button>
   <div class="create-head"><span class="eyebrow">Yeni ilan</span><h1>İşini birkaç adımda anlat</h1><p>Doğru bilgiler, uzmanlardan daha doğru teklifler almanı sağlar.</p></div><div class="create-progress"><span class="on"></span><span class="${d.kat?'on':''}"></span><span class="${d.sorunlar.length?'on':''}"></span><span class="${canPub(d)?'on':''}"></span></div>
@@ -1397,7 +1400,13 @@ const A={
   },
   newIlan(){S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.draft={kat:null,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
   quickCat(v){S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.draft={kat:v,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
-  pickKat(v){if(S.draft.kat!==v){S.draft.kat=v;S.draft.sorunlar=[]}},
+  pickKat(v){
+    if(S.draft.kat!==v){S.draft.kat=v;S.draft.sorunlar=[]}
+    setTimeout(()=>{
+      const x=document.getElementById('create-step-2');
+      if(x)x.scrollIntoView({behavior:'smooth',block:'start'});
+    },30);
+  },
   toggleSorun(v){const s=S.draft.sorunlar,x=s.indexOf(v);x<0?s.push(v):s.splice(x,1)},
   zaman(v){S.draft.zaman=v},
   removePhoto(v){const i=+v,x=S.draft.photos[i];if(x){URL.revokeObjectURL(x.preview);S.draft.photos.splice(i,1)}},
