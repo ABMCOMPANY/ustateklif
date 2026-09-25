@@ -1,10 +1,11 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v63-partner-categories-back">
+<meta name="color-scheme" content="light">
+<meta name="tamisim-build" content="v64-global-contrast-audit">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -592,6 +593,164 @@ button{-webkit-tap-highlight-color:transparent}.link{color:#1457D9!important}.pa
 .partner-category-badges{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0}.partner-category-badges>span{padding:5px 7px;border-radius:999px;background:#EEF4FC;color:#526984;font-size:7px;font-weight:850}.partner-category-badges .partner-cat-all{background:#E9F3FF;color:#1457D9}.partner-category-badges .partner-cat-empty{background:#FFF1D6;color:#8A5A00}.partner-category-badges.panel{margin:8px 0 0}
 .partner-cat-save{margin-top:-4px}.partner-add-btn{width:100%;margin-top:3px}.partner-form .partner-cat-picker{margin-top:14px}
 @media(max-width:390px){.partner-cat-grid{grid-template-columns:1fr}.partner-back{min-height:56px}}
+
+/* global-contrast-and-navigation-audit-v64 */
+:root[data-theme="light"]{
+  color-scheme:only light!important;
+  --bg:#F7F9FC!important;
+  --surface:#FFFFFF!important;
+  --ink:#102A56!important;
+  --muted:#6B7C93!important;
+  --line:#E2E8F0!important;
+  --petrol:#1457D9!important;
+  --petrol-ink:#FFFFFF!important;
+  --stub:#1457D9!important;
+  --tint:#EAF2FF!important;
+  --focus:#1457D9!important;
+  --amber:#2F80ED!important;
+  --amber-ink:#FFFFFF!important;
+  --amber-bg:#EAF2FF!important;
+  --amber-fg:#1457D9!important;
+  --good:#1D7448!important;
+  --good-bg:#D9F0E4!important;
+}
+:root[data-theme="light"] body,
+:root[data-theme="light"] .top,
+:root[data-theme="light"] #app{background:#F7F9FC!important}
+:root[data-theme="light"] body{color:#102A56!important;-webkit-text-fill-color:initial}
+
+:root[data-theme="light"] .detail-head h1,
+:root[data-theme="light"] .row>h2,
+:root[data-theme="light"] .pagehead h1,
+:root[data-theme="light"] .create-head h1,
+:root[data-theme="light"] .quote-head h1,
+:root[data-theme="light"] .notification-head h1,
+:root[data-theme="light"] .experts-head h1,
+:root[data-theme="light"] .home-title h2,
+:root[data-theme="light"] .steps h2,
+:root[data-theme="light"] .account-section h2,
+:root[data-theme="light"] .partner-pagehead h1,
+:root[data-theme="light"] .payment-title h2,
+:root[data-theme="light"] .chathead h2,
+:root[data-theme="light"] .pro-section-title h2,
+:root[data-theme="light"] .support-form h2,
+:root[data-theme="light"] .legal-card h2{
+  color:#102A56!important;
+  -webkit-text-fill-color:#102A56!important;
+  opacity:1!important;
+}
+:root[data-theme="light"] .detail-head p,
+:root[data-theme="light"] .pagehead p,
+:root[data-theme="light"] .create-head p,
+:root[data-theme="light"] .quote-head p,
+:root[data-theme="light"] .notification-head p,
+:root[data-theme="light"] .experts-head p,
+:root[data-theme="light"] .home-title p,
+:root[data-theme="light"] .account-section-head p,
+:root[data-theme="light"] .payment-title p,
+:root[data-theme="light"] .pro-section-title p,
+:root[data-theme="light"] .lede,
+:root[data-theme="light"] .hint,
+:root[data-theme="light"] .muted{
+  color:#6B7C93!important;
+  -webkit-text-fill-color:#6B7C93!important;
+  opacity:1!important;
+}
+:root[data-theme="light"] .section-kicker,
+:root[data-theme="light"] .eyebrow{
+  color:#1457D9!important;
+  -webkit-text-fill-color:#1457D9!important;
+  opacity:1!important;
+}
+:root[data-theme="light"] .quote,
+:root[data-theme="light"] .field,
+:root[data-theme="light"] .create-card,
+:root[data-theme="light"] .notif-card,
+:root[data-theme="light"] .legal-card,
+:root[data-theme="light"] .support-item,
+:root[data-theme="light"] .payment-summary,
+:root[data-theme="light"] .partner-portal-stats>div,
+:root[data-theme="light"] .directory-expert{
+  background:#fff!important;
+}
+:root[data-theme="light"] .qhead h3,
+:root[data-theme="light"] .directory-main h3,
+:root[data-theme="light"] .verify-row b,
+:root[data-theme="light"] .partner-stats b,
+:root[data-theme="light"] .partner-money b,
+:root[data-theme="light"] .payment-summary b{
+  color:#102A56!important;
+  -webkit-text-fill-color:#102A56!important;
+  opacity:1!important;
+}
+:root[data-theme="light"] .qnote,
+:root[data-theme="light"] .sub,
+:root[data-theme="light"] .directory-main p,
+:root[data-theme="light"] .verify-row small,
+:root[data-theme="light"] .partner-stats small,
+:root[data-theme="light"] .partner-money,
+:root[data-theme="light"] .payment-summary>div{
+  color:#6B7C93!important;
+  -webkit-text-fill-color:#6B7C93!important;
+  opacity:1!important;
+}
+
+/* Make every page-level back action look intentional and keep a 44px tap target. */
+.page-back{
+  min-height:44px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  margin:9px 0 10px!important;
+  padding:0 13px!important;
+  border:1px solid #DCE5F0!important;
+  border-radius:13px!important;
+  background:#fff!important;
+  color:#536B88!important;
+  -webkit-text-fill-color:#536B88!important;
+  font-size:10px!important;
+  font-weight:850!important;
+  box-shadow:0 4px 14px rgba(16,42,86,.035)!important;
+}
+.page-back:active{background:#F2F6FC!important;color:#1457D9!important;-webkit-text-fill-color:#1457D9!important}
+
+/* Stabilize controls against Android auto-dark. */
+:root[data-theme="light"] input,
+:root[data-theme="light"] textarea,
+:root[data-theme="light"] select{
+  color:#23364D!important;
+  -webkit-text-fill-color:#23364D!important;
+  background:#F8FBFF!important;
+  border-color:#D8E2EE!important;
+}
+:root[data-theme="light"] input::placeholder,
+:root[data-theme="light"] textarea::placeholder{
+  color:#74879A!important;
+  -webkit-text-fill-color:#74879A!important;
+  opacity:1!important;
+}
+:root[data-theme="light"] .btn.ghost{
+  background:#fff!important;
+  color:#1457D9!important;
+  -webkit-text-fill-color:#1457D9!important;
+  border-color:#D5E1F0!important;
+}
+
+/* Keep text readable on deliberately colored surfaces. */
+:root[data-theme="light"] .ticket .stub,
+:root[data-theme="light"] .ticket .stub *,
+:root[data-theme="light"] .btn:not(.ghost),
+:root[data-theme="light"] .btn:not(.ghost) *,
+:root[data-theme="light"] .guest-cta,
+:root[data-theme="light"] .guest-cta *,
+:root[data-theme="light"] .auth-primary,
+:root[data-theme="light"] .auth-primary *,
+:root[data-theme="light"] .quick-menu-primary,
+:root[data-theme="light"] .quick-menu-primary *,
+:root[data-theme="light"] .bottomnav .navplus,
+:root[data-theme="light"] .bottomnav .navplus *{
+  -webkit-text-fill-color:currentColor!important;
+}
 </style>
 </head>
 <body>
@@ -1376,7 +1535,7 @@ function vAdmin(){
   const payRows=payments.map(x=>{const cu=a.profiles[x.customer_id]||{},pr=a.profiles[x.pro_id]||{},at=latestAttempt[x.id];return `<article class="quote payment-admin"><div class="qhead"><div><h3>İş #${x.listing_id}</h3><p class="muted small">${esc(cu.name||'Müşteri')} → ${esc(pr.name||'Uzman')} · ${ago(x.created_at)}</p></div><span class="pill ${x.status==='paid'?'good':x.status==='failed'?'amber':''}">${esc(PAYMENT_STATUS[x.status]||x.status)}</span></div><div class="payment-admin-grid"><span>Net tutar <b>${tl(x.payable_amount)}</b></span><span>Kart/online <b>${tl(x.provider_amount||0)}</b></span><span>Nakit <b>${tl(x.cash_amount||0)}</b></span><span>Komisyon <b>${tl(x.platform_commission_amount||0)}</b></span></div><p class="muted small">${esc(PAYMENTS[x.method]&&PAYMENTS[x.method].label||x.method)}${x.provider?' · '+esc(x.provider):''}</p>${at?`<div class="attempt-note"><span>Son ödeme denemesi</span><b>${esc(at.status)}</b><small>${ago(at.created_at)}${at.error_message?' · '+esc(at.error_message):''}</small></div>`:''}</article>`}).join('');
   const supportRows=(a.support||[]).map(x=>{const p=a.profiles[x.user_id]||{};return `<article class="quote support-admin"><div class="qhead"><div><h3>${esc(x.subject)}</h3><p class="muted small">${esc(p.name||'Kullanıcı')} · ${ago(x.created_at)}</p></div><span class="pill ${x.status==='resolved'||x.status==='closed'?'good':x.status==='in_progress'?'amber':''}">${x.status}</span></div><p class="qnote">${esc(x.message)}</p>${x.admin_response?`<p class="muted small">Yanıt: ${esc(x.admin_response)}</p>`:''}<div class="foot">${x.status==='open'?'<button class="btn ghost sm" data-a="adminSupport" data-v="'+x.id+'|in_progress">İşleme al</button>':''}${!['resolved','closed'].includes(x.status)?'<button class="btn ghost sm" data-a="adminSupport" data-v="'+x.id+'|resolved">Yanıtla & çöz</button>':''}</div></article>`}).join('');
   const deletionRows=(a.deletions||[]).map(x=>{const p=a.profiles[x.user_id]||{};return `<article class="quote deletion-admin"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${ago(x.created_at)} · ${esc(x.status)}</p></div><span class="pill ${x.status==='completed'?'good':x.status==='pending'?'amber':''}">${x.status==='pending'?'Bekliyor':x.status==='processing'?'İşleniyor':x.status==='completed'?'Tamamlandı':'Reddedildi'}</span></div>${x.reason?`<p class="qnote">${esc(x.reason)}</p>`:''}${x.admin_note?`<p class="muted small">Not: ${esc(x.admin_note)}</p>`:''}<div class="foot">${x.status==='pending'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|processing">İşleme al</button>':''}${x.status!=='completed'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|completed">Tamamlandı</button>':''}${x.status==='pending'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|rejected">Reddet</button>':''}</div></article>`}).join('');
-  return `<button class="link" data-a="closeAdmin">Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}
+  return `<button class="page-back" data-a="closeAdmin">← Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}
   <h2>Ödeme operasyonu</h2><div class="field payment-admin-summary"><div><span>Kayıtlı ödeme</span><b>${Number(payStats.payments||payments.length)}</b></div><div><span>Bekleyen</span><b>${payPending}</b></div><div><span>Net hacim</span><b>${tl(payGross)}</b></div><div><span>Tahmini komisyon</span><b>${tl(payCommission)}</b></div></div>${payRows||'<div class="empty">Henüz ödeme kaydı yok.</div>'}
   <h2>Kurumsal partnerler</h2><div class="field partner-form"><div class="two"><div><label class="lb" for="partner-name">Şirket adı</label><input class="in" id="partner-name" placeholder="Örn. Koçtaş"></div><div><label class="lb" for="partner-slug">Kısa ad</label><input class="in" id="partner-slug" placeholder="koctas" autocapitalize="off"></div></div>${partnerCategoryPicker('partner-new',[],false)}<button class="btn partner-add-btn" data-a="addPartner">Partner ekle</button></div>${partners||'<div class="empty">Henüz kurumsal partner yok.</div>'}
   <h2>Destek talepleri</h2>${supportRows||'<div class="empty">Destek talebi yok.</div>'}
