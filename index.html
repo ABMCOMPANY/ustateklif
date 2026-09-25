@@ -396,6 +396,9 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* quote-payment-v30 */
 .payment-box{margin-top:14px}.payment-title{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}.payment-title h2{font-size:18px;color:#102A56;margin:0}.payment-title p{font-size:12px;color:#718198;margin:3px 0 0}.payment-options{display:grid;gap:9px}.payment-option{width:100%;border:1px solid #DFE7F2;background:#fff;border-radius:16px;padding:13px;display:grid;grid-template-columns:38px 1fr 24px;gap:10px;align-items:center;text-align:left;color:#213B5D}.payment-option[aria-pressed="true"]{border-color:#1457D9;background:#F5F9FF;box-shadow:0 0 0 1px #1457D9 inset}.payment-icon{width:38px;height:38px;border-radius:12px;background:#EEF4FF;display:grid;place-items:center;font-size:20px}.payment-option b{display:block;font-size:14px}.payment-option small{display:block;color:#718198;font-size:11px;line-height:1.35;margin-top:2px}.payment-check{width:22px;height:22px;border-radius:50%;border:1px solid #CBD6E5;color:transparent;display:grid;place-items:center;font-size:12px;font-weight:900}.payment-option[aria-pressed="true"] .payment-check{background:#1457D9;border-color:#1457D9;color:#fff}.deposit-row{margin-top:12px;padding-top:12px;border-top:1px solid #E9EEF5}.payment-badges{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.pay-badge{font-size:11px;font-weight:750;color:#1457D9;background:#EEF4FF;border:1px solid #D7E4FA;border-radius:999px;padding:6px 9px}
+
+/* customer-payment-choice-v31 */
+.customer-pay{margin:12px 0;padding:12px;border:1px solid #E5EBF3;border-radius:15px;background:#FBFCFE}.customer-pay>b{display:block;color:#294361;font-size:13px;margin-bottom:8px}.customer-pay-options{display:flex;flex-wrap:wrap;gap:7px}.pay-choice{border:1px solid #D9E2EE;background:#fff;color:#294361;border-radius:999px;padding:8px 10px;font:700 11px/1.2 Figtree,system-ui}.pay-choice[aria-pressed="true"]{background:#1457D9;border-color:#1457D9;color:#fff;box-shadow:0 5px 14px rgba(20,87,217,.18)}
 </style>
 </head>
 <body>
@@ -488,7 +491,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
-  draft:null,quoteFor:null,q:null,tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
+  draft:null,quoteFor:null,q:null,payPick:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
   authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
 const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
@@ -506,10 +509,24 @@ const PAYMENTS={
   deposit_cash:{label:'Ön ödeme + nakit',icon:'◐',desc:'Müşteri rezervasyon bedelini Tamİşim’e, kalanını iş sonunda sana öder.'}
 };
 const paymentLabels=a=>(Array.isArray(a)?a:[]).filter(x=>PAYMENTS[x]).map(x=>PAYMENTS[x].label);
+function quotePayments(q){
+  if(Array.isArray(q&&q.payment_methods)&&q.payment_methods.length)return q.payment_methods.filter(x=>PAYMENTS[x]);
+  const n=String(q&&q.note||'');
+  const out=[];
+  if(/Kartla ödeme/i.test(n))out.push('card');
+  if(/Nakit \/ elden/i.test(n))out.push('cash');
+  if(/Ön ödeme \+ nakit/i.test(n))out.push('deposit_cash');
+  return out.length?out:['card'];
+}
 const paymentBadges=q=>{
-  const a=Array.isArray(q&&q.payment_methods)?q.payment_methods:[];
-  return a.length?'<div class="payment-badges">'+a.filter(x=>PAYMENTS[x]).map(x=>'<span class="pay-badge">'+PAYMENTS[x].icon+' '+esc(PAYMENTS[x].label)+'</span>').join('')+'</div>':'';
+  const a=quotePayments(q);
+  return '<div class="payment-badges">'+a.map(x=>'<span class="pay-badge">'+PAYMENTS[x].icon+' '+esc(PAYMENTS[x].label)+'</span>').join('')+'</div>';
 };
+function quoteDeposit(q){
+  if(q&&q.deposit_percent)return +q.deposit_percent;
+  const m=String(q&&q.note||'').match(/%([0-9]{1,2}) ön ödeme/i);
+  return m?+m[1]:null;
+}
 const myQuote=id=>Object.values(D.quotes).find(q=>q.listing_id===id&&q.pro===uid());
 const chosenQ=l=>l.chosen_quote?D.quotes[l.chosen_quote]:null;
 function photoStrip(id,detail=false){const a=D.photos[id]||[];return a.length?`<div class="photo-strip ${detail?'detail':''}">${a.map(x=>`<img src="${esc(x.url)}" alt="İlan fotoğrafı" loading="lazy">`).join('')}</div>`:''}
@@ -787,6 +804,7 @@ function vDetail(){
       ${q.note?`<p class="qnote">${esc(q.note)}</p>`:''}
       ${paymentBadges(q)}
       ${proCard(q.pro)}
+      ${!chosen&&l.status==='open'?`<div class="customer-pay"><b>Bu teklif için ödeme yöntemini seç</b><div class="customer-pay-options">${quotePayments(q).map(m=>`<button type="button" class="pay-choice" data-a="choosePay" data-v="${q.id}|${m}" aria-pressed="${S.payPick[q.id]===m}">${PAYMENTS[m].icon} ${PAYMENTS[m].label}${m==='deposit_cash'&&quoteDeposit(q)?` · %${quoteDeposit(q)} ön ödeme`:''}</button>`).join('')}</div></div>`:''}
       ${chosen?'<span class="pill good">Seçildi</span>':(l.status==='open'?`<button class="btn block" data-a="pick" data-v="${q.id}">Bu teklifi seç</button>`:'')}
     </article>`;
   }).join('');
@@ -1016,11 +1034,27 @@ const A={
   openPro(v){S.sel=+v;S.view='prodetail'},
   back(){S.view='list';S.draft=null;S.sel=null},
   sort(v){S.sort=v},
+  choosePay(v){
+    const [qid,m]=String(v||'').split('|');
+    if(!qid||!PAYMENTS[m])return;
+    S.payPick[+qid]=m;
+  },
   async pick(v){
-    const l=D.listings[S.sel];
+    const l=D.listings[S.sel],q=D.quotes[+v]||qsOf(l.id).find(x=>x.id===+v);
+    const methods=quotePayments(q);
+    const chosen=methods.length===1?methods[0]:S.payPick[+v];
+    if(!chosen){toast('Önce ödeme yöntemini seç.');return}
+    if(!methods.includes(chosen)){toast('Bu ödeme yöntemi uzman tarafından kabul edilmiyor.');return}
     const r=await sb.rpc('choose_quote',{p_listing_id:l.id,p_quote_id:+v});
     if(r.error)throw r.error;
-    toast('Uzman seçildi. Artık mesajlaşabilirsin.');
+    const dep=chosen==='deposit_cash'?quoteDeposit(q):null;
+    try{
+      const pr=await sb.from('listing_payment_choices').insert({listing_id:l.id,quote_id:+v,customer_id:uid(),method:chosen,deposit_percent:dep});
+      if(pr.error)throw pr.error;
+    }catch(e){
+      try{localStorage.setItem('tamisim_pay_'+l.id,JSON.stringify({quote_id:+v,method:chosen,deposit_percent:dep}))}catch(_){}
+    }
+    toast('Uzman ve ödeme yöntemi seçildi. Artık mesajlaşabilirsin.');
     await refresh();
   },
   async send(){
