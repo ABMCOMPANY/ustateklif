@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v40-partner-fix">
+<meta name="tamisim-build" content="v41-post-select-promo">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -581,6 +581,9 @@ function paymentPlan(l,q,pc,side){
     extra+='<div class="payment-notice">Kartla ön ödeme altyapısı henüz ödeme kuruluşuna bağlanmadı. Bu bölüm şimdilik ödeme planını gösterir.</div>';
   }else if(pc.method==='card'){
     extra+='<div class="payment-notice">Kart tahsilatı henüz ödeme kuruluşuna bağlanmadı. Ödeme planı kaydedildi.</div>';
+  }
+  if(side==='customer'&&d<=0&&l.status==='chosen'){
+    extra+='<div class="promo-box selected-promo"><label class="lb" for="selected-promo-'+l.id+'">Promosyon kodun var mı?</label><div class="promo-row"><input class="in" id="selected-promo-'+l.id+'" placeholder="Örn. DEMO500" autocomplete="off" autocapitalize="characters"><button type="button" class="btn ghost sm" data-a="applySelectedPromo" data-v="'+l.id+'">Uygula</button></div></div>';
   }
   if(pc.method==='cash'||pc.method==='deposit_cash'){
     const mine=side==='customer'?pc.customer_cash_confirmed_at:pc.pro_cash_confirmed_at;
@@ -1239,6 +1242,15 @@ const A={
     if(r.error){toast(r.error.message||'Teklif seçilemedi.');return}
     toast('Uzman, ödeme yöntemi ve varsa kampanya kaydedildi.');
     await refresh();
+  },
+  async applySelectedPromo(v){
+    const inp=document.getElementById('selected-promo-'+v);
+    const code=String(inp&&inp.value||'').trim().toLocaleUpperCase('tr-TR');
+    if(!code){toast('Promosyon kodunu yaz.');return}
+    const r=await sb.rpc('apply_promotion_to_selected_listing',{p_code:code,p_listing_id:+v});
+    if(r.error){toast(r.error.message||'Promosyon uygulanamadı.');return}
+    await refresh();
+    toast('Promosyon uygulandı: -'+tl(Number((r.data||{}).discount)||0));
   },
   async confirmCash(v){
     if(!confirm('Nakit ödeme durumunu onaylıyor musun?'))return;
