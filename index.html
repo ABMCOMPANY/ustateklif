@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v46-payment-attempts">
+<meta name="tamisim-build" content="v47-public-beta">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -433,6 +433,9 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* payment-attempts-v46 */
 .attempt-note{margin-top:10px;padding:10px 12px;border-radius:12px;background:#F7F9FC;display:grid;grid-template-columns:1fr auto;gap:3px 10px}.attempt-note span{font-size:11px;color:#718096}.attempt-note b{font-size:11px;color:#102A56}.attempt-note small{grid-column:1/-1;color:#8A98AA;font-size:10px}
+
+/* public-beta-v47 */
+.beta-strip{margin:0 20px 10px;display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 12px;border-radius:12px;background:#FFF7E6;border:1px solid #F4D99A;color:#735615;font-size:11px;text-align:center}.beta-strip b{background:#102A56;color:#fff;border-radius:999px;padding:3px 7px;font-size:9px;letter-spacing:.04em;text-transform:uppercase}.beta-strip span{line-height:1.3}@media(max-width:520px){.beta-strip{margin-left:12px;margin-right:12px}}
 </style>
 </head>
 <body>
@@ -448,6 +451,7 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
       <button class="avatar" id="avatar" data-a="account" aria-label="Hesabım">K</button>
     </div>
   </header>
+  <div class="beta-strip"><b>Beta</b><span>Kart tahsilatı henüz aktif değil · Diğer akışlar test edilebilir</span></div>
   <main id="app"></main>
   <nav class="bottomnav" id="bottomnav" hidden aria-label="Ana menü"><button data-a="navHome"><span>⌂</span><small>Ana Sayfa</small></button><button data-a="navJobs"><span>▤</span><small>İlanlarım</small></button><button class="navplus" data-a="newIlan"><span>＋</span></button><button data-a="notifications"><span>♢</span><small>Bildirimler</small></button><button data-a="account"><span>○</span><small>Profil</small></button></nav>
 </div>
