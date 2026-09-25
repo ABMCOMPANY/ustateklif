@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v34-legacy-payments">
+<meta name="tamisim-build" content="v35-first-job-promo">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -403,6 +403,9 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* promotions-v32 */
 .promo-box{margin-top:14px;padding-top:13px;border-top:1px solid #E5EBF3}.promo-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.promo-row .in{min-width:0;text-transform:uppercase}.promo-success{margin-top:9px;padding:10px 11px;border-radius:12px;background:#EAF8F0;color:#17603D;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}.promo-success b,.promo-success span{font-size:13px}.promo-success small{grid-column:1/-1;color:#47705C;font-size:11px}
+
+/* payment-summary-v35 */
+.payment-summary{margin:14px 0;padding:15px;border:1px solid #DDE6F1;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(16,42,86,.05)}.payment-summary>div{display:flex;justify-content:space-between;gap:14px;padding:5px 0;color:#5F718A}.payment-summary>div b{color:#102A56}.payment-summary .discount b{color:#1D7448}.payment-summary .total{margin-top:5px;padding-top:11px;border-top:1px solid #E6ECF3;font-size:16px}.payment-summary .total span,.payment-summary .total b{color:#102A56;font-weight:800}.payment-summary p{margin:9px 0 0;color:#1457D9;font-size:12px;font-weight:700}
 </style>
 </head>
 <body>
@@ -497,7 +500,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
   draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
   authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
-const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},notifications:[],blocks:[],sig:'',qMine:undefined});
+const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},paymentChoices:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
 const uid=()=>S.user&&S.user.id;
@@ -609,11 +612,12 @@ async function refresh(){
   const ids=[...pids];
   const partyIds=Object.values(listings).filter(l=>l.status!=='open'&&(l.owner===me||(quotes[l.chosen_quote]&&quotes[l.chosen_quote].pro===me))).map(l=>l.id);
   const listingIds=Object.keys(listings).map(Number);
-  const [pr,st,ms,ph]=await Promise.all([
+  const [pr,st,ms,ph,pc]=await Promise.all([
     sb.from('profiles').select('id,name,title,bio,services,service_areas,service_city,service_districts,phone_verified,identity_verified,account_status,created_at').in('id',ids).then(chk),
     sb.from('pro_stats').select('*').in('pro_id',ids).then(chk),
     partyIds.length?sb.from('messages').select('*').in('listing_id',partyIds).order('created_at').then(chk):[],
-    listingIds.length?sb.from('listing_photos').select('id,listing_id,path,sort_order').in('listing_id',listingIds).order('sort_order').then(chk):[]
+    listingIds.length?sb.from('listing_photos').select('id,listing_id,path,sort_order').in('listing_id',listingIds).order('sort_order').then(chk):[],
+    listingIds.length?sb.from('listing_payment_choices').select('listing_id,quote_id,method,deposit_percent,promotion_id,discount_amount,created_at').in('listing_id',listingIds).then(chk):[]
   ]);
   const photos={};
   if(ph.length){
@@ -623,10 +627,11 @@ async function refresh(){
   const profiles={};pr.forEach(p=>{profiles[p.id]=p});
   const stats={};st.forEach(s=>{stats[s.pro_id]=s});
   const msgs={};ms.forEach(m=>{(msgs[m.listing_id]=msgs[m.listing_id]||[]).push(m)});
-  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
+  const paymentChoices={};pc.forEach(x=>{paymentChoices[x.listing_id]=x});
+  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,paymentChoices,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
   const changed=sig!==D.sig;
   if(D.qMine!==undefined&&qMine.length>D.qMine)toast('Yeni teklif geldi');
-  D={listings,mine,open,quotes,counts,profiles,stats,msgs,photos,notifications,blocks,sig,qMine:qMine.length};
+  D={listings,mine,open,quotes,counts,profiles,stats,msgs,photos,paymentChoices,notifications,blocks,sig,qMine:qMine.length};
   if(profiles[me])S.profile=profiles[me];
   return changed;
 }
@@ -828,6 +833,11 @@ function vDetail(){
     </article>`;
   }).join('');
   if(ch){
+    const pc=D.paymentChoices[l.id];
+    if(pc){
+      const d=Number(pc.discount_amount)||0,final=Math.max(0,Number(ch.price)-d),pm=PAYMENTS[pc.method]||{label:pc.method,icon:'•'};
+      h+=`<section class="payment-summary"><div><span>Hizmet bedeli</span><b>${tl(ch.price)}</b></div>${d>0?`<div class="discount"><span>Promosyon indirimi</span><b>-${tl(d)}</b></div>`:''}<div class="total"><span>Ödenecek tutar</span><b>${tl(final)}</b></div><p>${pm.icon} ${esc(pm.label)}${pc.method==='deposit_cash'&&pc.deposit_percent?` · %${pc.deposit_percent} ön ödeme`:''}</p></section>`;
+    }
     h+=chatBox(l,prof(ch.pro).name,l.status==='chosen');
     if(l.status==='chosen')h+=`<div class="rate"><p>İş bittiyse uzmanı puanla</p><div>${[1,2,3,4,5].map(i=>`<button class="star" data-a="rate" data-v="${i}" aria-label="${i} yıldız">★</button>`).join('')}</div></div>`;
     else h+=`<p class="rate"><span class="pill good">Tamamlandı. Puanın: ${'★'.repeat(l.rating||0)}${'☆'.repeat(5-(l.rating||0))}</span></p>`;
@@ -1063,22 +1073,11 @@ const A={
     const inp=document.getElementById('promo-'+qid);
     const code=String(inp&&inp.value||'').trim().toLocaleUpperCase('tr-TR');
     if(!code){toast('Promosyon kodunu yaz.');return}
-    const r=await sb.from('promotions').select('id,code,title,discount_type,discount_value,min_amount,max_discount,starts_at,ends_at,categories,cities,partner_id,status').eq('code',code).maybeSingle();
-    if(r.error){
-      if(/relation|schema cache|does not exist|promotions/i.test(r.error.message||'')){toast('Promosyon altyapısı henüz etkinleştirilmedi.');return}
-      throw r.error;
-    }
-    const p=r.data;
-    if(!p){toast('Bu promosyon kodu geçerli değil.');return}
-    const now=Date.now();
-    if(p.status!=='active'||(p.starts_at&&new Date(p.starts_at).getTime()>now)||(p.ends_at&&new Date(p.ends_at).getTime()<now)){toast('Bu kampanya şu anda aktif değil.');return}
-    if(Number(q.price)<Number(p.min_amount||0)){toast('Bu kod için minimum hizmet tutarı '+tl(p.min_amount)+' olmalı.');return}
-    if(Array.isArray(p.categories)&&p.categories.length&&!p.categories.includes(l.category)){toast('Bu kampanya bu hizmette geçerli değil.');return}
-    if(Array.isArray(p.cities)&&p.cities.length&&!p.cities.some(x=>norm(x)===norm(l.city))){toast('Bu kampanya bu şehirde geçerli değil.');return}
-    const discount=promoDiscount(q,p);
-    if(!(discount>0)){toast('Bu kod için uygulanabilir indirim bulunamadı.');return}
-    S.promoApplied[qid]={id:p.id,code:p.code,discount};
-    toast('Promosyon uygulandı: -'+tl(discount));
+    const r=await sb.rpc('validate_promotion',{p_code:code,p_listing_id:l.id,p_quote_id:qid});
+    if(r.error){toast(r.error.message||'Promosyon uygulanamadı.');return}
+    const p=r.data||{};
+    S.promoApplied[qid]={id:p.id,code:p.code,discount:Number(p.discount)||0,final_amount:Number(p.final_amount)||Math.max(0,q.price-(Number(p.discount)||0))};
+    toast('Promosyon uygulandı: -'+tl(S.promoApplied[qid].discount));
   },
   async pick(v){
     const l=D.listings[S.sel],q=D.quotes[+v]||qsOf(l.id).find(x=>x.id===+v);
@@ -1086,17 +1085,17 @@ const A={
     const chosen=methods.length===1?methods[0]:S.payPick[+v];
     if(!chosen){toast('Önce ödeme yöntemini seç.');return}
     if(!methods.includes(chosen)){toast('Bu ödeme yöntemi uzman tarafından kabul edilmiyor.');return}
-    const r=await sb.rpc('choose_quote',{p_listing_id:l.id,p_quote_id:+v});
-    if(r.error)throw r.error;
     const dep=chosen==='deposit_cash'?quoteDeposit(q):null;
-    try{
-      const promo=S.promoApplied[+v]||null;
-      const pr=await sb.from('listing_payment_choices').insert({listing_id:l.id,quote_id:+v,customer_id:uid(),method:chosen,deposit_percent:dep,promotion_id:promo&&promo.id||null,discount_amount:promo&&promo.discount||0});
-      if(pr.error)throw pr.error;
-    }catch(e){
-      try{localStorage.setItem('tamisim_pay_'+l.id,JSON.stringify({quote_id:+v,method:chosen,deposit_percent:dep,promotion:S.promoApplied[+v]||null}))}catch(_){}
-    }
-    toast('Uzman ve ödeme yöntemi seçildi. Artık mesajlaşabilirsin.');
+    const promo=S.promoApplied[+v]||null;
+    const r=await sb.rpc('choose_quote_with_payment',{
+      p_listing_id:l.id,
+      p_quote_id:+v,
+      p_method:chosen,
+      p_deposit_percent:dep,
+      p_promotion_id:promo&&promo.id||null
+    });
+    if(r.error){toast(r.error.message||'Teklif seçilemedi.');return}
+    toast('Uzman, ödeme yöntemi ve varsa kampanya kaydedildi.');
     await refresh();
   },
   async send(){
