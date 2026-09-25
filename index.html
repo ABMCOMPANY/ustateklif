@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
-<meta name="tamisim-build" content="v35-first-job-promo">
+<meta name="tamisim-build" content="v36-verification">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -406,6 +406,9 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* payment-summary-v35 */
 .payment-summary{margin:14px 0;padding:15px;border:1px solid #DDE6F1;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(16,42,86,.05)}.payment-summary>div{display:flex;justify-content:space-between;gap:14px;padding:5px 0;color:#5F718A}.payment-summary>div b{color:#102A56}.payment-summary .discount b{color:#1D7448}.payment-summary .total{margin-top:5px;padding-top:11px;border-top:1px solid #E6ECF3;font-size:16px}.payment-summary .total span,.payment-summary .total b{color:#102A56;font-weight:800}.payment-summary p{margin:9px 0 0;color:#1457D9;font-size:12px;font-weight:700}
+
+/* verification-v36 */
+.verified-pro{background:#E6F7EE!important;border-color:#B9E6CD!important;color:#17603D!important;font-weight:800}.verify-panel{margin-top:14px}.verify-upload{margin-top:16px;padding-top:14px;border-top:1px solid #E5EBF3}.verify-upload h3,.verify-history h3{margin:0 0 8px;color:#102A56}.verify-grid{display:grid;gap:9px;margin:10px 0}.verify-history{margin-top:16px;padding-top:14px;border-top:1px solid #E5EBF3}.verify-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #EEF2F7}.verify-row:last-child{border-bottom:0}.verify-row b{display:block;color:#102A56;font-size:13px}.verify-row small{display:block;color:#73839A;font-size:11px;margin-top:2px}.verify-admin{margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -500,22 +503,32 @@ if(cfg.url&&cfg.key&&window.supabase){
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,
   draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
   authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:''},acct:null,cfgDraft:{url:'',key:''},isAdmin:false,admin:null};
-const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},paymentChoices:{},notifications:[],blocks:[],sig:'',qMine:undefined});
+const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},stats:{},msgs:{},photos:{},paymentChoices:{},verifications:[],notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
 const uid=()=>S.user&&S.user.id;
 const qsOf=id=>Object.values(D.quotes).filter(q=>q.listing_id===id);
-const prof=id=>D.profiles[id]||{name:'Kullanıcı',title:'',bio:'',services:[],service_areas:[],service_city:'',service_districts:[],created_at:null,phone_verified:false,identity_verified:false,account_status:'active'};
+const prof=id=>D.profiles[id]||{name:'Kullanıcı',title:'',bio:'',services:[],service_areas:[],service_city:'',service_districts:[],created_at:null,phone_verified:false,identity_verified:false,vocational_verified:false,business_verified:false,account_status:'active'};
 const stat=id=>D.stats[id]||{jobs:0,rating:null};
 const csv=s=>String(s||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,12);
 const initials=n=>String(n||'U').trim().charAt(0).toLocaleUpperCase('tr-TR');
-function proCard(id){const p=prof(id),st=stat(id),sv=p.services||[],ar=(p.service_districts&&p.service_districts.length?p.service_districts:p.service_areas)||[];const complete=!!(p.bio&&sv.length&&p.service_city);const loc=p.service_city?[p.service_city,...ar.slice(0,3)]:ar.slice(0,3);const trust=(p.phone_verified?'<span class="badge">✓ Telefon doğrulandı</span>':'')+(p.identity_verified?'<span class="badge">✓ Kimlik doğrulandı</span>':'');const safety=id!==uid()?`<div class="foot"><button class="link" data-a="reportUser" data-v="${id}">Şikâyet et</button><button class="link" data-a="blockUser" data-v="${id}">Engelle</button></div>`:'';return `<div class="procard expert-card"><div class="protop expert-head"><div class="proavatar expert-avatar">${esc(initials(p.name))}</div><div><strong>${esc(p.name)}</strong><div class="muted small">${esc(p.title||'Servis ve tamir')}</div></div></div>${p.bio?`<p class="probio">${esc(p.bio)}</p>`:''}<div class="badges expert-badges">${st.rating!=null?`<span class="badge">★ ${Number(st.rating).toFixed(1)} · ${st.jobs} tamamlanan iş</span>`:`<span class="badge">Yeni uzman</span>`}${trust}${sv.slice(0,4).map(x=>`<span class="badge">${esc(x)}</span>`).join('')}${loc.map(x=>`<span class="badge">📍 ${esc(x)}</span>`).join('')}${complete?'<span class="badge">✓ Profil tamamlandı</span>':''}</div>${safety}</div>`}
+function proCard(id){const p=prof(id),st=stat(id),sv=p.services||[],ar=(p.service_districts&&p.service_districts.length?p.service_districts:p.service_areas)||[];const complete=!!(p.bio&&sv.length&&p.service_city);const loc=p.service_city?[p.service_city,...ar.slice(0,3)]:ar.slice(0,3);const fullVerified=!!(p.identity_verified&&p.vocational_verified);const trust=(fullVerified?'<span class="badge verified-pro">✓ Doğrulanmış Uzman</span>':'')+(!fullVerified&&p.identity_verified?'<span class="badge">✓ Kimlik doğrulandı</span>':'')+(!fullVerified&&p.vocational_verified?'<span class="badge">✓ Mesleki belge doğrulandı</span>':'')+(p.business_verified?'<span class="badge">✓ İşletme doğrulandı</span>':'')+(p.phone_verified?'<span class="badge">✓ Telefon doğrulandı</span>':'');const safety=id!==uid()?`<div class="foot"><button class="link" data-a="reportUser" data-v="${id}">Şikâyet et</button><button class="link" data-a="blockUser" data-v="${id}">Engelle</button></div>`:'';return `<div class="procard expert-card"><div class="protop expert-head"><div class="proavatar expert-avatar">${esc(initials(p.name))}</div><div><strong>${esc(p.name)}</strong><div class="muted small">${esc(p.title||'Servis ve tamir')}</div></div></div>${p.bio?`<p class="probio">${esc(p.bio)}</p>`:''}<div class="badges expert-badges">${st.rating!=null?`<span class="badge">★ ${Number(st.rating).toFixed(1)} · ${st.jobs} tamamlanan iş</span>`:`<span class="badge">Yeni uzman</span>`}${trust}${sv.slice(0,4).map(x=>`<span class="badge">${esc(x)}</span>`).join('')}${loc.map(x=>`<span class="badge">📍 ${esc(x)}</span>`).join('')}${complete?'<span class="badge">✓ Profil tamamlandı</span>':''}</div>${safety}</div>`}
 const PAYMENTS={
   card:{label:'Kartla ödeme',icon:'💳',desc:'Müşteri Tamİşim üzerinden öder; komisyon otomatik kesilir.'},
   cash:{label:'Nakit / elden',icon:'💵',desc:'Müşteri iş sonunda sana nakit öder; platform hizmet bedeli hesabına yansır.'},
   deposit_cash:{label:'Ön ödeme + nakit',icon:'◐',desc:'Müşteri rezervasyon bedelini Tamİşim’e, kalanını iş sonunda sana öder.'}
 };
 const paymentLabels=a=>(Array.isArray(a)?a:[]).filter(x=>PAYMENTS[x]).map(x=>PAYMENTS[x].label);
+const VERIFY_TYPES={
+  identity:'Kimlik',
+  vocational:'Ustalık / kalfalık / MYK',
+  diploma:'Diploma',
+  certificate:'Mesleki sertifika',
+  business:'İşletme / vergi belgesi'
+};
+const VERIFY_STATUS={pending:'İncelemede',approved:'Onaylandı',rejected:'Reddedildi',expired:'Süresi doldu'};
+const verifyCategoryLabel=k=>k==='general'?'Genel':(KAT[k]&&KAT[k].ad||k);
+
 function quotePayments(q){
   const out=[];
   const add=x=>{if(PAYMENTS[x]&&!out.includes(x))out.push(x)};
@@ -612,12 +625,13 @@ async function refresh(){
   const ids=[...pids];
   const partyIds=Object.values(listings).filter(l=>l.status!=='open'&&(l.owner===me||(quotes[l.chosen_quote]&&quotes[l.chosen_quote].pro===me))).map(l=>l.id);
   const listingIds=Object.keys(listings).map(Number);
-  const [pr,st,ms,ph,pc]=await Promise.all([
-    sb.from('profiles').select('id,name,title,bio,services,service_areas,service_city,service_districts,phone_verified,identity_verified,account_status,created_at').in('id',ids).then(chk),
+  const [pr,st,ms,ph,pc,vr]=await Promise.all([
+    sb.from('profiles').select('id,name,title,bio,services,service_areas,service_city,service_districts,phone_verified,identity_verified,vocational_verified,business_verified,account_status,created_at').in('id',ids).then(chk),
     sb.from('pro_stats').select('*').in('pro_id',ids).then(chk),
     partyIds.length?sb.from('messages').select('*').in('listing_id',partyIds).order('created_at').then(chk):[],
     listingIds.length?sb.from('listing_photos').select('id,listing_id,path,sort_order').in('listing_id',listingIds).order('sort_order').then(chk):[],
-    listingIds.length?sb.from('listing_payment_choices').select('listing_id,quote_id,method,deposit_percent,promotion_id,discount_amount,created_at').in('listing_id',listingIds).then(chk):[]
+    listingIds.length?sb.from('listing_payment_choices').select('listing_id,quote_id,method,deposit_percent,promotion_id,discount_amount,created_at').in('listing_id',listingIds).then(chk):[],
+    sb.from('professional_verifications').select('id,user_id,category,verification_type,document_type,status,review_note,reviewed_at,expires_at,created_at').eq('user_id',me).order('created_at',{ascending:false}).then(chk)
   ]);
   const photos={};
   if(ph.length){
@@ -628,10 +642,10 @@ async function refresh(){
   const stats={};st.forEach(s=>{stats[s.pro_id]=s});
   const msgs={};ms.forEach(m=>{(msgs[m.listing_id]=msgs[m.listing_id]||[]).push(m)});
   const paymentChoices={};pc.forEach(x=>{paymentChoices[x.listing_id]=x});
-  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,paymentChoices,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
+  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,paymentChoices,verifications:vr,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
   const changed=sig!==D.sig;
   if(D.qMine!==undefined&&qMine.length>D.qMine)toast('Yeni teklif geldi');
-  D={listings,mine,open,quotes,counts,profiles,stats,msgs,photos,paymentChoices,notifications,blocks,sig,qMine:qMine.length};
+  D={listings,mine,open,quotes,counts,profiles,stats,msgs,photos,paymentChoices,verifications:vr,notifications,blocks,sig,qMine:qMine.length};
   if(profiles[me])S.profile=profiles[me];
   return changed;
 }
@@ -741,7 +755,25 @@ function vAccount(){
     <div><label class="lb" for="ac-districts">Hizmet verdiğin ilçeler</label><input class="in" id="ac-districts" maxlength="400" placeholder="Seyhan, Çukurova, Yüreğir" value="${esc(S.acct.districts)}"><p class="muted small">Virgülle ayır. Boş bırakırsan seçtiğin ilin tüm ilçeleri kabul edilir.</p></div>
     <div><label class="lb" for="ac-bio">Kendini ve hizmetini tanıt</label><textarea class="in" id="ac-bio" maxlength="600" placeholder="Deneyimin, çalışma şeklin ve müşterinin bilmesini istediğin noktalar...">${esc(S.acct.bio)}</textarea></div>
   </div>
-  <div class="field"><h2>Güven & doğrulama</h2><div class="checks"><div class="check"><b>${(S.profile||{}).phone_verified?'✓':'i'}</b><span>Telefon: ${(S.profile||{}).phone_verified?'doğrulandı':'henüz doğrulanmadı'}. Supabase Auth telefon doğrulaması tamamlanınca durum otomatik eşitlenebilir.</span></div><div class="check"><b>${(S.profile||{}).identity_verified?'✓':'i'}</b><span>Kimlik: ${(S.profile||{}).identity_verified?'doğrulandı':'henüz doğrulanmadı'}. Bu rozet yalnızca yönetici tarafından verilebilir.</span></div><div class="check"><b>✓</b><span>Tamamlanan işler ve müşteri puanı sistem tarafından otomatik hesaplanır.</span></div></div><button class="btn ghost sm" data-a="syncVerify">Doğrulama durumunu yenile</button></div>
+  <div class="field verify-panel"><h2>Güven & doğrulama</h2>
+    <div class="checks">
+      <div class="check"><b>${(S.profile||{}).identity_verified?'✓':'i'}</b><span>Kimlik: ${(S.profile||{}).identity_verified?'doğrulandı':'belge göndererek doğrulayabilirsin'}.</span></div>
+      <div class="check"><b>${(S.profile||{}).vocational_verified?'✓':'i'}</b><span>Mesleki belge: ${(S.profile||{}).vocational_verified?'doğrulandı':'ustalık, kalfalık, MYK, diploma veya uygun sertifika ile doğrulanabilir'}.</span></div>
+      <div class="check"><b>${(S.profile||{}).business_verified?'✓':'i'}</b><span>İşletme: ${(S.profile||{}).business_verified?'doğrulandı':'isteğe bağlı; vergi/işletme belgesi ile doğrulanabilir'}.</span></div>
+    </div>
+    <div class="verify-upload">
+      <h3>Belge gönder</h3><p class="muted small">Belgeler müşterilere gösterilmez; yalnızca doğrulama incelemesinde kullanılır.</p>
+      <div class="verify-grid">
+        <select class="in" id="ver-type"><option value="identity">Kimlik</option><option value="vocational">Ustalık / kalfalık / MYK</option><option value="diploma">Diploma</option><option value="certificate">Mesleki sertifika</option><option value="business">İşletme / vergi belgesi</option></select>
+        <select class="in" id="ver-category"><option value="general">Genel / tüm hizmetler</option>${Object.entries(KAT).map(([k,v])=>`<option value="${k}">${esc(v.ad)}</option>`).join('')}</select>
+        <input class="in" id="ver-doc" maxlength="100" placeholder="Belge adı: Örn. Ustalık belgesi">
+        <input class="in" id="ver-file" type="file" accept="image/jpeg,image/png,image/webp,application/pdf">
+      </div>
+      <button class="btn ghost sm" data-a="submitVerification">Belgeyi incelemeye gönder</button>
+    </div>
+    <div class="verify-history"><h3>Başvurularım</h3>${(D.verifications||[]).length?(D.verifications||[]).map(v=>`<div class="verify-row"><div><b>${esc(VERIFY_TYPES[v.verification_type]||v.verification_type)}</b><small>${esc(verifyCategoryLabel(v.category))} · ${esc(v.document_type)}</small></div><span class="pill ${v.status==='approved'?'good':v.status==='pending'?'amber':''}">${esc(VERIFY_STATUS[v.status]||v.status)}</span></div>`).join(''):'<p class="muted small">Henüz belge göndermedin.</p>'}</div>
+    <button class="btn ghost sm" data-a="syncVerify">Doğrulama durumunu yenile</button>
+  </div>
   ${S.isAdmin?'<button class="btn block ghost" style="margin-bottom:12px" data-a="admin">Yönetici paneli</button>':''}<button class="btn block" data-a="saveAcct">Profili kaydet</button>
   <button class="btn block ghost" style="margin-top:12px" data-a="logout">Çıkış yap</button>
   <p class="muted small" style="margin-top:24px">Uygulama gibi kullanmak için tarayıcı menüsünden "Ana ekrana ekle" seçeneğini kullan.</p>`;
@@ -916,10 +948,21 @@ function vAdmin(){
   const a=S.admin||{stats:{},reports:[],profiles:{}};const st=a.stats||{};
   const cards=`<div class="field two"><div class="check"><b>${st.users||0}</b><span>Kullanıcı</span></div><div class="check"><b>${st.open_reports||0}</b><span>Açık şikâyet</span></div><div class="check"><b>${st.open_listings||0}</b><span>Açık ilan</span></div><div class="check"><b>${st.done_listings||0}</b><span>Tamamlanan iş</span></div></div>`;
   const rows=(a.reports||[]).map(r=>{const p=a.profiles[r.reported_id]||{};return `<article class="quote"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${esc(r.status)} · ${ago(r.created_at)}</p></div><span class="pill ${p.account_status==='suspended'?'amber':''}">${p.account_status==='suspended'?'Askıda':'Aktif'}</span></div><p class="qnote">${esc(r.reason)}</p><div class="badges">${p.phone_verified?'<span class="badge">✓ Telefon</span>':''}${p.identity_verified?'<span class="badge">✓ Kimlik</span>':''}</div><div class="foot"><button class="btn ghost sm" data-a="adminReport" data-v="${r.id}|${r.status==='resolved'?'open':'resolved'}">${r.status==='resolved'?'Yeniden aç':'Çözüldü yap'}</button><button class="btn ghost sm" data-a="adminIdentity" data-v="${r.reported_id}|${p.identity_verified?'0':'1'}">${p.identity_verified?'Kimlik onayını kaldır':'Kimliği onayla'}</button><button class="btn sm" data-a="adminSuspend" data-v="${r.reported_id}|${p.account_status==='suspended'?'active':'suspended'}">${p.account_status==='suspended'?'Hesabı aç':'Hesabı askıya al'}</button></div></article>`}).join('');
-  return `<button class="link" data-a="closeAdmin">Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}<h2>Şikâyetler</h2>${rows||'<div class="empty">Şikâyet kaydı yok.</div>'}`;
+  const vers=(a.verifications||[]).map(v=>{const p=a.profiles[v.user_id]||{};return `<article class="quote verify-admin"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${esc(VERIFY_TYPES[v.verification_type]||v.verification_type)} · ${esc(verifyCategoryLabel(v.category))}</p></div><span class="pill ${v.status==='approved'?'good':v.status==='pending'?'amber':''}">${esc(VERIFY_STATUS[v.status]||v.status)}</span></div><p class="qnote">${esc(v.document_type)}</p><div class="foot"><button class="btn ghost sm" data-a="openVerificationDoc" data-v="${v.id}">Belgeyi aç</button>${v.status==='pending'?`<button class="btn ghost sm" data-a="reviewVerification" data-v="${v.id}|approved">Onayla</button><button class="btn ghost sm" data-a="reviewVerification" data-v="${v.id}|rejected">Reddet</button>`:''}</div></article>`}).join('');
+  return `<button class="link" data-a="closeAdmin">Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}<h2>Belge doğrulama</h2>${vers||'<div class="empty">Doğrulama başvurusu yok.</div>'}<h2>Şikâyetler</h2>${rows||'<div class="empty">Şikâyet kaydı yok.</div>'}`;
 }
 async function loadAdmin(){
-  if(!S.isAdmin)return;const [dr,rr]=await Promise.all([sb.rpc('admin_dashboard'),sb.from('reports').select('*').order('created_at',{ascending:false}).limit(100)]);if(dr.error)throw dr.error;if(rr.error)throw rr.error;const ids=[...new Set((rr.data||[]).flatMap(x=>[x.reported_id,x.reporter_id]))];let ps=[];if(ids.length){const pr=await sb.from('profiles').select('id,name,phone_verified,identity_verified,account_status').in('id',ids);if(pr.error)throw pr.error;ps=pr.data||[]}const profiles={};ps.forEach(x=>profiles[x.id]=x);S.admin={stats:dr.data||{},reports:rr.data||[],profiles};
+  if(!S.isAdmin)return;
+  const [dr,rr,vr]=await Promise.all([
+    sb.rpc('admin_dashboard'),
+    sb.from('reports').select('*').order('created_at',{ascending:false}).limit(100),
+    sb.from('professional_verifications').select('*').order('created_at',{ascending:false}).limit(100)
+  ]);
+  if(dr.error)throw dr.error;if(rr.error)throw rr.error;if(vr.error)throw vr.error;
+  const ids=[...new Set([...(rr.data||[]).flatMap(x=>[x.reported_id,x.reporter_id]),...(vr.data||[]).map(x=>x.user_id)])];
+  let ps=[];if(ids.length){const pr=await sb.from('profiles').select('id,name,phone_verified,identity_verified,vocational_verified,business_verified,account_status').in('id',ids);if(pr.error)throw pr.error;ps=pr.data||[]}
+  const profiles={};ps.forEach(x=>profiles[x.id]=x);
+  S.admin={stats:dr.data||{},reports:rr.data||[],verifications:vr.data||[],profiles};
 }
 function vNotifications(){
   const ns=D.notifications||[], unread=ns.filter(n=>!n.read_at).length;
@@ -988,6 +1031,40 @@ const A={
   async adminIdentity(v){const [id,x]=String(v).split('|');const r=await sb.rpc('admin_set_identity',{p_user_id:id,p_verified:x==='1'});if(r.error)throw r.error;await loadAdmin();await refresh();toast('Kimlik doğrulama durumu güncellendi.');},
   async adminSuspend(v){const [id,status]=String(v).split('|');if(status==='suspended'&&!confirm('Bu hesabı askıya almak istiyor musun?'))return;const r=await sb.rpc('admin_set_account_status',{p_user_id:id,p_status:status});if(r.error)throw r.error;await loadAdmin();await refresh();toast(status==='suspended'?'Hesap askıya alındı.':'Hesap yeniden açıldı.');},
   async syncVerify(){const r=await sb.rpc('sync_my_verification');if(r.error)throw r.error;await refresh();toast('Doğrulama durumu yenilendi.');},
+  async submitVerification(){
+    const type=(document.getElementById('ver-type')||{}).value||'identity';
+    const category=(document.getElementById('ver-category')||{}).value||'general';
+    const doc=(document.getElementById('ver-doc')||{}).value||'';
+    const fi=document.getElementById('ver-file'),file=fi&&fi.files&&fi.files[0];
+    if(!VERIFY_TYPES[type]){toast('Belge türünü seç.');return}
+    if(doc.trim().length<3){toast('Belge adını yaz.');return}
+    if(!file){toast('Belge dosyasını seç.');return}
+    if(file.size>8*1024*1024){toast('Belge en fazla 8 MB olabilir.');return}
+    const ok=['image/jpeg','image/png','image/webp','application/pdf'];
+    if(!ok.includes(file.type)){toast('PDF, JPG, PNG veya WEBP dosyası kullan.');return}
+    const ext=file.type==='application/pdf'?'pdf':(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');
+    const path=uid()+'/'+crypto.randomUUID()+'.'+ext;
+    const up=await sb.storage.from('verification-docs').upload(path,file,{contentType:file.type,upsert:false});
+    if(up.error)throw up.error;
+    const r=await sb.from('professional_verifications').insert({user_id:uid(),category,verification_type:type,document_type:doc.trim().slice(0,100),storage_path:path});
+    if(r.error){await sb.storage.from('verification-docs').remove([path]);throw r.error}
+    await refresh();toast('Belgen incelemeye gönderildi.');
+  },
+  async openVerificationDoc(v){
+    const row=(S.admin&&S.admin.verifications||[]).find(x=>String(x.id)===String(v));if(!row)return;
+    const w=window.open('','_blank');
+    const r=await sb.storage.from('verification-docs').createSignedUrl(row.storage_path,300);
+    if(r.error){if(w)w.close();throw r.error}
+    if(w)w.location=r.data.signedUrl;else location.href=r.data.signedUrl;
+  },
+  async reviewVerification(v){
+    const [id,status]=String(v).split('|');if(!id||!['approved','rejected'].includes(status))return;
+    let note=null;
+    if(status==='rejected'){note=prompt('Red nedeni (isteğe bağlı):')||null}
+    const r=await sb.rpc('admin_review_verification',{p_verification_id:id,p_status:status,p_note:note});
+    if(r.error)throw r.error;
+    await loadAdmin();await refresh();toast(status==='approved'?'Belge onaylandı.':'Belge reddedildi.');
+  },
   async reportUser(v){if(!v||v===uid())return;const reason=prompt('Şikâyet nedenini kısaca yaz (en az 10 karakter):');if(!reason)return;if(reason.trim().length<10){toast('Şikâyet nedeni en az 10 karakter olmalı.');return}const r=await sb.from('reports').insert({reporter_id:uid(),reported_id:v,reason:reason.trim().slice(0,500)});if(r.error)throw r.error;toast('Şikâyetin alındı. İnceleme kaydına eklendi.');},
   async blockUser(v){if(!v||v===uid())return;if(!confirm('Bu kullanıcıyı engellemek istiyor musun? Birbirinizle yeni etkileşim kuramayacaksınız.'))return;const r=await sb.from('user_blocks').insert({blocker_id:uid(),blocked_id:v});if(r.error&&r.error.code!=='23505')throw r.error;await refresh();toast('Kullanıcı engellendi.');},
   async saveAcct(){
