@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
 <meta name="color-scheme" content="light">
-<meta name="tamisim-build" content="v64-global-contrast-audit">
+<meta name="tamisim-build" content="v65-navigation-pwa">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -891,9 +891,86 @@ if(cfg.url&&cfg.key&&window.supabase){
 }
 
 /* ---------- durum ---------- */
-const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,palette:savedPalette,
+const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,navSection:'home',palette:savedPalette,
   draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
   authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,auth:{name:'',email:'',pass:'',terms:false},acct:null,expertDraft:null,expertEditing:false,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[],supportRequests:[],supportDraft:{category:'general',subject:'',message:''},bootError:'',menuOpen:false,expertFilter:'hepsi',expertsLoaded:false};
+
+/* ---------- uygulama geçmişi ---------- */
+const NAV_STATE_KEY='tamisim-nav-v1';
+let navHistoryReady=false,navRestoring=false;
+const safeId=v=>Number.isSafeInteger(Number(v))&&Number(v)>0?Number(v):null;
+function navSnapshot(){
+  const signed=!!S.user;
+  if(!signed){
+    return {app:NAV_STATE_KEY,signed:false,page:S.page==='legal'?'legal':'main',guestAuth:!!S.guestAuth,guestCat:KAT[S.guestCat]?S.guestCat:null,recovery:!!S.recovery,menuOpen:false};
+  }
+  return {app:NAV_STATE_KEY,signed:true,page:String(S.page||'main'),role:S.role==='usta'?'usta':'musteri',view:String(S.view||'list'),sel:safeId(S.sel),quoteFor:safeId(S.quoteFor),navSection:S.navSection==='jobs'?'jobs':'home',expertEditing:!!S.expertEditing,expertFilter:KAT[S.expertFilter]?S.expertFilter:'hepsi',menuOpen:!!S.menuOpen};
+}
+function navComparable(x){
+  if(!x)return '';
+  const y={...x};delete y.depth;delete y.scrollY;
+  return JSON.stringify(y);
+}
+function navState(extra={}){return {...navSnapshot(),depth:Math.max(0,Number(history.state&&history.state.depth)||0),scrollY:Math.max(0,Math.round(window.scrollY||0)),...extra}}
+function syncNavigationHistory(){
+  if(S.loading||S.setup||navRestoring)return;
+  const current=history.state;
+  if(!navHistoryReady||!current||current.app!==NAV_STATE_KEY){
+    history.replaceState(navState({depth:0}),'',location.href);navHistoryReady=true;return;
+  }
+  if(!!current.signed!==!!S.user||!!current.recovery!==!!S.recovery){
+    history.replaceState(navState({depth:0,scrollY:0}),'',location.href);
+  }
+}
+function restoreNavigation(raw){
+  if(!raw||raw.app!==NAV_STATE_KEY)return;
+  navRestoring=true;
+  try{
+    if(!S.user){
+      S.page=raw.page==='legal'?'legal':'main';S.guestAuth=!!raw.guestAuth;S.guestCat=KAT[raw.guestCat]?raw.guestCat:null;S.menuOpen=false;S.recovery=!!(S.recovery&&raw.recovery);
+    }else{
+      const allowed=new Set(['main','account','notifications','experts','support','legal','admin','partner']);
+      S.page=allowed.has(raw.page)?raw.page:'main';
+      if(S.page==='admin'&&!S.isAdmin)S.page='account';
+      if(S.page==='partner'&&!S.partnerCtx)S.page='account';
+      S.role=raw.role==='usta'?'usta':'musteri';
+      S.view=['list','detail','prodetail','new'].includes(raw.view)?raw.view:'list';
+      S.navSection=raw.navSection==='jobs'?'jobs':'home';
+      S.sel=safeId(raw.sel);S.quoteFor=safeId(raw.quoteFor);
+      if(S.view==='new'&&!S.draft)S.view='list';
+      if((S.view==='detail'||S.view==='prodetail')&&!D.listings[S.sel]){S.view='list';S.sel=null}
+      if(S.quoteFor&&(!S.q||!D.listings[S.quoteFor]))S.quoteFor=null;
+      S.expertEditing=!!raw.expertEditing&&S.role==='usta'&&expertReady(S.profile||{});
+      S.expertFilter=KAT[raw.expertFilter]?raw.expertFilter:'hepsi';
+      S.menuOpen=!!raw.menuOpen;
+    }
+    render();
+    requestAnimationFrame(()=>{
+      if(S.navSection==='jobs'&&S.page==='main'&&S.role==='musteri'&&S.view==='list'){
+        const x=document.getElementById('myjobs');if(x)x.scrollIntoView({block:'start'});
+      }else window.scrollTo({top:Math.max(0,Number(raw.scrollY)||0)});
+    });
+  }finally{navRestoring=false}
+}
+const NAV_BACK_ACTIONS=new Set(['back','backGuest','guestBack','closeExperts','closeSupport','closeLegal','closeNotifications','closeAcct','closePartnerPanel','closeAdmin','cancelQuote','cancelExpertEdit']);
+const NAV_REPLACE_ACTIONS=new Set(['logout','setNewPass']);
+function commitNavigation(before,action){
+  if(navRestoring||!navHistoryReady)return;
+  const after=navSnapshot(),current=history.state||{};
+  if(navComparable(before)===navComparable(after))return;
+  const depth=Math.max(0,Number(current.depth)||0);
+  if(NAV_REPLACE_ACTIONS.has(action)){
+    history.replaceState(navState({depth:0,scrollY:0}),'',location.href);return;
+  }
+  const beforeCore={...before,menuOpen:false},afterCore={...after,menuOpen:false};
+  const closingOverlay=before.menuOpen&&!after.menuOpen&&navComparable(beforeCore)===navComparable(afterCore);
+  if((closingOverlay||NAV_BACK_ACTIONS.has(action))&&depth>0){history.back();return}
+  history.replaceState({...current,scrollY:Math.max(0,Math.round(window.scrollY||0))},'',location.href);
+  if(before.menuOpen&&!after.menuOpen){history.replaceState(navState({depth,scrollY:0}),'',location.href);return}
+  history.pushState(navState({depth:depth+1,scrollY:0}),'',location.href);
+}
+if('scrollRestoration' in history)history.scrollRestoration='manual';
+window.addEventListener('popstate',e=>{if(e.state&&e.state.app===NAV_STATE_KEY)restoreNavigation(e.state)});
 const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},expertAuth:{},stats:{},msgs:{},photos:{},paymentChoices:{},paymentRecords:{},verifications:[],partners:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
@@ -1712,6 +1789,7 @@ function render(){
   if(id){const n=document.getElementById(id);if(n){if(val!==undefined&&n.tagName!=='BUTTON')n.value=val;n.focus({preventScroll:true});try{if(ss!=null)n.setSelectionRange(ss,ss)}catch(e){}}}
   const m=$('#msgs');if(m)m.scrollTop=m.scrollHeight;
   upd();
+  syncNavigationHistory();
 }
 
 /* ---------- eylemler ---------- */
@@ -1765,9 +1843,9 @@ const A={
   guestBack(){S.guestCat=null},
   guestService(v){toast(v+' seçildi. İlan vermek için aşağıdaki butonu kullanabilirsin.')},
   requireAuth(v){S.pendingAction=v||null;S.guestAuth=true;S.authErr='';S.authInfo=''},
-  navHome(){S.menuOpen=false;S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null},
-  navJobs(){S.menuOpen=false;S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null;setTimeout(()=>{const x=document.getElementById('myjobs');if(x)x.scrollIntoView({behavior:'smooth',block:'start'})},0)},
-  role(v){S.role=v;S.view='list';S.page='main';S.tab='acik';S.quoteFor=null;S.sel=null;S.expertEditing=false;if(v==='usta')S.expertDraft=expertDraft(S.profile||{})},
+  navHome(){S.menuOpen=false;S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null;S.navSection='home'},
+  navJobs(){S.menuOpen=false;S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null;S.navSection='jobs';setTimeout(()=>{const x=document.getElementById('myjobs');if(x)x.scrollIntoView({behavior:'smooth',block:'start'})},0)},
+  role(v){S.role=v;S.view='list';S.page='main';S.tab='acik';S.quoteFor=null;S.sel=null;S.navSection='home';S.expertEditing=false;if(v==='usta')S.expertDraft=expertDraft(S.profile||{})},
   editExpert(){S.expertDraft=expertDraft(S.profile||{});S.expertEditing=true;S.tab='acik'},
   cancelExpertEdit(){S.expertEditing=false;S.expertDraft=expertDraft(S.profile||{})},
   toggleExpertCategory(v){if(!KAT[v])return;const d=S.expertDraft||(S.expertDraft=expertDraft(S.profile||{}));d.categories=d.categories.includes(v)?d.categories.filter(x=>x!==v):[...d.categories,v]},
@@ -1924,8 +2002,8 @@ const A={
       if(r.error){S.authErr=authMsg(r.error);return}
     }
   },
-  newIlan(){S.menuOpen=false;S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.draft={kat:null,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
-  quickCat(v){S.menuOpen=false;S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.draft={kat:v,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
+  newIlan(){S.menuOpen=false;S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.navSection='home';S.draft={kat:null,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
+  quickCat(v){S.menuOpen=false;S.page='main';S.role='musteri';S.sel=null;S.quoteFor=null;S.navSection='home';S.draft={kat:v,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]};S.catSearch='';S.view='new'},
   pickKat(v){
     if(S.draft.kat!==v){S.draft.kat=v;S.draft.sorunlar=[]}
     if(!S.expertsLoaded)loadExpertDirectory().then(()=>{if(S.view==='new'&&S.draft&&S.draft.kat===v)render()}).catch(()=>{});
@@ -2066,10 +2144,12 @@ const A={
 };
 async function run(a,v,el){
   const f=A[a];if(!f)return;
+  const before=navSnapshot();
   if(NET.has(a)){if(S.busy)return;S.busy=true;document.body.style.cursor='progress'}
   try{await f(v)}catch(e){console.error(e);toast(a==='authGo'?authMsg(e):errMsg(e))}
   finally{S.busy=false;document.body.style.cursor=''}
   render();
+  commitNavigation(before,a);
   if(a==='send'){const c=$('#chat-input');c&&c.focus({preventScroll:true})}
   else if(KEEP.has(a)&&el){
     const again=[...document.querySelectorAll('[data-a]')].find(x=>x.dataset.a===a&&x.dataset.v===v);
@@ -2193,13 +2273,16 @@ if(sb){
 if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
   window.addEventListener('load',async()=>{
     try{
-      const regs=await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map(r=>r.unregister()));
-      if('caches' in window){
-        const keys=await caches.keys();
-        await Promise.all(keys.filter(k=>k.startsWith('tamisim-')).map(k=>caches.delete(k)));
-      }
-    }catch(e){}
+      const hadController=!!navigator.serviceWorker.controller;
+      let refreshing=false;
+      navigator.serviceWorker.addEventListener('controllerchange',()=>{
+        if(!hadController||refreshing)return;
+        refreshing=true;location.reload();
+      });
+      const reg=await navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'});
+      const last=Number(sessionStorage.getItem('tamisim-sw-check')||0);
+      if(Date.now()-last>15*60*1000){sessionStorage.setItem('tamisim-sw-check',String(Date.now()));await reg.update()}
+    }catch(e){console.warn('Service worker kaydedilemedi.',e)}
   });
 }
 })();
