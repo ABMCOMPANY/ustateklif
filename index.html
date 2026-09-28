@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
 <meta name="color-scheme" content="light">
-<meta name="tamisim-build" content="v66-listing-flow">
+<meta name="tamisim-build" content="v67-auth-resume">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -931,6 +931,34 @@ function syncNavigationHistory(){
   if(!!current.signed!==!!S.user||!!current.recovery!==!!S.recovery){
     history.replaceState(navState({depth:0,scrollY:0}),'',location.href);
   }
+}
+function replaceNavigationSnapshot(){
+  const depth=Math.max(0,Number(history.state&&history.state.depth)||0);
+  history.replaceState(navState({depth,scrollY:0}),'',location.href);
+  navHistoryReady=true;
+}
+function resumeListingDraftAfterAuth(rawDraft,step,authHistorySteps){
+  const draft=safeDraft(rawDraft);if(!draft)return false;
+  const restoreDraft=()=>{
+    S.draft=draft;S.createStep=Math.min(6,Math.max(1,Number(step)||1));
+    S.page='main';S.role='musteri';S.view='new';S.sel=null;S.quoteFor=null;S.navSection='home';S.guestAuth=false;
+  };
+  const finish=()=>{
+    restoreDraft();
+    render();
+    if(authHistorySteps>1){
+      const current=history.state||{},depth=Math.max(0,Number(current.depth)||0);
+      history.replaceState({...current,scrollY:Math.max(0,Math.round(window.scrollY||0))},'',location.href);
+      history.pushState(navState({depth:depth+1,scrollY:0}),'',location.href);
+      navHistoryReady=true;
+    }else replaceNavigationSnapshot();
+    requestAnimationFrame(()=>toast('İlanına kaldığın yerden devam ediyorsun.'));
+  };
+  if(authHistorySteps>0){
+    window.addEventListener('popstate',finish,{once:true});
+    history.go(-authHistorySteps);
+  }else finish();
+  return true;
 }
 function restoreNavigation(raw){
   if(!raw||raw.app!==NAV_STATE_KEY)return;
@@ -2029,9 +2057,11 @@ const A={
       const r=await sb.auth.signUp({email:email.trim(),password:pass,options:{data:{name:name.trim()}}});
       if(r.error){S.authErr=authMsg(r.error);return}
       if(!r.data.session){S.authInfo='Kayıt oluşturuldu. E-postana gelen doğrulama bağlantısına tıkla, sonra giriş yap.';S.authMode='in';S.auth.pass=''}
+      return !!r.data.session;
     }else{
       const r=await sb.auth.signInWithPassword({email:email.trim(),password:pass});
       if(r.error){S.authErr=authMsg(r.error);return}
+      return !!r.data.session;
     }
   },
   newIlan(){S.menuOpen=false;S.sel=null;S.quoteFor=null;S.navSection='home';startDraft()},
@@ -2188,9 +2218,11 @@ const A={
 async function run(a,v,el){
   const f=A[a];if(!f)return;
   const before=navSnapshot();
+  let result;
   if(NET.has(a)){if(S.busy)return;S.busy=true;document.body.style.cursor='progress'}
-  try{await f(v)}catch(e){console.error(e);toast(a==='authGo'?authMsg(e):errMsg(e))}
+  try{result=await f(v)}catch(e){console.error(e);toast(a==='authGo'?authMsg(e):errMsg(e))}
   finally{S.busy=false;document.body.style.cursor=''}
+  if(a==='authGo'&&result===true)return;
   render();
   commitNavigation(before,a);
   if(a==='send'){const c=$('#chat-input');c&&c.focus({preventScroll:true})}
@@ -2306,9 +2338,11 @@ if(sb){
     if(u){
       if(!S.user||S.user.id!==u.id){
         const pending=S.pendingAction,continued=pending==='newIlan'?(safeDraft(S.draft)||loadGuestDraft()):null,continuedStep=S.createStep;
+        const authState=history.state,authDepth=Math.max(0,Number(authState&&authState.depth)||0);
+        const authHistorySteps=continued&&authState&&authState.app===NAV_STATE_KEY&&authState.guestAuth?(authDepth>1?2:authDepth):0;
         S.user=u;S.page='main';S.view='list';S.role='musteri';S.auth.pass='';S.authErr='';S.authInfo='';S.guestAuth=false;
         S.pendingAction=null;
-        setTimeout(async()=>{await boot();if(continued){S.draft=continued;S.createStep=Math.min(6,Math.max(1,continuedStep||1));S.page='main';S.role='musteri';S.view='new';render();toast('İlanına kaldığın yerden devam ediyorsun.')}},0);
+        setTimeout(async()=>{await boot();if(continued)resumeListingDraftAfterAuth(continued,continuedStep,authHistorySteps)},0);
       }
     }else{
       if(S.user){S.user=null;S.profile=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:'',terms:false};S.authErr='';S.authInfo=''}
