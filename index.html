@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
 <meta name="color-scheme" content="light">
-<meta name="tamisim-build" content="v69-suitable-quotes">
+<meta name="tamisim-build" content="v70-auth-email-resend">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -542,6 +542,7 @@ body.has-bottomnav main{padding-bottom:76px}
 button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!important}.pagehead h1,.create-head h1,.notification-head h1{letter-spacing:-.025em}.empty{border-radius:18px}.legal-card,.quote,.ticket,.trustbox{box-shadow:0 6px 20px rgba(var(--brand-ink-rgb),.045)}
 .auth-shell{max-width:520px;margin:0 auto;padding-bottom:30px}.auth-back{border:0;background:transparent;color:#58708D;font:inherit;font-size:10px;font-weight:800;padding:4px 0 8px;cursor:pointer}.auth-welcome{margin:10px 0 16px}.auth-kicker{display:inline-flex;padding:6px 9px;border-radius:999px;background:var(--brand-tint);color:var(--brand-primary);font-size:9px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}.auth-welcome h1{margin:10px 0 6px;color:var(--brand-ink);font-size:31px;line-height:1.06;letter-spacing:-.035em}.auth-welcome p{margin:0;color:var(--brand-muted);font-size:13px;line-height:1.55;max-width:470px}.auth-context{display:grid;grid-template-columns:38px 1fr;gap:10px;align-items:center;margin:0 0 12px;padding:11px 12px;border-radius:14px;background:var(--brand-tint);border:1px solid #DDEAFF}.auth-context>span{width:38px;height:38px;border-radius:12px;background:var(--brand-primary);color:#fff;display:grid;place-items:center;font-weight:900}.auth-context b{display:block;color:var(--brand-ink);font-size:11px}.auth-context small{display:block;color:#708199;font-size:9px;line-height:1.4;margin-top:2px}
 .auth-card{padding:17px;border:1px solid #DFE7F1;border-radius:20px;background:#fff;box-shadow:0 10px 30px rgba(var(--brand-ink-rgb),.065)}.auth-card-title{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:14px}.auth-card-title h2{margin:0;color:var(--brand-ink);font-size:17px}.auth-card-title span{color:#8B98AA;font-size:9px}.auth-fields{display:grid;gap:12px}.auth-fields label>span{display:block;margin:0 0 6px;color:var(--brand-ink);font-size:10px;font-weight:850}.auth-fields .in{min-height:49px;padding:11px 13px;border:1px solid #DDE5EF;border-radius:13px;background:var(--brand-field);box-shadow:none;font-size:13px}.auth-primary{width:100%;min-height:50px;margin-top:14px;border:0;border-radius:14px;background:var(--brand-primary);color:#fff;display:grid;grid-template-columns:1fr 24px;align-items:center;padding:0 13px;font:inherit;cursor:pointer;box-shadow:0 8px 20px rgba(var(--brand-primary-rgb),.17)}.auth-primary b{font-size:12px}.auth-primary span{font-size:17px}.auth-forgot{display:block;margin:10px auto 0;border:0;background:transparent;color:#60738D;font:inherit;font-size:10px;font-weight:750;padding:5px;cursor:pointer}.auth-card .terms-check{margin:13px 0 0;font-size:9px;line-height:1.45}.auth-card .terms-check input{margin-top:2px}
+.auth-confirm{display:grid;gap:10px}.auth-confirm p{margin:0;color:var(--brand-muted);font-size:13px;line-height:1.55}.auth-confirm strong{color:var(--brand-ink);overflow-wrap:anywhere}.auth-confirm ul{margin:0;padding-left:18px;color:var(--brand-muted);font-size:12px}.auth-primary:disabled{opacity:.55;cursor:wait}
 .auth-switch{margin-top:12px;padding:13px 14px;border:1px solid #E1E8F1;border-radius:16px;background:var(--brand-field);display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}.auth-switch b{display:block;color:var(--brand-ink);font-size:11px}.auth-switch small{display:block;color:#8593A5;font-size:9px;margin-top:2px}.auth-switch button{border:0;border-radius:11px;background:var(--brand-tint);color:var(--brand-primary);font:inherit;font-size:10px;font-weight:900;padding:10px 11px;white-space:nowrap;cursor:pointer}.auth-switch button span{margin-left:4px}.auth-beta-note{text-align:center;color:#95A1B1;font-size:8px;margin:12px 0 0}
 @media(max-width:390px){.auth-welcome h1{font-size:28px}.auth-card{padding:15px}.auth-switch{grid-template-columns:1fr}.auth-switch button{width:100%}}
 
@@ -905,7 +906,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,navSection:'home',palette:savedPalette,
   draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'uygun',busy:false,
-  authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,createStep:1,expertPreview:{key:'',loading:false,rows:[],total:0,nearby:0},auth:{name:'',email:'',pass:'',terms:false},acct:null,expertDraft:null,expertEditing:false,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[],supportRequests:[],supportDraft:{category:'general',subject:'',message:''},bootError:'',menuOpen:false,expertFilter:'hepsi',expertsLoaded:false};
+  authMode:'in',authErr:'',authInfo:'',confirmationEmail:'',resendBusy:false,recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,createStep:1,expertPreview:{key:'',loading:false,rows:[],total:0,nearby:0},auth:{name:'',email:'',pass:'',terms:false},acct:null,expertDraft:null,expertEditing:false,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[],supportRequests:[],supportDraft:{category:'general',subject:'',message:''},bootError:'',menuOpen:false,expertFilter:'hepsi',expertsLoaded:false};
 
 /* ---------- uygulama geçmişi ---------- */
 const NAV_STATE_KEY='tamisim-nav-v1';
@@ -1267,12 +1268,16 @@ function smoothTo(id,delay=40){
 function authMsg(e){
   const m=(e&&e.message||'').toLowerCase();
   if(m.includes('invalid login'))return 'E-posta veya şifre hatalı.';
-  if(m.includes('already registered')||m.includes('already been registered'))return 'Bu e-posta ile zaten kayıt var. Giriş yapmayı dene.';
-  if(m.includes('not confirmed'))return 'E-postanı doğrulaman gerekiyor. Gelen kutunu kontrol et.';
-  if(m.includes('rate limit')||m.includes('too many'))return 'Çok fazla deneme yapıldı. Biraz bekleyip tekrar dene.';
+  if(m.includes('already registered')||m.includes('already been registered'))return 'Kayıt işlemi tamamlanamadı. Giriş yapmayı veya doğrulama e-postasını tekrar istemeyi dene.';
+  if(m.includes('not confirmed'))return 'E-postanı doğrulaman gerekiyor. Gelen kutusu ve spam klasörünü kontrol et.';
+  if(m.includes('signup')&&m.includes('disabled'))return 'Yeni hesap oluşturma şu anda kapalı.';
+  if(m.includes('email')&&m.includes('rate')||m.includes('over_email_send_rate_limit'))return 'Çok fazla e-posta istendi. Birkaç dakika sonra tekrar dene.';
+  if(m.includes('rate limit')||m.includes('too many'))return 'Çok fazla deneme yapıldı. Birkaç dakika sonra tekrar dene.';
+  if(m.includes('already confirmed'))return 'Bu e-posta zaten doğrulanmış olabilir. Giriş yapmayı dene.';
   if(m.includes('fetch')||m.includes('network'))return 'Sunucuya ulaşılamadı. İnternetini ve bağlantı ayarını kontrol et.';
   return 'İşlem yapılamadı. Bilgileri kontrol edip tekrar dene.';
 }
+const authRedirectUrl=()=>location.origin+location.pathname;
 function errMsg(e){
   const m=(e&&e.message||'').toLowerCase();
   if(e&&e.code==='23505')return 'Bu ilana zaten teklif verdin.';
@@ -1433,17 +1438,18 @@ function vGuest(){
   </section>`;
 }
 function vAuth(){
-  const up=S.authMode==='up',fromListing=S.pendingAction==='newIlan';
+  const up=S.authMode==='up',fromListing=S.pendingAction==='newIlan',confirming=!!S.confirmationEmail;
   return `<div class="auth-shell">
     <button class="auth-back" data-a="backGuest">← <span>Hizmetlere dön</span></button>
     <section class="auth-welcome">
-      <span class="auth-kicker">${up?'Ücretsiz üyelik':'Hesabına eriş'}</span>
-      <h1>${up?'Tamİşim’e katıl':'Tekrar hoş geldin'}</h1>
-      <p>${fromListing?(up?'Hesabını oluştur; hazırladığın ilana kaldığın yerden devam et.':'İlanını yayınlamak için giriş yap; kaldığın yerden devam et.'):(up?'İlanlarını, tekliflerini ve mesajlarını tek yerden yönet.':'İlanlarını, tekliflerini ve mesajlarını tek yerden yönet.')}</p>
+      <span class="auth-kicker">${confirming?'E-posta doğrulama':up?'Ücretsiz üyelik':'Hesabına eriş'}</span>
+      <h1>${confirming?'E-postanı kontrol et':up?'Tamİşim’e katıl':'Tekrar hoş geldin'}</h1>
+      <p>${confirming?'Hesabını kullanmadan önce e-posta adresini doğrulaman gerekiyor.':fromListing?(up?'Hesabını oluştur; hazırladığın ilana kaldığın yerden devam et.':'İlanını yayınlamak için giriş yap; kaldığın yerden devam et.'):(up?'İlanlarını, tekliflerini ve mesajlarını tek yerden yönet.':'İlanlarını, tekliflerini ve mesajlarını tek yerden yönet.')}</p>
     </section>
     ${fromListing?`<div class="auth-context"><span>✓</span><div><b>İlanın hazır</b><small>${up?'Kayıttan':'Girişten'} sonra doğrudan ilan oluşturma adımına geçeceksin.</small></div></div>`:''}
     <section class="auth-card">
-      <div class="auth-card-title"><h2>${up?'Hesabını oluştur':'Giriş yap'}</h2><span>${up?'1 dakikadan kısa sürer':'Tekrar hoş geldin'}</span></div>
+      <div class="auth-card-title"><h2>${confirming?'Doğrulama bekleniyor':up?'Hesabını oluştur':'Giriş yap'}</h2><span>${confirming?'Güvenli kayıt':up?'1 dakikadan kısa sürer':'Tekrar hoş geldin'}</span></div>
+      ${confirming?`<div class="auth-confirm"><p>Bağlantı <strong>${esc(S.confirmationEmail)}</strong> adresine gönderildi.</p><ul><li>Gelen kutusu ile spam/junk klasörünü kontrol et.</li><li>Bağlantıya tıkladıktan sonra Tamİşim’e dönüp giriş yap.</li></ul>${S.authErr?`<div class="err" role="alert">${esc(S.authErr)}</div>`:''}${S.authInfo?`<div class="info">${esc(S.authInfo)}</div>`:''}<button class="auth-primary" data-a="resendConfirmation" ${S.resendBusy?'disabled':''}><b>${S.resendBusy?'Gönderiliyor…':'Doğrulama e-postasını tekrar gönder'}</b><span>↻</span></button><button class="auth-forgot" data-a="confirmationToLogin">Giriş ekranına dön</button></div>`:`
       <div class="auth-fields">
         ${up?`<label><span>Adın</span><input class="in" id="au-name" autocomplete="name" placeholder="Adın veya işletme adın" value="${esc(S.auth.name)}"></label>`:''}
         <label><span>E-posta</span><input class="in" id="au-email" type="email" inputmode="email" autocapitalize="off" autocomplete="email" placeholder="ornek@email.com" value="${esc(S.auth.email)}"></label>
@@ -1454,11 +1460,12 @@ function vAuth(){
       ${up?'<label class="terms-check"><input id="au-terms" type="checkbox" '+(S.auth.terms?'checked':'')+'> <span><button type="button" class="inline-link" data-a="legal">Kullanım Koşulları</button> ve <button type="button" class="inline-link" data-a="legal">Gizlilik/KVKK bilgilendirmesini</button> okudum ve kabul ediyorum.</span></label>':''}
       <button class="auth-primary" data-a="authGo"><b>${up?'Ücretsiz kayıt ol':'Giriş yap'}</b><span>→</span></button>
       ${!up?'<button class="auth-forgot" data-a="forgotPass">Şifremi unuttum</button>':''}
+      `}
     </section>
-    <section class="auth-switch">
+    ${confirming?'':`<section class="auth-switch">
       <div><b>${up?'Zaten hesabın var mı?':'Tamİşim’de yeni misin?'}</b><small>${up?'Hesabına güvenli şekilde giriş yap.':'Ücretsiz hesap aç ve ilan vermeye başla.'}</small></div>
       <button data-a="authMode">${up?'Giriş yap':'Ücretsiz kayıt ol'} <span>→</span></button>
-    </section>
+    </section>`}
     ${up?'<p class="auth-beta-note">Beta döneminde gerçek kart tahsilatı aktif değildir.</p>':''}
   </div>`;
 }
@@ -1905,7 +1912,7 @@ const A={
   async expertCategory(v){S.menuOpen=false;S.expertsLoaded=false;await loadExpertDirectory();S.page='experts';S.expertFilter=KAT[v]?v:'hepsi'},
   closeExperts(){S.page='main';S.menuOpen=false},
   expertFilter(v){S.expertFilter=KAT[v]?v:'hepsi'},
-  showAuth(){S.guestAuth=true;S.pendingAction=null;S.authErr='';S.authInfo=''},
+  showAuth(){S.guestAuth=true;S.pendingAction=null;S.authErr='';S.authInfo='';S.confirmationEmail=''},
   async support(){S.menuOpen=false;await A.supportRefresh();S.page='support'},
   closeSupport(){S.page='account'},
   async supportRefresh(){
@@ -1934,7 +1941,7 @@ const A={
     }
     toast('Hesap silme talebin alındı.');
   },
-  backGuest(){S.guestAuth=false;S.pendingAction=null;S.authErr='';S.authInfo='';S.auth.pass=''},
+  backGuest(){S.guestAuth=false;S.pendingAction=null;S.authErr='';S.authInfo='';S.confirmationEmail='';S.auth.pass=''},
   guestCat(v){if(KAT[v])S.guestCat=v},
   guestBack(){S.guestCat=null},
   guestService(v){if(S.guestCat&&KAT[S.guestCat]&&KAT[S.guestCat].sorunlar.includes(v))startDraft(S.guestCat,v)},
@@ -2061,18 +2068,30 @@ const A={
     if(r.error)throw r.error;
     await refresh();S.page='main';toast('Profilin kaydedildi.');
   },
-  async logout(){clearGuestDraft();S.draft=null;S.createStep=1;S.guestAuth=false;S.pendingAction=null;await sb.auth.signOut()},
+  async logout(){clearGuestDraft();S.draft=null;S.createStep=1;S.guestAuth=false;S.pendingAction=null;S.confirmationEmail='';await sb.auth.signOut()},
   saveCfg(){
     const url=S.cfgDraft.url.trim().replace(/\/+$/,''),key=S.cfgDraft.key.trim();
     if(!/^https:\/\/.+/.test(url)||key.length<20){toast('Adres ve anahtarı kontrol et.');return}
     try{localStorage.setItem('ut_cfg',JSON.stringify({url,key}))}catch(e){}
     location.reload();
   },
-  authMode(){S.authMode=S.authMode==='in'?'up':'in';S.authErr='';S.authInfo=''},
+  authMode(){S.authMode=S.authMode==='in'?'up':'in';S.authErr='';S.authInfo='';S.confirmationEmail=''},
+  confirmationToLogin(){S.confirmationEmail='';S.authMode='in';S.authErr='';S.authInfo='';S.auth.pass=''},
+  async resendConfirmation(){
+    const email=String(S.confirmationEmail||'').trim();
+    if(S.resendBusy)return;
+    if(!/^\S+@\S+\.\S+$/.test(email)){S.authErr='Geçerli bir e-posta adresi gerekli.';return}
+    S.resendBusy=true;S.authErr='';S.authInfo='';render();
+    try{
+      const r=await sb.auth.resend({type:'signup',email,options:{emailRedirectTo:authRedirectUrl()}});
+      if(r.error){S.authErr=authMsg(r.error);return}
+      S.authInfo='Doğrulama e-postası tekrar gönderildi. Gelen kutusu ve spam klasörünü kontrol et.';
+    }finally{S.resendBusy=false}
+  },
   async forgotPass(){
     const email=S.auth.email.trim();S.authErr='';S.authInfo='';
     if(!/^\S+@\S+\.\S+$/.test(email)){S.authErr='Önce e-posta adresini yaz.';return}
-    const redirectTo=location.origin+location.pathname;
+    const redirectTo=authRedirectUrl();
     const r=await sb.auth.resetPasswordForEmail(email,{redirectTo});
     if(r.error){S.authErr=authMsg(r.error);return}
     S.authInfo='Şifre yenileme bağlantısı gönderildi. E-postandaki bağlantıyı aç.';
@@ -2091,9 +2110,9 @@ const A={
     if(S.authMode==='up'){
       if(name.trim().length<2){S.authErr='Adını yaz.';return}
       if(!S.auth.terms){S.authErr='Devam etmek için kullanım koşulları ve gizlilik bilgilendirmesini kabul et.';return}
-      const r=await sb.auth.signUp({email:email.trim(),password:pass,options:{data:{name:name.trim()}}});
+      const r=await sb.auth.signUp({email:email.trim(),password:pass,options:{data:{name:name.trim()},emailRedirectTo:authRedirectUrl()}});
       if(r.error){S.authErr=authMsg(r.error);return}
-      if(!r.data.session){S.authInfo='Kayıt oluşturuldu. E-postana gelen doğrulama bağlantısına tıkla, sonra giriş yap.';S.authMode='in';S.auth.pass=''}
+      if(!r.data.session){S.confirmationEmail=email.trim();S.authInfo='';S.authMode='in';S.auth.pass=''}
       return !!r.data.session;
     }else{
       const r=await sb.auth.signInWithPassword({email:email.trim(),password:pass});
@@ -2385,12 +2404,12 @@ if(sb){
         const pending=S.pendingAction,continued=pending==='newIlan'?(safeDraft(S.draft)||loadGuestDraft()):null,continuedStep=S.createStep;
         const authState=history.state,authDepth=Math.max(0,Number(authState&&authState.depth)||0);
         const authHistorySteps=continued&&authState&&authState.app===NAV_STATE_KEY&&authState.guestAuth?(authDepth>1?2:authDepth):0;
-        S.user=u;S.page='main';S.view='list';S.role='musteri';S.auth.pass='';S.authErr='';S.authInfo='';S.guestAuth=false;
+        S.user=u;S.page='main';S.view='list';S.role='musteri';S.auth.pass='';S.authErr='';S.authInfo='';S.confirmationEmail='';S.guestAuth=false;
         S.pendingAction=null;
         setTimeout(async()=>{await boot();if(continued)resumeListingDraftAfterAuth(continued,continuedStep,authHistorySteps)},0);
       }
     }else{
-      if(S.user){S.user=null;S.profile=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:'',terms:false};S.authErr='';S.authInfo=''}
+      if(S.user){S.user=null;S.profile=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:'',terms:false};S.authErr='';S.authInfo='';S.confirmationEmail=''}
       if(!S.draft){const saved=loadGuestDraft();if(saved){S.draft=saved;S.view='new'}}
       S.loading=false;
       setTimeout(render,0);
