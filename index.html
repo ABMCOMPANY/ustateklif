@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
 <meta name="color-scheme" content="light">
-<meta name="tamisim-build" content="v72-mobile-appointment-picker">
+<meta name="tamisim-build" content="v73-preselection-messaging">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -178,6 +178,7 @@ textarea.in{min-height:92px;resize:vertical}
 .rate{margin:16px 0;text-align:center}
 .rate p{margin:0 0 4px;color:var(--muted)}
 .star{font-size:34px;background:none;border:0;color:var(--amber);cursor:pointer;padding:2px 4px;line-height:1}
+.prechat{margin:12px 0;padding:13px;border:1px solid var(--brand-line);border-radius:15px;background:var(--brand-soft)}.prechat-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.prechat-head h4{margin:0;color:var(--brand-ink);font-size:15px}.prechat-head p{margin:2px 0 0;color:var(--brand-muted);font-size:11px}.prechat-close{border:0;background:transparent;color:var(--brand-primary);font-weight:800;min-height:36px}.prechat-msgs{display:grid;gap:7px;max-height:240px;overflow:auto;margin:11px 0}.prechat-msg{max-width:86%;padding:8px 10px;border-radius:12px;background:#fff;border:1px solid var(--brand-line);font-size:13px;line-height:1.4}.prechat-msg.mine{justify-self:end;background:var(--brand-primary);border-color:var(--brand-primary);color:#fff}.prechat-msg small{display:block;margin-top:3px;opacity:.7;font-size:9px}.prechat-compose{display:grid;grid-template-columns:1fr auto;gap:7px}.prechat-compose .in{min-width:0}.prechat-warning{margin:7px 0 0;color:var(--brand-muted);font-size:10px;line-height:1.4}.prechat-remaining{display:block;margin:5px 0;color:var(--brand-muted);font-size:10px}
 
 .tabs{display:flex;gap:6px;margin:18px 0 8px}
 .tabs .chip{min-height:40px}
@@ -906,7 +907,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,navSection:'home',palette:savedPalette,
-  draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},appointmentDrafts:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'uygun',busy:false,
+  draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},appointmentDrafts:{},preThread:null,preDrafts:{},preRequestIds:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'uygun',busy:false,
   authMode:'in',authErr:'',authInfo:'',confirmationEmail:'',resendBusy:false,recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,createStep:1,expertPreview:{key:'',loading:false,rows:[],total:0,nearby:0},auth:{name:'',email:'',pass:'',terms:false},acct:null,expertDraft:null,expertEditing:false,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[],supportRequests:[],supportDraft:{category:'general',subject:'',message:''},bootError:'',menuOpen:false,expertFilter:'hepsi',expertsLoaded:false};
 
 /* ---------- uygulama geçmişi ---------- */
@@ -918,7 +919,7 @@ function navSnapshot(){
   if(!signed){
     return {app:NAV_STATE_KEY,signed:false,page:S.page==='legal'?'legal':'main',view:S.view==='new'&&S.draft?'new':'list',createStep:S.view==='new'?Math.min(6,Math.max(1,Number(S.createStep)||1)):1,guestAuth:!!S.guestAuth,guestCat:KAT[S.guestCat]?S.guestCat:null,recovery:!!S.recovery,menuOpen:false};
   }
-  return {app:NAV_STATE_KEY,signed:true,page:String(S.page||'main'),role:S.role==='usta'?'usta':'musteri',view:String(S.view||'list'),createStep:S.view==='new'?Math.min(6,Math.max(1,Number(S.createStep)||1)):1,sel:safeId(S.sel),quoteFor:safeId(S.quoteFor),navSection:S.navSection==='jobs'?'jobs':'home',expertEditing:!!S.expertEditing,expertFilter:KAT[S.expertFilter]?S.expertFilter:'hepsi',menuOpen:!!S.menuOpen};
+  return {app:NAV_STATE_KEY,signed:true,page:String(S.page||'main'),role:S.role==='usta'?'usta':'musteri',view:String(S.view||'list'),createStep:S.view==='new'?Math.min(6,Math.max(1,Number(S.createStep)||1)):1,sel:safeId(S.sel),quoteFor:safeId(S.quoteFor),preThread:safeId(S.preThread),navSection:S.navSection==='jobs'?'jobs':'home',expertEditing:!!S.expertEditing,expertFilter:KAT[S.expertFilter]?S.expertFilter:'hepsi',menuOpen:!!S.menuOpen};
 }
 function navComparable(x){
   if(!x)return '';
@@ -979,10 +980,11 @@ function restoreNavigation(raw){
       S.view=['list','detail','prodetail','new'].includes(raw.view)?raw.view:'list';
       S.createStep=Math.min(6,Math.max(1,Number(raw.createStep)||1));
       S.navSection=raw.navSection==='jobs'?'jobs':'home';
-      S.sel=safeId(raw.sel);S.quoteFor=safeId(raw.quoteFor);
+      S.sel=safeId(raw.sel);S.quoteFor=safeId(raw.quoteFor);S.preThread=safeId(raw.preThread);
       if(S.view==='new'&&!S.draft)S.view='list';
       if((S.view==='detail'||S.view==='prodetail')&&!D.listings[S.sel]){S.view='list';S.sel=null}
       if(S.quoteFor&&(!S.q||!D.listings[S.quoteFor]))S.quoteFor=null;
+      if(S.preThread&&!D.quotes[S.preThread])S.preThread=null;
       S.expertEditing=!!raw.expertEditing&&S.role==='usta'&&expertReady(S.profile||{});
       S.expertFilter=KAT[raw.expertFilter]?raw.expertFilter:'hepsi';
       S.menuOpen=!!raw.menuOpen;
@@ -995,7 +997,7 @@ function restoreNavigation(raw){
     });
   }finally{navRestoring=false}
 }
-const NAV_BACK_ACTIONS=new Set(['back','backGuest','guestBack','createPrev','cancelDraft','closeExperts','closeSupport','closeLegal','closeNotifications','closeAcct','closePartnerPanel','closeAdmin','cancelQuote','cancelExpertEdit']);
+const NAV_BACK_ACTIONS=new Set(['back','backGuest','guestBack','createPrev','cancelDraft','closeExperts','closeSupport','closeLegal','closeNotifications','closeAcct','closePartnerPanel','closeAdmin','cancelQuote','cancelExpertEdit','closePreThread']);
 const NAV_REPLACE_ACTIONS=new Set(['logout','setNewPass']);
 function commitNavigation(before,action){
   if(navRestoring||!navHistoryReady)return;
@@ -1014,7 +1016,7 @@ function commitNavigation(before,action){
 }
 if('scrollRestoration' in history)history.scrollRestoration='manual';
 window.addEventListener('popstate',e=>{if(e.state&&e.state.app===NAV_STATE_KEY)restoreNavigation(e.state)});
-const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},expertAuth:{},stats:{},msgs:{},photos:{},paymentChoices:{},paymentRecords:{},appointments:{},verifications:[],partners:{},notifications:[],blocks:[],sig:'',qMine:undefined});
+const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},expertAuth:{},stats:{},msgs:{},preMsgs:{},photos:{},paymentChoices:{},paymentRecords:{},appointments:{},verifications:[],partners:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
 const uid=()=>S.user&&S.user.id;
@@ -1311,6 +1313,7 @@ async function refresh(){
   ]);
   const listings={};[...mine,...open,...extra].forEach(l=>{listings[l.id]=l});
   const quotes={};[...qMine,...myq].forEach(q=>{quotes[q.id]=q});
+  const quoteIds=Object.keys(quotes).map(Number);
   const counts={};cnt.forEach(c=>{counts[c.listing_id]=c.n});
   const pids=new Set([me]);
   Object.values(quotes).forEach(q=>pids.add(q.pro));
@@ -1318,10 +1321,11 @@ async function refresh(){
   const ids=[...pids];
   const partyIds=Object.values(listings).filter(l=>l.status!=='open'&&(l.owner===me||(quotes[l.chosen_quote]&&quotes[l.chosen_quote].pro===me))).map(l=>l.id);
   const listingIds=Object.keys(listings).map(Number);
-  const [pr,st,ms,ph,pc,pt,ap,vr,pa]=await Promise.all([
+  const [pr,st,ms,pm,ph,pc,pt,ap,vr,pa]=await Promise.all([
     sb.from('profiles').select('id,name,title,bio,services,service_categories,expert_status,service_areas,service_city,service_districts,phone_verified,identity_verified,vocational_verified,business_verified,account_status,created_at').in('id',ids).then(chk),
     sb.from('pro_stats').select('*').in('pro_id',ids).then(chk),
     partyIds.length?sb.from('messages').select('*').in('listing_id',partyIds).order('created_at').then(chk):[],
+    quoteIds.length?sb.from('preselection_messages').select('id,listing_id,quote_id,customer_id,professional_id,sender_id,body,created_at').in('quote_id',quoteIds).order('created_at').then(chk):[],
     listingIds.length?sb.from('listing_photos').select('id,listing_id,path,sort_order').in('listing_id',listingIds).order('sort_order').then(chk):[],
     listingIds.length?sb.from('listing_payment_choices').select('listing_id,quote_id,method,deposit_percent,promotion_id,discount_amount,customer_cash_confirmed_at,pro_cash_confirmed_at,cash_confirmed_at,created_at').in('listing_id',listingIds).then(chk):[],
     listingIds.length?sb.from('payment_transactions').select('id,listing_id,method,currency,gross_amount,discount_amount,payable_amount,deposit_percent,provider_amount,cash_amount,commission_percent,platform_commission_amount,partner_promo_contribution,provider,provider_status,status,paid_at,refunded_at,updated_at').in('listing_id',listingIds).then(chk):[],
@@ -1337,16 +1341,17 @@ async function refresh(){
   const profiles={};pr.forEach(p=>{profiles[p.id]=p});
   const stats={};st.forEach(s=>{stats[s.pro_id]=s});
   const msgs={};ms.forEach(m=>{(msgs[m.listing_id]=msgs[m.listing_id]||[]).push(m)});
+  const preMsgs={};pm.forEach(m=>{(preMsgs[m.quote_id]=preMsgs[m.quote_id]||[]).push(m)});
   const paymentChoices={};pc.forEach(x=>{paymentChoices[x.listing_id]=x});
   const paymentRecords={};pt.forEach(x=>{paymentRecords[x.listing_id]=x});
   const appointments={};ap.forEach(x=>{appointments[x.listing_id]=x});
   const partners={};pa.forEach(x=>{partners[x.id]=x});
-  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,paymentChoices,paymentRecords,appointments,verifications:vr,partners,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
+  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,preMsgs,paymentChoices,paymentRecords,appointments,verifications:vr,partners,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
   const changed=sig!==D.sig;
   if(D.qMine!==undefined&&qMine.length>D.qMine)toast('Yeni teklif geldi');
   const mergedProfiles=S.expertsLoaded?{...(D.profiles||{}),...profiles}:profiles;
   const mergedStats=S.expertsLoaded?{...(D.stats||{}),...stats}:stats;
-  D={listings,mine,open,quotes,counts,profiles:mergedProfiles,expertAuth:D.expertAuth||{},stats:mergedStats,msgs,photos,paymentChoices,paymentRecords,appointments,verifications:vr,partners,notifications,blocks,sig,qMine:qMine.length};
+  D={listings,mine,open,quotes,counts,profiles:mergedProfiles,expertAuth:D.expertAuth||{},stats:mergedStats,msgs,preMsgs,photos,paymentChoices,paymentRecords,appointments,verifications:vr,partners,notifications,blocks,sig,qMine:qMine.length};
   if(mergedProfiles[me])S.profile=mergedProfiles[me];
   return changed;
 }
@@ -1408,6 +1413,32 @@ function chatBox(l,partner,canSend){
   return `<section class="chat modern-chat"><div class="chathead"><div class="chatperson"><div class="chatavatar">${esc(initials(partner))}</div><div><h2>${esc(partner)}</h2><p>${pp.identity_verified?'✓ Kimliği doğrulanmış uzman':'Tamİşim mesajlaşması'}</p></div></div><span class="chatsecure">🔒 Güvenli</span></div>
     <div class="msgs" id="msgs">${ms.length?ms.map(m=>`<div class="msgrow ${m.sender===uid()?'mine':'theirs'}"><div class="m ${m.sender===uid()?'ben':'usta'}">${esc(m.body)}</div></div>`).join(''):'<div class="chatempty"><span>💬</span><b>Mesajlaşmaya başla</b><small>İşin ayrıntılarını burada güvenle konuşabilirsin.</small></div>'}</div>`+
     (canSend?`<div class="send modern-send"><input class="in" id="chat-input" placeholder="Mesajını yaz..." autocomplete="off" maxlength="1000"><button class="btn sm" data-a="send" aria-label="Mesaj gönder">➤</button></div>`:'<div class="chatclosed">Bu iş tamamlandığı için mesaj gönderme kapalı.</div>')+`</section>`;
+}
+
+function preselectionError(e){
+  const m=String(e&&e.message||'').toLowerCase();
+  if(m.includes('contact_forbidden'))return 'Uzman seçilmeden önce telefon, e-posta veya harici bağlantı paylaşamazsın.';
+  if(m.includes('message_limit'))return 'Bu konuşmadaki 10 mesaj hakkını kullandın.';
+  if(m.includes('message_length'))return 'Mesaj 1–500 karakter arasında olmalı.';
+  if(m.includes('customer_must_start'))return 'Bu konuşmayı önce müşterinin başlatması gerekiyor.';
+  if(m.includes('thread_closed'))return 'Uzman seçildiği için bu seçim öncesi konuşma kapandı.';
+  if(m.includes('blocked'))return 'Bu kullanıcıyla mesajlaşamazsın.';
+  if(m.includes('inactive'))return 'Hesap şu anda mesajlaşmaya uygun değil.';
+  if(m.includes('forbidden')||m.includes('permission'))return 'Bu konuşmaya mesaj gönderme yetkin yok.';
+  return 'Mesaj gönderilemedi. Tekrar dene.';
+}
+function preselectionThread(q,l){
+  const ms=D.preMsgs[q.id]||[],isCustomer=l.owner===uid(),isPro=q.pro===uid(),active=l.status==='open'&&!l.chosen_quote,opened=S.preThread===q.id;
+  if(!opened){
+    if(!ms.length&&!(isCustomer&&active))return '';
+    const label=ms.length?(active?'Konuşmayı aç':'Seçim öncesi konuşma'):'Soru sor';
+    return `<button class="btn ghost block" data-a="openPreThread" data-v="${q.id}">${label}${ms.length?` · ${ms.length}`:''}</button>`;
+  }
+  const started=ms.some(m=>m.sender_id===l.owner),canSend=active&&(isCustomer||(isPro&&started)),ownCount=ms.filter(m=>m.sender_id===uid()).length,remaining=Math.max(0,10-ownCount);
+  const rows=ms.length?ms.map(m=>`<div class="prechat-msg ${m.sender_id===uid()?'mine':''}">${esc(m.body)}<small>${m.sender_id===l.owner?'Müşteri':'Uzman'} · ${ago(m.created_at)}</small></div>`).join(''):'<div class="muted small">Teklif hakkında kısa bir soru sorabilirsin.</div>';
+  const closedReason=!active?'Uzman seçildiği için yeni mesaj gönderilemez.':!remaining?'Bu konuşmadaki 10 mesaj hakkını kullandın.':'Müşterinin konuşmayı başlatması bekleniyor.';
+  const compose=canSend&&remaining?`<div class="prechat-compose"><input class="in" id="pre-message-${q.id}" maxlength="500" autocomplete="off" placeholder="Kısa mesajını yaz..." value="${esc(S.preDrafts[q.id]||'')}"><button class="btn sm" data-a="sendPreMessage" data-v="${q.id}">Gönder</button></div><small class="prechat-remaining">Senin kalan mesaj hakkın: ${remaining}</small>`:`<div class="chatclosed">${closedReason}</div>`;
+  return `<section class="prechat"><div class="prechat-head"><div><h4>${active?'Teklif hakkında soru-cevap':'Seçim öncesi konuşma'}</h4><p>${esc(prof(q.pro).name)} · ${tl(q.price)}</p></div><button class="prechat-close" data-a="closePreThread">Kapat</button></div><div class="prechat-msgs">${rows}</div>${compose}<p class="prechat-warning">Telefon, e-posta, sosyal medya hesabı veya harici bağlantı paylaşma.</p></section>`;
 }
 
 const appointmentParts=d=>Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Istanbul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(d).filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
@@ -1723,6 +1754,7 @@ function vDetail(){
       ${cleanQuoteNote(q)?`<p class="qnote">${esc(cleanQuoteNote(q))}</p>`:''}
       ${paymentBadges(q)}
       ${proCard(q.pro)}
+      ${preselectionThread(q,l)}
       ${chosen?'<span class="pill good">Seçildi</span>':(l.status==='open'?`<button class="btn block" id="pick-quote-${q.id}" data-a="pick" data-v="${q.id}">Bu uzmanı seç</button>`:'')}
     </article>`;
   }).join('');
@@ -1773,7 +1805,7 @@ function vUsta(){
     const mine=Object.values(D.quotes).filter(q=>q.pro===uid()).sort((x,y)=>new Date(y.created_at)-new Date(x.created_at));
     const items=mine.map(q=>({q,l:D.listings[q.listing_id]})).filter(x=>x.l);
     h+=`<div class="pro-section-title"><div><h2>Tekliflerin</h2><p>Gönderdiğin tekliflerin durumunu buradan takip et.</p></div></div>`;
-    h+=items.length?items.map(({q,l})=>{let status='<span class="pill amber">Karar bekliyor</span>',act=null;if(l.chosen_quote===q.id){status=l.status==='done'?'<span class="pill">Tamamlandı</span>':'<span class="pill good">✓ Seni seçti</span>';act='openPro'}else if(l.status!=='open')status='<span class="pill">Başka uzman seçildi</span>';return ticket(l,{act,extra:`<div class="pro-job-foot"><div><strong>${tl(q.price)}</strong><small> · ${esc(q.eta)}</small></div>${status}</div>`});}).join(''):'<div class="empty pro-empty"><span>📨</span><h3>Henüz teklifin yok</h3><p>Yeni işler bölümünden sana uygun bir işe teklif verebilirsin.</p></div>';
+    h+=items.length?items.map(({q,l})=>{let status='<span class="pill amber">Karar bekliyor</span>',act=null;if(l.chosen_quote===q.id){status=l.status==='done'?'<span class="pill">Tamamlandı</span>':'<span class="pill good">✓ Seni seçti</span>';act='openPro'}else if(l.status!=='open')status='<span class="pill">Başka uzman seçildi</span>';return ticket(l,{act,extra:`<div class="pro-job-foot"><div><strong>${tl(q.price)}</strong><small> · ${esc(q.eta)}</small></div>${status}</div>`})+preselectionThread(q,l);}).join(''):'<div class="empty pro-empty"><span>📨</span><h3>Henüz teklifin yok</h3><p>Yeni işler bölümünden sana uygun bir işe teklif verebilirsin.</p></div>';
   }
   return h;
 }
@@ -1785,6 +1817,7 @@ function vProDetail(){
   if(q)h+=`<p class="lede">Teklifin: <strong>${tl(q.price)}</strong>, ${esc(q.eta)}</p>`;
   if(q&&D.paymentChoices[l.id])h+=paymentPlan(l,q,D.paymentChoices[l.id],'pro');
   if(q)h+=appointmentCard(l);
+  if(q)h+=preselectionThread(q,l);
   h+=chatBox(l,prof(l.owner).name,l.status==='chosen');
   if(l.status==='done')h+=`<p class="rate"><span class="pill good">Müşteri puanı: ${'★'.repeat(l.rating||0)}${'☆'.repeat(5-(l.rating||0))}</span></p>`;
   return h;
@@ -1950,8 +1983,8 @@ function render(){
 }
 
 /* ---------- eylemler ---------- */
-const NET=new Set(['experts','expertCategory','saveExpertProfile','sendSupport','supportRefresh','savePartnerCategories','adminSupport','adminDeletion','requestDeletion','startCardPayment','applySelectedPromo','savePayment','proposeAppointment','acceptAppointment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','createNext','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
-const KEEP=new Set(['menuToggle','menuClose','expertFilter','toggleExpertCategory','pickKat','toggleSorun','choosePay','togglePayment','zaman','sort','filter','pick','send','rate','tab','setPalette']);
+const NET=new Set(['experts','expertCategory','saveExpertProfile','sendSupport','supportRefresh','savePartnerCategories','adminSupport','adminDeletion','requestDeletion','startCardPayment','applySelectedPromo','savePayment','proposeAppointment','acceptAppointment','sendPreMessage','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','createNext','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
+const KEEP=new Set(['menuToggle','menuClose','expertFilter','toggleExpertCategory','pickKat','toggleSorun','choosePay','togglePayment','zaman','sort','filter','pick','send','sendPreMessage','openPreThread','rate','tab','setPalette']);
 const A={
   menuToggle(){S.menuOpen=!S.menuOpen},
   menuClose(){S.menuOpen=false},
@@ -2020,7 +2053,7 @@ const A={
   notifications(){S.menuOpen=false;S.page='notifications';},
   closeNotifications(){S.page='main';},
   async readAll(){const r=await sb.from('notifications').update({read_at:new Date().toISOString()}).eq('user_id',uid()).is('read_at',null);if(r.error)throw r.error;await refresh();},
-  async openNotification(v){const n=(D.notifications||[]).find(x=>String(x.id)===String(v));if(!n)return;if(!n.read_at)await sb.from('notifications').update({read_at:new Date().toISOString()}).eq('id',n.id).eq('user_id',uid());S.page='main';if(n.listing_id){const l=D.listings[n.listing_id];if(l){S.role=l.owner===uid()?'musteri':'usta';S.sel=n.listing_id;S.view=l.owner===uid()?'detail':'prodetail';}}await refresh();},
+  async openNotification(v){const n=(D.notifications||[]).find(x=>String(x.id)===String(v));if(!n)return;if(!n.read_at)await sb.from('notifications').update({read_at:new Date().toISOString()}).eq('id',n.id).eq('user_id',uid());S.page='main';S.preThread=null;if(n.listing_id){const l=D.listings[n.listing_id];if(l){S.role=l.owner===uid()?'musteri':'usta';S.sel=n.listing_id;S.view=l.owner===uid()?'detail':'prodetail';}}await refresh();if(n.type==='preselection_message'&&n.listing_id){const l=D.listings[n.listing_id];if(l&&l.owner===uid()){S.role='musteri';S.view='detail';const q=Object.values(D.quotes).find(x=>x.listing_id===l.id&&x.pro===n.actor_id);if(q)S.preThread=q.id}else{S.role='usta';S.view='list';S.tab='teklifler';const q=myQuote(n.listing_id);if(q)S.preThread=q.id}}},
   account(){S.menuOpen=false;const p=S.profile||{};S.page='account';S.acct={name:p.name||'',title:p.title||'',bio:p.bio||'',services:(p.services||[]).join(', '),areas:(p.service_areas||[]).join(', '),city:p.service_city||'',districts:(p.service_districts||[]).join(', ')}},
   closeAcct(){S.page='main'},
   async admin(){S.menuOpen=false;if(!S.isAdmin)return;await loadAdmin();S.page='admin'},
@@ -2220,9 +2253,9 @@ const A={
     clearGuestDraft();S.createStep=1;S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};
     toast(photoFailed?'İlan yayınlandı; bazı fotoğraflar yüklenemedi.':'İlanın yayında. Uzmanlar teklif verdikçe burada görünecek.');
   },
-  open(v){S.sel=+v;S.view='detail'},
-  openPro(v){S.sel=+v;S.view='prodetail'},
-  back(){S.view='list';S.draft=null;S.sel=null},
+  open(v){S.sel=+v;S.view='detail';S.preThread=null},
+  openPro(v){S.sel=+v;S.view='prodetail';S.preThread=null},
+  back(){S.view='list';S.draft=null;S.sel=null;S.preThread=null},
   sort(v){if(['uygun','fiyat','puan'].includes(v))S.sort=v},
   choosePay(v){
     const [qid,m]=String(v||'').split('|');
@@ -2306,6 +2339,18 @@ const A={
     if(r.error){toast(r.error.message||'Nakit ödeme onaylanamadı.');return}
     await refresh();toast('Nakit ödeme onayın kaydedildi.');
   },
+  openPreThread(v){const id=+v;if(D.quotes[id])S.preThread=id},
+  closePreThread(){S.preThread=null},
+  async sendPreMessage(v){
+    const id=+v,q=D.quotes[id],text=String(S.preDrafts[id]||'').trim();
+    if(!q||!text){toast('Mesajını yazmalısın.');return}
+    if(text.length>500){toast('Mesaj en fazla 500 karakter olabilir.');return}
+    const requestId=S.preRequestIds[id]||(S.preRequestIds[id]=crypto.randomUUID());
+    const r=await sb.rpc('send_preselection_message',{p_quote_id:id,p_body:text,p_client_request_id:requestId});
+    if(r.error){toast(preselectionError(r.error));return}
+    delete S.preDrafts[id];delete S.preRequestIds[id];S.preThread=id;
+    await refresh();toast('Mesaj gönderildi.');
+  },
   async send(){
     const inp=$('#chat-input'),t=inp&&inp.value.trim();if(!t)return;
     inp.value='';
@@ -2372,6 +2417,7 @@ document.addEventListener('keydown',e=>{
   if(e.key!=='Enter'||e.target.tagName==='TEXTAREA')return;
   const id=e.target.id;
   if(id==='chat-input'){e.preventDefault();run('send')}
+  else if(id&&id.startsWith('pre-message-')){e.preventDefault();run('sendPreMessage',id.slice('pre-message-'.length))}
   else if(id==='au-name'||id==='au-email'||id==='au-pass'){e.preventDefault();run('authGo')}
 });
 const F={
@@ -2398,6 +2444,11 @@ function updateAppointmentDraft(el){
 }
 document.addEventListener('input',e=>{
   if(updateAppointmentDraft(e.target))return;
+  if(e.target.id&&e.target.id.startsWith('pre-message-')){
+    const id=Number(e.target.id.slice('pre-message-'.length));
+    if(Number.isSafeInteger(id)&&id>0)S.preDrafts[id]=e.target.value.slice(0,500);
+    return;
+  }
   if(e.target.id==='cat-search'){
     S.catSearch=e.target.value;
     const q=S.catSearch.trim().toLocaleLowerCase('tr-TR');
