@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
 <meta name="color-scheme" content="light">
-<meta name="tamisim-build" content="v71-listing-appointments">
+<meta name="tamisim-build" content="v72-mobile-appointment-picker">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -431,7 +431,7 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* customer-payment-choice-v31 */
 .customer-pay{margin:12px 0;padding:12px;border:1px solid var(--brand-line);border-radius:15px;background:#FBFCFE}.customer-pay>b{display:block;color:var(--brand-ink);font-size:13px;margin-bottom:8px}.customer-pay-options{display:flex;flex-wrap:wrap;gap:7px}.pay-choice{border:1px solid #D9E2EE;background:#fff;color:var(--brand-ink);border-radius:999px;padding:8px 10px;font:700 11px/1.2 Figtree,system-ui}.pay-choice[aria-pressed="true"]{background:var(--brand-primary);border-color:var(--brand-primary);color:#fff;box-shadow:0 5px 14px rgba(var(--brand-primary-rgb),.18)}
-.appointment-card{margin:16px 0;padding:16px;border:1px solid var(--brand-line);border-radius:20px;background:var(--surface);box-shadow:0 8px 26px rgba(var(--brand-ink-rgb),.07)}.appointment-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.appointment-head h2{margin:2px 0 4px;font-size:19px;color:var(--ink)}.appointment-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}.appointment-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--brand-tint);color:var(--brand-primary);font-size:20px}.appointment-time{margin:14px 0;padding:13px;border-radius:15px;background:var(--brand-bg);border:1px solid var(--brand-line)}.appointment-time b{display:block;color:var(--ink);font-size:16px}.appointment-time small{display:block;margin-top:4px;color:var(--muted)}.appointment-actions{display:grid;gap:10px;margin-top:12px}.appointment-actions .in{min-height:48px}.appointment-actions .two-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.appointment-confirmed{color:#147A50;font-weight:800}.appointment-wait{color:#9A6812;font-weight:750}
+.appointment-card{margin:16px 0;padding:16px;border:1px solid var(--brand-line);border-radius:20px;background:var(--surface);box-shadow:0 8px 26px rgba(var(--brand-ink-rgb),.07)}.appointment-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.appointment-head h2{margin:2px 0 4px;font-size:19px;color:var(--ink)}.appointment-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}.appointment-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--brand-tint);color:var(--brand-primary);font-size:20px}.appointment-time{margin:14px 0;padding:13px;border-radius:15px;background:var(--brand-bg);border:1px solid var(--brand-line)}.appointment-time b{display:block;color:var(--ink);font-size:16px}.appointment-time small{display:block;margin-top:4px;color:var(--muted)}.appointment-actions{display:grid;gap:10px;margin-top:12px}.appointment-actions .in{min-height:48px;min-width:0}.appointment-picker-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:10px}.appointment-choice{margin:0;padding:11px 13px;border-radius:14px;background:var(--brand-bg);border:1px solid var(--brand-line);color:var(--muted);font-size:13px;line-height:1.45}.appointment-choice.has-value{color:var(--ink);font-weight:750}.appointment-actions .two-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.appointment-confirmed{color:#147A50;font-weight:800}.appointment-wait{color:#9A6812;font-weight:750}
 
 /* promotions-v32 */
 .promo-box{margin-top:14px;padding-top:13px;border-top:1px solid var(--brand-line)}.promo-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.promo-row .in{min-width:0;text-transform:uppercase}.promo-success{margin-top:9px;padding:10px 11px;border-radius:12px;background:#EAF8F0;color:#17603D;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}.promo-success b,.promo-success span{font-size:13px}.promo-success small{grid-column:1/-1;color:#47705C;font-size:11px}
@@ -1364,7 +1364,7 @@ let kickT;
 function kick(){
   clearTimeout(kickT);
   kickT=setTimeout(async()=>{
-    if(!S.user||S.busy)return;
+    if(!S.user||S.busy||document.activeElement?.matches('[id^="appointment-date-"],[id^="appointment-time-"]'))return;
     try{if(await refresh())render()}catch(e){console.error(e)}
   },400);
 }
@@ -1412,6 +1412,13 @@ function chatBox(l,partner,canSend){
 
 const appointmentParts=d=>Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Istanbul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(d).filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
 function appointmentInputValue(d){const p=appointmentParts(d);return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`}
+function appointmentDraft(id){
+  const raw=S.appointmentDrafts[id];
+  if(raw&&typeof raw==='object')return {date:String(raw.date||''),time:String(raw.time||'')};
+  const m=String(raw||'').match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})$/);
+  return m?{date:m[1],time:m[2]}:{date:'',time:''};
+}
+function appointmentDraftValue(id){const d=appointmentDraft(id);return d.date&&d.time?`${d.date}T${d.time}`:''}
 function appointmentIso(v){
   if(!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(String(v||'')))return null;
   const d=new Date(v+':00+03:00');
@@ -1435,8 +1442,8 @@ function appointmentError(e){
 function appointmentCard(l){
   const a=D.appointments[l.id],q=chosenQ(l),isCustomer=l.owner===uid(),isPro=!!(q&&q.pro===uid());
   if(l.status!=='chosen'||!q||(!isCustomer&&!isPro))return '';
-  const min=appointmentInputValue(new Date(Date.now()+2*60*1000)),max=appointmentInputValue(new Date(Date.now()+90*24*60*60*1000));
-  const draft=S.appointmentDrafts[l.id]||'',input=`<label class="lb" for="appointment-${l.id}">Tarih ve saat</label><input class="in" id="appointment-${l.id}" type="datetime-local" min="${min}" max="${max}" value="${esc(draft)}">`;
+  const minDate=appointmentInputValue(new Date()).slice(0,10),maxDate=appointmentInputValue(new Date(Date.now()+90*24*60*60*1000)).slice(0,10),draft=appointmentDraft(l.id),draftIso=appointmentIso(appointmentDraftValue(l.id));
+  const input=`<div class="appointment-picker-grid"><div><label class="lb" for="appointment-date-${l.id}">Tarih</label><input class="in" id="appointment-date-${l.id}" type="date" min="${minDate}" max="${maxDate}" value="${esc(draft.date)}"></div><div><label class="lb" for="appointment-time-${l.id}">Saat</label><input class="in" id="appointment-time-${l.id}" type="time" step="300" value="${esc(draft.time)}"></div></div><p class="appointment-choice${draftIso?' has-value':''}" id="appointment-choice-${l.id}">${draftIso?'Seçilen randevu: '+esc(appointmentText(draftIso)):'Tarih ve saati ayrı ayrı seç.'}</p>`;
   let state='',actions='';
   if(!a){
     state='<p>Randevu henüz belirlenmedi.</p>';
@@ -2262,8 +2269,11 @@ const A={
     toast('Ödeme tercihin kaydedildi. Promosyon kodunu şimdi uygulayabilirsin.');
   },
   async proposeAppointment(v){
-    const id=+v,a=D.appointments[id],raw=S.appointmentDrafts[id],iso=appointmentIso(raw);
+    const id=+v,a=D.appointments[id],iso=appointmentIso(appointmentDraftValue(id));
     if(!iso){toast('Geçerli bir tarih ve saat seçmelisin.');return}
+    const when=new Date(iso),now=Date.now();
+    if(when.getTime()<=now){toast('Geçmiş bir tarih veya saat seçemezsin.');return}
+    if(when.getTime()>now+90*24*60*60*1000){toast('Randevu en fazla 90 gün sonrası için seçilebilir.');return}
     const r=await sb.rpc('propose_listing_appointment',{p_listing_id:id,p_proposed_at:iso,p_expected_revision:a?Number(a.revision):0});
     if(r.error){toast(appointmentError(r.error));if(String(r.error.message||'').includes('değişti'))await refresh();return}
     delete S.appointmentDrafts[id];await refresh();toast('Randevu önerin gönderildi.');
@@ -2378,12 +2388,16 @@ const F={
   's-url':v=>{S.cfgDraft.url=v},'s-key':v=>{S.cfgDraft.key=v}
 };
 function onField(e){const f=F[e.target.id];if(f){f(e.target.value);upd()}}
+function updateAppointmentDraft(el){
+  const m=String(el.id||'').match(/^appointment-(date|time)-(\d+)$/);if(!m)return false;
+  const id=Number(m[2]);if(!Number.isSafeInteger(id)||id<1)return true;
+  const d=appointmentDraft(id);d[m[1]]=el.value;S.appointmentDrafts[id]=d;
+  const iso=appointmentIso(appointmentDraftValue(id)),p=document.getElementById(`appointment-choice-${id}`);
+  if(p){p.textContent=iso?'Seçilen randevu: '+appointmentText(iso):'Tarih ve saati ayrı ayrı seç.';p.classList.toggle('has-value',!!iso)}
+  return true;
+}
 document.addEventListener('input',e=>{
-  if(e.target.id&&e.target.id.startsWith('appointment-')){
-    const id=Number(e.target.id.slice('appointment-'.length));
-    if(Number.isSafeInteger(id)&&id>0)S.appointmentDrafts[id]=e.target.value;
-    return;
-  }
+  if(updateAppointmentDraft(e.target))return;
   if(e.target.id==='cat-search'){
     S.catSearch=e.target.value;
     const q=S.catSearch.trim().toLocaleLowerCase('tr-TR');
@@ -2413,6 +2427,7 @@ document.addEventListener('input',e=>{
   onField(e);
 });
 document.addEventListener('change',e=>{
+  if(updateAppointmentDraft(e.target))return;
   const prefix=e.target.dataset.partnerAll||e.target.dataset.partnerCat;
   if(prefix){
     const all=document.getElementById(prefix+'-all');
