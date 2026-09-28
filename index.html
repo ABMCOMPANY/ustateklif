@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
 <meta name="color-scheme" content="light">
-<meta name="tamisim-build" content="v67-auth-resume">
+<meta name="tamisim-build" content="v68-separate-selection-payment">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1234,6 +1234,11 @@ function paymentPlan(l,q,pc,side){
   }
   return '<section class="payment-summary"><div><span>Hizmet bedeli</span><b>'+tl(q.price)+'</b></div>'+(d>0?'<div class="discount"><span>Promosyon indirimi</span><b>-'+tl(d)+'</b></div>':'')+'<div class="total"><span>Ödenecek tutar</span><b>'+tl(final)+'</b></div><p>'+pm.icon+' '+esc(pm.label)+(pc.method==='deposit_cash'&&pc.deposit_percent?' · %'+pc.deposit_percent+' ön ödeme':'')+'</p>'+extra+'</section>';
 }
+function paymentChoicePanel(l,q){
+  if(!l||!q)return '';
+  const methods=quotePayments(q),selected=S.payPick[q.id];
+  return `<section class="payment-summary"><div><span>Uzman seçildi</span><b>✓ ${esc(prof(q.pro).name)}</b></div><div class="customer-pay"><b>Ödeme yöntemini seç</b><p class="hint">Uzmanın kabul ettiği yöntemlerden birini daha sonra seçebilirsin.</p><div class="customer-pay-options">${methods.map(m=>`<button type="button" class="pay-choice" data-a="choosePay" data-v="${q.id}|${m}" aria-pressed="${selected===m}">${PAYMENTS[m].icon} ${PAYMENTS[m].label}${m==='deposit_cash'&&quoteDeposit(q)?` · %${quoteDeposit(q)} ön ödeme`:''}</button>`).join('')}</div></div><button class="btn block" id="save-payment-${l.id}" data-a="savePayment" data-v="${l.id}">Ödeme tercihini kaydet</button></section>`;
+}
 const myQuote=id=>Object.values(D.quotes).find(q=>q.listing_id===id&&q.pro===uid());
 const chosenQ=l=>l.chosen_quote?D.quotes[l.chosen_quote]:null;
 function photoStrip(id,detail=false){const a=D.photos[id]||[];return a.length?`<div class="photo-strip ${detail?'detail':''}">${a.map(x=>`<img src="${esc(x.url)}" alt="İlan fotoğrafı" loading="lazy">`).join('')}</div>`:''}
@@ -1607,7 +1612,7 @@ function vDetail(){
   const l=D.listings[S.sel];
   if(!l){S.view='list';return vList()}
   const all=qsOf(l.id),n=all.length;
-  let h=`<button class="page-back" data-a="back">← İlanlarıma dön</button><div class="detail-head"><span class="section-kicker">İlan detayı</span><h1>Tekliflerini karşılaştır</h1><p>Fiyatı, uzman profilini ve ödeme seçeneklerini birlikte değerlendir.</p></div>`+ticket(l,{pill:pillMine(l)});
+  let h=`<button class="page-back" data-a="back">← İlanlarıma dön</button><div class="detail-head"><span class="section-kicker">İlan detayı</span><h1>Tekliflerini karşılaştır</h1><p>Fiyatı ve uzman profilini değerlendir; ödeme tercihini uzmanı seçtikten sonra yap.</p></div>`+ticket(l,{pill:pillMine(l)});
   h+=`<div class="row"><h2>Gelen teklifler<span class="count">${n}</span></h2>`+
     (l.status==='open'&&n>1?`<div class="seg small" role="group" aria-label="Sırala"><button data-a="sort" data-v="fiyat" aria-pressed="${S.sort==='fiyat'}">En ucuz</button><button data-a="sort" data-v="puan" aria-pressed="${S.sort==='puan'}">En yüksek puan</button></div>`:'')+`</div>`;
   if(!n)h+='<div class="wait"><span class="dot"></span>Uzmanlar ilanını inceliyor. Teklifler gelince burada görünecek.</div>';
@@ -1624,15 +1629,12 @@ function vDetail(){
       ${cleanQuoteNote(q)?`<p class="qnote">${esc(cleanQuoteNote(q))}</p>`:''}
       ${paymentBadges(q)}
       ${proCard(q.pro)}
-      ${!chosen&&l.status==='open'?`<div class="customer-pay"><b>Bu teklif için ödeme yöntemini seç</b><div class="customer-pay-options">${quotePayments(q).map(m=>`<button type="button" class="pay-choice" data-a="choosePay" data-v="${q.id}|${m}" aria-pressed="${S.payPick[q.id]===m}">${PAYMENTS[m].icon} ${PAYMENTS[m].label}${m==='deposit_cash'&&quoteDeposit(q)?` · %${quoteDeposit(q)} ön ödeme`:''}</button>`).join('')}</div>
-      <div class="promo-box"><label class="lb" for="promo-${q.id}">Promosyon kodun var mı?</label><div class="promo-row"><input class="in" id="promo-${q.id}" placeholder="Örn. ILKIS100" autocomplete="off" autocapitalize="characters"><button type="button" class="btn ghost sm" data-a="applyPromo" data-v="${q.id}">Uygula</button></div>
-      ${S.promoApplied[q.id]?`<div class="promo-success"><b>✓ ${esc(S.promoApplied[q.id].code)}</b><span>-${tl(S.promoApplied[q.id].discount)}</span><small>Yeni tutar: ${tl(Math.max(0,q.price-S.promoApplied[q.id].discount))}</small></div>`:''}</div></div>`:''}
-      ${chosen?'<span class="pill good">Seçildi</span>':(l.status==='open'?`<button class="btn block" id="pick-quote-${q.id}" data-a="pick" data-v="${q.id}">Bu teklifi seç</button>`:'')}
+      ${chosen?'<span class="pill good">Seçildi</span>':(l.status==='open'?`<button class="btn block" id="pick-quote-${q.id}" data-a="pick" data-v="${q.id}">Bu uzmanı seç</button>`:'')}
     </article>`;
   }).join('');
   if(ch){
     const pc=D.paymentChoices[l.id];
-    if(pc)h+=paymentPlan(l,ch,pc,'customer');
+    h+=pc?paymentPlan(l,ch,pc,'customer'):paymentChoicePanel(l,ch);
     h+=chatBox(l,prof(ch.pro).name,l.status==='chosen');
     if(l.status==='chosen')h+=`<div class="rate"><p>İş bittiyse uzmanı puanla</p><div>${[1,2,3,4,5].map(i=>`<button class="star" data-a="rate" data-v="${i}" aria-label="${i} yıldız">★</button>`).join('')}</div></div>`;
     else h+=`<p class="rate"><span class="pill good">Tamamlandı. Puanın: ${'★'.repeat(l.rating||0)}${'☆'.repeat(5-(l.rating||0))}</span></p>`;
@@ -1852,7 +1854,7 @@ function render(){
 }
 
 /* ---------- eylemler ---------- */
-const NET=new Set(['experts','expertCategory','saveExpertProfile','sendSupport','supportRefresh','savePartnerCategories','adminSupport','adminDeletion','requestDeletion','startCardPayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','createNext','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
+const NET=new Set(['experts','expertCategory','saveExpertProfile','sendSupport','supportRefresh','savePartnerCategories','adminSupport','adminDeletion','requestDeletion','startCardPayment','applySelectedPromo','savePayment','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','createNext','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
 const KEEP=new Set(['menuToggle','menuClose','expertFilter','toggleExpertCategory','pickKat','toggleSorun','choosePay','togglePayment','zaman','sort','filter','pick','send','rate','tab','setPalette']);
 const A={
   menuToggle(){S.menuOpen=!S.menuOpen},
@@ -2118,7 +2120,8 @@ const A={
     const [qid,m]=String(v||'').split('|');
     if(!qid||!PAYMENTS[m])return;
     S.payPick[+qid]=m;
-    smoothTo('pick-quote-'+qid,180);
+    const l=D.listings[S.sel];
+    smoothTo(l&&l.chosen_quote===+qid?'save-payment-'+l.id:'pick-quote-'+qid,180);
   },
   async applyPromo(v){
     const qid=+v,q=D.quotes[qid]||qsOf(S.sel).find(x=>x.id===qid),l=D.listings[S.sel];
@@ -2132,23 +2135,30 @@ const A={
     toast('Promosyon uygulandı: -'+tl(S.promoApplied[qid].discount));
   },
   async pick(v){
-    const l=D.listings[S.sel],q=D.quotes[+v]||qsOf(l.id).find(x=>x.id===+v);
-    const methods=quotePayments(q);
-    const chosen=methods.length===1?methods[0]:S.payPick[+v];
-    if(!chosen){toast('Önce ödeme yöntemini seç.');return}
-    if(!methods.includes(chosen)){toast('Bu ödeme yöntemi uzman tarafından kabul edilmiyor.');return}
-    const dep=chosen==='deposit_cash'?quoteDeposit(q):null;
-    const promo=S.promoApplied[+v]||null;
-    const r=await sb.rpc('choose_quote_with_payment',{
+    const l=D.listings[S.sel],q=l&&(D.quotes[+v]||qsOf(l.id).find(x=>x.id===+v));
+    if(!l||!q){toast('Teklif bulunamadı.');return}
+    const r=await sb.rpc('select_quote',{
       p_listing_id:l.id,
-      p_quote_id:+v,
-      p_method:chosen,
-      p_deposit_percent:dep,
-      p_promotion_id:promo&&promo.id||null
+      p_quote_id:+v
     });
     if(r.error){toast(r.error.message||'Teklif seçilemedi.');return}
-    toast('Uzman, ödeme yöntemi ve varsa kampanya kaydedildi.');
     await refresh();
+    toast('Uzman seçildi. Şimdi ödeme yöntemini seçebilirsin.');
+  },
+  async savePayment(v){
+    const l=D.listings[+v],q=l&&chosenQ(l);
+    if(!l||!q){toast('Önce uzman seçmelisin.');return}
+    const methods=quotePayments(q),chosen=S.payPick[q.id];
+    if(!chosen){toast('Ödeme yöntemini seç.');return}
+    if(!methods.includes(chosen)){toast('Bu ödeme yöntemi uzman tarafından kabul edilmiyor.');return}
+    const r=await sb.rpc('set_listing_payment_choice',{
+      p_listing_id:l.id,
+      p_method:chosen,
+      p_deposit_percent:chosen==='deposit_cash'?quoteDeposit(q):null
+    });
+    if(r.error){toast(r.error.message||'Ödeme tercihi kaydedilemedi.');return}
+    await refresh();
+    toast('Ödeme tercihin kaydedildi. Promosyon kodunu şimdi uygulayabilirsin.');
   },
   async startCardPayment(v){
     const r=await sb.functions.invoke('payment-start',{body:{listing_id:+v}});
