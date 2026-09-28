@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
 <meta name="color-scheme" content="light">
-<meta name="tamisim-build" content="v68-separate-selection-payment">
+<meta name="tamisim-build" content="v69-suitable-quotes">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -151,6 +151,8 @@ textarea.in{min-height:92px;resize:vertical}
 .quote{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
 .quote.chosen{border-color:var(--good)}
 .quote.dim{opacity:.55}
+.suitable{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:0 0 12px;padding:10px 12px;border-radius:13px;background:var(--brand-tint);color:var(--brand-ink)}
+.suitable b{font-size:13px;white-space:nowrap}.suitable ul{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:12px;color:var(--brand-muted)}
 .qhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .qhead h3{font-size:18px;font-weight:600}
 .sub{margin:0;color:var(--muted);font-size:14px}
@@ -902,7 +904,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,navSection:'home',palette:savedPalette,
-  draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'fiyat',busy:false,
+  draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'uygun',busy:false,
   authMode:'in',authErr:'',authInfo:'',recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,createStep:1,expertPreview:{key:'',loading:false,rows:[],total:0,nearby:0},auth:{name:'',email:'',pass:'',terms:false},acct:null,expertDraft:null,expertEditing:false,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[],supportRequests:[],supportDraft:{category:'general',subject:'',message:''},bootError:'',menuOpen:false,expertFilter:'hepsi',expertsLoaded:false};
 
 /* ---------- uygulama geçmişi ---------- */
@@ -1608,22 +1610,55 @@ function vNew(){
   const actions=step===6?`<div class="create-actions"><button class="btn ghost" data-a="createPrev">Geri</button>${S.user?`<button class="btn" id="pub" data-a="publish" ${canPub(d)&&!S.busy?'':'disabled'}>İlanı yayınla</button>`:'<button class="btn" data-a="draftAuth">Giriş yap ve ilanı yayınla</button>'}</div>`:`<div class="create-actions ${step===1?'single':''}">${step>1?'<button class="btn ghost" data-a="createPrev">Geri</button>':''}<button class="btn" data-a="createNext">${nextLabel}</button></div>`;
   return `<button class="link" data-a="cancelDraft">← ${S.user?'İlanlarıma dön':'Ana sayfaya dön'}</button><div class="create-head"><span class="eyebrow">Yeni ilan</span><h1>İşini birkaç adımda anlat</h1><p>Her adımda yalnız gerekli bilgiyi isteyeceğiz.</p></div><div class="create-progress">${[1,2,3,4,5,6].map(n=>`<span class="${n<=step?'on':''}"></span>`).join('')}</div><div class="create-progress-meta"><span>Adım ${step}/6</span><span>${6-step} adım kaldı</span></div>${body}${actions}`;
 }
+function quoteSuitability(q,l,offers){
+  const p=prof(q.pro),s=stat(q.pro);
+  const eligible=expertReady(p)&&serviceMatch(p,l.category)&&locationMatch(l,p);
+  if(!eligible)return {eligible:false,score:Number.NEGATIVE_INFINITY,reasons:[]};
+  let score=0;
+  const reasons=[];
+  const districts=Array.isArray(p.service_districts)?p.service_districts:[];
+  if(l.district&&districts.some(x=>norm(x)===norm(l.district))){score+=32;reasons.push(`${l.district}’de hizmet veriyor`)}
+  if(p.vocational_verified){score+=16;reasons.push('Mesleki belgesi doğrulandı')}
+  if(p.identity_verified){score+=12;reasons.push('Kimliği doğrulandı')}
+  if(p.business_verified){score+=8;reasons.push('İşletmesi doğrulandı')}
+  const jobs=Math.max(0,Number(s.jobs)||0),rating=Math.max(0,Math.min(5,Number(s.rating)||0));
+  score+=Math.min(10,jobs/5)+rating*4;
+  if(jobs>0)reasons.push(`${jobs} tamamlanan iş`);
+  if(rating>0)reasons.push(`${rating.toFixed(1)} puan`);
+  const prices=(offers||[]).map(x=>Number(x.price)).filter(x=>Number.isFinite(x)&&x>0);
+  const price=Number(q.price),min=Math.min(...prices),max=Math.max(...prices);
+  if(Number.isFinite(price)&&prices.length&&max>min)score+=6*(max-price)/(max-min);
+  return {eligible:true,score,reasons:reasons.slice(0,3)};
+}
+function quoteTie(a,b){
+  const ar=Number(stat(a.pro).rating)||0,br=Number(stat(b.pro).rating)||0;
+  if(br!==ar)return br-ar;
+  const aj=Number(stat(a.pro).jobs)||0,bj=Number(stat(b.pro).jobs)||0;
+  if(bj!==aj)return bj-aj;
+  const at=Date.parse(a.created_at)||0,bt=Date.parse(b.created_at)||0;
+  return at-bt||Number(a.id)-Number(b.id);
+}
 function vDetail(){
   const l=D.listings[S.sel];
   if(!l){S.view='list';return vList()}
   const all=qsOf(l.id),n=all.length;
   let h=`<button class="page-back" data-a="back">← İlanlarıma dön</button><div class="detail-head"><span class="section-kicker">İlan detayı</span><h1>Tekliflerini karşılaştır</h1><p>Fiyatı ve uzman profilini değerlendir; ödeme tercihini uzmanı seçtikten sonra yap.</p></div>`+ticket(l,{pill:pillMine(l)});
   h+=`<div class="row"><h2>Gelen teklifler<span class="count">${n}</span></h2>`+
-    (l.status==='open'&&n>1?`<div class="seg small" role="group" aria-label="Sırala"><button data-a="sort" data-v="fiyat" aria-pressed="${S.sort==='fiyat'}">En ucuz</button><button data-a="sort" data-v="puan" aria-pressed="${S.sort==='puan'}">En yüksek puan</button></div>`:'')+`</div>`;
+    (l.status==='open'&&n>1?`<div class="seg small" role="group" aria-label="Sırala"><button data-a="sort" data-v="uygun" aria-pressed="${S.sort==='uygun'}">Sana uygun</button><button data-a="sort" data-v="fiyat" aria-pressed="${S.sort==='fiyat'}">En ucuz</button><button data-a="sort" data-v="puan" aria-pressed="${S.sort==='puan'}">En yüksek puan</button></div>`:'')+`</div>`;
   if(!n)h+='<div class="wait"><span class="dot"></span>Uzmanlar ilanını inceliyor. Teklifler gelince burada görünecek.</div>';
   const rt=q=>Number(stat(q.pro).rating)||0;
-  const rest=all.filter(q=>q.id!==l.chosen_quote).sort(S.sort==='puan'?(a,b)=>rt(b)-rt(a):(a,b)=>a.price-b.price);
+  const suitability=new Map(all.map(q=>[q.id,quoteSuitability(q,l,all)]));
+  const suitableIds=new Set([...all].filter(q=>suitability.get(q.id).eligible&&suitability.get(q.id).reasons.length).sort((a,b)=>suitability.get(b.id).score-suitability.get(a.id).score||quoteTie(a,b)).slice(0,3).map(q=>q.id));
+  const sortQuotes=(a,b)=>S.sort==='puan'?(rt(b)-rt(a)||quoteTie(a,b)):S.sort==='fiyat'?(Number(a.price)-Number(b.price)||quoteTie(a,b)):(suitability.get(b.id).score-suitability.get(a.id).score||quoteTie(a,b));
+  const rest=all.filter(q=>q.id!==l.chosen_quote).sort(sortQuotes);
   const ch=chosenQ(l);
   h+=(ch?[ch,...rest]:rest).map(q=>{
     const chosen=l.chosen_quote===q.id,dim=l.chosen_quote&&!chosen;
     const p=prof(q.pro),s=stat(q.pro);
     const rating=s.rating!=null?`<span class="star-i">★</span> ${Number(s.rating).toFixed(1)} <span class="muted">(${s.jobs} iş)</span>`:'<span class="muted">Yeni uzman, henüz puanı yok</span>';
+    const fit=suitability.get(q.id),showFit=l.status==='open'&&suitableIds.has(q.id);
     return `<article class="quote ${chosen?'chosen':''} ${dim?'dim':''}">
+      ${showFit?`<div class="suitable"><b>✓ Sana uygun</b><ul>${fit.reasons.map(x=>`<li>✓ ${esc(x)}</li>`).join('')}</ul></div>`:''}
       <div class="qhead"><div><h3>${esc(p.name)}</h3><p class="sub">${esc(p.title||'Servis ve tamir')}</p><p class="rating">${rating}</p></div>
       <div class="pr"><div class="price">${tl(q.price)}</div><div class="muted small">${esc(q.eta)}</div></div></div>
       ${cleanQuoteNote(q)?`<p class="qnote">${esc(cleanQuoteNote(q))}</p>`:''}
@@ -2108,14 +2143,14 @@ const A={
     }
     (d.photos||[]).forEach(x=>URL.revokeObjectURL(x.preview));
     await refresh();
-    S.sel=r.data.id;S.view='detail';S.sort='fiyat';S.draft=null;
+    S.sel=r.data.id;S.view='detail';S.sort='uygun';S.draft=null;
     clearGuestDraft();S.createStep=1;S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};
     toast(photoFailed?'İlan yayınlandı; bazı fotoğraflar yüklenemedi.':'İlanın yayında. Uzmanlar teklif verdikçe burada görünecek.');
   },
   open(v){S.sel=+v;S.view='detail'},
   openPro(v){S.sel=+v;S.view='prodetail'},
   back(){S.view='list';S.draft=null;S.sel=null},
-  sort(v){S.sort=v},
+  sort(v){if(['uygun','fiyat','puan'].includes(v))S.sort=v},
   choosePay(v){
     const [qid,m]=String(v||'').split('|');
     if(!qid||!PAYMENTS[m])return;
