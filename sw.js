@@ -1,7 +1,7 @@
 // Yalnız statik uygulama kabuğu önbelleğe alınır; kullanıcı/API cevapları alınmaz.
 const CACHE_PREFIX = 'tamisim-';
-const CACHE = `${CACHE_PREFIX}static-v53`;
-const SHELL = ['./', './index.html', './config.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const CACHE = `${CACHE_PREFIX}static-v54`;
+const SHELL = ['./', './index.html', './config.js', './turkiye-locations.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 const STATIC_PATHS = new Set(SHELL.map((path) => new URL(path, self.registration.scope).pathname));
 
 self.addEventListener('install', (e) => {
