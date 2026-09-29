@@ -1,6 +1,9 @@
 -- Sprint 5C rollback-only regression test. Leaves no production rows.
 begin;
 
+create temporary table _preselection_test_ids(quote_id bigint) on commit drop;
+grant select on _preselection_test_ids to authenticated;
+
 do $test$
 declare
   c constant uuid := '2e687688-b840-4fc3-88fe-2ad8d206b716';
@@ -18,6 +21,7 @@ begin
   returning id into lid;
   insert into public.quotes(listing_id,pro,price,eta,note)
   values(lid,p,5000,'Yarın','rollback test') returning id into qid;
+  insert into _preselection_test_ids values(qid);
 
   perform set_config('request.jwt.claim.sub',p::text,true);
   begin
@@ -113,7 +117,7 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub','2e687688-b840-4fc3-88fe-2ad8d206b716',true);
 do $rls_customer$
 begin
-  if (select count(*) from public.preselection_messages) <> 11 then
+  if (select count(*) from public.preselection_messages where quote_id=(select quote_id from _preselection_test_ids)) <> 11 then
     raise exception 'TEST customer RLS visibility';
   end if;
 end
@@ -124,7 +128,7 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub','994f3165-3682-47a5-86a4-85cda75353b7',true);
 do $rls_professional$
 begin
-  if (select count(*) from public.preselection_messages) <> 11 then
+  if (select count(*) from public.preselection_messages where quote_id=(select quote_id from _preselection_test_ids)) <> 11 then
     raise exception 'TEST professional RLS visibility';
   end if;
 end
@@ -135,7 +139,7 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub','2d79e6e0-0ce6-4fed-abf1-e156d2bd2a5b',true);
 do $rls_outsider$
 begin
-  if (select count(*) from public.preselection_messages) <> 0 then
+  if (select count(*) from public.preselection_messages where quote_id=(select quote_id from _preselection_test_ids)) <> 0 then
     raise exception 'TEST outsider RLS leak';
   end if;
 end
