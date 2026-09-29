@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
 <meta name="color-scheme" content="light">
-<meta name="tamisim-build" content="v73-preselection-messaging">
+<meta name="tamisim-build" content="v74-job-lifecycle">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -433,6 +433,7 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 /* customer-payment-choice-v31 */
 .customer-pay{margin:12px 0;padding:12px;border:1px solid var(--brand-line);border-radius:15px;background:#FBFCFE}.customer-pay>b{display:block;color:var(--brand-ink);font-size:13px;margin-bottom:8px}.customer-pay-options{display:flex;flex-wrap:wrap;gap:7px}.pay-choice{border:1px solid #D9E2EE;background:#fff;color:var(--brand-ink);border-radius:999px;padding:8px 10px;font:700 11px/1.2 Figtree,system-ui}.pay-choice[aria-pressed="true"]{background:var(--brand-primary);border-color:var(--brand-primary);color:#fff;box-shadow:0 5px 14px rgba(var(--brand-primary-rgb),.18)}
 .appointment-card{margin:16px 0;padding:16px;border:1px solid var(--brand-line);border-radius:20px;background:var(--surface);box-shadow:0 8px 26px rgba(var(--brand-ink-rgb),.07)}.appointment-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.appointment-head h2{margin:2px 0 4px;font-size:19px;color:var(--ink)}.appointment-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}.appointment-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--brand-tint);color:var(--brand-primary);font-size:20px}.appointment-time{margin:14px 0;padding:13px;border-radius:15px;background:var(--brand-bg);border:1px solid var(--brand-line)}.appointment-time b{display:block;color:var(--ink);font-size:16px}.appointment-time small{display:block;margin-top:4px;color:var(--muted)}.appointment-actions{display:grid;gap:10px;margin-top:12px}.appointment-actions .in{min-height:48px;min-width:0}.appointment-picker-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:10px}.appointment-choice{margin:0;padding:11px 13px;border-radius:14px;background:var(--brand-bg);border:1px solid var(--brand-line);color:var(--muted);font-size:13px;line-height:1.45}.appointment-choice.has-value{color:var(--ink);font-weight:750}.appointment-actions .two-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.appointment-confirmed{color:#147A50;font-weight:800}.appointment-wait{color:#9A6812;font-weight:750}
+.agreement-card,.workflow-card{margin:16px 0;padding:16px;border:1px solid var(--brand-line);border-radius:20px;background:#fff}.agreement-card h2,.workflow-card h2{margin:2px 0 5px;font-size:19px;color:var(--brand-ink)}.agreement-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.agreement-grid div{padding:10px;border-radius:13px;background:var(--brand-bg)}.agreement-grid span{display:block;color:var(--brand-muted);font-size:10px}.agreement-grid b{display:block;margin-top:3px;color:var(--brand-ink);font-size:13px}.agreement-note{margin:10px 0 0;color:var(--brand-muted);font-size:12px;line-height:1.45}.workflow-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:14px 0}.workflow-step{min-width:0;padding:9px 5px;border-radius:12px;background:#F1F4F8;color:#8390A1;text-align:center;font-size:9px;font-weight:800}.workflow-step b{display:grid;place-items:center;width:22px;height:22px;margin:0 auto 5px;border-radius:50%;background:#DCE3EC;color:#6E7B8D}.workflow-step.done{background:var(--brand-tint);color:var(--brand-primary)}.workflow-step.done b{background:var(--brand-primary);color:#fff}.workflow-status{padding:12px;border-radius:14px;background:var(--brand-bg);color:var(--brand-ink);font-size:13px;line-height:1.45}.workflow-status strong{display:block;margin-bottom:3px}.workflow-action{margin-top:12px}.review-box{margin-top:14px;padding-top:14px;border-top:1px solid var(--brand-line)}.review-stars{display:flex;gap:3px;margin:8px 0}.review-stars button{font-size:30px;background:transparent;border:0;color:#CBD4DF;padding:2px;cursor:pointer}.review-stars button.on{color:var(--brand-accent)}.review-box textarea{min-height:86px}.verified-review{margin-top:12px;padding:12px;border-radius:14px;background:#E8F7F0;color:#147A50}.verified-review p{margin:5px 0 0;color:#45675A;font-size:12px;line-height:1.45}
 
 /* promotions-v32 */
 .promo-box{margin-top:14px;padding-top:13px;border-top:1px solid var(--brand-line)}.promo-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.promo-row .in{min-width:0;text-transform:uppercase}.promo-success{margin-top:9px;padding:10px 11px;border-radius:12px;background:#EAF8F0;color:#17603D;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}.promo-success b,.promo-success span{font-size:13px}.promo-success small{grid-column:1/-1;color:#47705C;font-size:11px}
@@ -907,7 +908,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,navSection:'home',palette:savedPalette,
-  draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},appointmentDrafts:{},preThread:null,preDrafts:{},preRequestIds:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'uygun',busy:false,
+  draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},appointmentDrafts:{},workflowRequestIds:{},reviewDrafts:{},reviewRequestIds:{},preThread:null,preDrafts:{},preRequestIds:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'uygun',busy:false,
   authMode:'in',authErr:'',authInfo:'',confirmationEmail:'',resendBusy:false,recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,createStep:1,expertPreview:{key:'',loading:false,rows:[],total:0,nearby:0},auth:{name:'',email:'',pass:'',terms:false},acct:null,expertDraft:null,expertEditing:false,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[],supportRequests:[],supportDraft:{category:'general',subject:'',message:''},bootError:'',menuOpen:false,expertFilter:'hepsi',expertsLoaded:false};
 
 /* ---------- uygulama geçmişi ---------- */
@@ -1016,7 +1017,7 @@ function commitNavigation(before,action){
 }
 if('scrollRestoration' in history)history.scrollRestoration='manual';
 window.addEventListener('popstate',e=>{if(e.state&&e.state.app===NAV_STATE_KEY)restoreNavigation(e.state)});
-const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},expertAuth:{},stats:{},msgs:{},preMsgs:{},photos:{},paymentChoices:{},paymentRecords:{},appointments:{},verifications:[],partners:{},notifications:[],blocks:[],sig:'',qMine:undefined});
+const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},expertAuth:{},stats:{},msgs:{},preMsgs:{},photos:{},paymentChoices:{},paymentRecords:{},appointments:{},workflows:{},snapshots:{},reviews:{},verifications:[],partners:{},notifications:[],blocks:[],sig:'',qMine:undefined});
 let D=emptyD();
 
 const uid=()=>S.user&&S.user.id;
@@ -1321,7 +1322,7 @@ async function refresh(){
   const ids=[...pids];
   const partyIds=Object.values(listings).filter(l=>l.status!=='open'&&(l.owner===me||(quotes[l.chosen_quote]&&quotes[l.chosen_quote].pro===me))).map(l=>l.id);
   const listingIds=Object.keys(listings).map(Number);
-  const [pr,st,ms,pm,ph,pc,pt,ap,vr,pa]=await Promise.all([
+  const [pr,st,ms,pm,ph,pc,pt,ap,wf,sn,rv,vr,pa]=await Promise.all([
     sb.from('profiles').select('id,name,title,bio,services,service_categories,expert_status,service_areas,service_city,service_districts,phone_verified,identity_verified,vocational_verified,business_verified,account_status,created_at').in('id',ids).then(chk),
     sb.from('pro_stats').select('*').in('pro_id',ids).then(chk),
     partyIds.length?sb.from('messages').select('*').in('listing_id',partyIds).order('created_at').then(chk):[],
@@ -1330,6 +1331,9 @@ async function refresh(){
     listingIds.length?sb.from('listing_payment_choices').select('listing_id,quote_id,method,deposit_percent,promotion_id,discount_amount,customer_cash_confirmed_at,pro_cash_confirmed_at,cash_confirmed_at,created_at').in('listing_id',listingIds).then(chk):[],
     listingIds.length?sb.from('payment_transactions').select('id,listing_id,method,currency,gross_amount,discount_amount,payable_amount,deposit_percent,provider_amount,cash_amount,commission_percent,platform_commission_amount,partner_promo_contribution,provider,provider_status,status,paid_at,refunded_at,updated_at').in('listing_id',listingIds).then(chk):[],
     partyIds.length?sb.from('listing_appointments').select('id,listing_id,customer_id,professional_id,proposed_at,proposed_by,status,revision,confirmed_at,created_at,updated_at').in('listing_id',partyIds).then(chk):[],
+    partyIds.length?sb.from('listing_workflows').select('listing_id,customer_id,professional_id,state,revision,updated_at,completed_at').in('listing_id',partyIds).then(chk):[],
+    partyIds.length?sb.from('job_agreement_snapshots').select('listing_id,quote_id,customer_id,professional_id,category,service_problems,listing_description,quote_price,quote_eta,quote_note,quote_created_at,selected_at').in('listing_id',partyIds).then(chk):[],
+    partyIds.length?sb.from('job_reviews').select('listing_id,customer_id,professional_id,rating,comment,created_at').in('listing_id',partyIds).then(chk):[],
     sb.from('professional_verifications').select('id,user_id,category,verification_type,document_type,status,review_note,reviewed_at,expires_at,created_at').eq('user_id',me).order('created_at',{ascending:false}).then(chk),
     sb.from('partners').select('id,name,slug,status,created_at,service_categories').eq('status','active').then(chk)
   ]);
@@ -1345,13 +1349,16 @@ async function refresh(){
   const paymentChoices={};pc.forEach(x=>{paymentChoices[x.listing_id]=x});
   const paymentRecords={};pt.forEach(x=>{paymentRecords[x.listing_id]=x});
   const appointments={};ap.forEach(x=>{appointments[x.listing_id]=x});
+  const workflows={};wf.forEach(x=>{workflows[x.listing_id]=x});
+  const snapshots={};sn.forEach(x=>{snapshots[x.listing_id]=x});
+  const reviews={};rv.forEach(x=>{reviews[x.listing_id]=x});
   const partners={};pa.forEach(x=>{partners[x.id]=x});
-  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,preMsgs,paymentChoices,paymentRecords,appointments,verifications:vr,partners,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
+  const sig=JSON.stringify({listings,quotes,counts,profiles,stats,msgs,preMsgs,paymentChoices,paymentRecords,appointments,workflows,snapshots,reviews,verifications:vr,partners,notifications,photos:Object.fromEntries(Object.entries(photos).map(([k,v])=>[k,v.map(x=>x.path)]))});
   const changed=sig!==D.sig;
   if(D.qMine!==undefined&&qMine.length>D.qMine)toast('Yeni teklif geldi');
   const mergedProfiles=S.expertsLoaded?{...(D.profiles||{}),...profiles}:profiles;
   const mergedStats=S.expertsLoaded?{...(D.stats||{}),...stats}:stats;
-  D={listings,mine,open,quotes,counts,profiles:mergedProfiles,expertAuth:D.expertAuth||{},stats:mergedStats,msgs,preMsgs,photos,paymentChoices,paymentRecords,appointments,verifications:vr,partners,notifications,blocks,sig,qMine:qMine.length};
+  D={listings,mine,open,quotes,counts,profiles:mergedProfiles,expertAuth:D.expertAuth||{},stats:mergedStats,msgs,preMsgs,photos,paymentChoices,paymentRecords,appointments,workflows,snapshots,reviews,verifications:vr,partners,notifications,blocks,sig,qMine:qMine.length};
   if(mergedProfiles[me])S.profile=mergedProfiles[me];
   return changed;
 }
@@ -1488,6 +1495,42 @@ function appointmentCard(l){
     if(canRespond)actions=`${input}<div class="two-actions"><button class="btn" data-a="acceptAppointment" data-v="${l.id}|${a.revision}">Kabul et</button><button class="btn ghost" data-a="proposeAppointment" data-v="${l.id}">Başka zaman öner</button></div>`;
   }
   return `<section class="appointment-card"><div class="appointment-head"><div><span class="section-kicker">Randevu</span><h2>Tarih ve saat</h2><p>İlanın genel zaman tercihi: ${esc(l.when_text||'Belirtilmedi')}</p></div><span class="appointment-icon">◷</span></div>${state}${actions?`<div class="appointment-actions">${actions}</div>`:''}</section>`;
+}
+
+const WORKFLOW_STATES=['awaiting_appointment','scheduled','en_route','in_progress','completion_requested','completed'];
+const WORKFLOW_STEPS=['Uzman seçildi','Randevu','Yolda','İş başladı','Tamamlama','Tamamlandı'];
+function agreementCard(l){
+  const s=D.snapshots[l.id];if(!s)return '';
+  return `<section class="agreement-card"><span class="section-kicker">Değiştirilemez kayıt</span><h2>Anlaşılan iş</h2><p class="muted small">Uzman seçildiği andaki ilan ve teklif özeti.</p><div class="agreement-grid"><div><span>Hizmet</span><b>${esc(KAT[s.category]&&KAT[s.category].ad||s.category)}</b></div><div><span>Teklif</span><b>${tl(s.quote_price)}</b></div><div><span>İş kapsamı</span><b>${esc((s.service_problems||[]).join(', ')||'Belirtilmedi')}</b></div><div><span>Tahmini süre</span><b>${esc(s.quote_eta||'Belirtilmedi')}</b></div></div>${s.listing_description?`<p class="agreement-note"><b>İlan notu:</b> ${esc(s.listing_description)}</p>`:''}${s.quote_note?`<p class="agreement-note"><b>Teklif notu:</b> ${esc(s.quote_note)}</p>`:''}</section>`;
+}
+function workflowError(e){
+  const m=String(e&&e.message||'').toLocaleLowerCase('tr-TR');
+  if(m.includes('değişti'))return 'İş durumu değişti. Güncel bilgiyi yükleyip tekrar dene.';
+  if(m.includes('uygun değil'))return 'İş henüz bu adıma geçmeye uygun değil.';
+  if(m.includes('yetkin')||m.includes('taraflar'))return 'Bu işlem için yetkin yok.';
+  if(m.includes('kaldırıldı'))return 'Güncel iş adımlarını kullanmalısın.';
+  return 'İş durumu güncellenemedi. Tekrar dene.';
+}
+function reviewBox(l,isCustomer){
+  const r=D.reviews[l.id];
+  if(r)return `<div class="verified-review"><b>✓ Doğrulanmış iş yorumu · ${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</b>${r.comment?`<p>${esc(r.comment)}</p>`:''}</div>`;
+  if(!isCustomer)return '<p class="muted small">Müşteri henüz puan veya yorum bırakmadı.</p>';
+  const d=S.reviewDrafts[l.id]||(S.reviewDrafts[l.id]={rating:0,comment:''});
+  return `<div class="review-box"><b>Uzmanı puanla</b><p class="muted small">İş tamamlandı. Puan ve yorum isteğe bağlıdır ve ayrı kaydedilir.</p><div class="review-stars" role="group" aria-label="Puan seç">${[1,2,3,4,5].map(i=>`<button class="${i<=d.rating?'on':''}" data-a="setReviewRating" data-v="${l.id}|${i}" aria-label="${i} yıldız">★</button>`).join('')}</div><label class="lb" for="review-comment-${l.id}">Yorum (isteğe bağlı)</label><textarea class="in" id="review-comment-${l.id}" maxlength="1000" placeholder="Deneyimini paylaşabilirsin.">${esc(d.comment||'')}</textarea><button class="btn block" data-a="submitReview" data-v="${l.id}" ${d.rating?'':'disabled'}>Puanı ve yorumu gönder</button></div>`;
+}
+function workflowCard(l){
+  const w=D.workflows[l.id],q=chosenQ(l);if(!w||!q)return '';
+  const isCustomer=l.owner===uid(),isPro=q.pro===uid();if(!isCustomer&&!isPro)return '';
+  const idx=Math.max(0,WORKFLOW_STATES.indexOf(w.state));
+  const steps=WORKFLOW_STEPS.map((x,i)=>`<div class="workflow-step ${i<=idx?'done':''}"><b>${i<idx?'✓':i+1}</b>${x}</div>`).join('');
+  const copy={awaiting_appointment:['Randevu bekleniyor','Müşteri ve uzman kesin tarih/saat üzerinde anlaşmalı.'],scheduled:['Randevu kesinleşti','Uzman randevu zamanı geldiğinde yola çıktığını bildirebilir.'],en_route:['Uzman yolda','Uzman adrese doğru yola çıktığını bildirdi.'],in_progress:['İş başladı','Uzman iş üzerinde çalışıyor.'],completion_requested:['Uzman tamamlandığını bildirdi','İş ancak müşterinin onayıyla kesin olarak tamamlanır.'],completed:['İş tamamlandı','Müşteri işin tamamlandığını onayladı.']};
+  const c=copy[w.state]||['İş durumu','Güncel durum yükleniyor.'];
+  let action='';
+  if(isPro&&w.state==='scheduled')action='<button class="btn block workflow-action" data-a="advanceWorkflow" data-v="'+l.id+'|en_route">Yola çıktım</button>';
+  else if(isPro&&w.state==='en_route')action='<button class="btn block workflow-action" data-a="advanceWorkflow" data-v="'+l.id+'|in_progress">İşe başladım</button>';
+  else if(isPro&&w.state==='in_progress')action='<button class="btn block workflow-action" data-a="advanceWorkflow" data-v="'+l.id+'|completion_requested">İşi tamamladım</button>';
+  else if(isCustomer&&w.state==='completion_requested')action='<button class="btn block workflow-action" data-a="advanceWorkflow" data-v="'+l.id+'|completed">İşi tamamlandı olarak onayla</button>';
+  return `<section class="workflow-card"><span class="section-kicker">İş süreci</span><h2>Güncel durum</h2><div class="workflow-steps">${steps}</div><div class="workflow-status"><strong>${esc(c[0])}</strong>${esc(c[1])}</div>${action}${w.state==='completed'?reviewBox(l,isCustomer):''}</section>`;
 }
 
 function vSetup(){
@@ -1761,10 +1804,10 @@ function vDetail(){
   if(ch){
     const pc=D.paymentChoices[l.id];
     h+=pc?paymentPlan(l,ch,pc,'customer'):paymentChoicePanel(l,ch);
+    h+=agreementCard(l);
     h+=appointmentCard(l);
+    h+=workflowCard(l);
     h+=chatBox(l,prof(ch.pro).name,l.status==='chosen');
-    if(l.status==='chosen')h+=`<div class="rate"><p>İş bittiyse uzmanı puanla</p><div>${[1,2,3,4,5].map(i=>`<button class="star" data-a="rate" data-v="${i}" aria-label="${i} yıldız">★</button>`).join('')}</div></div>`;
-    else h+=`<p class="rate"><span class="pill good">Tamamlandı. Puanın: ${'★'.repeat(l.rating||0)}${'☆'.repeat(5-(l.rating||0))}</span></p>`;
   }
   return h;
 }
@@ -1816,10 +1859,11 @@ function vProDetail(){
   let h=`<button class="page-back" data-a="back">← Tekliflerime dön</button><div class="detail-head"><span class="section-kicker">İş detayı</span><h1>Müşteriyle işi yönet</h1><p>Ödeme planını, mesajları ve iş durumunu tek yerde takip et.</p></div>`+ticket(l,{pill:l.status==='done'?'<span class="pill">Tamamlandı</span>':'<span class="pill good">Seçildin</span>'});
   if(q)h+=`<p class="lede">Teklifin: <strong>${tl(q.price)}</strong>, ${esc(q.eta)}</p>`;
   if(q&&D.paymentChoices[l.id])h+=paymentPlan(l,q,D.paymentChoices[l.id],'pro');
+  if(q)h+=agreementCard(l);
   if(q)h+=appointmentCard(l);
+  if(q)h+=workflowCard(l);
   if(q)h+=preselectionThread(q,l);
   h+=chatBox(l,prof(l.owner).name,l.status==='chosen');
-  if(l.status==='done')h+=`<p class="rate"><span class="pill good">Müşteri puanı: ${'★'.repeat(l.rating||0)}${'☆'.repeat(5-(l.rating||0))}</span></p>`;
   return h;
 }
 function vQuote(){
@@ -1983,8 +2027,8 @@ function render(){
 }
 
 /* ---------- eylemler ---------- */
-const NET=new Set(['experts','expertCategory','saveExpertProfile','sendSupport','supportRefresh','savePartnerCategories','adminSupport','adminDeletion','requestDeletion','startCardPayment','applySelectedPromo','savePayment','proposeAppointment','acceptAppointment','sendPreMessage','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','createNext','publish','pick','send','rate','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
-const KEEP=new Set(['menuToggle','menuClose','expertFilter','toggleExpertCategory','pickKat','toggleSorun','choosePay','togglePayment','zaman','sort','filter','pick','send','sendPreMessage','openPreThread','rate','tab','setPalette']);
+const NET=new Set(['experts','expertCategory','saveExpertProfile','sendSupport','supportRefresh','savePartnerCategories','adminSupport','adminDeletion','requestDeletion','startCardPayment','applySelectedPromo','savePayment','proposeAppointment','acceptAppointment','advanceWorkflow','submitReview','sendPreMessage','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','createNext','publish','pick','send','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
+const KEEP=new Set(['menuToggle','menuClose','expertFilter','toggleExpertCategory','pickKat','toggleSorun','choosePay','togglePayment','zaman','sort','filter','pick','send','sendPreMessage','openPreThread','setReviewRating','tab','setPalette']);
 const A={
   menuToggle(){S.menuOpen=!S.menuOpen},
   menuClose(){S.menuOpen=false},
@@ -2318,6 +2362,30 @@ const A={
     if(r.error){toast(appointmentError(r.error));await refresh();return}
     delete S.appointmentDrafts[id];await refresh();toast('Randevu kesinleşti.');
   },
+  async advanceWorkflow(v){
+    const [rawId,target]=String(v||'').split('|'),id=Number(rawId),w=D.workflows[id];
+    if(!Number.isSafeInteger(id)||!w){toast('İş durumu güncel değil.');return}
+    const confirms={en_route:'Yola çıktığını bildirmek istiyor musun?',in_progress:'İşe başladığını bildirmek istiyor musun?',completion_requested:'İşi tamamladığını müşteriye bildirmek istiyor musun?',completed:'İşin tamamlandığını kesin olarak onaylıyor musun?'};
+    if(!confirms[target]||!confirm(confirms[target]))return;
+    const key=`${id}|${target}|${w.revision}`,requestId=S.workflowRequestIds[key]||(S.workflowRequestIds[key]=crypto.randomUUID());
+    const r=await sb.rpc('advance_listing_workflow',{p_listing_id:id,p_target_state:target,p_expected_revision:Number(w.revision),p_client_request_id:requestId});
+    if(r.error){toast(workflowError(r.error));if(String(r.error.message||'').includes('değişti'))await refresh();return}
+    delete S.workflowRequestIds[key];await refresh();
+    toast(target==='completed'?'İş tamamlandı. İstersen şimdi puan ve yorum bırakabilirsin.':'İş durumu güncellendi.');
+  },
+  setReviewRating(v){
+    const [rawId,rawRating]=String(v||'').split('|'),id=Number(rawId),rating=Number(rawRating);
+    if(!Number.isSafeInteger(id)||!Number.isInteger(rating)||rating<1||rating>5)return;
+    const d=S.reviewDrafts[id]||(S.reviewDrafts[id]={rating:0,comment:''});d.rating=rating;
+  },
+  async submitReview(v){
+    const id=Number(v),d=S.reviewDrafts[id];
+    if(!Number.isSafeInteger(id)||!d||!d.rating){toast('Önce 1–5 arasında puan seçmelisin.');return}
+    const requestId=S.reviewRequestIds[id]||(S.reviewRequestIds[id]=crypto.randomUUID());
+    const r=await sb.rpc('submit_job_review',{p_listing_id:id,p_rating:Number(d.rating),p_comment:String(d.comment||'').trim()||null,p_client_request_id:requestId});
+    if(r.error){toast(r.error.message||'Puan ve yorum kaydedilemedi.');return}
+    delete S.reviewRequestIds[id];delete S.reviewDrafts[id];await refresh();toast('Doğrulanmış iş yorumun kaydedildi.');
+  },
   async startCardPayment(v){
     const r=await sb.functions.invoke('payment-start',{body:{listing_id:+v}});
     if(r.error){toast(r.error.message||'Ödeme başlatılamadı.');return}
@@ -2357,11 +2425,6 @@ const A={
     const r=await sb.from('messages').insert({listing_id:S.sel,sender:uid(),body:t});
     if(r.error){inp.value=t;throw r.error}
     await refresh();
-  },
-  async rate(v){
-    const r=await sb.rpc('complete_listing',{p_listing_id:S.sel,p_rating:+v});
-    if(r.error)throw r.error;
-    toast('Puanın kaydedildi.');await refresh();
   },
   tab(v){S.tab=v},
   filter(v){S.filter=v},
@@ -2444,6 +2507,11 @@ function updateAppointmentDraft(el){
 }
 document.addEventListener('input',e=>{
   if(updateAppointmentDraft(e.target))return;
+  if(e.target.id&&e.target.id.startsWith('review-comment-')){
+    const id=Number(e.target.id.slice('review-comment-'.length));
+    if(Number.isSafeInteger(id)&&id>0){const d=S.reviewDrafts[id]||(S.reviewDrafts[id]={rating:0,comment:''});d.comment=e.target.value.slice(0,1000)}
+    return;
+  }
   if(e.target.id&&e.target.id.startsWith('pre-message-')){
     const id=Number(e.target.id.slice('pre-message-'.length));
     if(Number.isSafeInteger(id)&&id>0)S.preDrafts[id]=e.target.value.slice(0,500);
