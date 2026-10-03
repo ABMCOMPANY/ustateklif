@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1457D9">
 <meta name="color-scheme" content="light">
-<meta name="tamisim-build" content="v74-job-lifecycle">
+<meta name="tamisim-build" content="v75-responsive-shell">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -805,6 +805,79 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
 .palette-option[data-v="indigo-sage"] .palette-swatches i:first-child{background:#443D91}.palette-option[data-v="indigo-sage"] .palette-swatches i:last-child{background:#547A61}
 .palette-check{visibility:hidden;color:var(--brand-primary);font-weight:900;font-size:17px}.palette-option[aria-pressed="true"] .palette-check{visibility:visible}
 .palette-note{color:var(--brand-muted);font-size:10px;margin:10px 2px 1px}
+
+/* responsive-shell-v75 */
+.desktopnav{display:none}
+.home-shell,.hero-copy,.hero-actions,.hero-proof,.home-support-grid{min-width:0}
+.hero-copy{position:relative;z-index:1}
+.hero-actions{display:grid;gap:10px}
+.hero-actions .searchbox{display:flex;align-items:center;gap:8px;min-width:0}
+.hero-actions .searchbox>span{flex:none;margin-right:0}
+.hero-actions .searchbox input{min-width:0;width:auto;flex:1}
+.hero-create{min-height:52px;border:0;border-radius:16px;padding:0 20px;background:#F28A1A;color:#fff;font:800 14px Figtree,system-ui;cursor:pointer;box-shadow:0 10px 24px rgba(242,138,26,.24)}
+.hero-create:active{transform:translateY(1px)}
+.hero-proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:15px}
+.hero-proof div{min-width:0;padding:10px 8px;border:1px solid var(--brand-line);border-radius:14px;background:rgba(255,255,255,.72)}
+.hero-proof b{display:block;color:var(--brand-ink);font-size:10px;line-height:1.25}
+.hero-proof small{display:block;margin-top:2px;color:var(--brand-muted);font-size:8px;line-height:1.3}
+.home-support-grid{display:grid;gap:14px}
+
+@media (min-width:768px){
+  body{padding-bottom:88px}
+  .app{max-width:960px;padding:0 28px 72px}
+  body:not(.home-shell-active) #app{width:min(100%,760px);margin-inline:auto}
+  .top{padding:16px 0}
+  .brand{font-size:25px}
+  .hero{padding:46px 34px 34px;border:1px solid var(--brand-line);border-radius:28px;background:linear-gradient(135deg,#fff 0%,var(--brand-soft) 62%,var(--brand-tint) 100%);box-shadow:0 16px 44px rgba(var(--brand-ink-rgb),.08);overflow:hidden}
+  .hero h1{font-size:48px;max-width:650px}
+  .hero p{font-size:17px;max-width:560px}
+  .hero-actions{grid-template-columns:minmax(0,1fr) auto;align-items:stretch;max-width:760px}
+  .hero-create{min-width:158px}
+  .home-section{margin:32px 0}
+  .home-title h2,.steps h2{font-size:25px}
+  .homecats{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  .homecat{min-height:116px;padding:16px 10px;border:1px solid var(--brand-line);box-shadow:0 8px 24px rgba(var(--brand-ink-rgb),.055)}
+  .homecat .svc-icon{width:36px;height:36px}
+  .homecat b{font-size:13px}
+  .guest-group .homecats{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .guest-group .homecat{min-height:108px}
+  .home-support-grid{grid-template-columns:1fr 1.35fr;align-items:stretch;margin:30px 0}
+  .home-support-grid .trustbox,.home-support-grid .steps{height:100%;margin:0}
+  .steps{padding:24px}.trustbox{padding:24px}
+  .guest-convert{padding:30px}.guest-convert-primary{max-width:430px}
+  .beta-strip,.offline-banner{margin-inline:0}
+}
+
+@media (min-width:1024px){
+  body{padding-bottom:0}
+  .app{width:100%;max-width:1280px;padding:0 34px 64px}
+  .top{min-height:76px;gap:20px}
+  .hdr-r{flex:1;justify-content:flex-end}
+  .desktopnav{display:flex;align-items:center;gap:5px;margin-right:auto;margin-left:18px}
+  .desktopnav[hidden]{display:none!important}
+  .desktopnav button{min-height:42px;border:0;border-radius:12px;padding:0 14px;background:transparent;color:var(--brand-muted);font:750 13px Figtree,system-ui;cursor:pointer}
+  .desktopnav button:hover{background:var(--brand-tint);color:var(--brand-primary)}
+  .desktopnav button.active{background:var(--brand-tint);color:var(--brand-primary)}
+  .desktopnav .desktop-cta{background:#F28A1A;color:#fff;box-shadow:0 8px 20px rgba(242,138,26,.2)}
+  .desktopnav .desktop-cta:hover{background:#DE7810;color:#fff}
+  .bottomnav{display:none!important}
+  body.has-bottomnav main{padding-bottom:28px}
+  .quick-menu{top:84px;right:max(24px,calc((100vw - 1280px)/2 + 34px))}
+  .hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,.7fr);gap:46px;align-items:center;min-height:390px;padding:54px 52px;position:relative}
+  .hero:after{content:"";position:absolute;width:330px;height:330px;border-radius:50%;right:-150px;top:-170px;background:rgba(var(--brand-primary-rgb),.06);pointer-events:none}
+  .hero h1{font-size:58px;line-height:1}
+  .hero-proof{position:relative;z-index:1;grid-template-columns:1fr;margin:0}
+  .hero-proof div{padding:18px;border-radius:18px;background:rgba(255,255,255,.9);box-shadow:0 9px 28px rgba(var(--brand-ink-rgb),.07)}
+  .hero-proof b{font-size:14px}.hero-proof small{font-size:11px}
+  .guest-group .homecats{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .myjobs{margin-top:38px}
+  .guest-hdr{gap:12px}.guest-login{font-size:13px}.guest-cta{min-height:44px;padding:0 18px;background:#F28A1A;font-size:13px}
+}
+
+@media (min-width:1600px){
+  .app{max-width:1320px;padding-inline:40px}
+  .quick-menu{right:max(28px,calc((100vw - 1320px)/2 + 40px))}
+}
 </style>
 </head>
 <body>
@@ -816,6 +889,12 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
       <button class="guest-cta" data-a="requireAuth" data-v="newIlan"><span class="guest-cta-plus">＋</span><span class="guest-cta-text">İlan ver</span></button>
     </div>
     <div class="hdr-r" id="hdr-r" hidden>
+      <nav class="desktopnav" id="desktopnav" hidden aria-label="Masaüstü ana menü">
+        <button data-a="navHome">Ana Sayfa</button>
+        <button data-a="navJobs">İlanlarım</button>
+        <button data-a="experts">Uzmanlar</button>
+        <button class="desktop-cta" data-a="newIlan">＋ İlan Oluştur</button>
+      </nav>
       <div class="seg" role="group" aria-label="Kullanıcı türü">
         <button data-a="role" data-v="musteri" aria-pressed="true">Müşteri</button>
         <button data-a="role" data-v="usta" aria-pressed="false">Uzman</button>
@@ -1552,8 +1631,8 @@ function vGuest(){
   const matches=Object.entries(KAT).filter(([,v])=>!q||v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q)));
   const groups=[...new Set(matches.map(([,v])=>v.grup))];
   const sections=groups.map(g=>`<section class="home-section guest-group"><div class="home-title"><h2>${esc(g)}</h2></div><div class="homecats">${matches.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="homecat" data-a="guestCat" data-v="${k}"><span>${iconFor(k)}</span><b>${esc(v.ad)}</b><small>${q?esc(v.sorunlar.filter(x=>x.toLocaleLowerCase('tr-TR').includes(q)).slice(0,2).join(' · ')):''}</small></button>`).join('')}</div></section>`).join('') || `<div class="empty"><span>⌕</span><h3>Hizmet bulunamadı</h3><p>Başka bir hizmet adı veya sorun yazarak tekrar ara.</p></div>`;
-  return `<section class="hero"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet, ihtiyacını bul. İlan vermek istediğinde ücretsiz kayıt ol.</p><div class="searchbox"><span>⌕</span><input id="guest-search" value="${esc(S.guestSearch)}" placeholder="Hizmet ara: su kaçağı, klima, boya..." autocomplete="off"></div></section>
-  <section class="home-section guest-catalog-title"><div class="home-title"><div><span class="section-kicker">Hizmetler</span><h2>${q?'Arama sonuçları':'Tüm kategoriler'}</h2></div></div></section>${sections}
+  return `<div class="home-shell guest-home"><section class="hero"><div class="hero-copy"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet, ihtiyacını bul. İlan vermek istediğinde ücretsiz kayıt ol.</p><div class="hero-actions"><div class="searchbox"><span>⌕</span><input id="guest-search" value="${esc(S.guestSearch)}" placeholder="Hizmet ara: su kaçağı, klima, boya..." autocomplete="off"></div><button class="hero-create" data-a="requireAuth" data-v="newIlan">İlan Oluştur</button></div></div><aside class="hero-proof" aria-label="Tamİşim güven özellikleri"><div><b>Ücretsiz ilan</b><small>İhtiyacını birkaç adımda yayınla.</small></div><div><b>Teklifleri karşılaştır</b><small>Fiyatı ve uzman profilini birlikte incele.</small></div><div><b>Güvenli seçim</b><small>Puan ve doğrulama bilgilerini gör.</small></div></aside></section>
+  <section class="home-section guest-catalog-title" id="guest-services"><div class="home-title"><div><span class="section-kicker">Hizmetler</span><h2>${q?'Arama sonuçları':'Tüm kategoriler'}</h2></div></div></section>${sections}
   <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Ücretsiz hesap açıp ilanını oluştur.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section>
   <section class="guest-convert">
     <span class="guest-convert-kicker">Başlamaya hazır mısın?</span>
@@ -1561,7 +1640,7 @@ function vGuest(){
     <p>İlan vermek ücretsiz. Gelen teklifleri karşılaştır, sana uygun uzmanı seç.</p>
     <button class="guest-convert-primary" data-a="requireAuth" data-v="newIlan"><span>＋</span><b>Ücretsiz ilan oluştur</b><i>→</i></button>
     <div class="guest-signin-row"><span>Zaten Tamİşim hesabın var mı?</span><button data-a="showAuth">Giriş yap <i>→</i></button></div>
-  </section>`;
+  </section></div>`;
 }
 function vAuth(){
   const up=S.authMode==='up',fromListing=S.pendingAction==='newIlan',confirming=!!S.confirmationEmail;
@@ -1698,11 +1777,11 @@ function vList(){
   const popular=['boya','tesisat','elektrik','klima','temizlik','nakliyat','mobilya','oto'];
   const cats=popular.map(k=>{const v=KAT[k];return `<button class="homecat" data-a="quickCat" data-v="${k}"><span>${iconFor(k)}</span><b>${esc(v.ad)}</b></button>`}).join('');
   const jobs=D.mine.length?D.mine.map(l=>ticket(l,{act:'open',pill:pillMine(l)})).join(''):'<div class="empty jobs-empty"><span>▤</span><h3>Henüz ilanın yok</h3><p>İlk ilanını ver, uygun uzmanlardan teklifler almaya başla.</p><button class="btn sm" data-a="newIlan">İlk ilanımı ver</button></div>';
-  return `<section class="hero"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>İşini anlat, teklif al, karşılaştır ve güvenle seç.</p><button class="searchbox" data-a="newIlan"><span>⌕</span> Hangi hizmete ihtiyacın var?</button></section>
+  return `<div class="home-shell customer-home"><section class="hero"><div class="hero-copy"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>İşini anlat, teklif al, karşılaştır ve güvenle seç.</p><div class="hero-actions"><button class="searchbox" data-a="newIlan"><span>⌕</span> Hangi hizmete ihtiyacın var?</button><button class="hero-create" data-a="newIlan">İlan Oluştur</button></div></div><aside class="hero-proof" aria-label="Tamİşim güven özellikleri"><div><b>Tek ilan, çok teklif</b><small>Uzmanları fiyat ve profilleriyle karşılaştır.</small></div><div><b>Doğrulama görünür</b><small>Onaylı bilgileri seçimden önce incele.</small></div><div><b>Süreç kontrol altında</b><small>Randevu ve iş adımlarını takip et.</small></div></aside></section>
   <section class="home-section"><div class="home-title"><h2>Popüler hizmetler</h2><button class="link" data-a="newIlan">Tümünü gör</button></div><div class="homecats">${cats}</div></section>
-  <section class="trustbox"><div class="trusticon">✓</div><div><h3>Güvenle uzmanını seç</h3><p>Teklifleri, puanları, tamamlanan işleri ve doğrulama rozetlerini karşılaştır.</p></div></section>
-  <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Hizmeti ve konumu belirt.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section>
-  <section class="myjobs" id="myjobs"><div class="home-title"><div><span class="section-kicker">Hesabım</span><h2>İlanlarım</h2></div><button class="btn sm" data-a="newIlan">+ İlan ver</button></div><div class="jobcount">${D.mine.length} ilan</div>${jobs}</section>`;
+  <div class="home-support-grid"><section class="trustbox"><div class="trusticon">✓</div><div><h3>Güvenle uzmanını seç</h3><p>Teklifleri, puanları, tamamlanan işleri ve doğrulama rozetlerini karşılaştır.</p></div></section>
+  <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Hizmeti ve konumu belirt.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section></div>
+  <section class="myjobs" id="myjobs"><div class="home-title"><div><span class="section-kicker">Hesabım</span><h2>İlanlarım</h2></div><button class="btn sm" data-a="newIlan">+ İlan ver</button></div><div class="jobcount">${D.mine.length} ilan</div>${jobs}</section></div>`;
 }
 function detailPromptFor(k){
   const m={
@@ -1996,6 +2075,7 @@ function render(){
   else if(S.role==='musteri')h=S.view==='new'?vNew():S.view==='detail'?vDetail():vList();
   else h=S.quoteFor?vQuote():S.view==='prodetail'?vProDetail():vUsta();
   $('#app').innerHTML=h;
+  document.body.classList.toggle('home-shell-active',!!document.querySelector('#app > .home-shell'));
   const signed=!!(S.user&&!S.setup&&!S.loading);
   $('#hdr-r').hidden=!signed;
   const gh=$('#guest-hdr');if(gh)gh.hidden=signed||S.setup||S.loading||S.recovery;
@@ -2016,6 +2096,7 @@ function render(){
     qm.hidden=!signed||!S.menuOpen;mb.hidden=!signed||!S.menuOpen;mt.setAttribute('aria-expanded',String(!!S.menuOpen));
   }
   const bn=$('#bottomnav');if(bn){if(window.scrollY<90)bn.classList.remove('nav-hidden');const topLevel=signed&&S.page!=='admin'&&((S.page==='main'&&((S.role==='musteri'&&S.view==='list')||(S.role==='usta'&&S.view==='list'&&!S.quoteFor)))||S.page==='notifications'||S.page==='account');bn.hidden=!topLevel;document.body.classList.toggle('has-bottomnav',topLevel);bn.querySelectorAll('button').forEach(x=>x.classList.remove('active'));const active=S.page==='notifications'?'notifications':S.page==='account'?'account':(S.page==='main'&&S.role==='musteri'?'navHome':null);if(active){const x=bn.querySelector('[data-a="'+active+'"]');if(x)x.classList.add('active')}}
+  const dn=$('#desktopnav');if(dn){const desktopTop=signed&&S.page!=='admin'&&S.page!=='partner';dn.hidden=!desktopTop;dn.querySelectorAll('button').forEach(x=>x.classList.remove('active'));const active=S.page==='experts'?'experts':(S.page==='main'&&S.role==='musteri'?(S.navSection==='jobs'?'navJobs':'navHome'):null);if(active){const x=dn.querySelector('[data-a="'+active+'"]');if(x)x.classList.add('active')}}
   if(signed){
     document.querySelectorAll('.seg button[data-a="role"]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.role)));
     const nb=(D.notifications||[]).filter(n=>!n.read_at).length,b=$('#notifbadge');if(b){b.hidden=!nb;b.textContent=nb>99?'99+':String(nb)}
