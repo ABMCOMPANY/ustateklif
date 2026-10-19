@@ -4,6 +4,7 @@ async function openHome(page) {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await expect(page).toHaveTitle(/Tamİşim/i);
   await expect(page.locator('body')).toBeVisible();
+  await expect(page.locator('.hero')).toBeVisible();
 }
 
 test.describe('D1-A responsive shell', () => {
@@ -21,42 +22,80 @@ test.describe('D1-A responsive shell', () => {
     ).toBeLessThanOrEqual(overflow.clientWidth + 1);
   });
 
-  test('İlan Oluştur ana aksiyonu görünür', async ({ page }) => {
+  test('guest ana ilan aksiyonu görünür', async ({ page }) => {
     await openHome(page);
 
-    const cta = page.getByText(/İlan Oluştur/i).filter({ visible: true }).first();
+    const cta = page.getByText(/İlan (ver|Oluştur)/i).filter({ visible: true }).first();
     await expect(cta).toBeVisible();
   });
 
-  test('mobil ve desktop navigation breakpoint davranışı doğru', async ({ page }, testInfo) => {
+  test('navigation breakpoint guest görünümünde bozulmaz', async ({ page }, testInfo) => {
     await openHome(page);
 
     const width = testInfo.project.use.viewport.width;
     const bottomNav = page.locator('.bottomnav');
     const desktopNav = page.locator('.desktopnav');
+    const guestHeader = page.locator('#guest-hdr');
+
+    await expect(guestHeader).toBeVisible();
+    await expect(desktopNav).toBeHidden();
 
     if (width >= 1024) {
-      await expect(desktopNav).toBeVisible();
       await expect(bottomNav).toBeHidden();
-    } else {
-      await expect(bottomNav).toBeVisible();
-      await expect(desktopNav).toBeHidden();
     }
   });
 
-  test('ana shell viewport içinde kalır', async ({ page }) => {
+  test('desktop shell mobil kolon gibi kalmaz', async ({ page }, testInfo) => {
     await openHome(page);
 
-    const app = page.locator('#app');
-    await expect(app).toBeVisible();
-
-    const box = await app.boundingBox();
     const viewport = page.viewportSize();
+    const appShell = page.locator('.app');
+    const hero = page.locator('.hero');
 
-    expect(box).not.toBeNull();
+    const appBox = await appShell.boundingBox();
+    const heroBox = await hero.boundingBox();
+
     expect(viewport).not.toBeNull();
-    expect(box.x).toBeGreaterThanOrEqual(-1);
-    expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1);
+    expect(appBox).not.toBeNull();
+    expect(heroBox).not.toBeNull();
+
+    expect(appBox.x).toBeGreaterThanOrEqual(-1);
+    expect(appBox.x + appBox.width).toBeLessThanOrEqual(viewport.width + 1);
+
+    if (testInfo.project.use.viewport.width >= 1024) {
+      expect(
+        appBox.width,
+        `desktop app shell too narrow: ${appBox.width}px at viewport ${viewport.width}px`
+      ).toBeGreaterThanOrEqual(viewport.width * 0.82);
+
+      expect(
+        heroBox.width,
+        `desktop hero too narrow: ${heroBox.width}px at viewport ${viewport.width}px`
+      ).toBeGreaterThanOrEqual(viewport.width * 0.72);
+    }
+  });
+
+  test('desktop kategori grid en az 4 kolon kullanır', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.use.viewport.width < 1024, 'desktop-only acceptance check');
+
+    await openHome(page);
+
+    const visibleCards = page.locator('.homecat').filter({ visible: true });
+    const count = await visibleCards.count();
+    expect(count).toBeGreaterThanOrEqual(4);
+
+    const firstFour = [];
+    for (let i = 0; i < 4; i += 1) {
+      const box = await visibleCards.nth(i).boundingBox();
+      expect(box).not.toBeNull();
+      firstFour.push(box);
+    }
+
+    const distinctColumns = new Set(firstFour.map((box) => Math.round(box.x)));
+    expect(
+      distinctColumns.size,
+      `expected at least 4 desktop columns, found ${distinctColumns.size}`
+    ).toBeGreaterThanOrEqual(4);
   });
 
   test('kanıt screenshot üretilebilir', async ({ page }, testInfo) => {
