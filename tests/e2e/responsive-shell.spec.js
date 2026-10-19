@@ -66,12 +66,17 @@ test.describe('D1-A responsive shell', () => {
       expect(
         appBox.width,
         `desktop app shell too narrow: ${appBox.width}px at viewport ${viewport.width}px`
-      ).toBeGreaterThanOrEqual(viewport.width * 0.82);
+      ).toBeGreaterThanOrEqual(1040);
+
+      expect(
+        appBox.width,
+        `desktop app shell too wide: ${appBox.width}px at viewport ${viewport.width}px`
+      ).toBeLessThanOrEqual(1220);
 
       expect(
         heroBox.width,
         `desktop hero too narrow: ${heroBox.width}px at viewport ${viewport.width}px`
-      ).toBeGreaterThanOrEqual(viewport.width * 0.72);
+      ).toBeGreaterThanOrEqual(980);
     }
   });
 
