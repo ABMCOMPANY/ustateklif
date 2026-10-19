@@ -850,33 +850,37 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
 
 @media (min-width:1024px){
   body{padding-bottom:0}
-  .app{width:100%;max-width:1280px;padding:0 34px 64px}
-  .top{min-height:76px;gap:20px}
+  .app{width:100%;max-width:1180px;padding:0 30px 60px}
+  .top{min-height:72px;gap:18px}
   .hdr-r{flex:1;justify-content:flex-end}
-  .desktopnav{display:flex;align-items:center;gap:5px;margin-right:auto;margin-left:18px}
+  .desktopnav{display:flex;align-items:center;gap:5px;margin-right:auto;margin-left:16px}
   .desktopnav[hidden]{display:none!important}
-  .desktopnav button{min-height:42px;border:0;border-radius:12px;padding:0 14px;background:transparent;color:var(--brand-muted);font:750 13px Figtree,system-ui;cursor:pointer}
+  .desktopnav button{min-height:40px;border:0;border-radius:12px;padding:0 13px;background:transparent;color:var(--brand-muted);font:750 12px Figtree,system-ui;cursor:pointer}
   .desktopnav button:hover{background:var(--brand-tint);color:var(--brand-primary)}
   .desktopnav button.active{background:var(--brand-tint);color:var(--brand-primary)}
   .desktopnav .desktop-cta{background:#F28A1A;color:#fff;box-shadow:0 8px 20px rgba(242,138,26,.2)}
   .desktopnav .desktop-cta:hover{background:#DE7810;color:#fff}
   .bottomnav{display:none!important}
   body.has-bottomnav main{padding-bottom:28px}
-  .quick-menu{top:84px;right:max(24px,calc((100vw - 1280px)/2 + 34px))}
-  .hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,.7fr);gap:46px;align-items:center;min-height:390px;padding:54px 52px;position:relative}
-  .hero:after{content:"";position:absolute;width:330px;height:330px;border-radius:50%;right:-150px;top:-170px;background:rgba(var(--brand-primary-rgb),.06);pointer-events:none}
-  .hero h1{font-size:58px;line-height:1}
+  .quick-menu{top:80px;right:max(24px,calc((100vw - 1180px)/2 + 30px))}
+  .hero{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(280px,.82fr);gap:32px;align-items:center;min-height:330px;padding:40px 42px;position:relative}
+  .hero:after{content:"";position:absolute;width:300px;height:300px;border-radius:50%;right:-145px;top:-160px;background:rgba(var(--brand-primary-rgb),.06);pointer-events:none}
+  .hero h1{font-size:48px;line-height:1.02}
+  .hero p{font-size:15px;max-width:520px}
+  .hero-actions{max-width:690px}
   .hero-proof{position:relative;z-index:1;grid-template-columns:1fr;margin:0}
-  .hero-proof div{padding:18px;border-radius:18px;background:rgba(255,255,255,.9);box-shadow:0 9px 28px rgba(var(--brand-ink-rgb),.07)}
-  .hero-proof b{font-size:14px}.hero-proof small{font-size:11px}
+  .hero-proof div{padding:14px 15px;border-radius:16px;background:rgba(255,255,255,.9);box-shadow:0 7px 22px rgba(var(--brand-ink-rgb),.06)}
+  .hero-proof b{font-size:13px}.hero-proof small{font-size:10px}
+  .home-section{margin:28px 0}
+  .homecat{min-height:100px}
   .guest-group .homecats{grid-template-columns:repeat(4,minmax(0,1fr))}
-  .myjobs{margin-top:38px}
-  .guest-hdr{gap:12px}.guest-login{font-size:13px}.guest-cta{min-height:44px;padding:0 18px;background:#F28A1A;font-size:13px}
+  .myjobs{margin-top:34px}
+  .guest-hdr{gap:10px}.guest-login{font-size:12px}.guest-cta{min-height:42px;padding:0 16px;background:#F28A1A;font-size:12px}
 }
 
 @media (min-width:1600px){
-  .app{max-width:1320px;padding-inline:40px}
-  .quick-menu{right:max(28px,calc((100vw - 1320px)/2 + 40px))}
+  .app{max-width:1220px;padding-inline:34px}
+  .quick-menu{right:max(28px,calc((100vw - 1220px)/2 + 34px))}
 }
 </style>
 </head>
