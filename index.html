@@ -996,8 +996,8 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
 .guest-home .hero{
   position:relative;
   display:block;
-  min-height:370px;
-  padding:30px 22px 22px;
+  min-height:296px;
+  padding:16px 18px 12px;
   isolation:isolate;
 }
 .guest-home .hero:after{
@@ -1007,23 +1007,23 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
   width:auto;
   height:auto;
   border-radius:inherit;
-  background:linear-gradient(90deg,rgba(16,39,71,.94) 0%,rgba(16,39,71,.68) 47%,rgba(16,39,71,.06) 100%);
+  background:linear-gradient(90deg,rgba(16,39,71,.94) 0%,rgba(16,39,71,.72) 42%,rgba(16,39,71,.14) 72%,rgba(16,39,71,.02) 100%);
   z-index:-1;
   pointer-events:none;
 }
 .guest-home .guest-hero-person{
   position:absolute;
-  right:-38px;
+  right:-48px;
   bottom:0;
   width:330px;
   max-width:none;
   z-index:-2;
   pointer-events:none;
 }
-.guest-home .hero-copy{min-height:318px}
-.guest-home .hero .eyebrow{margin-bottom:14px;color:#fff!important}
-.guest-home .hero h1{max-width:235px;font-size:38px;line-height:1.02}
-.guest-home .hero p{max-width:205px;font-size:13px;line-height:1.4}
+.guest-home .hero-copy{min-height:268px}
+.guest-home .hero .eyebrow{margin-bottom:8px;padding:4px 8px;font-size:11px;color:#fff!important}
+.guest-home .hero h1{max-width:225px;font-size:30px;line-height:1.02}
+.guest-home .hero p{max-width:205px;margin:8px 0 0;font-size:12.5px;line-height:1.38}
 .guest-home .hero-actions{position:absolute;left:0;right:0;bottom:0;display:block;max-width:none}
 .guest-home .hero .hero-create{
   position:relative;
@@ -1040,13 +1040,15 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
 .guest-home .hero .hero-create:after{position:absolute;font-size:24px;font-weight:400;line-height:1}
 .guest-home .hero .hero-create:before{content:"+";left:22px}
 .guest-home .hero .hero-create:after{content:"→";right:22px}
+.guest-home .hero-callout,.guest-home .hero-spark{display:none}
+.guest-notif{display:none}
 .guest-home .hero-proof{
   position:relative;
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:0;
-  margin:0 0 8px;
-  padding:12px 4px;
+  margin:0 0 4px;
+  padding:8px 4px;
   background:#fff;
   border:1px solid #E0E6EE;
   border-radius:0 0 18px 18px;
@@ -1062,104 +1064,135 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
   box-shadow:none;
 }
 .guest-home .hero-proof div:last-child{border-right:0}
-.guest-home .hero-proof b{display:block;color:#102747;font-size:11px;line-height:1.2}
-.guest-home .hero-proof small{display:block;margin-top:3px;color:#627087;font-size:9px;line-height:1.25}
-.guest-home .guest-search-panel{padding:14px 0 8px}
+.guest-home .hero-proof b{display:block;color:#102747;font-size:10px;line-height:1.2}
+.guest-home .hero-proof small{display:block;margin-top:2px;color:#627087;font-size:8px;line-height:1.2}
+.guest-home .guest-search-panel{position:relative;z-index:3;flex:none;padding:0}
 .guest-home .guest-search-panel .searchbox{
   display:flex;
   align-items:center;
-  gap:8px;
-  min-height:52px;
-  padding:0 16px;
+  gap:0;
+  width:36px;
+  min-height:36px;
+  padding:0;
   background:#F4F6FA;
   border-color:#DFE5ED;
+  border-radius:11px;
   box-shadow:none;
+  transition:width .18s ease;
 }
-.guest-home .guest-search-panel .searchbox>span{flex:none;margin:0}
-.guest-home .guest-search-panel input{min-width:0;flex:1;width:auto;background:transparent}
+.guest-home .guest-search-panel .searchbox:focus-within{width:min(210px,calc(100vw - 36px))}
+.guest-home .guest-search-panel label{display:grid;place-items:center;flex:0 0 34px;height:34px;color:var(--brand-primary);font-size:25px;cursor:pointer}
+.guest-home .guest-search-panel input{min-width:0;width:0;flex:0 0 0;opacity:0;padding:0;background:transparent;font-size:12px;pointer-events:none}
+.guest-home .guest-search-panel .searchbox:focus-within input{flex:1;width:auto;opacity:1;pointer-events:auto}
 .guest-home .guest-catalog{
-  margin:12px 0 24px;
-  padding:20px;
+  margin:0 0 18px;
+  padding:16px;
   background:#fff;
   border:1px solid #E0E6EE;
-  border-radius:24px;
+  border-radius:20px;
 }
 .guest-home .guest-catalog-title{margin:0}
-.guest-home .guest-catalog-title .home-title{margin:0}
-.guest-home .guest-group{margin-top:18px!important}
-.guest-home .guest-group .home-title{margin:0 0 8px}
-.guest-home .guest-group .home-title h2{font-size:16px}
+.guest-home .guest-catalog-title .home-title{position:relative;margin:0;min-height:36px}
+.guest-home .guest-catalog-title .home-title:focus-within h2{position:absolute;visibility:hidden}
+.guest-home .guest-group{margin-top:12px!important}
+.guest-home .guest-group .home-title{margin:0 0 6px}
+.guest-home .guest-group .home-title h2{font-size:15px}
 .guest-home .homecat{
-  min-height:92px;
-  gap:8px;
-  padding:12px 6px;
+  min-height:82px;
+  gap:5px;
+  padding:8px 5px;
   background:#F4F6FA;
   border:1px solid transparent;
-  box-shadow:none;
+  box-shadow:0 3px 12px rgba(16,39,71,.045);
 }
 .guest-home .homecat .svc-icon{color:var(--brand-primary)}
 .guest-home .homecat:nth-child(3n+1) .svc-icon{color:var(--brand-accent)}
 .guest-home .homecat:nth-child(3n+2) .svc-icon{color:var(--brand-bright)}
 .guest-home .homecat small:empty{display:none}
+.guest-home .guest-bottomnav{display:none}
 @media(max-width:767px){
   body.home-shell-active:has(.guest-home) .top{
     position:relative;
     margin:0 -18px;
-    padding:18px 18px 8px;
+    padding:10px 18px 5px;
     background:#102747!important;
     border:0;
     border-radius:0;
     backdrop-filter:none;
   }
   body:has(.guest-home) .brand{color:#fff}
+  body:has(.guest-home) .brand{font-size:27px;line-height:1}
+  body:has(.guest-home) .brand span:nth-child(2){color:#FF5A13}
+  body:has(.guest-home) .brand i{display:none}
+  body:has(.guest-home) .guest-hdr .guest-cta{display:none}
+  body:has(.guest-home) .guest-hdr .guest-login{padding:0 5px;font-size:10px}
+  body:has(.guest-home) .guest-notif{display:grid;place-items:center;width:34px;height:38px;padding:0;border:0;background:transparent;color:#fff;font:22px "Segoe UI Symbol",sans-serif;cursor:pointer}
+  body:has(.guest-home) .guest-notif span{position:relative;display:block;width:17px;height:16px;border:2px solid #fff;border-bottom:0;border-radius:9px 9px 0 0;transform:translateY(-2px)}
+  body:has(.guest-home) .guest-notif span:before{content:"";position:absolute;left:-5px;bottom:-5px;width:23px;height:6px;border:2px solid #fff;border-top:0;border-radius:0 0 5px 5px}
+  body:has(.guest-home) .guest-notif span:after{content:"";position:absolute;left:4px;bottom:-9px;width:5px;height:3px;border-radius:0 0 5px 5px;background:#fff}
   body:has(.guest-home) .guest-login{color:#fff}
   body:has(.guest-home) .beta-strip{
     margin:0 -18px;
-    padding:4px 18px 10px;
+    padding:3px 18px 5px;
     color:#D9E3EF;
     background:#102747;
     border:0;
     border-radius:0;
   }
   body:has(.guest-home) .beta-strip b{background:#fff;color:#102747}
-  .guest-home .hero{margin:0 -18px;border:0;border-radius:0 0 24px 24px;padding:28px 18px 18px}
-  .guest-home .hero-copy{min-height:324px}
-  .guest-home .hero-proof{margin:0 -18px 8px;border-radius:0 0 18px 18px}
-  .guest-home .guest-catalog{margin:8px -18px 24px;padding:22px 18px;border:0;border-radius:0}
+  .guest-home{padding-bottom:80px}
+  .guest-home .hero{min-height:278px;margin:0 -18px;border:0;border-radius:0 0 22px 22px;padding:16px 18px 12px}
+  .guest-home .hero-callout{position:absolute;z-index:2;top:84px;right:4px;display:grid;place-items:center;width:82px;min-height:43px;padding:6px 5px;border-radius:8px;background:#fff;color:#102747;box-shadow:0 3px 10px rgba(3,17,33,.2);font-size:10px;font-weight:800;line-height:1.1;text-align:center;transform:rotate(5deg);pointer-events:none}
+  .guest-home .hero-callout:after{content:"";position:absolute;right:24px;bottom:-19px;width:17px;height:21px;background:#fff;clip-path:polygon(0 0,100% 0,38% 100%)}
+  .guest-home .hero-spark{position:absolute;z-index:2;right:1px;top:135px;display:block;width:33px;height:30px;pointer-events:none}
+  .guest-home .hero-spark i{position:absolute;display:block;width:3px;height:13px;border-radius:3px;background:#FF682B;transform-origin:bottom center}
+  .guest-home .hero-spark i:nth-child(1){left:8px;top:1px;transform:rotate(17deg)}
+  .guest-home .hero-spark i:nth-child(2){left:18px;top:5px;transform:rotate(52deg)}
+  .guest-home .hero-spark i:nth-child(3){left:21px;top:16px;height:9px;transform:rotate(82deg)}
+  .guest-home .hero-copy{min-height:250px}
+  .guest-home .hero-proof{margin:0 -18px;border-radius:0 0 16px 16px;padding-block:6px}
+  .guest-home .guest-catalog{margin:0 -18px 18px;padding:12px 18px 16px;border:0;border-radius:0}
+  .guest-home .guest-group{margin-top:4px!important}
+  .guest-home .guest-catalog-title + .guest-group .home-title{display:none}
   .guest-home .guest-group .homecats{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
-  .guest-home .homecat{min-height:84px;border-radius:13px}
+  .guest-home .homecat{min-height:80px;border-radius:12px}
   .guest-home .homecat b{font-size:10px}
+  .guest-home .guest-bottomnav{position:fixed;z-index:40;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;min-height:68px;padding:5px 8px calc(5px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(16,39,71,.09)}
+  .guest-home .guest-bottomnav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:50px;border:0;background:transparent;color:var(--muted);font:inherit;cursor:pointer}
+  .guest-home .guest-bottomnav button:first-child{color:var(--ink)}
+  .guest-home .guest-bottomnav button span{font-size:21px;line-height:1}
+  .guest-home .guest-bottomnav button small{font-size:9px;font-weight:750}
 }
 @media(min-width:768px){
-  .guest-home .hero{min-height:360px;padding:42px 38px}
-  .guest-home .hero-copy{min-height:276px}
+  .guest-home .hero{min-height:340px;padding:36px 38px}
+  .guest-home .hero-copy{min-height:264px}
   .guest-home .hero h1{max-width:550px;font-size:48px}
   .guest-home .hero p{max-width:390px;font-size:15px}
-  .guest-home .guest-hero-person{right:0;width:390px}
+  .guest-home .guest-hero-person{right:0;width:370px}
   .guest-home .hero-actions{right:auto;width:260px}
   .guest-home .hero-proof{margin:0 20px 16px}
-  .guest-home .guest-catalog{padding:26px}
+  .guest-home .guest-catalog{padding:24px}
   .guest-home .guest-group .homecats{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 @media(min-width:768px) and (max-width:1023px){
   .guest-home .hero p{max-width:340px}
 }
 @media(min-width:1024px){
-  .guest-home .hero{min-height:390px;padding:46px 44px}
+  .guest-home .hero{min-height:360px;padding:38px 44px}
   .guest-home .hero h1{font-size:54px}
-  .guest-home .guest-hero-person{right:60px;width:440px}
+  .guest-home .guest-hero-person{right:60px;width:400px}
   .guest-home .hero-proof{margin:0 34px 18px}
-  .guest-home .guest-search-panel{max-width:620px;margin:0 auto}
+  .guest-home .guest-search-panel{max-width:none;margin:0 0 0 auto}
 }
 </style>
 </head>
 <body>
 <div class="app">
   <header class="top">
-    <div class="brand">Tamİşim<i></i></div>
+    <div class="brand"><span>Tam</span><span>İşim</span><i></i></div>
     <div class="guest-hdr" id="guest-hdr">
       <button class="guest-login" data-a="showAuth">Giriş yap</button>
-      <button class="guest-cta" data-a="requireAuth" data-v="newIlan"><span class="guest-cta-plus">＋</span><span class="guest-cta-text">İlan ver</span></button>
+      <button class="guest-cta" data-a="requireAuth" data-v="newIlan"><span class="guest-cta-plus">＋</span><span class="guest-cta-text">İlan ver</span></button><button class="guest-notif" data-a="showAuth" aria-label="Bildirimler için giriş yap"><span aria-hidden="true"></span></button>
     </div>
     <div class="hdr-r" id="hdr-r" hidden>
       <nav class="desktopnav" id="desktopnav" hidden aria-label="Masaüstü ana menü">
@@ -1904,8 +1937,8 @@ function vGuest(){
   const matches=Object.entries(KAT).filter(([,v])=>!q||v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q)));
   const groups=[...new Set(matches.map(([,v])=>v.grup))];
   const sections=groups.map(g=>`<section class="home-section guest-group"><div class="home-title"><h2>${esc(g)}</h2></div><div class="homecats">${matches.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="homecat" data-a="guestCat" data-v="${k}"><span>${iconFor(k)}</span><b>${esc(v.ad)}</b><small>${q?esc(v.sorunlar.filter(x=>x.toLocaleLowerCase('tr-TR').includes(q)).slice(0,2).join(' · ')):''}</small></button>`).join('')}</div></section>`).join('') || `<div class="empty"><span>⌕</span><h3>Hizmet bulunamadı</h3><p>Başka bir hizmet adı veya sorun yazarak tekrar ara.</p></div>`;
-  return `<div class="home-shell guest-home"><section class="hero"><img class="guest-hero-person" src="hero-person.png" alt="" aria-hidden="true" decoding="async"><div class="hero-copy"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet, ihtiyacını bul. İlan vermek istediğinde ücretsiz kayıt ol.</p><div class="hero-actions"><button class="hero-create" data-a="requireAuth" data-v="newIlan">İlan Oluştur</button></div></div></section><aside class="hero-proof" aria-label="Tamİşim güven özellikleri"><div><b>Ücretsiz ilan</b><small>İhtiyacını birkaç adımda yayınla.</small></div><div><b>Teklifleri karşılaştır</b><small>Fiyatı ve uzman profilini birlikte incele.</small></div><div><b>Güvenli seçim</b><small>Puan ve doğrulama bilgilerini gör.</small></div></aside><div class="guest-search-panel"><div class="searchbox"><span>⌕</span><input id="guest-search" value="${esc(S.guestSearch)}" placeholder="Hizmet ara: su kaçağı, klima, boya..." autocomplete="off"></div></div>
-  <div class="guest-catalog"><section class="home-section guest-catalog-title" id="guest-services"><div class="home-title"><div><span class="section-kicker">Hizmetler</span><h2>${q?'Arama sonuçları':'Tüm kategoriler'}</h2></div></div></section>${sections}</div>
+  return `<div class="home-shell guest-home"><section class="hero"><img class="guest-hero-person" src="hero-person.png" alt="" aria-hidden="true" decoding="async"><span class="hero-callout" aria-hidden="true">Teklifleri<br>karşılaştır</span><span class="hero-spark" aria-hidden="true"><i></i><i></i><i></i></span><div class="hero-copy"><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet, ihtiyacını bul. İlan vermek istediğinde ücretsiz kayıt ol.</p><div class="hero-actions"><button class="hero-create" data-a="requireAuth" data-v="newIlan">İlan Oluştur</button></div></div></section><aside class="hero-proof" aria-label="Tamİşim güven özellikleri"><div><b>Ücretsiz ilan</b><small>İhtiyacını birkaç adımda yayınla.</small></div><div><b>Teklifleri karşılaştır</b><small>Fiyatı ve uzman profilini birlikte incele.</small></div><div><b>Güvenli seçim</b><small>Puan ve doğrulama bilgilerini gör.</small></div></aside>
+  <div class="guest-catalog"><section class="home-section guest-catalog-title" id="guest-services"><div class="home-title"><h2>${q?'Arama sonuçları':'Tüm kategoriler'}</h2><div class="guest-search-panel"><div class="searchbox"><label for="guest-search" aria-label="Hizmet ara">⌕</label><input id="guest-search" value="${esc(S.guestSearch)}" placeholder="Hizmet ara: su kaçağı, klima, boya..." autocomplete="off"></div></div></div></section>${sections}</div>
   <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Ücretsiz hesap açıp ilanını oluştur.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section>
   <section class="guest-convert">
     <span class="guest-convert-kicker">Başlamaya hazır mısın?</span>
@@ -1913,7 +1946,7 @@ function vGuest(){
     <p>İlan vermek ücretsiz. Gelen teklifleri karşılaştır, sana uygun uzmanı seç.</p>
     <button class="guest-convert-primary" data-a="requireAuth" data-v="newIlan"><span>＋</span><b>Ücretsiz ilan oluştur</b><i>→</i></button>
     <div class="guest-signin-row"><span>Zaten Tamİşim hesabın var mı?</span><button data-a="showAuth">Giriş yap <i>→</i></button></div>
-  </section></div>`;
+  </section><nav class="guest-bottomnav" aria-label="Misafir alt menüsü"><button type="button" data-a="navHome" aria-current="page"><span aria-hidden="true">⌂</span><small>Ana Sayfa</small></button><button type="button" data-a="showAuth"><span aria-hidden="true">▤</span><small>İlanlarım</small></button><button type="button" data-a="showAuth"><span aria-hidden="true">♢</span><small>Bildirimler</small></button><button type="button" data-a="showAuth"><span aria-hidden="true">○</span><small>Profil</small></button></nav></div>`;
 }
 function vAuth(){
   const up=S.authMode==='up',fromListing=S.pendingAction==='newIlan',confirming=!!S.confirmationEmail;
