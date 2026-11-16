@@ -992,6 +992,165 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
 @media(min-width:1024px){
   .guest-home .hero{padding:42px 44px}
 }
+/* V1-B guest homepage layout, based on the approved first phone. */
+.guest-home .hero{
+  position:relative;
+  display:block;
+  min-height:370px;
+  padding:30px 22px 22px;
+  isolation:isolate;
+}
+.guest-home .hero:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  width:auto;
+  height:auto;
+  border-radius:inherit;
+  background:linear-gradient(90deg,rgba(16,39,71,.94) 0%,rgba(16,39,71,.68) 47%,rgba(16,39,71,.06) 100%);
+  z-index:-1;
+  pointer-events:none;
+}
+.guest-home .guest-hero-person{
+  position:absolute;
+  right:-38px;
+  bottom:0;
+  width:330px;
+  max-width:none;
+  z-index:-2;
+  pointer-events:none;
+}
+.guest-home .hero-copy{min-height:318px}
+.guest-home .hero .eyebrow{margin-bottom:14px;color:#fff!important}
+.guest-home .hero h1{max-width:235px;font-size:38px;line-height:1.02}
+.guest-home .hero p{max-width:205px;font-size:13px;line-height:1.4}
+.guest-home .hero-actions{position:absolute;left:0;right:0;bottom:0;display:block;max-width:none}
+.guest-home .hero .hero-create{
+  position:relative;
+  width:100%;
+  min-height:56px;
+  padding:0 44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  border-radius:16px;
+}
+.guest-home .hero .hero-create:before,
+.guest-home .hero .hero-create:after{position:absolute;font-size:24px;font-weight:400;line-height:1}
+.guest-home .hero .hero-create:before{content:"+";left:22px}
+.guest-home .hero .hero-create:after{content:"→";right:22px}
+.guest-home .hero-proof{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:0;
+  margin:0 0 8px;
+  padding:12px 4px;
+  background:#fff;
+  border:1px solid #E0E6EE;
+  border-radius:0 0 18px 18px;
+  box-shadow:0 8px 22px rgba(16,39,71,.06);
+}
+.guest-home .hero-proof div{
+  min-width:0;
+  padding:2px 8px;
+  border:0;
+  border-right:1px solid #E0E6EE;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.guest-home .hero-proof div:last-child{border-right:0}
+.guest-home .hero-proof b{display:block;color:#102747;font-size:11px;line-height:1.2}
+.guest-home .hero-proof small{display:block;margin-top:3px;color:#627087;font-size:9px;line-height:1.25}
+.guest-home .guest-search-panel{padding:14px 0 8px}
+.guest-home .guest-search-panel .searchbox{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-height:52px;
+  padding:0 16px;
+  background:#F4F6FA;
+  border-color:#DFE5ED;
+  box-shadow:none;
+}
+.guest-home .guest-search-panel .searchbox>span{flex:none;margin:0}
+.guest-home .guest-search-panel input{min-width:0;flex:1;width:auto;background:transparent}
+.guest-home .guest-catalog{
+  margin:12px 0 24px;
+  padding:20px;
+  background:#fff;
+  border:1px solid #E0E6EE;
+  border-radius:24px;
+}
+.guest-home .guest-catalog-title{margin:0}
+.guest-home .guest-catalog-title .home-title{margin:0}
+.guest-home .guest-group{margin-top:18px!important}
+.guest-home .guest-group .home-title{margin:0 0 8px}
+.guest-home .guest-group .home-title h2{font-size:16px}
+.guest-home .homecat{
+  min-height:92px;
+  gap:8px;
+  padding:12px 6px;
+  background:#F4F6FA;
+  border:1px solid transparent;
+  box-shadow:none;
+}
+.guest-home .homecat .svc-icon{color:var(--brand-primary)}
+.guest-home .homecat:nth-child(3n+1) .svc-icon{color:var(--brand-accent)}
+.guest-home .homecat:nth-child(3n+2) .svc-icon{color:var(--brand-bright)}
+.guest-home .homecat small:empty{display:none}
+@media(max-width:767px){
+  body.home-shell-active:has(.guest-home) .top{
+    position:relative;
+    margin:0 -18px;
+    padding:18px 18px 8px;
+    background:#102747!important;
+    border:0;
+    border-radius:0;
+    backdrop-filter:none;
+  }
+  body:has(.guest-home) .brand{color:#fff}
+  body:has(.guest-home) .guest-login{color:#fff}
+  body:has(.guest-home) .beta-strip{
+    margin:0 -18px;
+    padding:4px 18px 10px;
+    color:#D9E3EF;
+    background:#102747;
+    border:0;
+    border-radius:0;
+  }
+  body:has(.guest-home) .beta-strip b{background:#fff;color:#102747}
+  .guest-home .hero{margin:0 -18px;border:0;border-radius:0 0 24px 24px;padding:28px 18px 18px}
+  .guest-home .hero-copy{min-height:324px}
+  .guest-home .hero-proof{margin:0 -18px 8px;border-radius:0 0 18px 18px}
+  .guest-home .guest-catalog{margin:8px -18px 24px;padding:22px 18px;border:0;border-radius:0}
+  .guest-home .guest-group .homecats{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .guest-home .homecat{min-height:84px;border-radius:13px}
+  .guest-home .homecat b{font-size:10px}
+}
+@media(min-width:768px){
+  .guest-home .hero{min-height:360px;padding:42px 38px}
+  .guest-home .hero-copy{min-height:276px}
+  .guest-home .hero h1{max-width:550px;font-size:48px}
+  .guest-home .hero p{max-width:390px;font-size:15px}
+  .guest-home .guest-hero-person{right:0;width:390px}
+  .guest-home .hero-actions{right:auto;width:260px}
+  .guest-home .hero-proof{margin:0 20px 16px}
+  .guest-home .guest-catalog{padding:26px}
+  .guest-home .guest-group .homecats{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(min-width:768px) and (max-width:1023px){
+  .guest-home .hero p{max-width:340px}
+}
+@media(min-width:1024px){
+  .guest-home .hero{min-height:390px;padding:46px 44px}
+  .guest-home .hero h1{font-size:54px}
+  .guest-home .guest-hero-person{right:60px;width:440px}
+  .guest-home .hero-proof{margin:0 34px 18px}
+  .guest-home .guest-search-panel{max-width:620px;margin:0 auto}
+}
 </style>
 </head>
 <body>
@@ -1745,8 +1904,8 @@ function vGuest(){
   const matches=Object.entries(KAT).filter(([,v])=>!q||v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q)));
   const groups=[...new Set(matches.map(([,v])=>v.grup))];
   const sections=groups.map(g=>`<section class="home-section guest-group"><div class="home-title"><h2>${esc(g)}</h2></div><div class="homecats">${matches.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="homecat" data-a="guestCat" data-v="${k}"><span>${iconFor(k)}</span><b>${esc(v.ad)}</b><small>${q?esc(v.sorunlar.filter(x=>x.toLocaleLowerCase('tr-TR').includes(q)).slice(0,2).join(' · ')):''}</small></button>`).join('')}</div></section>`).join('') || `<div class="empty"><span>⌕</span><h3>Hizmet bulunamadı</h3><p>Başka bir hizmet adı veya sorun yazarak tekrar ara.</p></div>`;
-  return `<div class="home-shell guest-home"><section class="hero"><div class="hero-copy"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet, ihtiyacını bul. İlan vermek istediğinde ücretsiz kayıt ol.</p><div class="hero-actions"><div class="searchbox"><span>⌕</span><input id="guest-search" value="${esc(S.guestSearch)}" placeholder="Hizmet ara: su kaçağı, klima, boya..." autocomplete="off"></div><button class="hero-create" data-a="requireAuth" data-v="newIlan">İlan Oluştur</button></div></div><aside class="hero-proof" aria-label="Tamİşim güven özellikleri"><div><b>Ücretsiz ilan</b><small>İhtiyacını birkaç adımda yayınla.</small></div><div><b>Teklifleri karşılaştır</b><small>Fiyatı ve uzman profilini birlikte incele.</small></div><div><b>Güvenli seçim</b><small>Puan ve doğrulama bilgilerini gör.</small></div></aside></section>
-  <section class="home-section guest-catalog-title" id="guest-services"><div class="home-title"><div><span class="section-kicker">Hizmetler</span><h2>${q?'Arama sonuçları':'Tüm kategoriler'}</h2></div></div></section>${sections}
+  return `<div class="home-shell guest-home"><section class="hero"><img class="guest-hero-person" src="hero-person.png" alt="" aria-hidden="true" decoding="async"><div class="hero-copy"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>Hizmetleri keşfet, ihtiyacını bul. İlan vermek istediğinde ücretsiz kayıt ol.</p><div class="hero-actions"><button class="hero-create" data-a="requireAuth" data-v="newIlan">İlan Oluştur</button></div></div></section><aside class="hero-proof" aria-label="Tamİşim güven özellikleri"><div><b>Ücretsiz ilan</b><small>İhtiyacını birkaç adımda yayınla.</small></div><div><b>Teklifleri karşılaştır</b><small>Fiyatı ve uzman profilini birlikte incele.</small></div><div><b>Güvenli seçim</b><small>Puan ve doğrulama bilgilerini gör.</small></div></aside><div class="guest-search-panel"><div class="searchbox"><span>⌕</span><input id="guest-search" value="${esc(S.guestSearch)}" placeholder="Hizmet ara: su kaçağı, klima, boya..." autocomplete="off"></div></div>
+  <div class="guest-catalog"><section class="home-section guest-catalog-title" id="guest-services"><div class="home-title"><div><span class="section-kicker">Hizmetler</span><h2>${q?'Arama sonuçları':'Tüm kategoriler'}</h2></div></div></section>${sections}</div>
   <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Ücretsiz hesap açıp ilanını oluştur.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section>
   <section class="guest-convert">
     <span class="guest-convert-kicker">Başlamaya hazır mısın?</span>
