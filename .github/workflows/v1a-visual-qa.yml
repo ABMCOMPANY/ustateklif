@@ -1,0 +1,39 @@
+name: V1-A Visual QA
+
+on:
+  push:
+    branches:
+      - qa/v1a-visual-98f06e1
+
+permissions:
+  contents: read
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact QA commit
+        uses: actions/checkout@v4
+      - name: Verify target design blob
+        run: test "$(git hash-object index.html)" = "ca0f393c6a15666291c5b47020e4866ddfd4e575"
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install test dependencies
+        run: npm install
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run isolated visual QA
+        run: npm run test:e2e:visual
+      - name: Upload screenshots and trace
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v1a-visual-qa-evidence
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 14
