@@ -110,8 +110,12 @@ test('eski palet tercihi ve açık/koyu tema', async ({ page }, testInfo) => {
   await capture(page, testInfo, 'legacy-palette-light');
   const light = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
   await page.emulateMedia({ colorScheme: 'dark' });
+  const systemDark = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
+  expect(systemDark, 'explicit light theme survives a dark system preference').toBe(light);
+  await capture(page, testInfo, 'legacy-palette-system-dark');
+  await page.locator('html').evaluate(el => { el.dataset.theme = 'dark'; });
   const dark = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
-  expect(dark).not.toBe(light);
+  expect(dark, 'explicit dark theme changes the page background').not.toBe(light);
   await capture(page, testInfo, 'legacy-palette-dark');
   expect(blocked, 'unexpected external requests').toEqual([]);
 });
