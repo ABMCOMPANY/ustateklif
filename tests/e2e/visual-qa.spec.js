@@ -119,7 +119,7 @@ test('eski palet tercihi ve açık/koyu tema', async ({ page }, testInfo) => {
   await capture(page, testInfo, 'legacy-palette-dark');
   const headingContrast = await page.locator('.home-title h2').first().evaluate(el => {
     const parse = value => {
-      const match = value.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+      const match = value.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
       if (!match) throw new Error('Cannot read RGB color: ' + value);
       return match.slice(1, 4).map(Number);
     };
