@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1457D9">
+<meta name="theme-color" content="#102747">
 <meta name="color-scheme" content="light">
 <meta name="tamisim-build" content="v75-responsive-shell">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -18,7 +18,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <title>Tamİşim</title>
 <script>
-const PALETTE_COLORS=Object.freeze({'blue-amber':'#1457D9','navy-teal':'#173B61','indigo-sage':'#443D91'});
+const PALETTE_COLORS=Object.freeze({'blue-amber':'#102747','navy-teal':'#173B61','indigo-sage':'#443D91'});
 let savedPalette='blue-amber';
 try{const value=localStorage.getItem('tamisim_palette');if(Object.prototype.hasOwnProperty.call(PALETTE_COLORS,value))savedPalette=value}catch(e){}
 document.documentElement.dataset.palette=savedPalette;
@@ -800,7 +800,7 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
 .palette-number{display:grid;place-items:center;width:27px;height:27px;border-radius:9px;background:var(--brand-tint);color:var(--brand-primary);font-size:11px;font-weight:900}
 .palette-label{min-width:0}.palette-label b,.palette-label small{display:block}.palette-label b{color:var(--brand-ink);font-size:12px;line-height:1.3}.palette-label small{color:var(--brand-muted);font-size:10px;margin-top:2px;line-height:1.3}
 .palette-swatches{display:flex;align-items:center}.palette-swatches i{width:23px;height:23px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.13)}.palette-swatches i+i{margin-left:-9px}
-.palette-option[data-v="blue-amber"] .palette-swatches i:first-child{background:#1457D9}.palette-option[data-v="blue-amber"] .palette-swatches i:last-child{background:#A66316}
+.palette-option[data-v="blue-amber"] .palette-swatches i:first-child{background:#102747}.palette-option[data-v="blue-amber"] .palette-swatches i:last-child{background:#FF510B}
 .palette-option[data-v="navy-teal"] .palette-swatches i:first-child{background:#173B61}.palette-option[data-v="navy-teal"] .palette-swatches i:last-child{background:#0F766E}
 .palette-option[data-v="indigo-sage"] .palette-swatches i:first-child{background:#443D91}.palette-option[data-v="indigo-sage"] .palette-swatches i:last-child{background:#547A61}
 .palette-check{visibility:hidden;color:var(--brand-primary);font-weight:900;font-size:17px}.palette-option[aria-pressed="true"] .palette-check{visibility:visible}
@@ -881,6 +881,116 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
 @media (min-width:1600px){
   .app{max-width:1220px;padding-inline:34px}
   .quick-menu{right:max(28px,calc((100vw - 1220px)/2 + 34px))}
+}
+
+/* tamisim-visual-reference-v1 — visual tokens only; preserve content and flows. */
+:root[data-palette="blue-amber"]{
+  --brand-primary:#102747;
+  --brand-ink:#102747;
+  --brand-muted:#627087;
+  --brand-bg:#F4F6FA;
+  --brand-tint:#E9EFF6;
+  --brand-soft:#F6F8FC;
+  --brand-field:#FAFBFD;
+  --brand-line:#DFE5ED;
+  --brand-accent:#FF510B;
+  --brand-bright:#193C64;
+  --brand-on-dark:#D9E5F4;
+  --brand-primary-rgb:16,39,71;
+  --brand-ink-rgb:16,39,71;
+}
+.guest-hdr .guest-cta,
+.desktopnav .desktop-cta{
+  background:#D04400;
+  color:#fff;
+  border-radius:14px;
+  box-shadow:0 9px 22px rgba(255,81,11,.22);
+}
+.guest-hdr .guest-cta:hover,
+.desktopnav .desktop-cta:hover{background:#BC3800}
+.guest-home .hero{
+  padding:28px 22px;
+  border:1px solid #1B3B5C;
+  border-radius:26px;
+  background:linear-gradient(135deg,#102747 0%,#193A5F 100%);
+  box-shadow:0 16px 36px rgba(16,39,71,.16);
+  overflow:hidden;
+}
+.guest-home .hero h1{color:#fff;letter-spacing:-.045em}
+.guest-home .hero h1 em{color:#FF7948}
+.guest-home .hero p{color:#D9E3EF}
+.guest-home .hero .eyebrow{
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.16);
+}
+.guest-home .hero .searchbox{
+  background:#fff;
+  border:1px solid #DFE5ED;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  color:#627087;
+}
+.guest-home .hero .searchbox input{color:#102747}
+.guest-home .hero .hero-create{
+  background:#D04400;
+  color:#fff;
+  border-radius:15px;
+  box-shadow:0 10px 25px rgba(255,81,11,.26);
+}
+.guest-home .hero .hero-create:hover{background:#BC3800}
+.guest-home .hero .hero-proof div{
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:none;
+}
+.guest-home .hero .hero-proof b{color:#fff}
+.guest-home .hero .hero-proof small{color:#D9E3EF}
+.guest-home .homecat{
+  background:#fff;
+  border:1px solid #E0E6EE;
+  border-radius:18px;
+  box-shadow:0 7px 20px rgba(16,39,71,.055);
+  transition:border-color .18s,box-shadow .18s,transform .18s;
+}
+.guest-home .homecat:focus-visible{
+  outline:3px solid #FF510B;
+  outline-offset:3px;
+}
+.guest-home .steps{
+  background:#fff;
+  border:1px solid #E0E6EE;
+  border-radius:22px;
+  box-shadow:0 8px 26px rgba(16,39,71,.055);
+}
+.guest-home .steps>div>b{
+  background:#FFF0E9;
+  color:#D84408;
+}
+.guest-home .guest-convert{
+  background:#fff;
+  border:1px solid #DFE5ED;
+  border-radius:22px;
+  box-shadow:0 10px 28px rgba(16,39,71,.06);
+}
+.guest-home .guest-convert-primary{
+  background:#D04400;
+  color:#fff;
+  border-radius:15px;
+  box-shadow:0 10px 24px rgba(255,81,11,.22);
+}
+.guest-home .guest-convert-primary:hover{background:#BC3800}
+@media(hover:hover){
+  .guest-home .homecat:hover{
+    border-color:#FF956D;
+    box-shadow:0 12px 28px rgba(16,39,71,.10);
+    transform:translateY(-2px);
+  }
+}
+@media(min-width:768px){
+  .guest-home .hero{padding:40px 38px}
+}
+@media(min-width:1024px){
+  .guest-home .hero{padding:42px 44px}
 }
 </style>
 </head>
@@ -1756,7 +1866,7 @@ function vAccount(){
     <section class="account-section palette-settings">
       <div class="account-section-head"><div><span>03</span><h2>Görünüm</h2></div><p>Uygulamanın renklerini seç.</p></div>
       <div class="palette-options" role="group" aria-label="Renk kombinasyonu">
-        <button type="button" class="palette-option" data-a="setPalette" data-v="blue-amber" aria-pressed="${S.palette==='blue-amber'}"><span class="palette-number">1</span><span class="palette-label"><b>Mavi & sıcak amber</b><small>Canlı ve güven veren</small></span><span class="palette-swatches"><i></i><i></i></span><span class="palette-check" aria-hidden="true">✓</span></button>
+        <button type="button" class="palette-option" data-a="setPalette" data-v="blue-amber" aria-pressed="${S.palette==='blue-amber'}"><span class="palette-number">1</span><span class="palette-label"><b>Lacivert & turuncu</b><small>Canlı ve güven veren</small></span><span class="palette-swatches"><i></i><i></i></span><span class="palette-check" aria-hidden="true">✓</span></button>
         <button type="button" class="palette-option" data-a="setPalette" data-v="navy-teal" aria-pressed="${S.palette==='navy-teal'}"><span class="palette-number">2</span><span class="palette-label"><b>Lacivert & turkuaz</b><small>Sakin ve profesyonel</small></span><span class="palette-swatches"><i></i><i></i></span><span class="palette-check" aria-hidden="true">✓</span></button>
         <button type="button" class="palette-option" data-a="setPalette" data-v="indigo-sage" aria-pressed="${S.palette==='indigo-sage'}"><span class="palette-number">4</span><span class="palette-label"><b>İndigo & adaçayı</b><small>Yumuşak ve özgün</small></span><span class="palette-swatches"><i></i><i></i></span><span class="palette-check" aria-hidden="true">✓</span></button>
       </div>
