@@ -117,5 +117,24 @@ test('eski palet tercihi ve açık/koyu tema', async ({ page }, testInfo) => {
   const dark = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
   expect(dark, 'explicit dark theme changes the page background').not.toBe(light);
   await capture(page, testInfo, 'legacy-palette-dark');
+  const headingContrast = await page.locator('.home-title h2').first().evaluate(el => {
+    const parse = value => {
+      const match = value.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+      if (!match) throw new Error('Cannot read RGB color: ' + value);
+      return match.slice(1, 4).map(Number);
+    };
+    const luminance = rgb => {
+      const [r, g, b] = rgb.map(value => {
+        const channel = value / 255;
+        return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const foreground = luminance(parse(getComputedStyle(el).color));
+    const background = luminance(parse(getComputedStyle(document.body).backgroundImage));
+    return (Math.max(foreground, background) + 0.05) /
+      (Math.min(foreground, background) + 0.05);
+  });
+  expect(headingContrast, 'dark theme category heading contrast').toBeGreaterThanOrEqual(4.5);
   expect(blocked, 'unexpected external requests').toEqual([]);
 });
