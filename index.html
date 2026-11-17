@@ -1189,6 +1189,86 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
   .guest-home .hero-proof{margin:0 34px 18px}
   .guest-home .guest-search-panel{max-width:none;margin:0 0 0 auto}
 }
+/* Reference-led create flow; scoped to the six-step form. */
+body:has(.create-flow){--bg:#fff;--brand-bg:#fff;--surface:#fff;background:#fff!important;color:#102747;padding-bottom:0}
+body:has(.create-flow) .top{background:#fff;height:52px;min-height:52px;box-sizing:border-box;padding:6px 0;gap:8px;border:0;position:relative;top:auto}
+body:has(.create-flow) .brand{display:flex;align-items:baseline;flex:none;white-space:nowrap;font-size:21px;line-height:1;letter-spacing:-.04em}
+body:has(.create-flow) .brand span:nth-child(2){color:#FF510B}
+body:has(.create-flow) .brand i{flex:none;align-self:center;width:5px;height:5px;margin-left:3px}
+body:has(.create-flow) .hdr-r{gap:6px}
+body:has(.create-flow) .seg button{font-size:11px;padding:5px 8px;min-height:32px}
+body:has(.create-flow) .guest-cta{min-height:32px;padding:6px 12px;font-size:11px;box-shadow:none}
+body:has(.create-flow) .beta-strip{margin:0;padding:5px 0;min-height:0;border:0;background:transparent;box-shadow:none;font-size:9px;line-height:1.3;gap:6px}
+body:has(.create-flow) .beta-strip b{padding:3px 6px;font-size:8px}
+body:has(.create-flow) #app{width:100%;max-width:620px;margin-inline:auto;padding:0}
+.create-flow{--form-navy:#102747;--form-orange:#FF510B;display:flex;flex-direction:column;min-height:calc(100dvh - 110px);padding:0 0 16px;color:var(--form-navy)}
+.create-flow .create-topbar{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;min-height:48px;margin:2px 0 5px}
+.create-flow .create-topbar>span{text-align:center;font-size:17px;font-weight:800}
+.create-flow .create-topbar .link{font-size:25px;min-width:44px;min-height:44px;margin:0;padding:0;text-align:left;line-height:1;color:#102747}
+.create-flow .create-progress-row{display:flex;align-items:center;gap:12px;margin:0 0 13px}
+.create-flow .create-progress{display:grid;flex:1;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin:0}
+.create-flow .create-progress span{height:4px;background:#E5E8ED;border-radius:4px}
+.create-flow .create-progress .on{background:#102747}
+.create-flow .create-progress-meta{margin:0;font-size:11px;white-space:nowrap;color:#102747}
+.create-flow .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.create-flow .create-head{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);padding:0;margin:0}
+.create-flow .create-head h1{font-family:Figtree,system-ui,sans-serif;font-size:13px;font-weight:700;letter-spacing:0;line-height:1.35;margin:0 0 3px}
+.create-flow .create-head p{font-size:12px;line-height:1.4;margin:0;color:#64748B}
+.create-flow .create-card{margin:0;padding:0;border:0;background:transparent;box-shadow:none;border-radius:0;min-width:0}
+.create-flow .stepno{display:none}
+.create-flow .create-card h2,.create-flow .create-card>label.lb{font-family:Figtree,system-ui,sans-serif;font-size:25px;letter-spacing:-.035em;line-height:1.12;font-weight:800;color:#102747;margin:0 0 9px;padding:0;max-width:330px}
+.create-flow .hint{font-size:13px;line-height:1.4;color:#64748B;margin:0 0 14px}
+.create-flow .in{min-height:44px;border:1px solid #DCE1E9;border-radius:9px;padding:10px 12px;font-size:16px;box-shadow:none}
+:root:not([data-theme="dark"]) .create-flow .in{background:#fff!important}
+.create-flow .in:focus-visible{outline:2px solid rgba(255,81,11,.22);outline-offset:1px;border-color:#FF510B}
+.create-flow .create-actions{position:static;display:grid;grid-template-columns:minmax(0,.65fr) minmax(0,1.35fr);gap:10px;padding-top:24px;margin: auto 0 0;background:#fff}
+.create-flow .create-actions.single{grid-template-columns:1fr}
+.create-flow .create-actions .btn{min-height:50px;padding:12px 14px;border-radius:12px;font-size:15px;line-height:1.3;font-weight:700;box-shadow:none;white-space:normal;background:#FF510B;color:#fff}
+.create-flow .create-actions .btn.ghost{background:#fff;color:#102747;border:1px solid #DCE1E9}
+.create-flow .create-actions .btn:disabled{opacity:.48;box-shadow:none}
+.create-flow .catresults{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+.create-flow .catgroup,.create-flow .cats{display:contents}
+.create-flow .catgroup h3{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.create-flow .cat{min-width:0;min-height:82px;gap:5px;padding:9px 5px;border:1px solid transparent;border-radius:10px;box-shadow:none;font-size:11px;font-weight:600;line-height:1.2}
+:root:not([data-theme="dark"]) .create-flow .cat{background:#F5F6F8!important}
+:root:not([data-theme="dark"]) .create-flow .cat[aria-pressed="true"]{border-color:#FF510B!important;background:#FFF4EE!important;box-shadow:none;outline:none}
+.create-flow .cat .svc-icon{width:28px;height:28px}
+.create-flow #cat-search{font-size:16px}
+.create-flow .catresults>.empty{grid-column:1/-1;margin:0;font-size:13px}
+@media(min-width:768px){body:has(.create-flow) .app{max-width:1000px}.create-flow{min-height:calc(100dvh - 120px)}.create-flow .create-card h2{max-width:none}.create-flow .cat{min-height:90px;font-size:13px}}
+/* Service choices: same quiet tile treatment as categories. */
+.create-flow .step-two-card .chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.create-flow .step-two-card .chip{min-width:0;min-height:66px;padding:10px;border:1px solid transparent!important;border-radius:10px;font-size:13px;line-height:1.3;font-weight:600;white-space:normal;box-shadow:none}
+:root:not([data-theme="dark"]) .create-flow .chip{background:#F5F6F8!important;color:#102747!important;-webkit-text-fill-color:#102747!important;border-color:transparent!important}
+:root:not([data-theme="dark"]) .create-flow .chip[aria-pressed="true"]{border-color:#FF510B!important;background:#FFF4EE!important;color:#102747!important;-webkit-text-fill-color:#102747!important;box-shadow:none}
+@media(min-width:768px){.create-flow .step-two-card .chips{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.create-flow #d-not{display:block;min-height:140px;resize:vertical;font-size:16px;line-height:1.5}
+.create-flow .step-three-card>label.lb{margin-bottom:15px}
+.create-flow .step-three-card>span.lb{font-size:14px;font-weight:700;margin:22px 0 9px}
+.create-flow .step-three-card .chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.create-flow .step-three-card .chip{min-width:0;min-height:54px;border:1px solid transparent;border-radius:10px;padding:8px;font-size:13px;font-weight:600}
+.create-flow .photo-picker{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
+.create-flow .photo-grid{display:contents}
+.create-flow .photo-thumb{flex:0 0 calc((100% - 16px)/3);aspect-ratio:1;border-radius:9px;border:1px solid #DCE1E9}
+.create-flow .photo-thumb button{width:32px;height:32px;font-size:15px;right:3px;top:3px}
+.create-flow .uploadbox{position:relative;order:2;flex:0 0 calc((100% - 16px)/3);aspect-ratio:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:9px;border-radius:9px;border:1px dashed #BECADC;font-size:12px;line-height:1.3;box-shadow:none}
+.create-flow .uploadbox:focus-within{outline:2px solid #FF510B;outline-offset:2px}
+.create-flow .guest-photo-note{padding:14px;border:1px dashed #DCE1E9;border-radius:9px;font-size:13px;line-height:1.5;box-shadow:none;background:#F7F8FA}
+.create-flow .uploadbox input{width:1px;height:1px;left:0;top:0;clip-path:inset(50%)}
+.create-flow .location-card .field.two{display:grid;grid-template-columns:minmax(0,1fr);gap:17px;padding:0;margin:20px 0 0}
+.create-flow .location-card .lb{font-size:13px;font-weight:700;margin:0 0 7px}
+.create-flow .location-card .in{width:100%;min-width:0;min-height:46px}
+@media(min-width:768px){.create-flow .location-card .field.two{grid-template-columns:repeat(2,minmax(0,1fr))}.create-flow .location-card .field.two>div:last-child{grid-column:1/-1}}
+.create-flow .create-review{display:grid;gap:0;margin-top:10px}
+.create-flow .create-review-row{border:0;border-bottom:1px solid #E8EBEF;border-radius:0;background:transparent;padding:14px 0;overflow-wrap:anywhere}
+.create-flow .create-review-row small{display:block;font-size:12px;font-weight:600;color:#64748B;margin-bottom:5px}
+.create-flow .create-review-row b{display:block;font-size:14px;font-weight:600;color:#102747;line-height:1.5}
+.create-flow .draft-experts{margin:20px 0 0;padding:14px;border:1px solid #E2E7EE;border-radius:10px;box-shadow:none;background:#fff}
+.create-flow .draft-experts-head h3{font-size:15px}
+.create-flow .draft-experts-empty,.create-flow .draft-experts-note{padding:10px 0 0;background:transparent;font-size:12px;line-height:1.5}
+.create-flow .draft-experts-empty{text-align:left}
+.create-flow .create-actions .btn[data-a="draftAuth"]{font-size:13px}
+.create-flow[data-step="1"] [data-a="createNext"]{scroll-margin-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
 </style>
 </head>
 <body>
@@ -1457,7 +1537,7 @@ function draftExpertPreview(d){
   if(!key)return '';
   if(p.key!==key||p.loading)return `<section class="draft-experts"><div class="draft-experts-head"><div><span class="section-kicker">Uygun uzmanlar</span><h3>${esc(d.city)} için kontrol ediliyor</h3></div><span class="draft-live"><i></i> Canlı</span></div><p class="draft-experts-note">Yalnız aktif, doğru kategori ve şehirde hizmet veren uzmanlar hesaplanıyor.</p></section>`;
   if(p.error)return `<section class="draft-experts"><div class="draft-experts-head"><div><span class="section-kicker">Uygun uzmanlar</span><h3>Önizleme şu anda yüklenemedi</h3></div></div><div class="draft-experts-empty">İlanını yine de yayınlayabilirsin. Uzman eşleştirmesi ilan sonrasında güvenli şekilde çalışmaya devam eder.</div></section>`;
-  if(!p.total)return `<section class="draft-experts"><div class="draft-experts-head"><div><span class="section-kicker">Uygun uzmanlar</span><h3>${esc(d.city)} · ${esc(KAT[d.kat].ad)}</h3></div></div><div class="draft-experts-empty">Bu bölgede henüz uygun uzman görünmüyor.</div></section>`;
+  if(!p.total)return `<section class="draft-experts"><div class="draft-experts-head"><div><span class="section-kicker">Uygun uzmanlar</span><h3>${esc(d.city)} · ${esc(KAT[d.kat].ad)}</h3></div></div><div class="draft-experts-empty">Seçtiğin şehir ve hizmet için şu anda eşleşen uzman bulunamadı. İlanını yine de yayınlayabilirsin; teklif geleceği garanti değildir.</div></section>`;
   return `<section class="draft-experts"><div class="draft-experts-head"><div><span class="section-kicker">Gerçek uygunluk</span><h3>${esc(d.city)} için ${p.total} aktif uzman</h3></div><span class="draft-live"><i></i> Canlı</span></div><div class="draft-experts-summary">${d.district?`<span>${esc(d.district)} yakınında ${p.nearby}</span>`:''}<span>${esc(d.city)} genelinde ${p.total}</span></div><div class="draft-expert-list">${p.rows.map(x=>{const verified=!!(x.identity_verified||x.vocational_verified||x.business_verified);return `<div class="draft-expert"><div class="draft-avatar">${esc(initials(x.name))}</div><div class="draft-expert-main"><b>${esc(x.name||'Uzman')}</b><small>${esc(x.title||KAT[d.kat].ad)} · ${esc(x.service_city)}</small><div class="draft-expert-meta">${x.rating!=null?'<span>★ '+Number(x.rating).toFixed(1)+'</span>':'<span>Yeni uzman</span>'}${Number(x.jobs||0)?'<span>'+Number(x.jobs)+' iş</span>':''}${x.nearby?'<span>Yakındaki</span>':''}${verified?'<span class="verified-mini">✓ Doğrulanmış</span>':''}</div></div></div>`}).join('')}</div></section>`;
 }
 
@@ -2124,14 +2204,14 @@ function vNew(){
   const cats=groups.map(g=>`<div class="catgroup"><h3>${esc(g)}</h3><div class="cats">${entries.filter(([,v])=>v.grup===g).map(([k,v])=>`<button class="cat" data-a="pickKat" data-v="${k}" aria-pressed="${d.kat===k}"><span class="ico" aria-hidden="true">${iconFor(k)}</span>${esc(v.ad)}</button>`).join('')}</div></div>`).join('');
   let body='';
   if(step===1)body=`<div class="field create-card"><span class="stepno">1</span><h2>Ne yaptırmak istiyorsun?</h2><p class="hint">Kategori veya hizmet adıyla ara.</p><input class="in" id="cat-search" value="${esc(S.catSearch)}" placeholder="Örn. boya, su kaçağı, lastik..." autocomplete="off"><div class="catresults">${cats||'<div class="empty">Aramana uygun hizmet bulunamadı.</div>'}</div></div>`;
-  if(step===2)body=`<div class="field create-card"><span class="stepno">2</span><h2>Hangi hizmete veya soruna ihtiyacın var?</h2><p class="hint">Birden fazla seçebilirsin.</p><div class="chips">${d.kat?KAT[d.kat].sorunlar.map(x=>`<button class="chip" data-a="toggleSorun" data-v="${esc(x)}" aria-pressed="${d.sorunlar.includes(x)}">${esc(x)}</button>`).join(''):''}</div></div>`;
-  if(step===3)body=`<div class="field create-card"><span class="stepno">3</span><label class="lb" for="d-not">${prompt[0]}</label><textarea class="in" id="d-not" maxlength="500" placeholder="${esc(prompt[1])}">${esc(d.not)}</textarea><span class="lb">Ne zaman gelsin?</span><div class="chips">${ZAMAN.map(z=>`<button class="chip" data-a="zaman" data-v="${z}" aria-pressed="${d.zaman===z}">${z}</button>`).join('')}</div></div>`;
-  if(step===4)body=`<div class="field create-card"><span class="stepno">4</span><h2>Fotoğraf ekle <small class="optional">İsteğe bağlı</small></h2><p class="hint">En fazla 5 fotoğraf, fotoğraf başına en fazla 8 MB.</p>${S.user?`<div class="photo-picker"><label class="uploadbox" for="d-photos">📷 Fotoğraf seç<input id="d-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>${d.photos.length?`<div class="photo-grid">${d.photos.map((x,i)=>`<div class="photo-thumb"><img src="${esc(x.preview)}" alt="Seçilen fotoğraf ${i+1}"><button type="button" data-a="removePhoto" data-v="${i}" aria-label="Fotoğrafı kaldır">×</button></div>`).join('')}</div>`:''}</div>`:'<div class="guest-photo-note">Fotoğrafları giriş yaptıktan sonra ekleyebilirsin. Taslağın kaybolmayacak.</div>'}</div>`;
-  if(step===5){const districts=districtsFor(d.city);body=`<div class="field create-card"><span class="stepno">5</span><h2>Nerede?</h2><p class="hint">İl ve ilçe standart listeden seçilir; mahalle isteğe bağlıdır.</p><div class="field two"><div><label class="lb" for="d-city">İl</label><select class="in" id="d-city"><option value="">İl seç</option>${ILLER.map(x=>`<option value="${esc(x)}" ${d.city===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div><div><label class="lb" for="d-district">İlçe</label><select class="in" id="d-district" ${d.city?'':'disabled'}><option value="">İlçe seç</option>${districts.map(x=>`<option value="${esc(x)}" ${d.district===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div><div><label class="lb" for="d-neighborhood">Mahalle <small class="optional">İsteğe bağlı</small></label><input class="in" id="d-neighborhood" maxlength="100" value="${esc(d.neighborhood)}" placeholder="Örn. Güzelyalı" autocomplete="address-level3"></div></div></div>`}
-  if(step===6)body=`<div class="field create-card"><span class="stepno">6</span><h2>Kontrol et ve yayınla</h2><div class="create-review"><div class="create-review-row"><small>Hizmet</small><b>${esc(KAT[d.kat]?.ad||'—')} · ${esc(d.sorunlar.join(', '))}</b></div><div class="create-review-row"><small>Detay ve zaman</small><b>${esc(d.not)} · ${esc(d.zaman)}</b></div><div class="create-review-row"><small>Konum</small><b>${esc([d.neighborhood,d.district,d.city].filter(Boolean).join(', '))}</b></div><div class="create-review-row"><small>Fotoğraf</small><b>${S.user?d.photos.length+' fotoğraf':`Girişten sonra eklenebilir`}</b></div></div></div>${draftExpertPreview(d)}`;
+  if(step===2)body=`<div class="field create-card step-two-card"><span class="stepno">2</span><h2>Hangi hizmete veya soruna ihtiyacın var?</h2><p class="hint">Birden fazla seçebilirsin.</p><div class="chips">${d.kat?KAT[d.kat].sorunlar.map(x=>`<button class="chip" data-a="toggleSorun" data-v="${esc(x)}" aria-pressed="${d.sorunlar.includes(x)}">${esc(x)}</button>`).join(''):''}</div></div>`;
+  if(step===3)body=`<div class="field create-card step-three-card"><span class="stepno">3</span><label class="lb" for="d-not">${prompt[0]}</label><textarea class="in" id="d-not" maxlength="500" placeholder="${esc(prompt[1])}">${esc(d.not)}</textarea><span class="lb">Ne zaman gelsin?</span><div class="chips">${ZAMAN.map(z=>`<button class="chip" data-a="zaman" data-v="${z}" aria-pressed="${d.zaman===z}">${z}</button>`).join('')}</div></div>`;
+  if(step===4)body=`<div class="field create-card v1c-final-card"><span class="stepno">4</span><h2>Fotoğraf ekle <small class="optional">İsteğe bağlı</small></h2><p class="hint">En fazla 5 fotoğraf, fotoğraf başına en fazla 8 MB.</p>${S.user?`<div class="photo-picker"><label class="uploadbox" for="d-photos">📷 Fotoğraf seç<input id="d-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>${d.photos.length?`<div class="photo-grid">${d.photos.map((x,i)=>`<div class="photo-thumb"><img src="${esc(x.preview)}" alt="Seçilen fotoğraf ${i+1}"><button type="button" data-a="removePhoto" data-v="${i}" aria-label="Fotoğrafı kaldır">×</button></div>`).join('')}</div>`:''}</div>`:'<div class="guest-photo-note">Fotoğrafları giriş yaptıktan sonra ekleyebilirsin. Taslağın kaybolmayacak.</div>'}</div>`;
+  if(step===5){const districts=districtsFor(d.city);body=`<div class="field create-card v1c-final-card location-card"><span class="stepno">5</span><h2>Nerede?</h2><p class="hint">İl ve ilçe standart listeden seçilir; mahalle isteğe bağlıdır.</p><div class="field two"><div><label class="lb" for="d-city">İl</label><select class="in" id="d-city"><option value="">İl seç</option>${ILLER.map(x=>`<option value="${esc(x)}" ${d.city===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div><div><label class="lb" for="d-district">İlçe</label><select class="in" id="d-district" ${d.city?'':'disabled'}><option value="">İlçe seç</option>${districts.map(x=>`<option value="${esc(x)}" ${d.district===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div><div><label class="lb" for="d-neighborhood">Mahalle <small class="optional">İsteğe bağlı</small></label><input class="in" id="d-neighborhood" maxlength="100" value="${esc(d.neighborhood)}" placeholder="Örn. Güzelyalı" autocomplete="address-level3"></div></div></div>`}
+  if(step===6)body=`<div class="field create-card v1c-final-card review-card"><span class="stepno">6</span><h2>Kontrol et ve yayınla</h2><div class="create-review"><div class="create-review-row"><small>Hizmet</small><b>${esc(KAT[d.kat]?.ad||'—')} · ${esc(d.sorunlar.join(', '))}</b></div><div class="create-review-row"><small>Detay ve zaman</small><b>${esc(d.not)} · ${esc(d.zaman)}</b></div><div class="create-review-row"><small>Konum</small><b>${esc([d.neighborhood,d.district,d.city].filter(Boolean).join(', '))}</b></div><div class="create-review-row"><small>Fotoğraf</small><b>${S.user?d.photos.length+' fotoğraf':`Girişten sonra eklenebilir`}</b></div></div></div>${draftExpertPreview(d)}`;
   const nextLabel=step===5?'Kontrol et':step===6?'':'Devam';
   const actions=step===6?`<div class="create-actions"><button class="btn ghost" data-a="createPrev">Geri</button>${S.user?`<button class="btn" id="pub" data-a="publish" ${canPub(d)&&!S.busy?'':'disabled'}>İlanı yayınla</button>`:'<button class="btn" data-a="draftAuth">Giriş yap ve ilanı yayınla</button>'}</div>`:`<div class="create-actions ${step===1?'single':''}">${step>1?'<button class="btn ghost" data-a="createPrev">Geri</button>':''}<button class="btn" data-a="createNext">${nextLabel}</button></div>`;
-  return `<button class="link" data-a="cancelDraft">← ${S.user?'İlanlarıma dön':'Ana sayfaya dön'}</button><div class="create-head"><span class="eyebrow">Yeni ilan</span><h1>İşini birkaç adımda anlat</h1><p>Her adımda yalnız gerekli bilgiyi isteyeceğiz.</p></div><div class="create-progress">${[1,2,3,4,5,6].map(n=>`<span class="${n<=step?'on':''}"></span>`).join('')}</div><div class="create-progress-meta"><span>Adım ${step}/6</span><span>${6-step} adım kaldı</span></div>${body}${actions}`;
+  return `<section class="create-flow" data-step="${step}"><div class="create-topbar"><button class="link" data-a="cancelDraft" aria-label="${S.user?'İlanlarıma dön':'Ana sayfaya dön'}">←</button><span>Yeni ilan</span></div><div class="create-progress-row"><div class="create-progress">${[1,2,3,4,5,6].map(n=>`<span class="${n<=step?'on':''}"></span>`).join('')}</div><div class="create-progress-meta"><span>Adım ${step}/6</span><span class="sr-only">${6-step} adım kaldı</span></div></div><div class="create-head"><h1>İşini birkaç adımda anlat</h1><p>Her adımda yalnız gerekli bilgiyi isteyeceğiz.</p></div>${body}${actions}</section>`;
 }
 function quoteSuitability(q,l,offers){
   const p=prof(q.pro),s=stat(q.pro);
@@ -2866,6 +2946,10 @@ async function run(a,v,el){
     if(again)again.focus({preventScroll:true});
   }
   if(!KEEP.has(a))window.scrollTo({top:0});
+  if(a==='pickKat'&&S.draft?.kat&&window.matchMedia('(max-width:767px)').matches){
+    const next=document.querySelector('.create-flow[data-step="1"] [data-a="createNext"]');
+    if(next){next.focus({preventScroll:true});next.scrollIntoView({block:'end',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}
+  }
 }
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el)run(el.dataset.a,el.dataset.v,el)});
 document.addEventListener('keydown',e=>{
@@ -2914,7 +2998,7 @@ document.addEventListener('input',e=>{
     const q=S.catSearch.trim().toLocaleLowerCase('tr-TR');
     const entries=Object.entries(KAT).filter(([,v])=>!q||v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q)));
     const groups=[...new Set(entries.map(([,v])=>v.grup))];
-    const html=groups.map(g=>'<div class="catgroup"><h3>'+esc(g)+'</h3><div class="cats">'+entries.filter(([,v])=>v.grup===g).map(([k,v])=>'<button class="cat" data-a="pickKat" data-v="'+k+'" aria-pressed="'+(S.draft&&S.draft.kat===k)+'"><span class="ico" aria-hidden="true">'+v.ikon+'</span>'+esc(v.ad)+'</button>').join('')+'</div></div>').join('');
+    const html=groups.map(g=>'<div class="catgroup"><h3>'+esc(g)+'</h3><div class="cats">'+entries.filter(([,v])=>v.grup===g).map(([k,v])=>'<button class="cat" data-a="pickKat" data-v="'+k+'" aria-pressed="'+(S.draft&&S.draft.kat===k)+'"><span class="ico" aria-hidden="true">'+iconFor(k)+'</span>'+esc(v.ad)+'</button>').join('')+'</div></div>').join('');
     const box=document.querySelector('.catresults');
     if(box)box.innerHTML=html||'<div class="empty">Aramana uygun hizmet bulunamadı.</div>';
     return;
