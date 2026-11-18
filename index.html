@@ -1516,6 +1516,34 @@ body:has(.quote-form) .beta-strip{margin:0;padding:4px 0;background:transparent;
 .quote-form #qsend[aria-busy="true"]{background:#963008;color:#fff}
 .quote-form :is(button,summary,input,select,textarea):focus-visible{outline:2px solid #29466a!important;outline-offset:2px}
 .quote-form-bar button:focus-visible{outline-color:#fff!important;outline-offset:-4px}
+/* V1-H1 · Mesajlaşma */
+.conversation{--message-ink:#102747;--message-secondary:#435671;--message-line:#d7e1ec;box-sizing:border-box;min-width:0;overflow:hidden;border:1px solid var(--message-line);border-radius:13px;background:#fff;color:var(--message-ink);box-shadow:none}
+.conversation.modern-chat,.conversation.prechat{padding:0;background:#fff}
+.conversation-head{display:flex;align-items:center;gap:9px;padding:8px 10px;background:#102747;color:#fff}
+.conversation-head h3{margin:0;color:#fff;font:750 16px/1.25 Figtree,sans-serif;overflow-wrap:anywhere}
+.conversation-head p,.conversation-head small{display:block;margin:2px 0 0;color:#e0e9f4;font-size:12px;line-height:1.3;overflow-wrap:anywhere}
+.conversation-head .conversation-back{display:grid;place-items:center;min-width:44px;min-height:44px;margin:0;padding:0;border:0;border-radius:7px;background:transparent;color:#fff;font:700 22px/1 Figtree,sans-serif;cursor:pointer}
+.conversation-avatar{display:grid;place-items:center;flex:0 0 32px;width:32px;height:32px;border-radius:50%;background:#e8eef6;color:#102747;font-weight:800}
+.conversation-log{display:block;max-height:clamp(128px,38dvh,340px);overflow:auto;overscroll-behavior-y:contain;scrollbar-width:thin;padding:12px;background:#f5f8fb;color:var(--message-ink)}
+.conversation-row{display:flex;margin:0 0 8px}
+.conversation-row:last-child{margin-bottom:0}
+.conversation-row.mine{justify-content:flex-end}
+.conversation-bubble{max-width:min(88%,560px);padding:7px 10px;border:1px solid var(--message-line);border-radius:11px 11px 11px 3px;background:#fff;overflow-wrap:anywhere}
+.conversation-row.mine .conversation-bubble{border-radius:11px 11px 3px 11px;border-color:#d7e3f1;background:#e8f0fa}
+.conversation-meta{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;color:var(--message-secondary);font-size:12px}
+.conversation-meta strong{color:#102747}
+.conversation-bubble p{margin:3px 0 0;font-size:14px;line-height:1.45;white-space:pre-wrap}
+.conversation-empty{margin:4px 0;color:var(--message-secondary);font-size:14px}
+.conversation-body{padding:9px 10px}
+.conversation-composer{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:7px;scroll-margin-bottom:12px}
+:root .conversation-composer input.in{box-sizing:border-box;width:100%;min-width:0;min-height:46px;margin:0;padding:8px;border:1px solid #7789a1!important;border-radius:8px;background:#fff!important;color:#102747!important;-webkit-text-fill-color:#102747!important;font-size:16px;box-shadow:none!important}
+.conversation-composer button{min-width:44px;min-height:46px;padding:6px 12px;border:0;border-radius:8px;background:#b83b08;color:#fff;font-weight:750;font-size:13px;cursor:pointer}
+.conversation .conversation-log:focus-visible,.conversation button:focus-visible,:root .conversation input.in:focus-visible{outline:2px solid #29466a!important;outline-offset:-2px}
+.conversation-head .conversation-back:focus-visible{outline-color:#fff!important}
+.conversation-help,.conversation-limit,.conversation-notice,.conversation-error{margin:6px 0 0;color:var(--message-secondary);font-size:12px;line-height:1.45}
+.conversation-notice{margin:0;padding:8px 10px;background:#f5f8fb}
+.conversation-error{margin:0 0 7px;padding:7px 9px;border-radius:8px;background:#fff0ec;color:#862d21;font-size:13px}
+html:has(.conversation-composer input:focus){padding-bottom:calc(env(safe-area-inset-bottom,0px) + var(--conversation-keyboard-inset,0px))}
 </style>
 </head>
 <body>
@@ -1625,7 +1653,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,navSection:'home',palette:savedPalette,
-  draft:null,quoteFor:null,q:null,quoteDrafts:new Map(),payPick:{},promoApplied:{},appointmentDrafts:{},workflowRequestIds:{},reviewDrafts:{},reviewRequestIds:{},preThread:null,preDrafts:{},preRequestIds:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'uygun',busy:false,
+  draft:null,quoteFor:null,q:null,quoteDrafts:new Map(),payPick:{},promoApplied:{},appointmentDrafts:{},workflowRequestIds:{},reviewDrafts:{},reviewRequestIds:{},preThread:null,conversationFeedback:null,preDrafts:{},preRequestIds:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'uygun',busy:false,
   authMode:'in',authErr:'',authInfo:'',confirmationEmail:'',resendBusy:false,recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,createStep:1,expertPreview:{key:'',loading:false,rows:[],total:0,nearby:0},auth:{name:'',email:'',pass:'',terms:false},acct:null,expertDraft:null,expertEditing:false,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[],supportRequests:[],supportDraft:{category:'general',subject:'',message:''},bootError:'',menuOpen:false,expertFilter:'hepsi',expertsLoaded:false};
 
 /* ---------- uygulama geçmişi ---------- */
@@ -2133,11 +2161,41 @@ function ticket(l,o={}){
       ${o.extra||''}
     </div></article>`;
 }
+const messageClock=new Intl.DateTimeFormat('tr-TR',{timeZone:'Europe/Istanbul',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+function conversationRows(messages,senderKey,otherRole,empty){
+  if(!messages.length)return `<p class="conversation-empty">${empty}</p>`;
+  return messages.map(message=>{
+    const mine=message[senderKey]===uid();
+    const date=new Date(message.created_at||NaN);
+    const time=Number.isFinite(date.getTime())?`<time datetime="${esc(date.toISOString())}">${esc(messageClock.format(date))}</time>`:'';
+    return `<div class="conversation-row${mine?' mine':''}"><div class="conversation-bubble">
+      <div class="conversation-meta"><strong>${mine?'Sen':otherRole}</strong>${time}</div>
+      <p>${esc(message.body)}</p></div></div>`;
+  }).join('');
+}
+function conversationHeader(kind,partner,role,verified,back){
+  return `<header class="conversation-head">${back}
+    ${partner?`<span class="conversation-avatar" aria-hidden="true">${esc(initials(partner))}</span>`:''}
+    <div><h3>${kind}</h3><p>${partner?`${role} · ${esc(partner)}`:role}</p>
+    ${verified?'<small>Kimlik doğrulandı</small>':''}</div></header>`;
+}
+function conversationFeedback(key){
+  const feedback=S.conversationFeedback;
+  return feedback?.key===key?`<p class="conversation-error" role="alert">${esc(feedback.message)}</p>`:'';
+}
 function chatBox(l,partner,canSend){
-  const ms=D.msgs[l.id]||[], pp=prof(l.owner===uid()?(chosenQ(l)||{}).pro:l.owner);
-  return `<section class="chat modern-chat"><div class="chathead"><div class="chatperson">${partner?`<div class="chatavatar">${esc(initials(partner))}</div>`:''}<div><h2>${esc(partner||'İş sohbeti')}</h2><p>${pp.identity_verified?(l.owner===uid()?'✓ Kimliği doğrulanmış uzman':'✓ Kimliği doğrulanmış müşteri'):'Tamİşim mesajlaşması'}</p></div></div><span class="chatsecure">🔒 Güvenli</span></div>
-    <div class="msgs" id="msgs">${ms.length?ms.map(m=>`<div class="msgrow ${m.sender===uid()?'mine':'theirs'}"><div class="m ${m.sender===uid()?'ben':'usta'}">${esc(m.body)}</div></div>`).join(''):'<div class="chatempty"><span>💬</span><b>Mesajlaşmaya başla</b><small>İşin ayrıntılarını burada güvenle konuşabilirsin.</small></div>'}</div>`+
-    (canSend?`<div class="send modern-send"><input class="in" id="chat-input" placeholder="Mesajını yaz..." autocomplete="off" maxlength="1000"><button class="btn sm" data-a="send" aria-label="Mesaj gönder">➤</button></div>`:'<div class="chatclosed">Bu iş tamamlandığı için mesaj gönderme kapalı.</div>')+`</section>`;
+  const isCustomer=l.owner===uid();
+  const other=D.profiles[isCustomer?chosenQ(l)?.pro:l.owner];
+  const role=isCustomer?'Uzman':'Müşteri';
+  const back='<button type="button" class="conversation-back" data-conversation-return aria-label="İş detayına dön">←</button>';
+  return `<section class="chat modern-chat conversation" aria-label="Seçilmiş iş sohbeti">
+    ${conversationHeader('İş sohbeti',other?.name?partner:'',role,other?.identity_verified,back)}
+    <div class="conversation-log" id="msgs" role="log" aria-label="İş mesajları" tabindex="0">${conversationRows(D.msgs[l.id]||[],'sender',role,'Henüz mesaj yok. İşin ayrıntılarını burada konuşabilirsin.')}</div>
+    ${canSend?`<div class="conversation-body">
+      ${conversationFeedback('job:'+l.id)}
+      <div class="conversation-composer"><input class="in" id="chat-input" aria-label="İş mesajı" placeholder="Mesajını yaz…" autocomplete="off" maxlength="1000"><button type="button" data-a="send">Gönder</button></div>
+    </div>`:'<p class="conversation-notice">İş tamamlandı. Bu konuşma salt okunur.</p>'}
+  </section>`;
 }
 
 function preselectionError(e){
@@ -2154,16 +2212,27 @@ function preselectionError(e){
 }
 function preselectionThread(q,l){
   const ms=D.preMsgs[q.id]||[],isCustomer=l.owner===uid(),isPro=q.pro===uid(),active=l.status==='open'&&!l.chosen_quote,opened=S.preThread===q.id;
+  const title=active?'Teklif soru-cevap':'Seçim öncesi mesaj geçmişi';
   if(!opened){
     if(!ms.length&&!(isCustomer&&active))return '';
-    const label=ms.length?(active?'Konuşmayı aç':'Seçim öncesi konuşma'):'Soru sor';
+    const label=ms.length?(active?'Konuşmayı aç':title):'Soru sor';
     return `<button class="btn ghost block" data-a="openPreThread" data-v="${q.id}">${label}${ms.length?` · ${ms.length}`:''}</button>`;
   }
   const started=ms.some(m=>m.sender_id===l.owner),canSend=active&&(isCustomer||(isPro&&started)),ownCount=ms.filter(m=>m.sender_id===uid()).length,remaining=Math.max(0,10-ownCount);
-  const rows=ms.length?ms.map(m=>`<div class="prechat-msg ${m.sender_id===uid()?'mine':''}">${esc(m.body)}<small>${m.sender_id===l.owner?'Müşteri':'Uzman'} · ${ago(m.created_at)}</small></div>`).join(''):'<div class="muted small">Teklif hakkında kısa bir soru sorabilirsin.</div>';
-  const closedReason=!active?'Uzman seçildiği için yeni mesaj gönderilemez.':!remaining?'Bu konuşmadaki 10 mesaj hakkını kullandın.':'Müşterinin konuşmayı başlatması bekleniyor.';
-  const compose=canSend&&remaining?`<div class="prechat-compose"><input class="in" id="pre-message-${q.id}" maxlength="500" autocomplete="off" placeholder="Kısa mesajını yaz..." value="${esc(S.preDrafts[q.id]||'')}"><button class="btn sm" data-a="sendPreMessage" data-v="${q.id}">Gönder</button></div><small class="prechat-remaining">Senin kalan mesaj hakkın: ${remaining}</small>`:`<div class="chatclosed">${closedReason}</div>`;
-  return `<section class="prechat"><div class="prechat-head"><div><h4>${active?'Teklif hakkında soru-cevap':'Seçim öncesi konuşma'}</h4><p>${esc(prof(q.pro).name)} · ${tl(q.price)}</p></div><button class="prechat-close" data-a="closePreThread">Kapat</button></div><div class="prechat-msgs">${rows}</div>${compose}<p class="prechat-warning">Telefon, e-posta, sosyal medya hesabı veya harici bağlantı paylaşma.</p></section>`;
+  const role=isCustomer?'Uzman':'Müşteri',other=D.profiles[isCustomer?q.pro:l.owner];
+  const closedReason=!active?'Teklif aşaması sona erdi. Bu konuşma salt okunur.':!remaining?'Bu konuşmadaki 10 mesaj hakkını kullandın.':'Müşterinin konuşmayı başlatması bekleniyor.';
+  const back='<button type="button" class="conversation-back prechat-close" data-a="closePreThread" aria-label="Teklife dön">←</button>';
+  return `<section class="prechat conversation" aria-label="${title}">
+    ${conversationHeader(title,other?.name,role,other?.identity_verified,back)}
+    <div class="conversation-log" role="log" aria-label="Teklif mesajları" tabindex="0">${conversationRows(ms,'sender_id',role,'Henüz mesaj yok. Müşteri teklif hakkında soru sorabilir.')}</div>
+    <div class="conversation-body">
+      ${conversationFeedback('offer:'+q.id)}
+      ${canSend&&remaining?`<div class="conversation-composer">
+        <input class="in" id="pre-message-${q.id}" maxlength="500" autocomplete="off" aria-label="Teklif mesajı" aria-describedby="offer-chat-limit-${q.id}" placeholder="Kısa mesajını yaz…" value="${esc(S.preDrafts[q.id]||'')}"><button type="button" data-a="sendPreMessage" data-v="${q.id}">Gönder</button>
+      </div><p class="conversation-limit" id="offer-chat-limit-${q.id}">Kalan mesaj hakkın: ${remaining}/10</p>`:`<p class="conversation-notice">${closedReason}</p>`}
+      ${active?'<p class="conversation-help">Telefon, e-posta, sosyal medya hesabı veya harici bağlantı paylaşma.</p>':''}
+    </div>
+  </section>`;
 }
 
 const appointmentParts=d=>Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Istanbul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(d).filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
@@ -2917,8 +2986,8 @@ function render(){
     document.querySelectorAll('.seg button[data-a="role"]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.role)));
     const nb=(D.notifications||[]).filter(n=>!n.read_at).length,b=$('#notifbadge');if(b){b.hidden=!nb;b.textContent=nb>99?'99+':String(nb)}
   }
-  if(id){const n=document.getElementById(id);if(n){if(val!==undefined&&n.tagName!=='BUTTON')n.value=val;n.focus({preventScroll:true});try{if(ss!=null)n.setSelectionRange(ss,ss)}catch(e){}}}
-  const m=$('#msgs');if(m)m.scrollTop=m.scrollHeight;
+  if(id){const n=document.getElementById(id);if(n){if(val!==undefined&&n.tagName!=='BUTTON'&&!id.startsWith('pre-message-'))n.value=val;n.focus({preventScroll:true});try{if(ss!=null)n.setSelectionRange(ss,ss)}catch(e){}}}
+  document.querySelectorAll('.conversation-log').forEach(log=>{log.scrollTop=log.scrollHeight});
   upd();
   syncNavigationHistory();
 }
@@ -3309,19 +3378,34 @@ const A={
   closePreThread(){S.preThread=null},
   async sendPreMessage(v){
     const id=+v,q=D.quotes[id],text=String(S.preDrafts[id]||'').trim();
-    if(!q||!text){toast('Mesajını yazmalısın.');return}
-    if(text.length>500){toast('Mesaj en fazla 500 karakter olabilir.');return}
+    const feedback=message=>{S.conversationFeedback={key:'offer:'+id,message}};
+    S.conversationFeedback=null;
+    if(!q||!text){feedback('Mesajını yazmalısın.');return}
+    if(text.length>500){feedback('Mesaj en fazla 500 karakter olabilir.');return}
     const requestId=S.preRequestIds[id]||(S.preRequestIds[id]=crypto.randomUUID());
-    const r=await sb.rpc('send_preselection_message',{p_quote_id:id,p_body:text,p_client_request_id:requestId});
-    if(r.error){toast(preselectionError(r.error));return}
+    try{
+      const r=await sb.rpc('send_preselection_message',{p_quote_id:id,p_body:text,p_client_request_id:requestId});
+      if(r.error)throw r.error;
+    }catch(error){
+      feedback(preselectionError(error));
+      return;
+    }
     delete S.preDrafts[id];delete S.preRequestIds[id];S.preThread=id;
     await refresh();toast('Mesaj gönderildi.');
   },
   async send(){
     const inp=$('#chat-input'),t=inp&&inp.value.trim();if(!t)return;
+    const key='job:'+S.sel;
+    S.conversationFeedback=null;
     inp.value='';
-    const r=await sb.from('messages').insert({listing_id:S.sel,sender:uid(),body:t});
-    if(r.error){inp.value=t;throw r.error}
+    try{
+      const r=await sb.from('messages').insert({listing_id:S.sel,sender:uid(),body:t});
+      if(r.error)throw r.error;
+    }catch(error){
+      if(!inp.value)inp.value=t;
+      S.conversationFeedback={key,message:errMsg(error)};
+      return;
+    }
     await refresh();
   },
   tab(v){S.tab=v},
@@ -3392,7 +3476,14 @@ async function run(a,v,el){
   if(a==='authGo'&&result===true)return;
   render();
   commitNavigation(before,a);
-  if(a==='send'){const c=$('#chat-input');c&&c.focus({preventScroll:true})}
+  if(a==='send'||a==='sendPreMessage'){
+    const c=a==='send'?$('#chat-input'):document.getElementById('pre-message-'+v);
+    c?.focus({preventScroll:true});
+  }else if(a==='openPreThread'){
+    const panel=$('.conversation.prechat');
+    panel?.querySelector('.conversation-back')?.focus({preventScroll:true});
+    panel?.scrollIntoView({block:'nearest'});
+  }
   else if(KEEP.has(a)&&el){
     const again=[...document.querySelectorAll('[data-a]')].find(x=>x.dataset.a===a&&x.dataset.v===v);
     if(again)again.focus({preventScroll:true});
@@ -3417,6 +3508,23 @@ document.addEventListener('click',e=>{
   panel.focus({preventScroll:true});
   panel.scrollIntoView({block:'start'});
 });
+document.addEventListener('click',e=>{
+  if(!e.target.closest('[data-conversation-return]'))return;
+  const target=$('.active-job [data-job-target="job-chat"]')||$('.offers-top [data-a="back"]');
+  target?.focus({preventScroll:true});
+  target?.scrollIntoView({block:'center'});
+});
+function keepConversationComposerVisible(){
+  const composer=document.activeElement?.closest('.conversation-composer');
+  const viewport=window.visualViewport;
+  if(!composer||!viewport||viewport.scale!==1)return;
+  const inset=Math.max(0,innerHeight-viewport.height-viewport.offsetTop);
+  document.documentElement.style.setProperty('--conversation-keyboard-inset',inset+'px');
+  const overflow=composer.getBoundingClientRect().bottom-viewport.offsetTop-viewport.height+12;
+  if(overflow>0)window.scrollBy({top:overflow,behavior:'instant'});
+}
+document.addEventListener('focusin',()=>requestAnimationFrame(keepConversationComposerVisible));
+window.visualViewport?.addEventListener('resize',keepConversationComposerVisible);
 document.addEventListener('error',e=>{
   if(e.target.matches?.('.job-cover img'))e.target.hidden=true;
 },true);
