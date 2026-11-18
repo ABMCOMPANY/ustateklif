@@ -1269,6 +1269,134 @@ body:has(.create-flow) #app{width:100%;max-width:620px;margin-inline:auto;paddin
 .create-flow .draft-experts-empty{text-align:left}
 .create-flow .create-actions .btn[data-a="draftAuth"]{font-size:13px}
 .create-flow[data-step="1"] [data-a="createNext"]{scroll-margin-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+/* V1-D: received offers only. */
+body:has(.offers-view){--bg:#fff;--brand-bg:#fff;background:#fff!important;padding-bottom:0}
+body:has(.offers-view) .top{background:#fff;min-height:54px;height:54px;box-sizing:border-box;padding:4px 0;gap:8px;position:relative;top:auto;border:0}
+body:has(.offers-view) .brand{display:flex;align-items:baseline;flex:none;white-space:nowrap;font-size:21px;line-height:1}
+body:has(.offers-view) .brand span:nth-child(2){color:#FF510B}
+body:has(.offers-view) .brand i{flex:none;align-self:center;width:5px;height:5px;margin-left:3px}
+body:has(.offers-view) .hdr-r{gap:6px}
+body:has(.offers-view) .seg button{font-size:11px;padding:5px 8px;min-width:46px;min-height:46px}
+body:has(.offers-view) .hdr-r>button{min-width:46px;min-height:46px}
+body:has(.offers-view) .beta-strip{margin:0;padding:5px 0;border:0;background:transparent;font-size:9px;line-height:1.3}
+body:has(.offers-view) #app{max-width:720px;width:100%;margin-inline:auto;padding:0}
+.offers-view{color:#102747;padding:0 0 24px}
+.offers-view .offers-top{display:grid;grid-template-columns:72px 1fr 72px;align-items:center;min-height:48px;gap:4px}
+.offers-view .offers-back{display:grid;place-items:center;cursor:pointer;justify-self:start;margin:0;padding:0;min-width:46px;min-height:46px;font:400 25px/1 Figtree,sans-serif;border:0;box-shadow:none;background:transparent;color:#102747}
+.offers-view .offers-top h1{font:800 18px/1.2 Figtree,sans-serif;text-align:center}
+.offers-view .offers-top>span{font-size:12px;text-align:right;color:#475A73}
+.offers-view .offers-listing{background:#FFF3ED;border-radius:14px;margin:4px 0 10px;padding:0 12px}
+.offers-view .offers-listing>summary{box-sizing:border-box;display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:54px;cursor:pointer;padding:6px 0}
+.offers-view .offers-listing strong{font-size:14px}
+.offers-view .offers-listing>summary span{flex:none;font-size:12px;color:#475A73}
+.offers-view .offers-listing>summary span::after{content:"";display:inline-block;width:6px;height:6px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg);margin:0 2px 3px 6px}
+.offers-view .offers-listing[open]>summary span::after{transform:rotate(225deg);margin-bottom:0}
+.offers-view .offers-listing[open]{padding-bottom:12px}
+.offers-view .offers-listing .ticket{margin:4px 0 0;box-shadow:none;border:1px solid #E4EAF1}
+.offers-view .offers-sort{display:flex;gap:6px;padding:0;margin:0 0 10px;border:0;background:none;box-shadow:none;flex-wrap:wrap}
+.offers-view .offers-sort button{flex:1;min-height:46px;padding:6px 8px;border-radius:24px;background:#F3F5F8;color:#344963;font-size:12px;white-space:nowrap}
+.offers-view .offers-sort button[aria-pressed="true"]{background:#102747;color:#fff}
+.offers-view .quote{padding:11px 12px;margin:0 0 9px;border:1px solid #E0E8F0;border-radius:13px;box-shadow:none;background:#fff}
+.offers-view .quote.chosen{border-color:#189467;background:#F7FCF9}
+.offers-view .quote.dim{opacity:1;background:#F7F9FC}
+.offers-view .qhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin:0}
+.offers-view .offer-person{display:flex;gap:8px;align-items:center;min-width:0;flex:1}
+.offers-view .offer-person>div{min-width:0}
+.offers-view .offer-avatar{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border-radius:50%;background:#EDF2F8;color:#102747;font-weight:800}
+.offers-view .qhead h3{font:800 15px/1.25 Figtree,sans-serif;color:#102747;overflow-wrap:anywhere;margin:0}
+.offers-view .rating{font-size:12px;margin:2px 0 0;line-height:1.35;color:#29466A}
+.offers-view .rating .muted{color:#475A73}
+.offers-view .pr{flex:none;max-width:40%;text-align:right}
+.offers-view .price{font-size:20px;font-weight:800;line-height:1.15;color:#102747;overflow-wrap:anywhere}
+.offers-view .pr .small{font-size:12px;color:#475A73}
+.offers-view .qnote{font-size:13px;line-height:1.4;margin:7px 0;overflow-wrap:anywhere;color:#344963}
+.offers-view .offer-status{display:flex;flex-wrap:wrap;gap:4px 8px;margin:0 0 7px;color:#176044;font-size:11px;line-height:1.4}
+.offers-view .offer-status span{background:#EAF6EF;border-radius:5px;padding:2px 5px}
+.offers-view .offer-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:flex-start}
+.offers-view .offer-review{flex:1;min-width:0}
+.offers-view .offer-actions:has(.offer-review[open],.prechat) .offer-review{flex-basis:100%}
+.offers-view .offer-review>summary{box-sizing:border-box;display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:9px;padding:6px 10px;background:#102747;color:#fff;cursor:pointer;font-size:13px;font-weight:750;text-align:center}
+.offers-view .offer-review>summary::after{content:"";width:6px;height:6px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg);margin:0 0 3px 8px}
+.offers-view .offer-review[open]>summary::after{transform:rotate(225deg);margin-bottom:0}
+.offers-view .offer-review-body{padding:9px 0 0}
+.offers-view .suitable{display:block;margin:0 0 8px;padding:8px 10px;border:0;border-radius:8px;background:#EDF9F3;font-size:12px}
+.offers-view .suitable ul{display:block;list-style:disc;margin:4px 0 0;padding-inline-start:16px;font-size:12px;color:#344963}
+.offers-view .offer-profile>summary{display:flex;align-items:center;gap:7px;min-height:46px;cursor:pointer;color:#29466A;font-size:13px;font-weight:700}
+.offers-view .offer-profile>summary::after{content:"";width:6px;height:6px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg);margin-bottom:3px}
+.offers-view .offer-profile[open]>summary::after{transform:rotate(225deg);margin-bottom:0}
+.offers-view .expert-card{box-shadow:none;border:0;padding:7px 0;margin:0}
+.offers-view .btn{box-sizing:border-box;border-radius:9px;min-height:46px;font-size:13px;box-shadow:none;white-space:normal}
+.offers-view .btn[data-a="pick"]{background:#B83B08;color:#fff;margin-top:8px}
+.offers-view .btn[data-a="pick"]:disabled{opacity:1;background:#E8EBF0;color:#475A73}
+.offers-view .offer-actions .btn[data-a="openPreThread"]{width:auto;max-width:100%;min-width:46px;padding:6px 10px;background:#fff;color:#102747;border:1px solid #CCD8E5}
+.offers-view .offer-actions .prechat{flex-basis:100%;min-width:0;margin:3px 0 0}
+.offers-view .prechat-close,.offers-view .expert-card button{min-height:46px;min-width:46px}
+.offers-view .wait{font-size:13px;line-height:1.5;border:1px solid #E0E8F0;background:#F7F9FC}
+.offers-view .payment-summary,.offers-view .appointment-card{box-shadow:none}
+.offers-view .payment-summary>.customer-pay{display:block;padding:10px 12px}
+.offers-view .customer-pay .hint{margin:4px 0 8px}
+.offers-view .pay-choice{min-height:46px;min-width:46px;color:#102747;-webkit-text-fill-color:currentColor;box-shadow:none}
+.offers-view .pay-choice[aria-pressed="true"]{color:#fff}
+.offers-view .other-offers{margin-top:20px}
+.offers-view .other-offers h2{font-size:16px;margin:0 0 8px}
+@media(min-width:768px){.offers-view .quote{padding:14px 16px}.offers-view .qhead h3{font-size:16px}.offers-view .qnote{font-size:14px}}
+/* V1-E · Aktif işim */
+body:has(.active-job){--brand-bg:#fff;--bg:#fff;background:#fff!important}
+body:has(.active-job) .top{position:relative;top:auto;box-sizing:border-box;min-height:52px;padding-block:4px;background:white;backdrop-filter:none}
+body:has(.active-job) .brand{display:flex;align-items:baseline;white-space:nowrap;font-size:21px;line-height:1}
+body:has(.active-job) .brand span:nth-child(2){color:#ff510b}
+body:has(.active-job) .brand i{align-self:center;width:5px;height:5px;margin-left:3px}
+body:has(.active-job) .hdr-r{gap:6px}
+body:has(.active-job) .seg button{padding-inline:8px;font-size:12px}
+body:has(.active-job) .beta-strip{margin:0;padding:4px 0;background:transparent;border:0}
+body:has(.active-job) #app{padding-top:0}
+.active-job{max-width:740px;margin:auto;background:#fff;color:#102747;overflow-wrap:anywhere}
+.job-bar{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;min-height:48px;background:#102747;color:#fff;border-radius:14px 14px 0 0}
+.job-bar h1{color:#fff;text-align:center;font:750 17px/1.2 Figtree,sans-serif}
+.job-bar button{min-height:46px;border:0;background:transparent;color:#fff;font-size:24px;cursor:pointer}
+.job-cover{position:relative;padding:13px 14px 0}
+.job-cover:has(img:not([hidden])){padding:0}
+.job-cover img{display:block;width:100%;height:clamp(146px,34vw,232px);object-fit:cover;border-radius:0 0 14px 14px}
+.job-cover span{display:inline-block;padding:4px 10px;border-radius:18px;background:#e7f6ee;color:#165539;font:750 12px/1.4 Figtree,sans-serif}
+.job-cover:has(img:not([hidden])) span{position:absolute;top:12px;left:12px}
+.job-main{padding:0 12px 32px}
+.job-title{padding:12px 0 7px}
+.job-title h2{font-size:22px;line-height:1.2;color:#102747}
+.job-title p{font-size:13px;color:#506078;margin:4px 0 0}
+.active-job .job-progress{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;position:relative;margin:10px 0 14px}
+.job-progress .workflow-step{background:transparent;color:#536279;padding:0 1px;position:relative;font:650 11px/1.2 Figtree,sans-serif}
+.job-progress .workflow-step::before{content:"";position:absolute;left:-50%;right:50%;top:11px;background:#d8dfe8;height:2px}
+.job-progress .workflow-step:first-child::before{display:none}
+.job-progress .workflow-step.done::before{background:#16815b}
+.job-progress .workflow-step b{position:relative;z-index:1;background:#e3e8ee;color:#4e5c70;font-size:12px}
+.job-progress .workflow-step.done b{background:#176b50;color:#fff}
+.job-progress .workflow-step[aria-current] b{background:#102747}
+.job-person,.job-customer,.job-facts{border:1px solid #dce4ed;border-radius:14px;padding:12px;margin:0 0 10px}
+.job-identity{display:flex;align-items:center;gap:10px}
+.job-avatar{display:grid;place-items:center;width:42px;height:42px;background:#edf2f7;border-radius:50%;font-weight:800}
+.job-person h3{font-size:17px;color:#102747}
+.job-person small,.job-facts dt{font-size:12px;color:#506078}
+.job-contact{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.job-contact details,.job-contact>button{flex:1}
+.job-contact details[open]{flex-basis:100%}
+.job-contact button,.job-contact summary{box-sizing:border-box;display:grid;place-items:center;min-height:45px;padding:6px 10px;border:1px solid #dce4ed;background:#f9fbfd;color:#102747;border-radius:9px;cursor:pointer;font:700 13px/1.3 Figtree,sans-serif}
+.job-person--expert,.job-customer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.job-person--expert .job-contact{margin-top:0}
+.job-person--expert:has(details[open]) .job-contact{flex-basis:100%}
+.job-customer h3{font:750 13px/1.3 Figtree,sans-serif;color:#506078}
+.job-customer p{margin:3px 0 0;font-weight:750}
+.job-customer .job-contact{margin:0}
+.job-facts .job-appointment-link{border:0;background:transparent;padding:0;color:#29466a;font:inherit;font-weight:750;text-decoration:underline;text-underline-offset:2px;cursor:pointer;min-height:44px}
+.job-facts{display:grid;gap:8px}
+.job-facts>div{display:grid;grid-template-columns:minmax(80px,1fr) minmax(0,1.7fr);align-items:baseline;gap:8px}
+.job-facts dd{margin:0;text-align:right;font-size:14px;font-weight:750;color:#102747}
+.job-primary>button{box-sizing:border-box;width:100%;min-height:48px;border:0;border-radius:11px;margin:0;background:#b83b08;color:white;box-shadow:none;font:750 15px/1.3 Figtree,sans-serif;cursor:pointer}
+.active-job .payment-summary,.active-job .appointment-card,.active-job .modern-chat{box-shadow:none}
+.active-job .payment-summary>.customer-pay{display:block;padding:12px}
+.active-job .pay-choice{min-height:45px;-webkit-text-fill-color:currentColor}
+.active-job .btn,.active-job input,.active-job textarea{box-sizing:border-box;max-width:100%}
+.active-job [tabindex="-1"]{scroll-margin-top:12px}
+@media(max-width:767px){.active-job{margin-inline:-6px}}
 </style>
 </head>
 <body>
@@ -1448,12 +1576,12 @@ function restoreNavigation(raw){
       if(S.page==='admin'&&!S.isAdmin)S.page='account';
       if(S.page==='partner'&&!S.partnerCtx)S.page='account';
       S.role=raw.role==='usta'?'usta':'musteri';
-      S.view=['list','detail','prodetail','new'].includes(raw.view)?raw.view:'list';
+      S.view=['list','detail','prodetail','activejob','new'].includes(raw.view)?raw.view:'list';
       S.createStep=Math.min(6,Math.max(1,Number(raw.createStep)||1));
       S.navSection=raw.navSection==='jobs'?'jobs':'home';
       S.sel=safeId(raw.sel);S.quoteFor=safeId(raw.quoteFor);S.preThread=safeId(raw.preThread);
       if(S.view==='new'&&!S.draft)S.view='list';
-      if((S.view==='detail'||S.view==='prodetail')&&!D.listings[S.sel]){S.view='list';S.sel=null}
+      if(['detail','prodetail','activejob'].includes(S.view)&&!D.listings[S.sel]){S.view='list';S.sel=null}
       if(S.quoteFor&&(!S.q||!D.listings[S.quoteFor]))S.quoteFor=null;
       if(S.preThread&&!D.quotes[S.preThread])S.preThread=null;
       S.expertEditing=!!raw.expertEditing&&S.role==='usta'&&expertReady(S.profile||{});
@@ -1887,7 +2015,7 @@ function ticket(l,o={}){
 }
 function chatBox(l,partner,canSend){
   const ms=D.msgs[l.id]||[], pp=prof(l.owner===uid()?(chosenQ(l)||{}).pro:l.owner);
-  return `<section class="chat modern-chat"><div class="chathead"><div class="chatperson"><div class="chatavatar">${esc(initials(partner))}</div><div><h2>${esc(partner)}</h2><p>${pp.identity_verified?'✓ Kimliği doğrulanmış uzman':'Tamİşim mesajlaşması'}</p></div></div><span class="chatsecure">🔒 Güvenli</span></div>
+  return `<section class="chat modern-chat"><div class="chathead"><div class="chatperson">${partner?`<div class="chatavatar">${esc(initials(partner))}</div>`:''}<div><h2>${esc(partner||'İş sohbeti')}</h2><p>${pp.identity_verified?(l.owner===uid()?'✓ Kimliği doğrulanmış uzman':'✓ Kimliği doğrulanmış müşteri'):'Tamİşim mesajlaşması'}</p></div></div><span class="chatsecure">🔒 Güvenli</span></div>
     <div class="msgs" id="msgs">${ms.length?ms.map(m=>`<div class="msgrow ${m.sender===uid()?'mine':'theirs'}"><div class="m ${m.sender===uid()?'ben':'usta'}">${esc(m.body)}</div></div>`).join(''):'<div class="chatempty"><span>💬</span><b>Mesajlaşmaya başla</b><small>İşin ayrıntılarını burada güvenle konuşabilirsin.</small></div>'}</div>`+
     (canSend?`<div class="send modern-send"><input class="in" id="chat-input" placeholder="Mesajını yaz..." autocomplete="off" maxlength="1000"><button class="btn sm" data-a="send" aria-label="Mesaj gönder">➤</button></div>`:'<div class="chatclosed">Bu iş tamamlandığı için mesaj gönderme kapalı.</div>')+`</section>`;
 }
@@ -1988,11 +2116,11 @@ function reviewBox(l,isCustomer){
   const d=S.reviewDrafts[l.id]||(S.reviewDrafts[l.id]={rating:0,comment:''});
   return `<div class="review-box"><b>Uzmanı puanla</b><p class="muted small">İş tamamlandı. Puan ve yorum isteğe bağlıdır ve ayrı kaydedilir.</p><div class="review-stars" role="group" aria-label="Puan seç">${[1,2,3,4,5].map(i=>`<button class="${i<=d.rating?'on':''}" data-a="setReviewRating" data-v="${l.id}|${i}" aria-label="${i} yıldız">★</button>`).join('')}</div><label class="lb" for="review-comment-${l.id}">Yorum (isteğe bağlı)</label><textarea class="in" id="review-comment-${l.id}" maxlength="1000" placeholder="Deneyimini paylaşabilirsin.">${esc(d.comment||'')}</textarea><button class="btn block" data-a="submitReview" data-v="${l.id}" ${d.rating?'':'disabled'}>Puanı ve yorumu gönder</button></div>`;
 }
-function workflowCard(l){
+function workflowParts(l,labels=WORKFLOW_STEPS){
   const w=D.workflows[l.id],q=chosenQ(l);if(!w||!q)return '';
   const isCustomer=l.owner===uid(),isPro=q.pro===uid();if(!isCustomer&&!isPro)return '';
-  const idx=Math.max(0,WORKFLOW_STATES.indexOf(w.state));
-  const steps=WORKFLOW_STEPS.map((x,i)=>`<div class="workflow-step ${i<=idx?'done':''}"><b>${i<idx?'✓':i+1}</b>${x}</div>`).join('');
+  const idx=WORKFLOW_STATES.indexOf(w.state);
+  const steps=WORKFLOW_STEPS.map((x,i)=>`<div ${i===idx?'aria-current="step"':''} title="${x}" class="workflow-step ${i<=idx?'done':''}"><b>${i<idx?'✓':i+1}</b>${labels[i]}</div>`).join('');
   const copy={awaiting_appointment:['Randevu bekleniyor','Müşteri ve uzman kesin tarih/saat üzerinde anlaşmalı.'],scheduled:['Randevu kesinleşti','Uzman randevu zamanı geldiğinde yola çıktığını bildirebilir.'],en_route:['Uzman yolda','Uzman adrese doğru yola çıktığını bildirdi.'],in_progress:['İş başladı','Uzman iş üzerinde çalışıyor.'],completion_requested:['Uzman tamamlandığını bildirdi','İş ancak müşterinin onayıyla kesin olarak tamamlanır.'],completed:['İş tamamlandı','Müşteri işin tamamlandığını onayladı.']};
   const c=copy[w.state]||['İş durumu','Güncel durum yükleniyor.'];
   let action='';
@@ -2000,7 +2128,12 @@ function workflowCard(l){
   else if(isPro&&w.state==='en_route')action='<button class="btn block workflow-action" data-a="advanceWorkflow" data-v="'+l.id+'|in_progress">İşe başladım</button>';
   else if(isPro&&w.state==='in_progress')action='<button class="btn block workflow-action" data-a="advanceWorkflow" data-v="'+l.id+'|completion_requested">İşi tamamladım</button>';
   else if(isCustomer&&w.state==='completion_requested')action='<button class="btn block workflow-action" data-a="advanceWorkflow" data-v="'+l.id+'|completed">İşi tamamlandı olarak onayla</button>';
-  return `<section class="workflow-card"><span class="section-kicker">İş süreci</span><h2>Güncel durum</h2><div class="workflow-steps">${steps}</div><div class="workflow-status"><strong>${esc(c[0])}</strong>${esc(c[1])}</div>${action}${w.state==='completed'?reviewBox(l,isCustomer):''}</section>`;
+  return {steps,label:c[0],description:c[1],action,review:w.state==='completed'?reviewBox(l,isCustomer):''};
+}
+function workflowCard(l){
+  const flow=workflowParts(l);
+  if(!flow)return '';
+  return `<section class="workflow-card"><span class="section-kicker">İş süreci</span><h2>Güncel durum</h2><div class="workflow-steps">${flow.steps}</div><div class="workflow-status"><strong>${esc(flow.label)}</strong>${esc(flow.description)}</div>${flow.action}${flow.review}</section>`;
 }
 
 function vSetup(){
@@ -2167,7 +2300,7 @@ function vAccount(){
 function vList(){
   const popular=['boya','tesisat','elektrik','klima','temizlik','nakliyat','mobilya','oto'];
   const cats=popular.map(k=>{const v=KAT[k];return `<button class="homecat" data-a="quickCat" data-v="${k}"><span>${iconFor(k)}</span><b>${esc(v.ad)}</b></button>`}).join('');
-  const jobs=D.mine.length?D.mine.map(l=>ticket(l,{act:'open',pill:pillMine(l)})).join(''):'<div class="empty jobs-empty"><span>▤</span><h3>Henüz ilanın yok</h3><p>İlk ilanını ver, uygun uzmanlardan teklifler almaya başla.</p><button class="btn sm" data-a="newIlan">İlk ilanımı ver</button></div>';
+  const jobs=D.mine.length?D.mine.map(l=>ticket(l,{act:chosenQ(l)?'openActive':'open',pill:pillMine(l)})).join(''):'<div class="empty jobs-empty"><span>▤</span><h3>Henüz ilanın yok</h3><p>İlk ilanını ver, uygun uzmanlardan teklifler almaya başla.</p><button class="btn sm" data-a="newIlan">İlk ilanımı ver</button></div>';
   return `<div class="home-shell customer-home"><section class="hero"><div class="hero-copy"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>İşini anlat, teklif al, karşılaştır ve güvenle seç.</p><div class="hero-actions"><button class="searchbox" data-a="newIlan"><span>⌕</span> Hangi hizmete ihtiyacın var?</button><button class="hero-create" data-a="newIlan">İlan Oluştur</button></div></div><aside class="hero-proof" aria-label="Tamİşim güven özellikleri"><div><b>Tek ilan, çok teklif</b><small>Uzmanları fiyat ve profilleriyle karşılaştır.</small></div><div><b>Doğrulama görünür</b><small>Onaylı bilgileri seçimden önce incele.</small></div><div><b>Süreç kontrol altında</b><small>Randevu ve iş adımlarını takip et.</small></div></aside></section>
   <section class="home-section"><div class="home-title"><h2>Popüler hizmetler</h2><button class="link" data-a="newIlan">Tümünü gör</button></div><div class="homecats">${cats}</div></section>
   <div class="home-support-grid"><section class="trustbox"><div class="trusticon">✓</div><div><h3>Güvenle uzmanını seç</h3><p>Teklifleri, puanları, tamamlanan işleri ve doğrulama rozetlerini karşılaştır.</p></div></section>
@@ -2245,32 +2378,49 @@ function vDetail(){
   const l=D.listings[S.sel];
   if(!l){S.view='list';return vList()}
   const all=qsOf(l.id),n=all.length;
-  let h=`<button class="page-back" data-a="back">← İlanlarıma dön</button><div class="detail-head"><span class="section-kicker">İlan detayı</span><h1>Tekliflerini karşılaştır</h1><p>Fiyatı ve uzman profilini değerlendir; ödeme tercihini uzmanı seçtikten sonra yap.</p></div>`+ticket(l,{pill:pillMine(l)});
-  h+=`<div class="row"><h2>Gelen teklifler<span class="count">${n}</span></h2>`+
-    (l.status==='open'&&n>1?`<div class="seg small" role="group" aria-label="Sırala"><button data-a="sort" data-v="uygun" aria-pressed="${S.sort==='uygun'}">Sana uygun</button><button data-a="sort" data-v="fiyat" aria-pressed="${S.sort==='fiyat'}">En ucuz</button><button data-a="sort" data-v="puan" aria-pressed="${S.sort==='puan'}">En yüksek puan</button></div>`:'')+`</div>`;
+  const ch=chosenQ(l);
+  const listingTitle=ch?'Seçilen teklif':n?'Tekliflerini karşılaştır':'Teklif bekleniyor';
+  let h=`<header class="offers-top"><button class="offers-back" data-a="back" aria-label="İlanlarıma dön">←</button><h1>Gelen teklifler</h1><span>${n} teklif</span></header>
+  <details class="offers-listing"><summary><strong>${listingTitle}</strong><span>İlan detayları</span></summary>${ticket(l,{pill:pillMine(l)})}${ch?`<button class="btn block" data-a="openActive" data-v="${l.id}">Aktif işim</button>`:''}</details>`;
+  h+=(l.status==='open'&&n>1?`<div class="seg small offers-sort" role="group" aria-label="Sırala"><button data-a="sort" data-v="uygun" aria-pressed="${S.sort==='uygun'}">Sana uygun</button><button data-a="sort" data-v="fiyat" aria-pressed="${S.sort==='fiyat'}">En ucuz</button><button data-a="sort" data-v="puan" aria-pressed="${S.sort==='puan'}">En yüksek puan</button></div>`:'');
   if(!n)h+='<div class="wait"><span class="dot"></span>Uzmanlar ilanını inceliyor. Teklifler gelince burada görünecek.</div>';
   const rt=q=>Number(stat(q.pro).rating)||0;
   const suitability=new Map(all.map(q=>[q.id,quoteSuitability(q,l,all)]));
   const suitableIds=new Set([...all].filter(q=>suitability.get(q.id).eligible&&suitability.get(q.id).reasons.length).sort((a,b)=>suitability.get(b.id).score-suitability.get(a.id).score||quoteTie(a,b)).slice(0,3).map(q=>q.id));
   const sortQuotes=(a,b)=>S.sort==='puan'?(rt(b)-rt(a)||quoteTie(a,b)):S.sort==='fiyat'?(Number(a.price)-Number(b.price)||quoteTie(a,b)):(suitability.get(b.id).score-suitability.get(a.id).score||quoteTie(a,b));
   const rest=all.filter(q=>q.id!==l.chosen_quote).sort(sortQuotes);
-  const ch=chosenQ(l);
-  h+=(ch?[ch,...rest]:rest).map(q=>{
+  const offerCard=q=>{
     const chosen=l.chosen_quote===q.id,dim=l.chosen_quote&&!chosen;
-    const p=prof(q.pro),s=stat(q.pro);
-    const rating=s.rating!=null?`<span class="star-i">★</span> ${Number(s.rating).toFixed(1)} <span class="muted">(${s.jobs} iş)</span>`:'<span class="muted">Yeni uzman, henüz puanı yok</span>';
+    const p=prof(q.pro),s=stat(q.pro),note=cleanQuoteNote(q);
+    const rating=s.rating!=null?`<span class="star-i">★</span> ${Number(s.rating).toFixed(1)} <span class="muted">(${s.jobs} iş)</span>`:'<span class="muted">Henüz puanı yok</span>';
     const fit=suitability.get(q.id),showFit=l.status==='open'&&suitableIds.has(q.id);
-    return `<article class="quote ${chosen?'chosen':''} ${dim?'dim':''}">
-      ${showFit?`<div class="suitable"><b>✓ Sana uygun</b><ul>${fit.reasons.map(x=>`<li>✓ ${esc(x)}</li>`).join('')}</ul></div>`:''}
-      <div class="qhead"><div><h3>${esc(p.name)}</h3><p class="sub">${esc(p.title||'Servis ve tamir')}</p><p class="rating">${rating}</p></div>
+    const status=[
+      chosen?'✓ Seçildi':'',
+      showFit?'✓ Sana uygun':'',
+      p.identity_verified?'✓ Kimlik doğrulandı':'',
+      p.vocational_verified?'✓ Mesleki belge doğrulandı':'',
+      p.business_verified?'✓ İşletme doğrulandı':''
+    ].filter(Boolean);
+    return `<article data-quote-id="${q.id}" class="quote ${chosen?'chosen':''} ${dim?'dim':''}">
+      ${status.length?`<div class="offer-status">${status.map(label=>`<span>${label}</span>`).join('')}</div>`:''}
+      <div class="qhead"><div class="offer-person"><span class="offer-avatar" aria-hidden="true">${esc(initials(p.name))}</span><div><h3>${esc(p.name)}</h3><p class="rating">${rating}</p></div></div>
       <div class="pr"><div class="price">${tl(q.price)}</div><div class="muted small">${esc(q.eta)}</div></div></div>
-      ${cleanQuoteNote(q)?`<p class="qnote">${esc(cleanQuoteNote(q))}</p>`:''}
-      ${paymentBadges(q)}
-      ${proCard(q.pro)}
-      ${preselectionThread(q,l)}
-      ${chosen?'<span class="pill good">Seçildi</span>':(l.status==='open'?`<button class="btn block" id="pick-quote-${q.id}" data-a="pick" data-v="${q.id}">Bu uzmanı seç</button>`:'')}
+      ${note?`<p class="qnote">${esc(note)}</p>`:''}
+      <div class="offer-actions">
+        <details class="offer-review">
+          <summary>Teklifi incele</summary>
+          <div class="offer-review-body">
+            ${showFit?`<div class="suitable"><b>Sana uygun olma nedenleri</b><ul>${fit.reasons.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
+            ${paymentBadges(q)}
+            <details class="offer-profile"><summary>Uzman profili</summary>${proCard(q.pro)}</details>
+            ${!chosen&&l.status==='open'?`<button class="btn block" id="pick-quote-${q.id}" data-a="pick" data-v="${q.id}">Bu uzmanı seç</button>`:''}
+          </div>
+        </details>
+        ${preselectionThread(q,l)}
+      </div>
     </article>`;
-  }).join('');
+  };
+  h+=ch?offerCard(ch):rest.map(offerCard).join('');
   if(ch){
     const pc=D.paymentChoices[l.id];
     h+=pc?paymentPlan(l,ch,pc,'customer'):paymentChoicePanel(l,ch);
@@ -2278,8 +2428,9 @@ function vDetail(){
     h+=appointmentCard(l);
     h+=workflowCard(l);
     h+=chatBox(l,prof(ch.pro).name,l.status==='chosen');
+    if(rest.length)h+=`<section class="other-offers"><h2>Diğer teklifler</h2>${rest.map(offerCard).join('')}</section>`;
   }
-  return h;
+  return `<section class="offers-view">${h}</section>`;
 }
 
 /* usta */
@@ -2322,19 +2473,58 @@ function vUsta(){
   }
   return h;
 }
-function vProDetail(){
-  const l=D.listings[S.sel];
-  if(!l){S.view='list';return vUsta()}
-  const q=chosenQ(l);
-  let h=`<button class="page-back" data-a="back">← Tekliflerime dön</button><div class="detail-head"><span class="section-kicker">İş detayı</span><h1>Müşteriyle işi yönet</h1><p>Ödeme planını, mesajları ve iş durumunu tek yerde takip et.</p></div>`+ticket(l,{pill:l.status==='done'?'<span class="pill">Tamamlandı</span>':'<span class="pill good">Seçildin</span>'});
-  if(q)h+=`<p class="lede">Teklifin: <strong>${tl(q.price)}</strong>, ${esc(q.eta)}</p>`;
-  if(q&&D.paymentChoices[l.id])h+=paymentPlan(l,q,D.paymentChoices[l.id],'pro');
-  if(q)h+=agreementCard(l);
-  if(q)h+=appointmentCard(l);
-  if(q)h+=workflowCard(l);
-  if(q)h+=preselectionThread(q,l);
-  h+=chatBox(l,prof(l.owner).name,l.status==='chosen');
-  return h;
+function vActiveJob(){
+  const l=D.listings[S.sel],q=l&&chosenQ(l),customer=S.role==='musteri';
+  if(!q||(customer?l.owner:q.pro)!==uid()){
+    S.view='list';
+    return customer?vList():vUsta();
+  }
+  const w=D.workflows[l.id],flow=workflowParts(l,['Seçildi','Randevu','Yolda','Başladı','Onay','Bitti']),appointment=D.appointments[l.id];
+  const snapshot=D.snapshots[l.id],choice=D.paymentChoices[l.id],expert=D.profiles[q.pro];
+  const title=(l.problems||[]).join(', ')||KAT[l.category]?.ad||'İş detayı';
+  const cover=(D.photos[l.id]||[]).find(photo=>photo.url);
+  const status=flow?.label||(l.status==='done'?'Tamamlandı':'Uzman seçildi');
+  const appointmentPanel=appointmentCard(l);
+  const dateText=value=>value&&Number.isFinite(Date.parse(value))?appointmentText(value):'';
+  const confirmed=appointment?.status==='confirmed'?dateText(appointment.proposed_at):'';
+  const end=dateText(w?.completed_at);
+  const price=snapshot?.quote_price??q.price;
+  const facts=[
+    ['Randevu',confirmed||(appointment?'Onay bekleniyor':'Henüz belirlenmedi')],
+    ['Tamamlanma tarihi',end],
+    ['Anlaşılan tutar',price!=null&&price!==''&&Number.isFinite(Number(price))?tl(price):'']
+  ];
+  const clientName=String(D.profiles[l.owner]?.name||'').trim();
+  const canChat=l.status==='chosen';
+  const jump=(id,text)=>`<button type="button" data-job-target="${id}">${text}</button>`;
+  const previousAppointment=$('#job-appointment:not([hidden])');
+  const appointmentOpen=previousAppointment?.dataset.jobId===String(l.id)&&previousAppointment.dataset.role===S.role;
+  const appointmentToggle=(text,className,closeText=text)=>`<button type="button" class="${className}" data-job-target="job-appointment" aria-controls="job-appointment" aria-expanded="${appointmentOpen}" data-open-label="${text}" data-close-label="${closeText}">${appointmentOpen?closeText:text}</button>`;
+  const review=flow?.review;
+  const appointmentIsPrimary=appointmentPanel&&!flow?.action&&!review;
+  const primary=flow?.action||(review?jump('job-review',customer&&!D.reviews[l.id]?'Uzmanı değerlendir':'Değerlendirmeyi gör'):appointmentIsPrimary?appointmentToggle('Randevu detaylarını gör','','Randevu detaylarını kapat'):jump('job-record','İş detaylarını gör'));
+  const payment=choice?paymentPlan(l,q,choice,customer?'customer':'pro'):customer?paymentChoicePanel(l,q):'';
+  return `<section class="active-job">
+    <header class="job-bar"><button type="button" data-a="back" aria-label="Geri dön">←</button><h1>Aktif işim</h1></header>
+    <div class="job-cover">${cover?`<img src="${esc(cover.url)}" alt="İlana eklenen iş fotoğrafı">`:''}<span>${esc(status)}</span></div>
+    <div class="job-main">
+      <header class="job-title"><h2>${esc(title)}</h2><p>${esc(locText(l))}</p></header>
+      ${flow?`<div class="workflow-steps job-progress" aria-label="İş ilerlemesi">${flow.steps}</div>`:''}
+      <section class="job-person${customer?'':' job-person--expert'}"><div class="job-identity">${expert?.name?`<span class="job-avatar" aria-hidden="true">${esc(initials(expert.name))}</span>`:''}
+        <div><small>${customer?'Seçilen uzman':'Uzman profilin'}</small><h3>${esc(expert?.name||'Profil bilgisi bulunmuyor')}</h3></div></div>
+        <div class="job-contact">${expert?`<details><summary>Profili gör</summary>${proCard(q.pro)}</details>`:''}
+        ${customer?jump('job-chat',canChat?'Mesaj yaz':'Mesajları gör'):''}</div></section>
+      ${customer?'':`<section class="job-customer" aria-label="Müşteri iletişimi"><div><h3>Müşteri</h3>${clientName?`<p>${esc(clientName)}</p>`:''}</div><div class="job-contact">${jump('job-chat',canChat?'Müşteriye yaz':'Mesajları gör')}</div></section>`}
+      <dl class="job-facts">${facts.filter(([,value])=>value).map(([label,value])=>`<div><dt>${label==='Randevu'&&appointmentPanel&&!appointmentIsPrimary?appointmentToggle('Randevu detayları','job-appointment-link'):label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
+      <div class="job-primary">${primary}</div>
+      ${review?`<section id="job-review" tabindex="-1">${review}</section>`:''}
+      ${appointmentPanel?`<div id="job-appointment" tabindex="-1" data-job-id="${l.id}" data-role="${S.role}" ${appointmentOpen?'':'hidden'}>${appointmentPanel}</div>`:''}
+      ${payment}
+      <div id="job-chat" tabindex="-1">${chatBox(l,customer?prof(q.pro).name:clientName,canChat)}</div>
+      ${preselectionThread(q,l)}
+      <section id="job-record" tabindex="-1">${agreementCard(l)}${ticket(l)}${cleanQuoteNote(q)?`<p>${esc(cleanQuoteNote(q))}</p>`:''}${q.eta?`<p>Teklifteki zaman: ${esc(q.eta)}</p>`:''}
+      ${customer?`<button class="btn ghost" data-a="open" data-v="${l.id}">Gelen teklifleri gör</button>`:''}</section>
+    </div></section>`;
 }
 function vQuote(){
   const l=D.listings[S.quoteFor];
@@ -2463,8 +2653,8 @@ function render(){
   else if(S.page==='experts')h=vExperts();
   else if(S.page==='admin')h=vAdmin();
   else if(S.page==='partner')h=vPartnerPanel();
-  else if(S.role==='musteri')h=S.view==='new'?vNew():S.view==='detail'?vDetail():vList();
-  else h=S.quoteFor?vQuote():S.view==='prodetail'?vProDetail():vUsta();
+  else if(S.role==='musteri')h=S.view==='new'?vNew():S.view==='detail'?vDetail():S.view==='activejob'?vActiveJob():vList();
+  else h=S.quoteFor?vQuote():S.view==='prodetail'?vActiveJob():vUsta();
   $('#app').innerHTML=h;
   document.body.classList.toggle('home-shell-active',!!document.querySelector('#app > .home-shell'));
   const signed=!!(S.user&&!S.setup&&!S.loading);
@@ -2770,6 +2960,7 @@ const A={
     toast(photoFailed?'İlan yayınlandı; bazı fotoğraflar yüklenemedi.':'İlanın yayında. Uzmanlar teklif verdikçe burada görünecek.');
   },
   open(v){S.sel=+v;S.view='detail';S.preThread=null},
+  openActive(v){S.sel=+v;S.view='activejob';S.preThread=null},
   openPro(v){S.sel=+v;S.view='prodetail';S.preThread=null},
   back(){S.view='list';S.draft=null;S.sel=null;S.preThread=null},
   sort(v){if(['uygun','fiyat','puan'].includes(v))S.sort=v},
@@ -2951,6 +3142,23 @@ async function run(a,v,el){
     if(next){next.focus({preventScroll:true});next.scrollIntoView({block:'end',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}
   }
 }
+document.addEventListener('click',e=>{
+  const button=e.target.closest('.active-job [data-job-target]');
+  if(!button)return;
+  const panel=document.getElementById(button.dataset.jobTarget);
+  if(!panel)return;
+  if(button.hasAttribute('aria-expanded')){
+    panel.hidden=!panel.hidden;
+    button.setAttribute('aria-expanded',String(!panel.hidden));
+    button.textContent=panel.hidden?button.dataset.openLabel:button.dataset.closeLabel;
+    if(panel.hidden)return;
+  }
+  panel.focus({preventScroll:true});
+  panel.scrollIntoView({block:'start'});
+});
+document.addEventListener('error',e=>{
+  if(e.target.matches?.('.job-cover img'))e.target.hidden=true;
+},true);
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el)run(el.dataset.a,el.dataset.v,el)});
 document.addEventListener('keydown',e=>{
   if(e.key!=='Enter'||e.target.tagName==='TEXTAREA')return;
