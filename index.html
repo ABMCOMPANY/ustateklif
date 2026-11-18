@@ -432,7 +432,6 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 
 /* customer-payment-choice-v31 */
 .customer-pay{margin:12px 0;padding:12px;border:1px solid var(--brand-line);border-radius:15px;background:#FBFCFE}.customer-pay>b{display:block;color:var(--brand-ink);font-size:13px;margin-bottom:8px}.customer-pay-options{display:flex;flex-wrap:wrap;gap:7px}.pay-choice{border:1px solid #D9E2EE;background:#fff;color:var(--brand-ink);border-radius:999px;padding:8px 10px;font:700 11px/1.2 Figtree,system-ui}.pay-choice[aria-pressed="true"]{background:var(--brand-primary);border-color:var(--brand-primary);color:#fff;box-shadow:0 5px 14px rgba(var(--brand-primary-rgb),.18)}
-.appointment-card{margin:16px 0;padding:16px;border:1px solid var(--brand-line);border-radius:20px;background:var(--surface);box-shadow:0 8px 26px rgba(var(--brand-ink-rgb),.07)}.appointment-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.appointment-head h2{margin:2px 0 4px;font-size:19px;color:var(--ink)}.appointment-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}.appointment-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--brand-tint);color:var(--brand-primary);font-size:20px}.appointment-time{margin:14px 0;padding:13px;border-radius:15px;background:var(--brand-bg);border:1px solid var(--brand-line)}.appointment-time b{display:block;color:var(--ink);font-size:16px}.appointment-time small{display:block;margin-top:4px;color:var(--muted)}.appointment-actions{display:grid;gap:10px;margin-top:12px}.appointment-actions .in{min-height:48px;min-width:0}.appointment-picker-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:10px}.appointment-choice{margin:0;padding:11px 13px;border-radius:14px;background:var(--brand-bg);border:1px solid var(--brand-line);color:var(--muted);font-size:13px;line-height:1.45}.appointment-choice.has-value{color:var(--ink);font-weight:750}.appointment-actions .two-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.appointment-confirmed{color:#147A50;font-weight:800}.appointment-wait{color:#9A6812;font-weight:750}
 .agreement-card,.workflow-card{margin:16px 0;padding:16px;border:1px solid var(--brand-line);border-radius:20px;background:#fff}.agreement-card h2,.workflow-card h2{margin:2px 0 5px;font-size:19px;color:var(--brand-ink)}.agreement-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.agreement-grid div{padding:10px;border-radius:13px;background:var(--brand-bg)}.agreement-grid span{display:block;color:var(--brand-muted);font-size:10px}.agreement-grid b{display:block;margin-top:3px;color:var(--brand-ink);font-size:13px}.agreement-note{margin:10px 0 0;color:var(--brand-muted);font-size:12px;line-height:1.45}.workflow-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:14px 0}.workflow-step{min-width:0;padding:9px 5px;border-radius:12px;background:#F1F4F8;color:#8390A1;text-align:center;font-size:9px;font-weight:800}.workflow-step b{display:grid;place-items:center;width:22px;height:22px;margin:0 auto 5px;border-radius:50%;background:#DCE3EC;color:#6E7B8D}.workflow-step.done{background:var(--brand-tint);color:var(--brand-primary)}.workflow-step.done b{background:var(--brand-primary);color:#fff}.workflow-status{padding:12px;border-radius:14px;background:var(--brand-bg);color:var(--brand-ink);font-size:13px;line-height:1.45}.workflow-status strong{display:block;margin-bottom:3px}.workflow-action{margin-top:12px}.review-box{margin-top:14px;padding-top:14px;border-top:1px solid var(--brand-line)}.review-stars{display:flex;gap:3px;margin:8px 0}.review-stars button{font-size:30px;background:transparent;border:0;color:#CBD4DF;padding:2px;cursor:pointer}.review-stars button.on{color:var(--brand-accent)}.review-box textarea{min-height:86px}.verified-review{margin-top:12px;padding:12px;border-radius:14px;background:#E8F7F0;color:#147A50}.verified-review p{margin:5px 0 0;color:#45675A;font-size:12px;line-height:1.45}
 
 /* promotions-v32 */
@@ -1544,6 +1543,51 @@ body:has(.quote-form) .beta-strip{margin:0;padding:4px 0;background:transparent;
 .conversation-notice{margin:0;padding:8px 10px;background:#f5f8fb}
 .conversation-error{margin:0 0 7px;padding:7px 9px;border-radius:8px;background:#fff0ec;color:#862d21;font-size:13px}
 html:has(.conversation-composer input:focus){padding-bottom:calc(env(safe-area-inset-bottom,0px) + var(--conversation-keyboard-inset,0px))}
+/* V1-H2 · Randevu */
+.appointment-card{box-sizing:border-box;margin:12px 0 16px;border:1px solid #d8e1eb;border-radius:14px;background:#fff;color:#102747;overflow-wrap:anywhere;box-shadow:none}
+.appointment-head{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;padding:8px 16px;border-radius:13px 13px 0 0;background:#102747;color:#fff}
+.appointment-head h2{margin:0;color:#fff;font:750 17px/1.25 Figtree,sans-serif}
+.appointment-status{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:20px;background:#eef3f9;color:#29466a;font:700 12px/1.4 Figtree,sans-serif}
+.appointment-status::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.appointment-status.waiting{background:#fff0dc;color:#78480e}
+.appointment-status.confirmed{background:#e5f5ea;color:#175a40}
+.appointment-body{padding:16px}
+.appointment-context{padding-bottom:14px;border-bottom:1px solid #dce4ed}
+.appointment-context h3{margin:0;color:#102747;font:750 20px/1.25 Figtree,sans-serif}
+.appointment-context p,.appointment-section p,.appointment-slot p{margin:4px 0 0;color:#4c6077;font-size:14px;line-height:1.45}
+.appointment-context dl{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px 12px;margin:12px 0 0;font-size:13px}
+.appointment-context dt{color:#4c6077}.appointment-context dd{margin:0;color:#263e5d;font-weight:700}
+.appointment-screen{min-height:72dvh}
+.appointment-screen .appointment-card{margin:0;border:0}
+.appointment-screen .appointment-head{display:grid;grid-template-columns:44px 1fr 44px;gap:0;padding:0 5px}
+.appointment-screen .appointment-head h1{margin:0;color:#fff;text-align:center;font:750 17px/1.3 Figtree,sans-serif}
+.appointment-head button{min-width:44px;min-height:46px;padding:0;border:0;background:transparent;color:#fff;font:500 22px/1 Figtree,sans-serif;cursor:pointer}
+.appointment-context>.appointment-status{margin-bottom:9px}
+.appointment-context dl+dl{margin-top:5px}
+.appointment-section{margin:15px 0 0}
+.appointment-section h4,.appointment-slot h4{margin:0;font:750 16px/1.35 Figtree,sans-serif;color:#102747}
+.appointment-slot{display:flex;align-items:center;gap:12px;margin:16px 0}
+.appointment-calendar{box-sizing:border-box;flex:0 0 54px;overflow:hidden;border:1px solid #bccbd9;border-radius:9px;text-align:center;color:#102747}
+.appointment-calendar span{display:block;padding:3px 0;background:#e7eef6;color:#29466a;font:750 11px/1.2 Figtree,sans-serif;text-transform:uppercase}
+.appointment-calendar b{display:block;padding:4px;font:750 23px/1.2 Figtree,sans-serif}
+.appointment-slot h4{font-size:13px;color:#4c6077}.appointment-slot time{display:block;margin-top:3px;color:#102747;font:750 18px/1.3 Figtree,sans-serif;font-variant-numeric:tabular-nums}
+.appointment-slot .appointment-zone,.appointment-zone{font-size:13px;color:#4c6077}
+.appointment-picker{margin-top:12px}
+.appointment-picker-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:10px}
+.appointment-picker-grid label{display:grid;gap:5px;color:#263e5d;font-size:14px;font-weight:700}
+.appointment-picker-grid input{box-sizing:border-box;display:block;width:100%;min-width:0;min-height:46px;margin:0;padding:8px;border:1px solid #8293a7;border-radius:8px;background:#fff;color:#102747;color-scheme:light;font:500 16px/1.35 Figtree,sans-serif;scroll-margin-block:12px}
+.appointment-choice{margin:7px 0 0;color:#4c6077;font-size:13px;line-height:1.45}
+.appointment-primary{box-sizing:border-box;display:block;width:100%;min-height:46px;margin:14px 0 0;padding:10px 14px;border:0;border-radius:10px;background:#b83b08;color:#fff;cursor:pointer;font:750 15px/1.35 Figtree,sans-serif;scroll-margin-block:12px}
+.appointment-primary:disabled{cursor:wait;background:#8c3413}
+.appointment-alternative summary{display:flex;align-items:center;justify-content:center;gap:9px;min-height:44px;margin-top:4px;color:#29466a;cursor:pointer;list-style:none;font:700 14px/1.4 Figtree,sans-serif}
+.appointment-alternative summary::-webkit-details-marker{display:none}
+.appointment-alternative summary::after{content:"";width:6px;height:6px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.appointment-alternative[open] summary::after{transform:rotate(225deg)}
+.appointment-actions:has(.appointment-alternative[open])>.appointment-primary{display:none}
+.appointment-feedback{margin:12px 0 0;padding:9px 11px;border-inline-start:3px solid #ad392b;background:#fff1ef;color:#812c23;font-size:14px;line-height:1.45}
+.appointment-card :is(button,summary,input):focus-visible{outline:2px solid #29466a;outline-offset:2px}
+.appointment-card .appointment-head button:focus-visible{outline-color:#fff;outline-offset:-4px}
+@media(min-width:768px){.appointment-head{padding-inline:20px}.appointment-body{padding:18px 20px}}
 </style>
 </head>
 <body>
@@ -1723,12 +1767,12 @@ function restoreNavigation(raw){
       if(S.page==='admin'&&!S.isAdmin)S.page='account';
       if(S.page==='partner'&&!S.partnerCtx)S.page='account';
       S.role=raw.role==='usta'?'usta':'musteri';
-      S.view=['list','detail','prodetail','activejob','new'].includes(raw.view)?raw.view:'list';
+      S.view=['list','detail','prodetail','activejob','appointment','new'].includes(raw.view)?raw.view:'list';
       S.createStep=Math.min(6,Math.max(1,Number(raw.createStep)||1));
       S.navSection=raw.navSection==='jobs'?'jobs':'home';
       S.sel=safeId(raw.sel);S.quoteFor=safeId(raw.quoteFor);S.preThread=safeId(raw.preThread);
       if(S.view==='new'&&!S.draft)S.view='list';
-      if(['detail','prodetail','activejob'].includes(S.view)&&!D.listings[S.sel]){S.view='list';S.sel=null}
+      if(['detail','prodetail','activejob','appointment'].includes(S.view)&&!D.listings[S.sel]){S.view='list';S.sel=null}
       S.q=S.quoteDrafts.get(S.quoteFor)||null;
       if(S.quoteFor&&(!S.q||!D.listings[S.quoteFor]))S.quoteFor=null;
       if(S.preThread&&!D.quotes[S.preThread])S.preThread=null;
@@ -1744,7 +1788,7 @@ function restoreNavigation(raw){
     });
   }finally{navRestoring=false}
 }
-const NAV_BACK_ACTIONS=new Set(['back','backGuest','guestBack','createPrev','cancelDraft','closeExperts','closeSupport','closeLegal','closeNotifications','closeAcct','closePartnerPanel','closeAdmin','cancelQuote','cancelExpertEdit','closePreThread']);
+const NAV_BACK_ACTIONS=new Set(['back','backGuest','guestBack','createPrev','cancelDraft','closeExperts','closeSupport','closeLegal','closeNotifications','closeAcct','closePartnerPanel','closeAdmin','cancelQuote','cancelExpertEdit','closePreThread','closeAppointment']);
 const NAV_REPLACE_ACTIONS=new Set(['logout','setNewPass']);
 function commitNavigation(before,action){
   if(navRestoring||!navHistoryReady)return;
@@ -2264,24 +2308,72 @@ function appointmentError(e){
   if(m.includes('kesinleşmiş'))return 'Kesinleşmiş randevu bu ekrandan değiştirilemez.';
   return 'Randevu işlemi tamamlanamadı. Tekrar dene.';
 }
-function appointmentCard(l){
+let appointmentFeedback=null;
+function showAppointmentError(id,message){
+  appointmentFeedback={id,user:uid(),message};
+}
+function appointmentPicker(id,submitLabel){
+  const draft=appointmentDraft(id),iso=appointmentIso(appointmentDraftValue(id));
+  const min=appointmentInputValue(new Date()).slice(0,10);
+  const max=appointmentInputValue(new Date(Date.now()+90*24*60*60*1000)).slice(0,10);
+  return `<div class="appointment-picker">
+    <div class="appointment-picker-grid">
+      <label>Tarih<input id="appointment-date-${id}" type="date" min="${min}" max="${max}" value="${esc(draft.date)}"></label>
+      <label>Saat<input id="appointment-time-${id}" type="time" step="300" value="${esc(draft.time)}"></label>
+    </div>
+    <p class="appointment-choice" id="appointment-choice-${id}" aria-live="polite">${iso?esc(appointmentText(iso))+' · ':''}Türkiye saati</p>
+    <button type="button" class="appointment-primary" data-a="proposeAppointment" data-v="${id}">${submitLabel}</button>
+  </div>`;
+}
+function appointmentSlot(a,label){
+  const date=new Date(a.proposed_at);
+  if(!a.proposed_at||!Number.isFinite(date.getTime()))return '<p class="appointment-feedback">Randevu zamanı görüntülenemiyor.</p>';
+  const format=options=>new Intl.DateTimeFormat('tr-TR',{timeZone:'Europe/Istanbul',...options}).format(date);
+  return `<div class="appointment-slot">
+    <div class="appointment-calendar" aria-hidden="true"><span>${format({month:'short'})}</span><b>${format({day:'numeric'})}</b></div>
+    <div><h4>${label}</h4><time datetime="${esc(a.proposed_at)}">${format({dateStyle:'long'})}</time>
+      <p class="appointment-zone">${format({weekday:'long'})} · <strong>${format({timeStyle:'short'})}</strong> (Türkiye saati)</p></div>
+  </div>`;
+}
+function appointmentCard(l,standalone=false){
   const a=D.appointments[l.id],q=chosenQ(l),isCustomer=l.owner===uid(),isPro=!!(q&&q.pro===uid());
   if(l.status!=='chosen'||!q||(!isCustomer&&!isPro))return '';
-  const minDate=appointmentInputValue(new Date()).slice(0,10),maxDate=appointmentInputValue(new Date(Date.now()+90*24*60*60*1000)).slice(0,10),draft=appointmentDraft(l.id),draftIso=appointmentIso(appointmentDraftValue(l.id));
-  const input=`<div class="appointment-picker-grid"><div><label class="lb" for="appointment-date-${l.id}">Tarih</label><input class="in" id="appointment-date-${l.id}" type="date" min="${minDate}" max="${maxDate}" value="${esc(draft.date)}"></div><div><label class="lb" for="appointment-time-${l.id}">Saat</label><input class="in" id="appointment-time-${l.id}" type="time" step="300" value="${esc(draft.time)}"></div></div><p class="appointment-choice${draftIso?' has-value':''}" id="appointment-choice-${l.id}">${draftIso?'Seçilen randevu: '+esc(appointmentText(draftIso)):'Tarih ve saati ayrı ayrı seç.'}</p>`;
-  let state='',actions='';
+  const title=(l.problems||[]).join(', ')||KAT[l.category]?.ad||'İş detayı';
+  let badge='Planlanacak',kind='',body='';
   if(!a){
-    state='<p>Randevu henüz belirlenmedi.</p>';
-    actions=isCustomer?`${input}<button class="btn block" data-a="proposeAppointment" data-v="${l.id}">Randevu öner</button>`:'<p class="appointment-wait">Müşterinin tarih önermesi bekleniyor.</p>';
+    body=isCustomer?`<div class="appointment-section"><h4>İlk randevuyu öner</h4><p>Uzmanın yanıtlaması için bir tarih ve saat seç.</p></div>${appointmentPicker(l.id,'Randevu öner')}`
+      :'<div class="appointment-section"><h4>Müşterinin önerisi bekleniyor</h4><p>Tarih ve saat önerildiğinde buradan yanıtlayabilirsin.</p></div>';
   }else if(a.status==='confirmed'){
-    state=`<div class="appointment-time"><span class="appointment-confirmed">✓ Randevu kesinleşti</span><b>${esc(appointmentText(a.proposed_at))}</b><small>Türkiye saati · Europe/Istanbul</small></div>`;
+    badge='Kesinleşti';kind='confirmed';
+    body=appointmentSlot(a,'Kesinleşen randevu');
+  }else if(a.status==='awaiting_expert'||a.status==='awaiting_customer'){
+    const waitingExpert=a.status==='awaiting_expert',canRespond=waitingExpert?isPro:isCustomer;
+    kind='waiting';badge=canRespond?'Yanıtın bekleniyor':(waitingExpert?'Uzman yanıtlayacak':'Müşteri yanıtlayacak');
+    body=appointmentSlot(a,waitingExpert?'Müşterinin önerdiği zaman':'Uzmanın önerdiği zaman');
+    if(canRespond){
+      const previous=document.getElementById('appointment-alternative-'+l.id);
+      const open=previous?.open&&previous.dataset.user===uid();
+      body+=`<div class="appointment-actions">
+        <button type="button" class="appointment-primary" data-a="acceptAppointment" data-v="${l.id}|${a.revision}">Randevuyu kabul et</button>
+        <details class="appointment-alternative" id="appointment-alternative-${l.id}" data-user="${esc(uid())}" ${open?'open':''}>
+          <summary>Başka zaman öner</summary>${appointmentPicker(l.id,'Öneriyi gönder')}
+        </details></div>`;
+    }
   }else{
-    const waitingExpert=a.status==='awaiting_expert',canRespond=(waitingExpert&&isPro)||(!waitingExpert&&isCustomer);
-    const label=waitingExpert?'Müşterinin önerdiği zaman':'Uzmanın alternatif önerisi';
-    state=`<div class="appointment-time"><small>${label}</small><b>${esc(appointmentText(a.proposed_at))}</b><small class="appointment-wait">${canRespond?'Yanıtın bekleniyor':(waitingExpert?'Uzmanın onayı bekleniyor':'Müşterinin onayı bekleniyor')}</small></div>`;
-    if(canRespond)actions=`${input}<div class="two-actions"><button class="btn" data-a="acceptAppointment" data-v="${l.id}|${a.revision}">Kabul et</button><button class="btn ghost" data-a="proposeAppointment" data-v="${l.id}">Başka zaman öner</button></div>`;
+    badge='Durum bilinmiyor';
   }
-  return `<section class="appointment-card"><div class="appointment-head"><div><span class="section-kicker">Randevu</span><h2>Tarih ve saat</h2><p>İlanın genel zaman tercihi: ${esc(l.when_text||'Belirtilmedi')}</p></div><span class="appointment-icon">◷</span></div>${state}${actions?`<div class="appointment-actions">${actions}</div>`:''}</section>`;
+  const name=D.profiles[isCustomer?q.pro:l.owner]?.name;
+  const badgeHtml=`<span class="appointment-status ${kind}">${badge}</span>`;
+  const header=standalone?`<button type="button" data-a="closeAppointment" aria-label="Aktif işime dön">←</button><h1 id="appointment-title-${l.id}">Randevu detayları</h1>`
+    :`<h2 id="appointment-title-${l.id}">Randevu</h2>${badgeHtml}`;
+  const error=appointmentFeedback?.id===l.id&&appointmentFeedback.user===uid()?appointmentFeedback.message:'';
+  return `<section class="appointment-card" id="appointment-card-${l.id}" aria-labelledby="appointment-title-${l.id}" tabindex="-1">
+    <header class="appointment-head">${header}</header>
+    <div class="appointment-body"><div class="appointment-context">${standalone?badgeHtml:''}<h3>${esc(title)}</h3><p>${esc(locText(l))}</p>
+      ${name?`<dl><dt>${isCustomer?'Seçilen uzman':'Müşteri'}</dt><dd>${esc(name)}</dd></dl>`:''}
+      ${l.when_text?`<dl><dt>İlandaki zaman tercihi</dt><dd>${esc(l.when_text)}</dd></dl>`:''}</div>
+      ${body}${error?`<p class="appointment-feedback" role="alert" tabindex="-1">${esc(error)}</p>`:''}
+    </div></section>`;
 }
 
 const WORKFLOW_STATES=['awaiting_appointment','scheduled','en_route','in_progress','completion_requested','completed'];
@@ -2714,12 +2806,17 @@ function vActiveJob(){
     S.view='list';
     return customer?vList():vUsta();
   }
+  if(S.view==='appointment'){
+    const panel=appointmentCard(l,true);
+    if(panel)return `<div class="active-job appointment-screen">${panel}</div>`;
+    S.view=customer?'activejob':'prodetail';
+  }
   const w=D.workflows[l.id],flow=workflowParts(l,['Seçildi','Randevu','Yolda','Başladı','Onay','Bitti']),appointment=D.appointments[l.id];
   const snapshot=D.snapshots[l.id],choice=D.paymentChoices[l.id],expert=D.profiles[q.pro];
   const title=(l.problems||[]).join(', ')||KAT[l.category]?.ad||'İş detayı';
   const cover=(D.photos[l.id]||[]).find(photo=>photo.url);
   const status=flow?.label||(l.status==='done'?'Tamamlandı':'Uzman seçildi');
-  const appointmentPanel=appointmentCard(l);
+  const canViewAppointment=l.status==='chosen';
   const dateText=value=>value&&Number.isFinite(Date.parse(value))?appointmentText(value):'';
   const confirmed=appointment?.status==='confirmed'?dateText(appointment.proposed_at):'';
   const end=dateText(w?.completed_at);
@@ -2732,12 +2829,10 @@ function vActiveJob(){
   const clientName=String(D.profiles[l.owner]?.name||'').trim();
   const canChat=l.status==='chosen';
   const jump=(id,text)=>`<button type="button" data-job-target="${id}">${text}</button>`;
-  const previousAppointment=$('#job-appointment:not([hidden])');
-  const appointmentOpen=previousAppointment?.dataset.jobId===String(l.id)&&previousAppointment.dataset.role===S.role;
-  const appointmentToggle=(text,className,closeText=text)=>`<button type="button" class="${className}" data-job-target="job-appointment" aria-controls="job-appointment" aria-expanded="${appointmentOpen}" data-open-label="${text}" data-close-label="${closeText}">${appointmentOpen?closeText:text}</button>`;
+  const appointmentLink=(label,className='')=>`<button type="button" class="${className}" data-a="openAppointment">${label}</button>`;
   const review=flow?.review;
-  const appointmentIsPrimary=appointmentPanel&&!flow?.action&&!review;
-  const primary=flow?.action||(review?jump('job-review',customer&&!D.reviews[l.id]?'Uzmanı değerlendir':'Değerlendirmeyi gör'):appointmentIsPrimary?appointmentToggle('Randevu detaylarını gör','','Randevu detaylarını kapat'):jump('job-record','İş detaylarını gör'));
+  const appointmentIsPrimary=canViewAppointment&&!flow?.action&&!review;
+  const primary=flow?.action||(review?jump('job-review',customer&&!D.reviews[l.id]?'Uzmanı değerlendir':'Değerlendirmeyi gör'):appointmentIsPrimary?appointmentLink('Randevu detaylarını gör'):jump('job-record','İş detaylarını gör'));
   const payment=choice?paymentPlan(l,q,choice,customer?'customer':'pro'):customer?paymentChoicePanel(l,q):'';
   return `<section class="active-job">
     <header class="job-bar"><button type="button" data-a="back" aria-label="Geri dön">←</button><h1>Aktif işim</h1></header>
@@ -2750,10 +2845,9 @@ function vActiveJob(){
         <div class="job-contact">${expert?`<details><summary>Profili gör</summary>${proCard(q.pro)}</details>`:''}
         ${customer?jump('job-chat',canChat?'Mesaj yaz':'Mesajları gör'):''}</div></section>
       ${customer?'':`<section class="job-customer" aria-label="Müşteri iletişimi"><div><h3>Müşteri</h3>${clientName?`<p>${esc(clientName)}</p>`:''}</div><div class="job-contact">${jump('job-chat',canChat?'Müşteriye yaz':'Mesajları gör')}</div></section>`}
-      <dl class="job-facts">${facts.filter(([,value])=>value).map(([label,value])=>`<div><dt>${label==='Randevu'&&appointmentPanel&&!appointmentIsPrimary?appointmentToggle('Randevu detayları','job-appointment-link'):label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
+      <dl class="job-facts">${facts.filter(([,value])=>value).map(([label,value])=>`<div><dt>${label==='Randevu'&&canViewAppointment&&!appointmentIsPrimary?appointmentLink('Randevu detayları','job-appointment-link'):label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
       <div class="job-primary">${primary}</div>
       ${review?`<section id="job-review" tabindex="-1">${review}</section>`:''}
-      ${appointmentPanel?`<div id="job-appointment" tabindex="-1" data-job-id="${l.id}" data-role="${S.role}" ${appointmentOpen?'':'hidden'}>${appointmentPanel}</div>`:''}
       ${payment}
       <div id="job-chat" tabindex="-1">${chatBox(l,customer?prof(q.pro).name:clientName,canChat)}</div>
       ${preselectionThread(q,l)}
@@ -2957,8 +3051,8 @@ function render(){
   else if(S.page==='experts')h=vExperts();
   else if(S.page==='admin')h=vAdmin();
   else if(S.page==='partner')h=vPartnerPanel();
-  else if(S.role==='musteri')h=S.view==='new'?vNew():S.view==='detail'?vDetail():S.view==='activejob'?vActiveJob():vList();
-  else h=S.quoteFor?vQuote():S.view==='prodetail'?vActiveJob():vUsta();
+  else if(S.role==='musteri')h=S.view==='new'?vNew():S.view==='detail'?vDetail():(S.view==='activejob'||S.view==='appointment')?vActiveJob():vList();
+  else h=S.quoteFor?vQuote():(S.view==='prodetail'||S.view==='appointment')?vActiveJob():vUsta();
   $('#app').innerHTML=h;
   document.body.classList.toggle('home-shell-active',!!document.querySelector('#app > .home-shell'));
   const signed=!!(S.user&&!S.setup&&!S.loading);
@@ -3264,6 +3358,8 @@ const A={
     toast(photoFailed?'İlan yayınlandı; bazı fotoğraflar yüklenemedi.':'İlanın yayında. Uzmanlar teklif verdikçe burada görünecek.');
   },
   open(v){S.sel=+v;S.view='detail';S.preThread=null},
+  openAppointment(){appointmentFeedback=null;S.view='appointment'},
+  closeAppointment(){S.view=S.role==='musteri'?'activejob':'prodetail';appointmentFeedback=null},
   openActive(v){S.sel=+v;S.view='activejob';S.preThread=null},
   openPro(v){S.sel=+v;S.view='prodetail';S.preThread=null},
   back(){S.view='list';S.draft=null;S.sel=null;S.preThread=null},
@@ -3314,19 +3410,19 @@ const A={
   },
   async proposeAppointment(v){
     const id=+v,a=D.appointments[id],iso=appointmentIso(appointmentDraftValue(id));
-    if(!iso){toast('Geçerli bir tarih ve saat seçmelisin.');return}
+    if(!iso){showAppointmentError(id,'Geçerli bir tarih ve saat seçmelisin.');return}
     const when=new Date(iso),now=Date.now();
-    if(when.getTime()<=now){toast('Geçmiş bir tarih veya saat seçemezsin.');return}
-    if(when.getTime()>now+90*24*60*60*1000){toast('Randevu en fazla 90 gün sonrası için seçilebilir.');return}
+    if(when.getTime()<=now){showAppointmentError(id,'Geçmiş bir tarih veya saat seçemezsin.');return}
+    if(when.getTime()>now+90*24*60*60*1000){showAppointmentError(id,'Randevu en fazla 90 gün sonrası için seçilebilir.');return}
     const r=await sb.rpc('propose_listing_appointment',{p_listing_id:id,p_proposed_at:iso,p_expected_revision:a?Number(a.revision):0});
-    if(r.error){toast(appointmentError(r.error));if(String(r.error.message||'').includes('değişti'))await refresh();return}
+    if(r.error){showAppointmentError(id,appointmentError(r.error));if(String(r.error.message||'').includes('değişti'))await refresh();return}
     delete S.appointmentDrafts[id];await refresh();toast('Randevu önerin gönderildi.');
   },
   async acceptAppointment(v){
     const [rawId,rawRevision]=String(v||'').split('|'),id=Number(rawId),revision=Number(rawRevision);
-    if(!Number.isSafeInteger(id)||!Number.isSafeInteger(revision)){toast('Randevu bilgisi güncel değil.');return}
+    if(!Number.isSafeInteger(id)||!Number.isSafeInteger(revision)){showAppointmentError(id,'Randevu bilgisi güncel değil.');return}
     const r=await sb.rpc('accept_listing_appointment',{p_listing_id:id,p_expected_revision:revision});
-    if(r.error){toast(appointmentError(r.error));await refresh();return}
+    if(r.error){showAppointmentError(id,appointmentError(r.error));await refresh();return}
     delete S.appointmentDrafts[id];await refresh();toast('Randevu kesinleşti.');
   },
   async advanceWorkflow(v){
@@ -3471,11 +3567,17 @@ async function run(a,v,el){
   const before=navSnapshot();
   let result;
   if(NET.has(a)){if(S.busy)return;S.busy=true;document.body.style.cursor='progress'}
+  const appointmentAction=a==='proposeAppointment'||a==='acceptAppointment';
+  if(appointmentAction){
+    appointmentFeedback=null;
+    if(el){el.disabled=true;el.setAttribute('aria-busy','true');el.textContent=a==='acceptAppointment'?'Kabul ediliyor…':'Gönderiliyor…'}
+  }
   try{result=await f(v)}catch(e){console.error(e);toast(a==='authGo'?authMsg(e):errMsg(e))}
   finally{S.busy=false;document.body.style.cursor=''}
   if(a==='authGo'&&result===true)return;
   render();
   commitNavigation(before,a);
+  if(a==='openAppointment')$('.appointment-head [data-a="closeAppointment"]')?.focus({preventScroll:true});
   if(a==='send'||a==='sendPreMessage'){
     const c=a==='send'?$('#chat-input'):document.getElementById('pre-message-'+v);
     c?.focus({preventScroll:true});
@@ -3488,7 +3590,14 @@ async function run(a,v,el){
     const again=[...document.querySelectorAll('[data-a]')].find(x=>x.dataset.a===a&&x.dataset.v===v);
     if(again)again.focus({preventScroll:true});
   }
-  if(!KEEP.has(a)&&(a!=='sendQuote'||!S.quoteFor))window.scrollTo({top:0});
+  if(appointmentAction){
+    const card=document.getElementById('appointment-card-'+String(v).split('|')[0]);
+    if(card?.getClientRects().length){
+      const target=card.querySelector('[role="alert"]')||card;
+      target.focus({preventScroll:true});
+      target.scrollIntoView({block:'nearest'});
+    }
+  }else if(!KEEP.has(a)&&(a!=='sendQuote'||!S.quoteFor))window.scrollTo({top:0});
   if(a==='pickKat'&&S.draft?.kat&&window.matchMedia('(max-width:767px)').matches){
     const next=document.querySelector('.create-flow[data-step="1"] [data-a="createNext"]');
     if(next){next.focus({preventScroll:true});next.scrollIntoView({block:'end',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}
@@ -3555,7 +3664,11 @@ function updateAppointmentDraft(el){
   const id=Number(m[2]);if(!Number.isSafeInteger(id)||id<1)return true;
   const d=appointmentDraft(id);d[m[1]]=el.value;S.appointmentDrafts[id]=d;
   const iso=appointmentIso(appointmentDraftValue(id)),p=document.getElementById(`appointment-choice-${id}`);
-  if(p){p.textContent=iso?'Seçilen randevu: '+appointmentText(iso):'Tarih ve saati ayrı ayrı seç.';p.classList.toggle('has-value',!!iso)}
+  if(p)p.textContent=(iso?appointmentText(iso)+' · ':'')+'Türkiye saati';
+  if(appointmentFeedback?.id===id&&appointmentFeedback.user===uid()){
+    appointmentFeedback=null;
+    el.closest('.appointment-card')?.querySelector('[role="alert"]')?.remove();
+  }
   return true;
 }
 document.addEventListener('input',e=>{
