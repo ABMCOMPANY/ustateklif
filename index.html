@@ -1451,6 +1451,71 @@ body:has(.expert-panel) .beta-strip{margin:0;padding:4px 0;background:transparen
 .expert-job-card [data-a="openPreThread"]{min-height:45px;margin-top:6px;box-shadow:none;font-size:13px}
 .expert-panel .expert-onboarding{box-shadow:none;border-color:#dce4ed}
 @media(min-width:768px){.expert-panel-list{grid-template-columns:repeat(2,minmax(0,1fr))}.expert-panel-head{padding:16px 20px}}
+/* V1-G · Teklif hazırlama */
+body:has(.quote-form){--brand-bg:#fff;--bg:#fff;background:#fff!important}
+body:has(.quote-form) .top{position:relative;top:auto;box-sizing:border-box;min-height:54px;padding-block:4px;background:#fff;backdrop-filter:none}
+body:has(.quote-form) .brand{display:flex;align-items:baseline;white-space:nowrap;font-size:21px;line-height:1}
+body:has(.quote-form) .brand span:nth-child(2){color:#ff510b}
+body:has(.quote-form) .brand i{align-self:center;width:5px;height:5px;margin-left:3px}
+body:has(.quote-form) .hdr-r{gap:6px}
+body:has(.quote-form) .seg button{padding-inline:8px;font-size:12px}
+body:has(.quote-form) .beta-strip{margin:0;padding:4px 0;background:transparent;border:0}
+.quote-form{max-width:640px;margin:4px auto 0;padding-bottom:calc(12px + env(safe-area-inset-bottom));color:#102747;overflow-wrap:anywhere}
+.quote-form-bar{display:grid;grid-template-columns:46px 1fr 46px;align-items:center;min-height:46px;background:#102747;color:#fff;border-radius:10px}
+.quote-form-bar h1{font:750 17px/1.2 Figtree,sans-serif;text-align:center;color:#fff}
+.quote-form-bar button{min-height:46px;border:0;border-radius:10px;background:none;color:#fff;font-size:23px;cursor:pointer}
+.quote-form-bar button:disabled{opacity:.65;cursor:default}
+.quote-form-summary{margin:0 0 10px;padding:9px 0;border-bottom:1px solid #d8e0eb}
+.quote-form-listing{display:flex;align-items:center;gap:9px}
+.quote-form-icon{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:8px;background:#102747}
+.quote-form-icon .svc-icon{width:21px;height:21px;color:#fff}
+.quote-form-listing h2{font-size:15px;line-height:1.2}
+.quote-form-summary small,.quote-form-meta{font-size:12px;color:#435671}
+.quote-form-meta{display:flex;flex-wrap:wrap;gap:2px 8px;margin-top:6px}
+.quote-form-meta span+span{border-inline-start:1px solid #d8e0eb;padding-inline-start:8px}
+.quote-form-summary p{font-size:13px;line-height:1.4;margin:4px 0 0;white-space:pre-wrap}
+.quote-form summary{display:flex;align-items:center;justify-content:space-between;min-height:44px;font-size:14px;font-weight:700;color:#29466a;cursor:pointer}
+.quote-form summary::after{content:"";width:7px;height:7px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg);margin:0 3px 4px 8px}
+.quote-form details[open]>summary::after{transform:rotate(225deg);margin-bottom:0}
+.quote-form-fields{border:0;margin:0;padding:0;min-width:0}
+.quote-form-guide{margin:0 0 9px;color:#435671;font-size:13px;line-height:1.4}
+.quote-form-terms{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:start}
+.quote-form-terms .lb,.quote-form-note .lb,.quote-form-deposit .lb{font-size:13px;margin:0 0 5px}
+:root .quote-form .in{box-sizing:border-box;width:100%;min-width:0;min-height:48px;padding:9px 10px;border-radius:9px;border:1px solid #7789a1!important;background:#fff!important;color:#102747!important;-webkit-text-fill-color:#102747!important;box-shadow:none!important;font-size:16px}
+.quote-form-terms .in{min-height:52px}
+.quote-form #q-fiyat{font-size:23px;line-height:1.25;font-weight:800;border-color:#475f81!important}
+.quote-form #q-fiyat::placeholder{font-size:16px;font-weight:500}
+.quote-form #q-fiyat[aria-invalid="true"]{border-color:#ba4333!important}
+.quote-form-note{margin-top:13px}
+.quote-form-note>div,.quote-form-payment-title{display:flex;align-items:baseline;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.quote-form #quote-note-count,.quote-form-payment-title small,.quote-form-deposit p{font-size:13px;color:#435671}
+.quote-form-note textarea.in{display:block;min-height:88px;resize:vertical;line-height:1.45}
+.quote-form-payment{margin-top:15px}
+.quote-form-payment-title{align-items:center}
+.quote-form-payment-title h2{font-size:16px}
+.quote-form-payment-info[open]{flex-basis:100%}
+.quote-form-methods{display:grid;margin-top:4px;border-top:1px solid #d8e0eb}
+.quote-form-methods button{box-sizing:border-box;display:grid;grid-template-columns:23px minmax(0,1fr) 20px;text-align:left;align-items:center;gap:8px;min-width:0;min-height:44px;padding:5px 2px;border:0;border-bottom:1px solid #d8e0eb;background:#fff;color:#102747;cursor:pointer}
+.quote-form-methods button[aria-pressed="true"]{background:#f5f7fa;font-weight:750}
+.quote-method-icon{font-size:16px;text-align:center}
+.quote-form-methods button>b{font-size:14px;line-height:1.3}
+.quote-method-check{display:grid;place-items:center;box-sizing:border-box;width:18px;height:18px;border:1px solid #647891;border-radius:4px;color:transparent;font-size:12px}
+.quote-form-methods button[aria-pressed="true"] .quote-method-check{color:#fff;border-color:#102747;background:#102747}
+.quote-form-deposit{display:grid;grid-template-columns:minmax(0,1fr) minmax(84px,.35fr);align-items:center;gap:4px 10px;margin-top:7px;padding:4px 0 8px;border-bottom:1px solid #d8e0eb}
+.quote-form-deposit p{grid-column:1/-1;margin:0}
+.quote-form-payment-info dl{margin:0 0 8px;padding:2px 0 6px}
+.quote-form-payment-info dt{font-size:14px;font-weight:750}
+.quote-form-payment-info dd{margin:2px 0 10px;color:#435671;font-size:14px;line-height:1.45}
+.quote-form-error{display:block;margin:4px 0;color:#982d21;font-size:13px;line-height:1.35}
+.quote-form-submit{margin-top:5px}
+.quote-form-submit p{margin:0 0 5px}
+.quote-form #quote-submit-help{font-size:13px;color:#435671}
+.quote-form #quote-submit-help:empty{display:none}
+.quote-form #qsend{width:100%;min-height:48px;border:0;border-radius:10px;background:#b83b08;color:#fff;font-weight:800;cursor:pointer}
+.quote-form #qsend:disabled{background:#e8edf3;color:#435671;cursor:default}
+.quote-form #qsend[aria-busy="true"]{background:#963008;color:#fff}
+.quote-form :is(button,summary,input,select,textarea):focus-visible{outline:2px solid #29466a!important;outline-offset:2px}
+.quote-form-bar button:focus-visible{outline-color:#fff!important;outline-offset:-4px}
 </style>
 </head>
 <body>
@@ -1560,7 +1625,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 
 /* ---------- durum ---------- */
 const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,navSection:'home',palette:savedPalette,
-  draft:null,quoteFor:null,q:null,payPick:{},promoApplied:{},appointmentDrafts:{},workflowRequestIds:{},reviewDrafts:{},reviewRequestIds:{},preThread:null,preDrafts:{},preRequestIds:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'uygun',busy:false,
+  draft:null,quoteFor:null,q:null,quoteDrafts:new Map(),payPick:{},promoApplied:{},appointmentDrafts:{},workflowRequestIds:{},reviewDrafts:{},reviewRequestIds:{},preThread:null,preDrafts:{},preRequestIds:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'uygun',busy:false,
   authMode:'in',authErr:'',authInfo:'',confirmationEmail:'',resendBusy:false,recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,createStep:1,expertPreview:{key:'',loading:false,rows:[],total:0,nearby:0},auth:{name:'',email:'',pass:'',terms:false},acct:null,expertDraft:null,expertEditing:false,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[],supportRequests:[],supportDraft:{category:'general',subject:'',message:''},bootError:'',menuOpen:false,expertFilter:'hepsi',expertsLoaded:false};
 
 /* ---------- uygulama geçmişi ---------- */
@@ -1636,6 +1701,7 @@ function restoreNavigation(raw){
       S.sel=safeId(raw.sel);S.quoteFor=safeId(raw.quoteFor);S.preThread=safeId(raw.preThread);
       if(S.view==='new'&&!S.draft)S.view='list';
       if(['detail','prodetail','activejob'].includes(S.view)&&!D.listings[S.sel]){S.view='list';S.sel=null}
+      S.q=S.quoteDrafts.get(S.quoteFor)||null;
       if(S.quoteFor&&(!S.q||!D.listings[S.quoteFor]))S.quoteFor=null;
       if(S.preThread&&!D.quotes[S.preThread])S.preThread=null;
       S.expertEditing=!!raw.expertEditing&&S.role==='usta'&&expertReady(S.profile||{});
@@ -1772,9 +1838,9 @@ function vExperts(){
 }
 function proCard(id){const p=prof(id),st=stat(id),sv=p.services||[],ar=(p.service_districts&&p.service_districts.length?p.service_districts:p.service_areas)||[];const complete=!!(p.bio&&sv.length&&p.service_city);const loc=p.service_city?[p.service_city,...ar.slice(0,3)]:ar.slice(0,3);const fullVerified=!!(p.identity_verified&&p.vocational_verified);const trust=(fullVerified?'<span class="badge verified-pro">✓ Doğrulanmış Uzman</span>':'')+(!fullVerified&&p.identity_verified?'<span class="badge">✓ Kimlik doğrulandı</span>':'')+(!fullVerified&&p.vocational_verified?'<span class="badge">✓ Mesleki belge doğrulandı</span>':'')+(p.business_verified?'<span class="badge">✓ İşletme doğrulandı</span>':'')+(p.phone_verified?'<span class="badge">✓ Telefon doğrulandı</span>':'');const safety=id!==uid()?`<div class="foot"><button class="link" data-a="reportUser" data-v="${id}">Şikâyet et</button><button class="link" data-a="blockUser" data-v="${id}">Engelle</button></div>`:'';return `<div class="procard expert-card"><div class="protop expert-head"><div class="proavatar expert-avatar">${esc(initials(p.name))}</div><div><strong>${esc(p.name)}</strong><div class="muted small">${esc(p.title||'Servis ve tamir')}</div></div></div>${p.bio?`<p class="probio">${esc(p.bio)}</p>`:''}<div class="badges expert-badges">${st.rating!=null?`<span class="badge">★ ${Number(st.rating).toFixed(1)} · ${st.jobs} tamamlanan iş</span>`:`<span class="badge">Yeni uzman</span>`}${trust}${sv.slice(0,4).map(x=>`<span class="badge">${esc(x)}</span>`).join('')}${loc.map(x=>`<span class="badge">📍 ${esc(x)}</span>`).join('')}${complete?'<span class="badge">✓ Profil tamamlandı</span>':''}</div>${safety}</div>`}
 const PAYMENTS={
-  card:{label:'Kartla ödeme',icon:'💳',desc:'Müşteri Tamİşim üzerinden öder; komisyon otomatik kesilir.'},
-  cash:{label:'Nakit / elden',icon:'💵',desc:'Müşteri iş sonunda sana nakit öder; platform hizmet bedeli hesabına yansır.'},
-  deposit_cash:{label:'Ön ödeme + nakit',icon:'◐',desc:'Müşteri rezervasyon bedelini Tamİşim’e, kalanını iş sonunda sana öder.'}
+  card:{label:'Kartla ödeme',icon:'💳',desc:'Beta döneminde kart tercihi yalnızca ödeme planına kaydedilir. Kart tahsilatı aktif değildir.'},
+  cash:{label:'Nakit / elden',icon:'💵',desc:'Müşteri iş sonunda uzmana doğrudan nakit öder. Uygulamadaki ödeme onayı tarafların beyanına dayanır.'},
+  deposit_cash:{label:'Ön ödeme + nakit',icon:'◐',desc:'Ön ödeme oranı ve kalan nakit tutarı yalnızca ödeme planına kaydedilir. Beta döneminde ön ödeme tahsilatı aktif değildir.'}
 };
 const paymentLabels=a=>(Array.isArray(a)?a:[]).filter(x=>PAYMENTS[x]).map(x=>PAYMENTS[x].label);
 const VERIFY_TYPES={
@@ -1871,9 +1937,9 @@ function paymentPlan(l,q,pc,side){
   }
   if(pc.method==='deposit_cash'){
     extra+='<div><span>Ön ödeme (%'+dp+')</span><b>'+tl(deposit)+'</b></div><div><span>İş sonunda nakit</span><b>'+tl(cashDue)+'</b></div>';
-    extra+='<div class="payment-notice">Kartla ön ödeme altyapısı henüz ödeme kuruluşuna bağlanmadı. Bu bölüm şimdilik ödeme planını gösterir.</div>';
+    extra+='<div class="payment-notice">Ön ödeme oranı ve kalan nakit tutarı plan bilgisi olarak gösterilir. Beta döneminde ön ödeme tahsilatı aktif değildir.</div>';
   }else if(pc.method==='card'){
-    extra+='<div class="payment-notice">Kart tahsilatı henüz ödeme kuruluşuna bağlanmadı. Ödeme planı kaydedildi.</div>';
+    extra+='<div class="payment-notice">Kart tercihi ödeme planına kaydedildi. Beta döneminde kart tahsilatı aktif değildir.</div>';
   }
   if(side==='customer'&&d<=0&&l.status==='chosen'){
     extra+='<div class="promo-box selected-promo"><label class="lb" for="selected-promo-'+l.id+'">Promosyon kodun var mı?</label><div class="promo-row"><input class="in" id="selected-promo-'+l.id+'" placeholder="Örn. DEMO500" autocomplete="off" autocapitalize="characters"><button type="button" class="btn ghost sm" data-a="applySelectedPromo" data-v="'+l.id+'">Uygula</button></div></div>';
@@ -1896,7 +1962,7 @@ function paymentPlan(l,q,pc,side){
 function paymentChoicePanel(l,q){
   if(!l||!q)return '';
   const methods=quotePayments(q),selected=S.payPick[q.id];
-  return `<section class="payment-summary"><div><span>Uzman seçildi</span><b>✓ ${esc(prof(q.pro).name)}</b></div><div class="customer-pay"><b>Ödeme yöntemini seç</b><p class="hint">Uzmanın kabul ettiği yöntemlerden birini daha sonra seçebilirsin.</p><div class="customer-pay-options">${methods.map(m=>`<button type="button" class="pay-choice" data-a="choosePay" data-v="${q.id}|${m}" aria-pressed="${selected===m}">${PAYMENTS[m].icon} ${PAYMENTS[m].label}${m==='deposit_cash'&&quoteDeposit(q)?` · %${quoteDeposit(q)} ön ödeme`:''}</button>`).join('')}</div></div><button class="btn block" id="save-payment-${l.id}" data-a="savePayment" data-v="${l.id}">Ödeme tercihini kaydet</button></section>`;
+  return `<section class="payment-summary"><div><span>Uzman seçildi</span><b>✓ ${esc(prof(q.pro).name)}</b></div><div class="customer-pay"><b>Ödeme yöntemini seç</b><p class="hint">Uzmanın kabul ettiği bir yöntemi seçebilirsin. Beta döneminde kart ve ön ödeme tercihleri yalnızca ödeme planına kaydedilir.</p><div class="customer-pay-options">${methods.map(m=>`<button type="button" class="pay-choice" data-a="choosePay" data-v="${q.id}|${m}" aria-pressed="${selected===m}">${PAYMENTS[m].icon} ${PAYMENTS[m].label}${m==='deposit_cash'&&quoteDeposit(q)?` · %${quoteDeposit(q)} ön ödeme`:''}</button>`).join('')}</div></div><button class="btn block" id="save-payment-${l.id}" data-a="savePayment" data-v="${l.id}">Ödeme tercihini kaydet</button></section>`;
 }
 const myQuote=id=>Object.values(D.quotes).find(q=>q.listing_id===id&&q.pro===uid());
 const chosenQ=l=>l.chosen_quote?D.quotes[l.chosen_quote]:null;
@@ -1912,7 +1978,7 @@ const norm=s=>String(s||'').trim().toLocaleLowerCase('tr-TR');
 const locText=l=>[l.neighborhood,l.district,l.city].filter(Boolean).join(', ')||l.area||'Konum belirtilmedi';
 function locationMatch(l,p){return !!(p&&p.service_city&&norm(l.city)===norm(p.service_city));}
 
-let tt,quoteAdvanceT;
+let tt;
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),3400)}
 function smoothTo(id,delay=40){
   setTimeout(()=>{
@@ -2650,19 +2716,62 @@ function vQuote(){
     evcilhayvan:{time:'Ne zaman uygun olursun?',intro:'Bakım süresini, ziyaret sıklığını ve hizmet kapsamını açıkça belirt.',note:'Hizmet kaç saat/gün sürecek? Gezdirme, mama-su, bakım veya taşıma neleri kapsıyor? Evcil hayvan deneyimini kısaca belirt.'},
     diger:{time:'Ne zaman hizmet verebilirsin?',intro:'Hizmetin kapsamını, süreyi ve varsa ek masrafları açıkça belirt.',note:'Teklifin tam olarak neleri kapsıyor? Malzeme, ulaşım veya ek hizmet ücrete dahil mi? Tahmini süre nedir?'}
   }[l.category]||{time:'Ne zaman hizmet verebilirsin?',intro:'Fiyatını, uygun olduğun zamanı ve teklif kapsamını açıkça belirt.',note:'Teklifin neleri kapsadığını, tahmini süreyi ve varsa ek masrafları belirt.'};
-  return `<button class="page-back" data-a="cancelQuote">← İlanlara dön</button>
-  <div class="quote-head"><span class="section-kicker">Yeni teklif</span><h1>Net ve güven veren bir teklif hazırla</h1><p>${copy.intro}</p></div>`+ticket(l)+
-  `<div class="field two"><div><label class="lb" for="q-fiyat">Fiyatın (₺)</label>
-    <input class="in" id="q-fiyat" inputmode="numeric" autocomplete="off" placeholder="Örn. 900" value="${esc(S.q.fiyat)}"></div>
-   <div><label class="lb" for="q-sure">${copy.time}</label>
-    <select class="in" id="q-sure">${SURE.map(s=>`<option ${S.q.sure===s?'selected':''}>${s}</option>`).join('')}</select></div>
-   <div><label class="lb" for="q-not">Teklif notu</label>
-    <textarea class="in" id="q-not" maxlength="500" placeholder="${copy.note}">${esc(S.q.not)}</textarea></div></div>
-  <div class="field payment-box"><div class="payment-title"><div><h2>Ödeme şekli</h2><p>Bu teklif için kabul ettiğin yöntemleri seçebilirsin.</p></div><span class="optional">En az 1</span></div>
-    <div class="payment-options">${Object.entries(PAYMENTS).map(([k,p])=>`<button type="button" class="payment-option" data-a="togglePayment" data-v="${k}" aria-pressed="${S.q.payments.includes(k)}"><span class="payment-icon">${p.icon}</span><span><b>${p.label}</b><small>${p.desc}</small></span><span class="payment-check">✓</span></button>`).join('')}</div>
-    ${S.q.payments.includes('deposit_cash')?`<div class="deposit-row"><label class="lb" for="q-deposit">Ön ödeme oranı</label><select class="in" id="q-deposit">${[10,20,25,30,40,50].map(x=>`<option value="${x}" ${S.q.deposit===x?'selected':''}>%${x}</option>`).join('')}</select><p class="hint">Kalan tutar iş sonunda nakit ödenir.</p></div>`:''}
-  </div>
-  <button class="btn block" id="qsend" data-a="sendQuote" disabled>Teklifi gönder</button>`;
+  const service=KAT[l.category]?.ad||KAT.diger.ad;
+  const partner=l.partner_id&&D.partners[l.partner_id];
+  const photos=photoStrip(l.id,true);
+  return `<section class="quote-form">
+    <header class="quote-form-bar"><button type="button" data-a="cancelQuote" aria-label="İlanlara dön">←</button><h1>Teklif hazırla</h1></header>
+    <article class="quote-form-summary">
+      <div class="quote-form-listing"><span class="quote-form-icon" aria-hidden="true">${iconFor(l.category)}</span>
+        <div><small>${esc(service)}</small><h2>${esc((l.problems||[]).join(', ')||service)}</h2></div>
+      </div>
+      <div class="quote-form-meta"><span>${esc(locText(l))}</span>${l.when_text?`<span>${esc(l.when_text)}</span>`:''}</div>
+      ${l.note?`<p>${esc(l.note)}</p>`:''}
+      ${photos?`<details><summary>İlan fotoğrafları</summary>${photos}</details>`:''}
+      ${partner?`<small>${esc(partner.name)}</small>`:''}
+    </article>
+    <fieldset id="quote-fields" class="quote-form-fields" aria-label="Teklif bilgileri">
+      <p class="quote-form-guide">${esc(copy.intro)}</p>
+      <div class="quote-form-terms">
+        <div><label class="lb" for="q-fiyat">Fiyatın (₺)</label>
+          <input class="in" id="q-fiyat" type="text" inputmode="numeric" autocomplete="off" required aria-describedby="quote-price-error" placeholder="Örn. 900" value="${esc(S.q.fiyat)}">
+          <span id="quote-price-error" class="quote-form-error" hidden>TL olarak pozitif bir tam sayı gir.</span>
+        </div>
+        <div><label class="lb" for="q-sure">${esc(copy.time)}</label>
+          <select class="in" id="q-sure">${SURE.map(s=>`<option ${S.q.sure===s?'selected':''}>${esc(s)}</option>`).join('')}</select>
+        </div>
+      </div>
+      <div class="quote-form-note">
+        <div><label class="lb" for="q-not">Teklif notu</label><span id="quote-note-count" aria-hidden="true">${S.q.not.length}/500</span></div>
+        <textarea class="in" id="q-not" maxlength="500" aria-description="En fazla 500 karakter" placeholder="${esc(copy.note)}">${esc(S.q.not)}</textarea>
+      </div>
+      <section class="quote-form-payment">
+        <div class="quote-form-payment-title">
+          <div><h2>Ödeme şekli</h2><small>En az bir yöntem seç</small></div>
+          <details class="quote-form-payment-info">
+            <summary>Ödeme koşulları</summary>
+            <dl>${Object.values(PAYMENTS).map(p=>`<dt>${esc(p.label)}</dt><dd>${esc(p.desc)}</dd>`).join('')}</dl>
+          </details>
+        </div>
+        <div class="quote-form-methods" role="group" aria-label="Ödeme yöntemleri">
+          ${Object.entries(PAYMENTS).map(([k,p])=>`<button type="button" data-a="togglePayment" data-v="${k}" aria-pressed="${S.q.payments.includes(k)}">
+            <span class="quote-method-icon" aria-hidden="true">${p.icon}</span><b>${esc(p.label)}</b><span class="quote-method-check" aria-hidden="true">✓</span>
+          </button>`).join('')}
+        </div>
+        <p id="quote-payment-error" class="quote-form-error" role="status" hidden></p>
+        ${S.q.payments.includes('deposit_cash')?`<div class="quote-form-deposit">
+          <label class="lb" for="q-deposit">Ön ödeme oranı</label>
+          <select class="in" id="q-deposit">${[10,20,25,30,40,50].map(x=>`<option value="${x}" ${S.q.deposit===x?'selected':''}>%${x}</option>`).join('')}</select>
+          <p>Kalan tutar iş sonunda nakit ödenir.</p>
+        </div>`:''}
+      </section>
+    </fieldset>
+    <div class="quote-form-submit">
+      <p id="quote-submit-error" class="quote-form-error" role="alert" hidden></p>
+      <p id="quote-submit-help" role="status"></p>
+      <button type="button" id="qsend" data-a="sendQuote" aria-describedby="quote-submit-help" disabled>Teklifi gönder</button>
+    </div>
+  </section>`;
 }
 
 function vAdmin(){
@@ -2727,9 +2836,35 @@ function vNotifications(){
 }
 
 /* ---------- çizim ---------- */
+function quotePrice(value){
+  const entered=String(value).trim();
+  if(!/^(?:\d+|\d{1,3}(?:\.\d{3})+)$/.test(entered))return 0;
+  const amount=Number(entered.replaceAll('.',''));
+  return amount>0&&amount<=2147483647?amount:0;
+}
 function upd(){
   const p=$('#pub');if(p&&S.draft)p.disabled=!canPub(S.draft);
-  const q=$('#qsend');if(q&&S.q)q.disabled=!(parseInt(S.q.fiyat,10)>0&&S.q.payments&&S.q.payments.length);
+  const submit=$('#qsend'),draft=S.q;
+  if(!submit||!draft)return;
+  const priceValid=quotePrice(draft.fiyat)>0;
+  const badPrice=!!draft.fiyat&&!priceValid;
+  const hasPayment=!!draft.payments.length;
+  const sending=!!draft.sending;
+  $('#q-fiyat').setAttribute('aria-invalid',String(badPrice));
+  $('#quote-price-error').hidden=!badPrice;
+  $('#quote-note-count').textContent=draft.not.length+'/500';
+  const paymentError=$('#quote-payment-error');
+  paymentError.textContent=draft.paymentError||(!hasPayment?'En az bir ödeme yöntemi seçmelisin.':'');
+  paymentError.hidden=!paymentError.textContent;
+  const submitError=$('#quote-submit-error');
+  submitError.textContent=draft.error||'';
+  submitError.hidden=!draft.error;
+  $('#quote-submit-help').textContent=sending?'Teklif gönderiliyor…':!priceValid?'Göndermek için geçerli bir fiyat gir.':'';
+  $('#quote-fields').disabled=sending;
+  $('.quote-form-bar button').disabled=sending;
+  submit.setAttribute('aria-busy',String(sending));
+  submit.textContent=sending?'Gönderiliyor…':'Teklifi gönder';
+  submit.disabled=sending||!priceValid||!hasPayment;
 }
 function render(){
   const act=document.activeElement;
@@ -3191,34 +3326,60 @@ const A={
   },
   tab(v){S.tab=v},
   filter(v){S.filter=v},
-  quote(v){S.quoteFor=+v;S.q={fiyat:'',sure:SURE[0],not:'',payments:['card'],deposit:20}},
-  cancelQuote(){S.quoteFor=null;S.q=null},
+  quote(v){
+    S.quoteFor=+v;
+    S.q=S.quoteDrafts.get(S.quoteFor)||{fiyat:'',sure:SURE[0],not:'',payments:['card'],deposit:20};
+    S.quoteDrafts.set(S.quoteFor,S.q);
+  },
+  cancelQuote(){
+    if(S.q?.sending)return;
+    S.quoteFor=null;S.q=null;
+  },
   togglePayment(v){
-    if(!S.q||!PAYMENTS[v])return;
-    const a=S.q.payments||[];
-    if(a.includes(v)){
-      if(a.length===1){toast('En az bir ödeme yöntemi seçmelisin.');return}
-      S.q.payments=a.filter(x=>x!==v);
-    }else S.q.payments=[...a,v];
-    clearTimeout(quoteAdvanceT);
-    if(parseInt(S.q.fiyat,10)>0&&S.q.payments.length){
-      quoteAdvanceT=setTimeout(()=>smoothTo('qsend',0),650);
+    const draft=S.q;
+    if(!draft||draft.sending||!PAYMENTS[v])return;
+    const payments=draft.payments;
+    if(payments.includes(v)&&payments.length===1){
+      draft.paymentError='En az bir ödeme yöntemi seçmelisin.';
+      return;
     }
+    draft.payments=payments.includes(v)?payments.filter(x=>x!==v):[...payments,v];
+    draft.paymentError='';draft.error='';
   },
   async sendQuote(){
-    const f=parseInt(S.q.fiyat,10);if(!(f>0)||!S.q.payments||!S.q.payments.length)return;
-    const access=await sb.rpc('quote_eligibility',{p_listing_id:S.quoteFor});
-    if(access.error){toast('Teklif yetkin doğrulanamadı. Tekrar dene.');return}
-    if(access.data){toast(access.data);return}
-    const payload={listing_id:S.quoteFor,pro:uid(),price:f,eta:S.q.sure,note:S.q.not.trim(),payment_methods:S.q.payments,deposit_percent:S.q.payments.includes('deposit_cash')?S.q.deposit:null};
-    let r=await sb.from('quotes').insert(payload);
-    if(r.error&&(/payment_methods|deposit_percent|schema cache|column/i.test(r.error.message||''))){
-      const pay='Ödeme: '+paymentLabels(S.q.payments).join(' / ')+(S.q.payments.includes('deposit_cash')?' (%'+S.q.deposit+' ön ödeme)':'');
-      const fallbackNote=(S.q.not.trim()?S.q.not.trim()+'\n\n':'')+pay;
-      r=await sb.from('quotes').insert({listing_id:S.quoteFor,pro:uid(),price:f,eta:S.q.sure,note:fallbackNote});
+    const draft=S.q,listingId=S.quoteFor;
+    if(!listingId||!draft||draft.sending)return;
+    const price=quotePrice(draft.fiyat);
+    if(!price||!draft.payments.length)return;
+    const payload={
+      listing_id:listingId,pro:uid(),price,eta:draft.sure,note:draft.not.trim(),
+      payment_methods:draft.payments.slice(),
+      deposit_percent:draft.payments.includes('deposit_cash')?draft.deposit:null
+    };
+    draft.error='';draft.sending=true;
+    upd();
+    try{
+      const access=await sb.rpc('quote_eligibility',{p_listing_id:listingId});
+      if(access.error){draft.error='Teklif yetkin doğrulanamadı. Tekrar dene.';return}
+      if(access.data){draft.error=access.data;return}
+      let r=await sb.from('quotes').insert(payload);
+      if(r.error&&(/payment_methods|deposit_percent|schema cache|column/i.test(r.error.message||''))){
+        const {listing_id,pro,price,eta,note,payment_methods,deposit_percent}=payload;
+        const pay='Ödeme: '+paymentLabels(payment_methods).join(' / ')+(payment_methods.includes('deposit_cash')?' (%'+deposit_percent+' ön ödeme)':'');
+        r=await sb.from('quotes').insert({listing_id,pro,price,eta,note:(note?note+'\n\n':'')+pay});
+      }
+      if(r.error){draft.error=errMsg(r.error);return}
+      if(S.quoteDrafts.get(listingId)===draft)S.quoteDrafts.delete(listingId);
+      if(S.q===draft&&S.quoteFor===listingId){S.quoteFor=null;S.q=null}
+      toast('Teklifin gönderildi. Ödeme seçeneklerin müşteriye gösterilecek.');
+      await refresh();
+    }catch(error){
+      draft.error=errMsg(error);
+      if(S.q!==draft)toast(draft.error);
+    }finally{
+      draft.sending=false;
+      upd();
     }
-    if(r.error)throw r.error;
-    S.quoteFor=null;S.q=null;toast('Teklifin gönderildi. Ödeme seçeneklerin müşteriye gösterilecek.');await refresh();
   }
 };
 async function run(a,v,el){
@@ -3236,7 +3397,7 @@ async function run(a,v,el){
     const again=[...document.querySelectorAll('[data-a]')].find(x=>x.dataset.a===a&&x.dataset.v===v);
     if(again)again.focus({preventScroll:true});
   }
-  if(!KEEP.has(a))window.scrollTo({top:0});
+  if(!KEEP.has(a)&&(a!=='sendQuote'||!S.quoteFor))window.scrollTo({top:0});
   if(a==='pickKat'&&S.draft?.kat&&window.matchMedia('(max-width:767px)').matches){
     const next=document.querySelector('.create-flow[data-step="1"] [data-a="createNext"]');
     if(next){next.focus({preventScroll:true});next.scrollIntoView({block:'end',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}
@@ -3273,7 +3434,7 @@ const F={
   'd-city':v=>{const city=ILLER.includes(v)?v:'';S.draft.city=city;if(!districtsFor(city).includes(S.draft.district))S.draft.district='';S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};persistGuestDraft();render()},
   'd-district':v=>{S.draft.district=districtsFor(S.draft.city).includes(v)?v:'';S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};persistGuestDraft()},
   'd-neighborhood':v=>{S.draft.neighborhood=v.slice(0,100);persistGuestDraft()},'cat-search':v=>{S.catSearch=v},
-  'q-fiyat':v=>{S.q.fiyat=v.replace(/\D/g,'')},'q-sure':v=>{S.q.sure=v},'q-not':v=>{S.q.not=v},'q-deposit':v=>{S.q.deposit=parseInt(v,10)||20},
+  'q-fiyat':v=>{S.q.fiyat=v;S.q.error=''},'q-sure':v=>{S.q.sure=v;S.q.error=''},'q-not':v=>{S.q.not=v.slice(0,500);S.q.error=''},'q-deposit':v=>{S.q.deposit=parseInt(v,10)||20;S.q.error=''},
   'au-name':v=>{S.auth.name=v},'au-email':v=>{S.auth.email=v},'au-pass':v=>{S.auth.pass=v},
   'sup-subject':v=>{S.supportDraft.subject=v},'sup-message':v=>{S.supportDraft.message=v},
   'ac-name':v=>{S.acct.name=v},'ac-title':v=>{S.acct.title=v},'ac-bio':v=>{S.acct.bio=v},'ac-services':v=>{S.acct.services=v},'ac-city':v=>{S.acct.city=v},'ac-districts':v=>{S.acct.districts=v},
@@ -3388,12 +3549,13 @@ if(sb){
         const pending=S.pendingAction,continued=pending==='newIlan'?(safeDraft(S.draft)||loadGuestDraft()):null,continuedStep=S.createStep;
         const authState=history.state,authDepth=Math.max(0,Number(authState&&authState.depth)||0);
         const authHistorySteps=continued&&authState&&authState.app===NAV_STATE_KEY&&authState.guestAuth?(authDepth>1?2:authDepth):0;
+        S.quoteDrafts.clear();S.quoteFor=null;S.q=null;
         S.user=u;S.page='main';S.view='list';S.role='musteri';S.auth.pass='';S.authErr='';S.authInfo='';S.confirmationEmail='';S.guestAuth=false;
         S.pendingAction=null;
         setTimeout(async()=>{await boot();if(continued)resumeListingDraftAfterAuth(continued,continuedStep,authHistorySteps)},0);
       }
     }else{
-      if(S.user){S.user=null;S.profile=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:'',terms:false};S.authErr='';S.authInfo='';S.confirmationEmail=''}
+      if(S.user){S.quoteDrafts.clear();S.quoteFor=null;S.q=null;S.user=null;S.profile=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:'',terms:false};S.authErr='';S.authInfo='';S.confirmationEmail=''}
       if(!S.draft){const saved=loadGuestDraft();if(saved){S.draft=saved;S.view='new'}}
       S.loading=false;
       setTimeout(render,0);
