@@ -1397,6 +1397,60 @@ body:has(.active-job) #app{padding-top:0}
 .active-job .btn,.active-job input,.active-job textarea{box-sizing:border-box;max-width:100%}
 .active-job [tabindex="-1"]{scroll-margin-top:12px}
 @media(max-width:767px){.active-job{margin-inline:-6px}}
+/* V1-F · Uzman iş paneli */
+body:has(.expert-panel){--brand-bg:#fff;--bg:#fff;background:#fff!important}
+body:has(.expert-panel) .top{position:relative;top:auto;min-height:54px;padding-block:4px;box-sizing:border-box;background:#fff;backdrop-filter:none}
+body:has(.expert-panel) .brand{display:flex;align-items:baseline;white-space:nowrap;font-size:21px;line-height:1}
+body:has(.expert-panel) .brand span:nth-child(2){color:#ff510b}
+body:has(.expert-panel) .brand i{align-self:center;width:5px;height:5px;margin-left:3px}
+body:has(.expert-panel) .hdr-r{gap:6px}
+body:has(.expert-panel) .seg button{padding-inline:8px;font-size:12px}
+body:has(.expert-panel) .beta-strip{margin:0;padding:4px 0;background:transparent;border:0}
+.expert-panel{max-width:930px;margin:4px auto 0;color:#102747;overflow-wrap:anywhere}
+.expert-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:15px 14px;background:#102747;border-radius:14px;color:#fff}
+.expert-panel-head h1{color:#fff;font-size:23px;line-height:1.15;letter-spacing:-.02em}
+.expert-panel-head p{margin:4px 0 0;color:#d8e4f2;font-size:13px}
+.expert-panel-head button{min-height:45px;border:1px solid #61748d;border-radius:9px;background:none;padding:5px 10px;color:#fff;font-size:12px;font-weight:750;cursor:pointer}
+.expert-panel-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin:10px 0 14px;padding:4px;border-radius:12px;background:#f1f4f8}
+.expert-panel-tabs button,.expert-panel-filters button{min-height:45px;border:1px solid transparent;background:none;border-radius:9px;color:#344963;font-size:14px;font-weight:750;cursor:pointer}
+.expert-panel-tabs button[aria-pressed="true"]{background:#102747;color:#fff}
+.expert-panel-filters{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.expert-panel-filters button{padding:4px 10px;background:#f5f7fa;border-color:#dce4ed;font-size:12px}
+.expert-panel-filters button[aria-pressed="true"]{background:#fff1e9;border-color:#b83b08;color:#913008}
+.expert-panel-group{margin:0 0 16px}
+.expert-panel-group h2{font-size:17px;margin:0 0 8px}
+.expert-panel-list{display:grid;gap:9px;grid-template-columns:minmax(0,1fr);align-items:start}
+.expert-job-card,.expert-panel-empty{box-sizing:border-box;min-width:0;padding:12px;border:1px solid #dce4ed;border-radius:13px;background:#fff}
+.expert-panel-empty{grid-column:1/-1;background:#f7f9fc}
+.expert-panel-empty h3{font-size:15px}
+.expert-panel-empty p{font-size:13px;margin:4px 0 0;color:#506078}
+.expert-job-heading{display:flex;align-items:center;gap:9px}
+.expert-job-icon{display:grid;place-items:center;width:40px;height:40px;flex:none;border-radius:10px;background:#102747}
+.expert-job-icon .svc-icon{width:25px;height:25px;color:#fff}
+.expert-job-title small,.expert-job-meta,.expert-job-state small,.expert-job-description small{font-size:12px;color:#506078}
+.expert-job-title h3{font-size:16px;margin:1px 0 0}
+.expert-job-meta{display:flex;flex-wrap:wrap;gap:3px 10px;margin:7px 0 8px}
+.expert-job-meta>span+span{border-inline-start:1px solid #dce4ed;padding-inline-start:10px}
+.expert-job-state{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 8px}
+.expert-job-numbers{display:flex;flex-wrap:wrap;gap:3px 8px;align-items:center}
+.expert-job-state strong{font-size:13px}
+.expert-job-badge{padding:3px 7px;border-radius:6px;background:#edf2f8;color:#344963;font-size:11px;font-weight:750}
+.expert-job-badge.available{background:#e7f6ee;color:#165539}
+.expert-job-badge.waiting{background:#fff0df;color:#77340d}
+.expert-job-actions{display:flex;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-top:9px}
+.expert-job-actions details,.expert-panel-cta{flex:1;min-width:0}
+.expert-job-actions details[open]{flex-basis:100%}
+.expert-job-actions summary,.expert-panel-cta{box-sizing:border-box;display:flex;align-items:center;justify-content:center;min-height:45px;border:1px solid #dce4ed;border-radius:9px;padding:5px 9px;background:#f7f9fc;color:#102747;font-size:13px;font-weight:750;cursor:pointer}
+.expert-job-actions summary::after{content:"";width:6px;height:6px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg);margin:0 0 3px 7px}
+.expert-job-actions details[open] summary::after{transform:rotate(225deg);margin-bottom:0}
+.expert-panel-cta{border-color:#b83b08;background:#b83b08;color:#fff}
+.expert-job-description{padding:8px 1px 3px;color:#344963;font-size:13px}
+.expert-job-description p{margin:0 0 6px;white-space:pre-wrap}
+.expert-job-description small{display:block;margin-top:3px}
+.expert-job-card .btn{box-sizing:border-box;max-width:100%}
+.expert-job-card [data-a="openPreThread"]{min-height:45px;margin-top:6px;box-shadow:none;font-size:13px}
+.expert-panel .expert-onboarding{box-shadow:none;border-color:#dce4ed}
+@media(min-width:768px){.expert-panel-list{grid-template-columns:repeat(2,minmax(0,1fr))}.expert-panel-head{padding:16px 20px}}
 </style>
 </head>
 <body>
@@ -2448,30 +2502,76 @@ function vExpertOnboarding(){
     ${editing?'<button class="btn block ghost" data-a="cancelExpertEdit">Panele dön</button>':''}
   </section>`;
 }
+function expertJobCard(l,status,kind,price,action,thread=''){
+  const service=KAT[l.category]?.ad||KAT.diger.ad;
+  const title=(l.problems||[]).join(', ')||service;
+  const count=D.counts[l.id];
+  const partner=l.partner_id&&D.partners[l.partner_id];
+  const photos=photoStrip(l.id,true);
+  return `<article class="expert-job-card" data-listing-id="${l.id}">
+    <div class="expert-job-heading">
+      <div class="expert-job-icon" aria-hidden="true">${iconFor(l.category)}</div>
+      <div class="expert-job-title"><small>${esc(service)}</small><h3>${esc(title)}</h3></div>
+    </div>
+    <div class="expert-job-meta"><span>${esc(locText(l))}</span>${l.when_text?`<span>${esc(l.when_text)}</span>`:''}</div>
+    <div class="expert-job-state">
+      <span class="expert-job-badge ${kind}">${status}</span>
+      <div class="expert-job-numbers">${count!=null?`<small>${esc(count)} teklif</small>`:''}${price?`<strong>${esc(price)}</strong>`:''}</div>
+    </div>
+    <div class="expert-job-actions">
+      <details><summary>İlanı incele</summary><div class="expert-job-description">
+        ${l.note?`<p>${esc(l.note)}</p>`:'<p>İlan açıklaması eklenmemiş.</p>'}
+        ${photos}
+        ${l.created_at?`<small>Yayınlandı: ${esc(ago(l.created_at))}</small>`:''}
+        ${partner?`<small>${esc(partner.name)}</small>`:''}
+      </div></details>
+      ${action}
+    </div>
+    ${thread}
+  </article>`;
+}
 function vUsta(){
-  const pp=S.profile||{}, st=stat(uid());
-  const tabs=`<div class="pro-tabs"><button data-a="tab" data-v="acik" aria-pressed="${S.tab==='acik'}">Yeni işler</button><button data-a="tab" data-v="teklifler" aria-pressed="${S.tab==='teklifler'}">Tekliflerim</button></div>`;
-  let h=`<section class="pro-dashboard"><div><span class="section-kicker">Uzman paneli</span><h1>İşini büyüt, <em>itibarını güçlendir.</em></h1><p>Uygun işleri keşfet, net teklif ver ve iyi hizmetle daha çok tercih edil.</p>${expertReady(pp)?'<button class="link" data-a="editExpert">Uzman profilini düzenle</button>':''}</div><div class="pro-mini"><div><b>${st.rating!=null?Number(st.rating).toFixed(1):'—'}</b><small>Puan</small></div><div><b>${st.jobs||0}</b><small>Tamamlanan</small></div><div><b>${pp.identity_verified?'✓':'—'}</b><small>Kimlik</small></div></div></section>`+tabs;
-  if(S.tab==='acik'){
-    if(!expertReady(pp)||S.expertEditing)return h+vExpertOnboarding();
-    h+=`<div class="pro-section-title"><div><h2>Sana uygun işler</h2><p>Hizmet alanın ve konumuna göre filtrele.</p></div></div><div class="chips profilters"><button class="chip" data-a="filter" data-v="hepsi" aria-pressed="${S.filter==='hepsi'}">Hepsi</button>`+
-      (pp.service_categories||[]).map(k=>`<button class="chip" data-a="filter" data-v="${k}" aria-pressed="${S.filter===k}">${esc(KAT[k]&&KAT[k].ad||k)}</button>`).join('')+`</div>`;
+  const pp=S.profile||{},ready=expertReady(pp),isOpen=S.tab==='acik';
+  const tabs=`<div class="expert-panel-tabs" role="group" aria-label="Uzman paneli görünümleri">
+    <button data-a="tab" data-v="acik" aria-pressed="${isOpen}">Yeni işler</button>
+    <button data-a="tab" data-v="teklifler" aria-pressed="${!isOpen}">Tekliflerim</button>
+  </div>`;
+  const panel=content=>`<section class="expert-panel">
+    <header class="expert-panel-head"><div><h1>Uzman iş paneli</h1>${pp.service_city?`<p>${esc(pp.service_city)}</p>`:''}</div>
+    ${ready?'<button data-a="editExpert">Profili düzenle</button>':''}</header>
+    ${tabs}${content}
+  </section>`;
+  const empty=(title,description)=>`<div class="expert-panel-empty"><h3>${title}</h3><p>${description}</p></div>`;
+  const group=(title,cards)=>`<section class="expert-panel-group"><h2>${title}</h2><div class="expert-panel-list">${cards}</div></section>`;
+  if(isOpen){
+    if(!ready||S.expertEditing)return panel(vExpertOnboarding());
+    const filters=`<div class="expert-panel-filters" role="group" aria-label="Hizmet kategorisi">
+      <button data-a="filter" data-v="hepsi" aria-pressed="${S.filter==='hepsi'}">Hepsi</button>
+      ${(pp.service_categories||[]).map(k=>`<button data-a="filter" data-v="${esc(k)}" aria-pressed="${S.filter===k}">${esc(KAT[k]?.ad||k)}</button>`).join('')}
+    </div>`;
     const list=D.open.filter(l=>!D.blocks.includes(l.owner)&&(S.filter==='hepsi'||l.category===S.filter)&&locationMatch(l,pp));
-    const cards=rows=>rows.map(l=>{const my=myQuote(l.id);const extra=`<div class="pro-job-foot"><div><b>${D.counts[l.id]||0}</b><small> teklif</small></div>${my?`<span class="pill good">Teklifin: ${tl(my.price)}</span>`:`<button class="btn sm" data-a="quote" data-v="${l.id}">Teklif ver →</button>`}</div>`;return ticket(l,{extra});}).join('');
+    const cards=rows=>rows.map(l=>{
+      const my=myQuote(l.id);
+      const action=my?'':`<button class="expert-panel-cta" data-a="quote" data-v="${l.id}">Teklif ver</button>`;
+      return expertJobCard(l,my?'Teklif gönderildi':'Teklife açık',my?'waiting':'available',my?tl(my.price):'',action);
+    }).join('');
     const districts=pp.service_districts||[];
-    if(!districts.length)h+=list.length?cards(list):'<div class="empty pro-empty"><span>✨</span><h3>Şu an uygun yeni iş yok</h3><p>Yeni ilanlar geldiğinde burada göreceksin.</p></div>';
-    else{
-      const nearby=list.filter(l=>districts.some(x=>norm(x)===norm(l.district))),other=list.filter(l=>!districts.some(x=>norm(x)===norm(l.district)));
-      h+=`<div class="pro-section-title"><div><h2>Yakındaki işler</h2><p>Tercih ettiğin ilçelerdeki işler.</p></div></div>`+(nearby.length?cards(nearby):'<div class="empty pro-empty"><p>Tercih ettiğin ilçelerde yeni iş yok.</p></div>');
-      if(other.length)h+=`<div class="pro-section-title"><div><h2>${esc(pp.service_city)}’deki diğer işler</h2><p>Aynı şehirde, tercih ilçelerin dışındaki işler. Bunlara da teklif verebilirsin.</p></div></div>`+cards(other);
-    }
-  }else{
-    const mine=Object.values(D.quotes).filter(q=>q.pro===uid()).sort((x,y)=>new Date(y.created_at)-new Date(x.created_at));
-    const items=mine.map(q=>({q,l:D.listings[q.listing_id]})).filter(x=>x.l);
-    h+=`<div class="pro-section-title"><div><h2>Tekliflerin</h2><p>Gönderdiğin tekliflerin durumunu buradan takip et.</p></div></div>`;
-    h+=items.length?items.map(({q,l})=>{let status='<span class="pill amber">Karar bekliyor</span>',act=null;if(l.chosen_quote===q.id){status=l.status==='done'?'<span class="pill">Tamamlandı</span>':'<span class="pill good">✓ Seni seçti</span>';act='openPro'}else if(l.status!=='open')status='<span class="pill">Başka uzman seçildi</span>';return ticket(l,{act,extra:`<div class="pro-job-foot"><div><strong>${tl(q.price)}</strong><small> · ${esc(q.eta)}</small></div>${status}</div>`})+preselectionThread(q,l);}).join(''):'<div class="empty pro-empty"><span>📨</span><h3>Henüz teklifin yok</h3><p>Yeni işler bölümünden sana uygun bir işe teklif verebilirsin.</p></div>';
+    if(!districts.length)return panel(filters+group('Sana uygun işler',list.length?cards(list):empty('Şu an uygun yeni iş yok','Yeni ilanlar geldiğinde burada göreceksin.')));
+    const nearby=list.filter(l=>districts.some(x=>norm(x)===norm(l.district)));
+    const other=list.filter(l=>!districts.some(x=>norm(x)===norm(l.district)));
+    return panel(filters+group('Yakındaki işler',nearby.length?cards(nearby):empty('Yakında uygun iş yok','Tercih ettiğin ilçelerde yeni ilan bulunmuyor.'))+
+      (other.length?group('Aynı şehirdeki diğer işler',cards(other)):''));
   }
-  return h;
+  const mine=Object.values(D.quotes).filter(q=>q.pro===uid()).sort((x,y)=>new Date(y.created_at)-new Date(x.created_at));
+  const items=mine.map(q=>({q,l:D.listings[q.listing_id]})).filter(x=>x.l);
+  const cards=items.map(({q,l})=>{
+    const chosen=l.chosen_quote===q.id,done=l.status==='done';
+    const status=chosen?(done?'Tamamlandı':'Seçildin'):l.status==='open'?'Karar bekliyor':'Başka uzman seçildi';
+    const kind=chosen?(done?'neutral':'available'):l.status==='open'?'waiting':'neutral';
+    const action=chosen?`<button class="expert-panel-cta" data-a="openPro" data-v="${l.id}">${done?'İş detayını aç':'Aktif işi aç'}</button>`:'';
+    return expertJobCard(l,status,kind,`${tl(q.price)}${q.eta?' · '+q.eta:''}`,action,preselectionThread(q,l));
+  }).join('');
+  return panel(group('Gönderdiğin teklifler',cards||empty('Henüz teklifin yok','Yeni işler bölümünden sana uygun bir işe teklif verebilirsin.')));
 }
 function vActiveJob(){
   const l=D.listings[S.sel],q=l&&chosenQ(l),customer=S.role==='musteri';
