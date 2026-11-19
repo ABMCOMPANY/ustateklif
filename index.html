@@ -21,8 +21,19 @@
 const PALETTE_COLORS=Object.freeze({'blue-amber':'#102747','navy-teal':'#173B61','indigo-sage':'#443D91'});
 let savedPalette='blue-amber';
 try{const value=localStorage.getItem('tamisim_palette');if(Object.prototype.hasOwnProperty.call(PALETTE_COLORS,value))savedPalette=value}catch(e){}
-document.documentElement.dataset.palette=savedPalette;
-document.querySelector('meta[name="theme-color"]').content=PALETTE_COLORS[savedPalette];
+const appearanceRoot=document.documentElement;
+const THEME_KEY='tamisim_theme';
+let theme='light';
+try{if(localStorage.getItem(THEME_KEY)==='dark')theme='dark'}catch(e){}
+appearanceRoot.dataset.theme=theme;
+appearanceRoot.dataset.palette=savedPalette;
+function syncAppearanceMeta(){
+  document.querySelector('meta[name="color-scheme"]').content=appearanceRoot.dataset.theme;
+  document.querySelector('meta[name="theme-color"]').content=appearanceRoot.dataset.theme==='dark'
+    ?'#0F1724'
+    :PALETTE_COLORS[appearanceRoot.dataset.palette];
+}
+syncAppearanceMeta();
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1588,6 +1599,484 @@ html:has(.conversation-composer input:focus){padding-bottom:calc(env(safe-area-i
 .appointment-card :is(button,summary,input):focus-visible{outline:2px solid #29466a;outline-offset:2px}
 .appointment-card .appointment-head button:focus-visible{outline-color:#fff;outline-offset:-4px}
 @media(min-width:768px){.appointment-head{padding-inline:20px}.appointment-body{padding:18px 20px}}
+/* Remaining V1 screens share these colors within their own surfaces. */
+:root{--ui-paper:#fff;--ui-field:#f5f7fa;--ui-text:#102747;--ui-secondary:#485d75;--ui-stroke:#ccd7e3;--ui-control:#778ba2;--ui-action:#b43808;--ui-bar:#102747}
+:root[data-theme="dark"]{--ui-paper:#152339;--ui-field:#1f3048;--ui-text:#f3f6fa;--ui-secondary:#c4d2e1;--ui-control:#8497ac;--ui-stroke:#485a70;--ui-action:#ad3607;--ui-bar:#102747}
+#app .service-payment{display:grid;gap:10px;padding:16px;border:1px solid var(--ui-stroke);border-radius:14px;background:var(--ui-paper);color:var(--ui-text);box-shadow:none;overflow-wrap:anywhere}
+#app .service-payment h2{margin:0;color:var(--ui-text);font:750 19px/1.25 'Bricolage Grotesque',sans-serif}
+#app .service-payment>div{padding:3px 0;color:var(--ui-secondary)}
+#app .service-payment :is(b,.total){color:var(--ui-text)}
+#app .service-payment>.customer-pay{display:grid;gap:8px;margin:0;padding:10px 0;border:0;border-top:1px solid var(--ui-stroke);border-radius:0;background:transparent}
+#app .service-payment .customer-pay-options{display:grid;gap:5px}
+#app .service-payment .pay-choice{min-height:44px;padding:8px 12px;text-align:start;background:var(--ui-field);color:var(--ui-text);border:1px solid var(--ui-control);border-radius:9px;font:650 14px/1.4 Figtree,sans-serif}
+#app .service-payment .pay-choice[aria-pressed=true]{background:var(--ui-paper);border:2px solid #d35416;padding:7px 11px;box-shadow:none}
+#app .service-payment .total{border-block:1px solid var(--ui-stroke);padding:10px 0;font-weight:700}
+#app .service-payment>p,#app .service-payment .hint{margin:0;color:var(--ui-secondary);font-size:14px;line-height:1.45}
+#app .service-payment :is(.payment-notice,.cash-state,.payment-ledger){display:block;border-radius:8px;background:var(--ui-field);color:var(--ui-text);padding:10px 12px;font-size:14px}
+#app .service-payment .payment-ledger b{display:block}
+#app .service-payment .promo-box{display:grid;gap:5px;margin:0;border:0}
+#app .service-payment .promo-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+#app .service-payment :is(input,button){box-sizing:border-box;min-width:0;min-height:44px}
+#app .service-payment .btn{background:var(--ui-action)!important;color:white!important;border-radius:9px;box-shadow:none}
+#app .service-payment .btn.ghost,#app .service-payment .btn:disabled{background:var(--ui-field)!important;color:var(--ui-secondary)!important;border:1px solid var(--ui-stroke);opacity:1}
+#app .service-payment :focus-visible{outline:2px solid var(--ui-control);outline-offset:2px}
+/* Shared page layout for directory, settings and operational views. */
+#app .service-page{box-sizing:border-box;width:100%;max-width:760px;margin:0 auto;padding:clamp(12px,3vw,24px);background:var(--ui-paper);color:var(--ui-text);font-family:Figtree,sans-serif;overflow-wrap:anywhere}
+#app .service-page :is(input,select,textarea,button,summary){box-sizing:border-box;max-width:100%;min-width:0}
+#app .service-page :is(button,summary){min-height:44px;cursor:pointer}
+#app .service-page :is(.in,.auth-input){min-height:46px;background:var(--ui-field)!important;border:1px solid var(--ui-control)!important;border-radius:9px;color:var(--ui-text)!important;-webkit-text-fill-color:var(--ui-text)!important;box-shadow:none;font-size:16px}
+#app .service-page :is(.btn,.directory-cta,.auth-primary){min-height:46px;padding:9px 14px;border:0;border-radius:9px;background:var(--ui-action)!important;color:white!important;box-shadow:none;font:700 14px/1.35 Figtree,sans-serif}
+#app .service-page :is(.btn.ghost,.btn:disabled){background:var(--ui-field)!important;color:var(--ui-text)!important;border:1px solid var(--ui-stroke)}
+#app .service-page :focus-visible{outline:2px solid var(--ui-control)!important;outline-offset:2px}
+#app .service-page :is(.page-back,.partner-back,.auth-back){min-height:44px;padding:4px 0;margin:0;color:var(--ui-secondary);font-size:14px}
+#app .service-page :is(.experts-head,.pagehead,.notification-head,.auth-welcome,.account-cover){box-sizing:border-box;margin:0 0 14px;padding:14px 16px;background:var(--ui-bar)!important;color:white;border:0;border-radius:12px;box-shadow:none}
+#app .service-page :is(.experts-head,.pagehead,.notification-head,.auth-welcome,.account-cover) h1{margin:0;color:white!important;-webkit-text-fill-color:white!important;font:750 clamp(21px,4vw,26px)/1.16 'Bricolage Grotesque',sans-serif}
+#app .service-page :is(.experts-head,.pagehead,.notification-head,.auth-welcome,.account-cover) p{margin:5px 0 0;color:#e1eaf5!important;-webkit-text-fill-color:#e1eaf5!important;font:450 14px/1.45 Figtree,sans-serif}
+#app .service-page :is(.directory-expert,.account-section,.legal-card,.support-item,.notif-card,.quote,.auth-card,.auth-switch){box-sizing:border-box;padding:14px;margin:10px 0;border:1px solid var(--ui-stroke);border-radius:12px;background:var(--ui-paper);color:var(--ui-text);box-shadow:none}
+#app .service-page :is(.hint,.muted,.lb,.empty-inline,.directory-main p){color:var(--ui-secondary)!important;-webkit-text-fill-color:var(--ui-secondary)!important;font-size:14px}
+#app .service-page .empty{padding:20px 14px;background:var(--ui-field);border:1px dashed var(--ui-stroke);border-radius:10px;color:var(--ui-secondary);box-shadow:none}
+#app .expert-filter-row{max-width:100%;padding:2px 0 8px}
+#app .expert-directory-page .expert-filter-row button,#app .expert-onboarding .chip{border:1px solid var(--ui-stroke);border-radius:9px;background:var(--ui-field);color:var(--ui-text);font-size:14px}
+#app .expert-directory-page .expert-filter-row [aria-pressed=true],#app .expert-onboarding .chip[aria-pressed=true]{background:var(--ui-bar);color:white;border-color:var(--ui-bar)}
+#app .expert-directory-page .directory-expert{margin:0}
+#app .expert-directory-page .directory-cta{width:100%;margin-top:9px}
+#app .service-page.expert-onboarding{padding:14px;border:1px solid var(--ui-stroke);border-radius:12px;box-shadow:none}
+#app .expert-onboarding .chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(128px,100%),1fr));gap:6px}
+#app .expert-onboarding .chip{white-space:normal;text-align:start;padding:7px 10px}
+/* Expanded professional profile inside the existing disclosure. */
+#app details[open] .expert-card{padding:12px 4px;border:0;border-top:1px solid var(--ui-stroke);border-radius:0;background:var(--ui-paper);color:var(--ui-text);box-shadow:none}
+#app details[open] .expert-card .probio{color:var(--ui-secondary);font-size:14px;line-height:1.5}
+#app details[open] .expert-card .foot button{min-height:44px}
+#app .expert-directory-page .expert-filter-row button{flex:0 0 auto}
+#app .expert-directory-page :is(.directory-meta,.directory-services,.directory-verified){font-size:13px}
+#app .expert-directory-page :is(.directory-services,.directory-meta)>span{font-size:12px;line-height:1.4}
+#app .service-page .experts-head .section-kicker{color:#dce8f5!important;-webkit-text-fill-color:#dce8f5!important}
+
+#app .service-page.auth-shell{max-width:540px}
+#app .service-page .auth-fields{display:grid;gap:10px}
+#app .service-page .auth-primary{width:100%}
+#app .service-page .auth-welcome::after,#app .service-page .account-cover::after{display:none}
+#app .service-page .auth-kicker,#app .service-page .account-kicker,#app .service-page .section-kicker{color:#d7e4f3}
+#app .service-page .auth-switch{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+#app .service-page .account-section-head>div>span{display:none}
+#app .service-page .account-form label{min-width:0}
+#app .service-page .profile-score{color:white;background:#24466c}
+#app .service-page .notif-card{display:grid;grid-template-columns:24px minmax(0,1fr);gap:9px}
+#app .service-page .notif-card.unread{border-inline-start:3px solid var(--ui-action)}
+#app .service-page .notif-title{flex-wrap:wrap;gap:5px}
+#app .jobs-page .ticket{margin-block:8px;background:var(--ui-paper);border:1px solid var(--ui-stroke);border-radius:12px;box-shadow:none}
+body:has(.service-page) :is(.quick-menu,.bottomnav,.desktopnav){background:var(--ui-paper)!important;color:var(--ui-text);box-shadow:none}
+body:has(.service-page) .quick-menu{max-height:calc(100dvh - 76px);overflow:auto}
+body:has(.service-page) :is(.quick-menu button,.seg button,.desktopnav button){min-height:44px}
+body:has(.service-page).has-bottomnav #app{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+@media(max-width:420px){body:has(.service-page) .top{gap:5px}body:has(.service-page) .seg button{padding-inline:6px}}
+#app .service-page.recovery-page{max-width:540px}
+body:has(.service-page) .top{gap:6px;box-sizing:border-box;min-height:52px;padding:5px 0}
+body:has(.service-page) .brand{display:inline-flex;align-items:baseline;white-space:nowrap;font-size:22px;line-height:1}
+body:has(.service-page) .brand span:nth-child(2){color:#e65113}
+body:has(.service-page) .brand i{display:none}
+body:has(.service-page) .beta-strip{padding:5px 0;margin:0;border:0;background:transparent}
+#app .service-page .auth-welcome .auth-kicker{color:#dce8f5!important;background:transparent;padding:0}
+#app .service-page .account-cover .account-kicker{color:#dce8f5!important}
+#app .service-page :is(.auth-forgot,.auth-switch button,.page-back){font:650 14px/1.4 Figtree,sans-serif}
+
+#app .service-page>h2{margin:20px 0 8px;color:var(--ui-text);font:750 19px/1.25 'Bricolage Grotesque',sans-serif}
+#app .service-page .legal-card p,#app .service-page .support-item p{color:var(--ui-secondary);font-size:14px;line-height:1.55}
+#app .service-page .support-form{display:grid;gap:8px}
+#app .service-page .support-form .lb{margin:4px 0 0}
+#app .service-page :is(.verify-status,.account-menu-row,.file-drop,.verify-details,.partner-cat-picker){background:var(--ui-field);color:var(--ui-text);border:1px solid var(--ui-stroke);border-radius:10px;box-shadow:none}
+#app .service-page :is(.verify-details-body,.verify-grid,.partner-form,.partner-terms){min-width:0}
+#app .service-page :is(.verify-grid label,.partner-terms label,.partner-form .two>div){min-width:0}
+#app .service-page .foot{flex-wrap:wrap;gap:6px}
+#app .operations-page .field.two,#app .partner-portal-stats,#app .operations-page .payment-admin-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#app .operations-page .check,#app .service-page :is(.partner-portal-stats>div,.payment-admin-summary>div,.partner-portal-money){padding:12px;border:1px solid var(--ui-stroke);border-radius:10px;background:var(--ui-field);color:var(--ui-text);box-shadow:none}
+#app .service-page :is(.partner-back,.partner-back-ico){background:transparent;box-shadow:none;border:0}
+#app .service-page .partner-terms{display:flex;align-items:end;flex-wrap:wrap;gap:8px}
+#app .service-page .partner-terms label{flex:1 1 110px}
+#app .service-page .partner-cat-picker summary{display:flex;align-items:center}
+#app .service-page .attempt-note,#app .service-page .support-reply{background:var(--ui-field);border-inline-start:3px solid var(--ui-control);padding:10px}
+@media(min-width:768px){#app .operations-page .field.two,#app .service-page .partner-portal-stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+#app .service-page.fatal-state{max-width:540px;text-align:center;border:1px solid var(--ui-stroke);border-radius:12px;box-shadow:none}
+@media(prefers-reduced-motion:reduce){#app .service-page.boot-skeleton *{animation:none!important}}
+/* Readable secondary type and theme surfaces on the remaining screens. */
+#app .service-page :is(.account-form label,.auth-fields label,.verify-grid label)>span{font-size:14px}
+#app .service-page :is(.account-form label>small,.auth-switch small,.verify-status small,.verify-details summary small,.account-menu-row small,.account-menu-row>i,.account-install-note,.partner-back small,.account-section-head p){font-size:13px;color:var(--ui-secondary)!important}
+#app .service-page :is(.account-section-head p,.verify-details summary small){margin-inline-start:0}
+#app .service-page :is(.pagehead,.notification-head,.experts-head) :is(.section-kicker,.eyebrow){background:transparent!important;color:#dce8f5!important;-webkit-text-fill-color:#dce8f5!important}
+#app .service-page .verify-ico{background:#e9eff5;color:#334b63}
+#app .service-page .verify-status.done .verify-ico{background:#d7f2e5;color:#19583d}
+#app .service-page .auth-switch button{background:var(--ui-field);color:var(--ui-text)}
+#app .jobs-page .stub{background:#102747!important}
+#app .jobs-page .pill.good{background:#dff4ea;color:#19583d}
+#app .jobs-page{scroll-margin-top:64px}
+#app .jobs-page .home-title h2,#app .jobs-page .jobcount{color:var(--ui-text)!important;-webkit-text-fill-color:var(--ui-text)!important}
+:root[data-theme=dark] body:has(.service-page),:root[data-theme=dark] body:has(.service-page) :is(#app,.top,.beta-strip){background:var(--ui-paper)!important;color:var(--ui-text)}
+:root[data-theme=dark] body:has(.service-page) :is(.brand,.bottomnav button,.desktopnav button){color:var(--ui-text)}
+:root[data-theme=dark] .service-page{--brand-ink:var(--ui-text);--brand-muted:var(--ui-secondary);--brand-line:var(--ui-stroke)}
+:root[data-theme=dark] #app .service-page :is(.auth-forgot,.subsection-title .link,.account-form label>span,.verify-grid label>span,.auth-fields label>span,.legal-card h2,.directory-main h3,.partner-back-ico,.account-menu-row b,.account-section-head h2,.partner-cat-picker summary i){color:var(--ui-text)!important;-webkit-text-fill-color:var(--ui-text)!important}
+:root[data-theme=dark] #app .service-page :is(.notif-content p,.lede,.palette-note,.partner-portal-money span,.payment-admin-summary span,.partner-portal-stats small,.partner-cat-picker summary small,.directory-meta span){color:var(--ui-secondary)!important}
+:root[data-theme=dark] #app .service-page :is(.partner-form,.partner-portal-money,.payment-admin-summary,.partner-cat-picker,.check,.account-menu-row,.verify-status,.verify-details,.directory-meta span,.auth-forgot,.palette-option,.empty-inline){background:var(--ui-field)!important;color:var(--ui-text)}
+:root[data-theme=dark] #app .service-page :is(.profile-score,.account-cover-copy,.account-avatar){--brand-ink:#102747}
+:root[data-theme=dark] #app .service-page .palette-label :is(b,small){color:var(--ui-text)}
+:root[data-theme=dark] #app .service-page .account-menu-row.danger b{color:#ffb8ae!important;-webkit-text-fill-color:#ffb8ae!important}
+:root[data-theme=dark] #app .jobs-page{background:var(--ui-paper);color:var(--ui-text)}
+
+#app .jobs-page .meta .pill.good{background:#dff4ea!important;color:#19583d!important;-webkit-text-fill-color:#19583d!important}
+#app .jobs-page .section-kicker{color:var(--ui-secondary)!important;-webkit-text-fill-color:var(--ui-secondary)!important}
+:root[data-theme=dark] #app .service-page .palette-check{background:#102747;color:white}
+
+#app .payment-breakdown{border-block:1px solid var(--ui-stroke);font:600 14px/1.4 Figtree,sans-serif}
+#app .payment-breakdown summary{padding-block:12px;min-height:44px;cursor:pointer}
+#app .payment-breakdown>div{display:flex;justify-content:space-between;gap:12px;padding-block:5px;color:var(--ui-secondary)}
+#app .guest-service-page .create-head{padding:12px 0}
+#app .guest-service-page .create-head h1{color:var(--ui-text);font:750 24px/1.2 'Bricolage Grotesque',sans-serif}
+#app .guest-service-page :is(.create-head p,.trustbox p){font-size:14px;color:var(--ui-secondary)}
+#app .guest-service-page :is(.create-card,.trustbox){padding:14px;margin:10px 0;border:1px solid var(--ui-stroke);border-radius:12px;background:var(--ui-field);box-shadow:none}
+#app .guest-service-page .chip{white-space:normal;background:var(--ui-paper);color:var(--ui-text);border:1px solid var(--ui-control)}
+#app .expert-directory-page .directory-main h3{font:750 16px/1.3 'Bricolage Grotesque',sans-serif}
+#app .expert-directory-page .directory-meta,#app .expert-directory-page .directory-services{flex-wrap:wrap}
+#app details[open] .procard.expert-card,#job-review :is(.verified-review,.review-box){padding:14px;border:1px solid var(--ui-stroke);border-radius:10px;background:var(--ui-paper);color:var(--ui-text);box-shadow:none;overflow-wrap:anywhere}
+#app details[open] .expert-card :is(.probio,.muted),#job-review .review-box p{color:var(--ui-secondary);font-size:14px;line-height:1.5}
+#app details[open] .expert-card .foot button,#job-review .review-stars button{min-width:44px;min-height:44px}
+#app .service-page :is(.quote,.support-item) .qhead>div{min-width:0}
+#app .operations-page :is(.partner-stats,.partner-admin .foot){flex-wrap:wrap}
+body:has(.service-page) .quick-menu :is(b,.quick-menu-logout){font-size:14px}
+body:has(.service-page) .quick-menu :is(small,.quick-menu-user small){font-size:12px}
+body:has(.service-page) :is(.quick-menu-user b,.quick-menu-list b){color:var(--ui-text)}
+body:has(.service-page) :is(.quick-menu-list small,.quick-menu-user small,.quick-menu-logout){color:var(--ui-secondary)}
+body:has(.service-page) .quick-menu .quick-menu-primary{background:var(--ui-bar);color:white}
+body:has(.service-page) .quick-menu .quick-menu-primary small{color:#dce8f5;opacity:1}
+body:has(.service-page) .bottomnav button small{font-size:11px}
+:root[data-theme="light"] body:not(:has(.service-page)) .bottomnav button:not(.active) > small{
+  color:var(--brand-muted);
+}
+:root[data-theme=dark] body:has(.service-page) .bottomnav button.active:not(.navplus) span{background:#314c69;color:white}
+:root[data-theme=dark] body:has(.service-page) :is(.seg,.menubtn,.notifbtn,.quick-menu-list .qm-ico){background:var(--ui-field)!important;color:var(--ui-text)!important}
+:root[data-theme=dark] body:has(.service-page) .seg button[aria-pressed=true]{background:#334d6c;color:white}
+
+body:has(.service-page) .quick-menu-list i{color:var(--ui-secondary)}
+:root[data-theme=dark] #app .guest-service-page .create-head .eyebrow{color:var(--ui-secondary)!important;-webkit-text-fill-color:var(--ui-secondary)!important}
+:root[data-theme=dark] #app .service-page .verify-history small,:root[data-theme=dark] #job-review .verified-review p{color:var(--ui-secondary)!important}
+:root[data-theme=dark] #app .service-payment :is(.total,.payment-ledger b,.promo-box label){background:transparent!important;color:var(--ui-text)!important;-webkit-text-fill-color:var(--ui-text)!important}
+
+:root[data-theme=dark] #app .operations-page :is(.partner-stats>div,.partner-money span,.payment-admin-grid span),:root[data-theme=dark] #app .partner-page .partner-job-meta span{background:var(--ui-field);color:var(--ui-secondary)}
+:root[data-theme=dark] #app .operations-page :is(.partner-stats b,.payment-admin-grid b),:root[data-theme=dark] #app details[open] .expert-card .expert-head strong{color:var(--ui-text)!important;-webkit-text-fill-color:var(--ui-text)!important}
+:root[data-theme=dark] #app .operations-page .partner-stats small{color:var(--ui-secondary)}
+:root:not([data-theme=dark]) body:has(.service-page) #bottomnav button:not(.active):not(.navplus){color:var(--ui-secondary)!important}
+
+#app .customer-home:has(>.jobs-page)>:not(.jobs-page){display:none}
+#app .jobs-page .home-title{margin:0 0 10px}
+#app .jobs-page .home-title h2{font:750 24px/1.2 'Bricolage Grotesque',sans-serif}
+#app .service-page :is(.jobs-empty,.pro-empty,.notif-empty){display:grid;grid-template-columns:1fr;justify-items:start;text-align:start;gap:6px}
+#app .service-page :is(.jobs-empty,.pro-empty,.notif-empty) :is(h3,p){margin:0}
+#app .service-page :is(.auth-beta-note,.empty p),#app .service-page.fatal-state p,#app .service-page .terms-check>span{color:var(--ui-secondary)!important;font-size:14px}
+#app .service-page .terms-check .inline-link{color:var(--ui-text)!important;text-underline-offset:2px}
+#app .service-page .terms-check{align-items:baseline}
+#app .service-page .terms-check button{min-height:44px}
+body:has(.jobs-page) #bottomnav [data-a=navHome]:is(.active,button){color:var(--ui-secondary)!important}
+body:has(.jobs-page) #bottomnav [data-a=navHome] span{background:transparent}
+body:has(.jobs-page) #bottomnav [data-a=navJobs]:not(.active){color:var(--ui-text)!important}
+body:has(.jobs-page) #bottomnav [data-a=navJobs] span{background:var(--ui-field);border-radius:9px}
+
+#app .jobs-page .ticket,#app .jobs-page .ticket .tbody{background:var(--ui-paper)!important;box-shadow:none!important}
+:root[data-theme=dark] #app .jobs-page .ticket .stretch{color:var(--ui-text)!important;-webkit-text-fill-color:var(--ui-text)!important}
+:root[data-theme=dark] #app .jobs-page .ticket .meta span{color:var(--ui-secondary)!important}
+
+/* Category selection is shared by the profile and filter controls. */
+#app .expert-onboarding .chips,
+#app .expert-panel-filters{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+#app .expert-directory-page .expert-filter-row{
+  display:grid;
+  grid-template-rows:repeat(2,auto);
+  grid-auto-flow:column;
+  grid-auto-columns:clamp(136px,38vw,168px);
+  gap:8px;
+  padding:4px 4px 10px;
+  scrollbar-width:thin;
+}
+#app .expert-directory-page .expert-filter-row::-webkit-scrollbar{display:block;height:6px}
+#app :is(.expert-onboarding .chip,.expert-filter-row button,.expert-panel-filters button,.partner-cat-grid label>span){
+  min-width:0;
+  min-height:44px;
+  padding:8px 10px;
+  border:1px solid var(--choice-border)!important;
+  border-radius:8px;
+  background:var(--choice-surface)!important;
+  color:var(--choice-text)!important;
+  -webkit-text-fill-color:currentColor!important;
+  font:700 13px/1.3 Figtree,system-ui,sans-serif;
+  text-align:start;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  box-shadow:none;
+}
+#app :is(.expert-onboarding,.expert-filter-row,.expert-panel-filters,.partner-cat-grid){
+  --choice-surface:#f5f7fa;
+  --choice-text:#102747;
+  --choice-border:#cdd7e3;
+  --choice-selected:#102747;
+  --choice-selected-text:#fff;
+  --choice-accent:#b83b08;
+}
+#app :is(.expert-onboarding .chip,.expert-filter-row button,.expert-panel-filters button)[aria-pressed="true"],
+#app .partner-cat-grid input:checked+span{
+  border-color:var(--choice-accent)!important;
+  background:var(--choice-selected)!important;
+  color:var(--choice-selected-text)!important;
+  box-shadow:inset 3px 0 var(--choice-accent);
+}
+#app .partner-cat-grid{
+  grid-template-columns:repeat(auto-fit,minmax(min(136px,100%),1fr));
+}
+#app .partner-cat-grid .svc-icon{
+  min-height:0;
+  padding:0;
+  background:transparent;
+  border:0;
+}
+#app .partner-cat-grid input:focus-visible+span{
+  outline:2px solid var(--focus);
+  outline-offset:2px;
+}
+@media(min-width:768px){
+  #app .expert-onboarding .chips,#app .expert-panel-filters{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+.theme-settings{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  margin:8px 0 14px;
+}
+#app .theme-settings button{
+  min-height:44px;
+  border:1px solid var(--ui-control);
+  border-radius:8px;
+  background:var(--ui-field);
+  color:var(--ui-text);
+  cursor:pointer;
+  font-weight:700;
+}
+#app .theme-settings button[aria-pressed="true"]{
+  background:var(--ui-bar);
+  border-color:var(--ui-accent,#b83b08);
+  color:#fff;
+  box-shadow:inset 0 -2px var(--ui-accent,#b83b08);
+}
+
+/* Dark surfaces retain the existing layout and icon styles. */
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --dark-canvas:#0f1724;
+  --bg:var(--dark-canvas);
+  --surface:#162338;
+  --ink:#f5f7fa;
+  --muted:#a9b4c7;
+  --line:rgba(255,255,255,.10);
+  --ui-paper:var(--surface);
+  --ui-field:#1b2a42;
+  --ui-text:var(--ink);
+  --ui-secondary:var(--muted);
+  --ui-stroke:var(--line);
+  --ui-control:#7486a0;
+  --ui-bar:#1b2a42;
+  --ui-accent:#ff9366;
+  --ui-action:#b83b08;
+  --focus:var(--ui-accent);
+  --brand-ink:var(--ink);
+  --brand-muted:var(--muted);
+  --brand-bg:var(--bg);
+  --brand-field:var(--ui-field);
+  --brand-line:var(--line);
+  --petrol:#b9d4fd;
+  --petrol-ink:#0f1724;
+  --tint:var(--ui-field);
+}
+:root[data-theme="dark"] #app :is(.expert-onboarding,.expert-filter-row,.expert-panel-filters,.partner-cat-grid){
+  --choice-surface:var(--ui-field);
+  --choice-text:var(--ink);
+  --choice-border:var(--ui-control);
+  --choice-selected:#293e5c;
+  --choice-selected-text:var(--ink);
+  --choice-accent:var(--ui-accent);
+}
+:root[data-theme="dark"] body,
+:root[data-theme="dark"] body:has(.service-page),
+:root[data-theme="dark"] body:has(.service-page) #app,
+:root[data-theme="dark"] :is(.top,.beta-strip){
+  background:var(--bg)!important;
+  color:var(--ink);
+}
+:root[data-theme="dark"] .top .brand span:first-child{color:var(--ink)}
+:root[data-theme="dark"] .beta-strip>b{background:var(--ui-field);color:var(--ink)}
+:root[data-theme="dark"] .beta-strip>span{color:var(--muted)!important}
+:root[data-theme="dark"] :is(.quick-menu,.bottomnav,.guest-bottomnav,.desktopnav,.seg,.menubtn,.notifbtn,.guest-notif){
+  background:var(--surface)!important;
+  border-color:var(--line)!important;
+}
+:root[data-theme="dark"] .menubtn span{background:var(--ink)!important}
+:root[data-theme="dark"] .guest-notif span{color:var(--ink)}
+:root[data-theme="dark"] :is(.guest-login,.desktopnav button:not(.desktop-cta),.seg button,.guest-bottomnav small,.bottomnav button:not(.navplus)){
+  color:var(--ink)!important;
+}
+:root[data-theme="dark"] :is(.seg button[aria-pressed="true"],.desktopnav button.active,.bottomnav button.active:not(.navplus) span){
+  background:#304866!important;
+  color:#fff!important;
+}
+:root[data-theme="dark"] :is(.quick-menu-user b,.quick-menu-list b,.quick-menu-avatar){color:var(--ink)}
+:root[data-theme="dark"] :is(.quick-menu-user small,.quick-menu-list small,.quick-menu-list i,.quick-menu-logout){color:var(--muted)}
+:root[data-theme="dark"] :is(.quick-menu-avatar,.quick-menu-list .qm-ico,.quick-menu-list button:hover,.quick-menu-list button:focus-visible){background:var(--ui-field)}
+:root[data-theme="dark"] :is(.quick-menu-primary,.bottomnav .navplus,.guest-cta,.desktop-cta,.btn:not(.ghost):not(:disabled),.hero-create,.guest-convert-primary){
+  background:var(--ui-action)!important;
+  color:#fff!important;
+}
+:root[data-theme="dark"] #app .page-back{
+  background:var(--ui-field)!important;
+  color:var(--ui-text)!important;
+  -webkit-text-fill-color:currentColor!important;
+  border-color:var(--ui-control)!important;
+  box-shadow:none!important;
+}
+:root[data-theme="dark"] .menu-backdrop{background:rgba(5,10,18,.68)}
+:root[data-theme="dark"] dialog{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+:root[data-theme="dark"] dialog::backdrop{background:rgba(5,10,18,.74)}
+
+:root[data-theme="dark"] #app :is(
+  .active-job,.appointment-card,.expert-job-card,.ticket,.ticket .tbody,
+  .expert-card,.offers-view .quote,.agreement-card,.workflow-card,
+  .guest-catalog,.homecat,.hero-proof,.steps,.trustbox,.guest-convert,
+  .draft-experts,.legal-card,.partner-form
+){
+  background:var(--surface)!important;
+  color:var(--ink);
+  border-color:var(--line)!important;
+  box-shadow:none;
+}
+:root[data-theme="dark"] #app :is(
+  .expert-panel-head,.expert-panel-tabs,.expert-panel-empty,.offer-review>summary,
+  .offers-listing,.offers-sort button:not([aria-pressed=true]),.offers-view .wait,
+  .job-person,.job-customer,.job-facts,.job-contact :is(button,summary),.job-avatar,
+  .agreement-grid>div,.appointment-calendar,.appointment-calendar span,
+  .quote-form-methods button,.quote-form-methods button[aria-pressed=true],
+  .create-flow .cat,.create-flow .chip,.create-flow .uploadbox,.guest-photo-note,
+  .expert-job-actions summary,.empty,.searchbox,.steps>div>b,.trusticon,
+  .btn.ghost,.offer-actions .btn[data-a=openPreThread],.offer-avatar,.directory-avatar
+){
+  background:var(--ui-field)!important;
+  color:var(--ink)!important;
+  border-color:var(--line)!important;
+}
+:root[data-theme="dark"] #app :is(.create-actions,.field:not(.service-page .field)){background:transparent}
+:root[data-theme="dark"] #app :is(.cat,.chip)[aria-pressed="true"]:not(.expert-onboarding .chip){
+  background:#293e5c!important;
+  border-color:var(--ui-accent)!important;
+}
+:root[data-theme="dark"] #app :is(.offers-sort,.expert-panel-tabs) button[aria-pressed="true"]{background:#304866!important;color:#fff!important}
+:root[data-theme="dark"] #app :is(.quote-form-selection,.expert-job-meta>span+span,.quote-form-meta>span+span,.quote-form-methods,.quote-form-summary,.quote-form-deposit,.create-review-row,.appointment-context,.partner-cat-body,.partner-all-choice){border-color:var(--line)}
+:root[data-theme="dark"] #app :is(.create-flow,.offers-view,.quote-form,.expert-panel){color:var(--ink)}
+:root[data-theme="dark"] #app :is(
+  .home-title h2,.homecat b,.steps strong,.trustbox h3,.guest-convert h2,.hero-proof b,
+  .quote .qhead h3,.quote .price,.ticket .stretch,.ticket .tbody h3,
+  .job-title h2,.job-person h3,.job-facts dd,.appointment-context h3,
+  .appointment-section h4,.appointment-slot time,.appointment-context dd,
+  .create-progress-meta,.create-review-row b,.create-topbar .link
+){color:var(--ink)!important;-webkit-text-fill-color:currentColor}
+:root[data-theme="dark"] #app :is(
+  .hero-proof small,.homecat small,.steps small,.trustbox p,.guest-convert>p,.guest-signin-row>span,
+  .hint,.create-review-row small,.guest-photo-note,.offer-review-body .sub,
+  .offers-top>span,.offers-listing>summary span,.quote .rating,.quote .qnote,.quote .pr .small,
+  .expert-panel-head p,.expert-panel-empty p,.expert-job-title small,.expert-job-meta,
+  .expert-job-state small,.expert-job-description,.expert-job-description small,
+  .job-title p,.job-person small,.job-customer h3,.job-facts dt,.job-progress .workflow-step,
+  .appointment-context p,.appointment-section p,.appointment-slot p,.appointment-slot h4,
+  .appointment-context dt,.appointment-picker-grid label,.appointment-choice,
+  .quote-form-guide,.quote-form-summary small,.quote-form-meta,.quote-form-payment-title small,
+  .quote-form #quote-note-count,.quote-form-deposit p,.quote-form-payment-info dd,.quote-form #quote-submit-help,
+  .partner-cat-group>b,.partner-all-choice small,.sk-status
+){color:var(--muted)!important;-webkit-text-fill-color:currentColor}
+:root[data-theme="dark"] #app :is(.guest-signin-row button,.guest-convert-kicker,.eyebrow,.offer-profile>summary,.job-facts .job-appointment-link,.appointment-alternative summary,.quote-form summary,.link,.partner-all-choice b,.expert-panel-head>button){
+  color:#bfd8fd!important;
+  -webkit-text-fill-color:currentColor;
+}
+:root[data-theme="dark"] #app :is(.palette-number,.expert-panel-head>button,.quote-form #qsend:disabled,.offers-view .btn[data-a=pick]:disabled){
+  background:var(--ui-field);
+  color:var(--muted);
+}
+:root[data-theme="dark"] #app :is(.in,.appointment-picker-grid input){
+  background:var(--ui-field)!important;
+  color:var(--ink)!important;
+  -webkit-text-fill-color:currentColor!important;
+  border-color:var(--ui-control)!important;
+  color-scheme:dark;
+}
+:root[data-theme="dark"] #app :is(.in,input,textarea)::placeholder{
+  color:var(--muted)!important;
+  -webkit-text-fill-color:currentColor!important;
+  opacity:1;
+}
+:root[data-theme="dark"] #app :is(button,summary,input,select,textarea):focus-visible{
+  outline-color:var(--focus)!important;
+}
+:root[data-theme="dark"] #app .quote-form-error{color:#ffb1a3}
+:root[data-theme="dark"] #app .create-progress span{background:#435874}
+:root[data-theme="dark"] #app .create-progress .on{background:var(--ui-accent)}
+:root[data-theme="dark"] #app .quote-form-methods button[aria-pressed="true"] .quote-method-check{background:var(--ui-action);border-color:var(--ui-accent)}
+:root[data-theme="dark"] #app :is(.sk-line,.sk-search,.sk-grid span){background:linear-gradient(90deg,#192840 25%,#263852 45%,#192840 65%);background-size:220% 100%}
+
+/* Keep both existing bubble variants and their ink paired when the shell changes. */
+:root[data-theme="dark"] #app .conversation{
+  background:var(--surface);
+  border-color:var(--line);
+  --brand-ink:var(--message-ink);
+  --brand-muted:var(--message-secondary);
+}
+
+:root[data-theme="dark"] body{
+  --bg:var(--dark-canvas);
+  --brand-bg:var(--dark-canvas);
+  --surface:var(--ui-paper);
+}
+:root[data-theme="dark"] body .top :is(.notifbtn,.menubtn){
+  background:var(--surface)!important;
+  border-color:var(--line);
+}
+:root[data-theme="dark"][data-palette="navy-teal"]{--readable-accent:#74d8ca}
+:root[data-theme="dark"][data-palette="indigo-sage"]{--readable-accent:#afdab9}
+:root[data-theme="dark"] .customer-home .hero h1 em,
+:root[data-theme="dark"] .rating .star-i{color:var(--readable-accent,var(--brand-accent))}
+:root[data-theme="dark"][data-palette="blue-amber"] .notifbadge{color:#192030}
+:root[data-theme="dark"]:not([data-palette="blue-amber"]) .notifbadge{color:#fff}
+@media(min-width:768px){
+  :root[data-theme="dark"] #app .customer-home .hero{
+    background:linear-gradient(135deg,var(--surface),var(--ui-field));
+    border-color:var(--line);
+    box-shadow:none;
+  }
+}
+:root[data-theme="dark"] #app .customer-home .hero-proof div{
+  background:var(--ui-field);
+  border-color:var(--line);
+}
+:root[data-theme="dark"] #app :is(.searchbox label,.searchbox>span,.searchbox,.notif-link,.section-kicker,.verify-details summary i,.file-drop .file-drop-icon){
+  color:#bfd8fd!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+:root[data-theme="dark"] #app .file-drop .file-drop-icon{background:#263852}
+:root[data-theme="dark"] #app :is(.file-drop b,.expert-panel-tabs button,.offers-view .suitable){color:var(--ink)}
+:root[data-theme="dark"] #app .verify-details .privacy-note{background:var(--ui-field)}
+:root[data-theme="dark"] #app :is(.verify-details .privacy-note,.quote .rating .muted,.create-flow .optional){color:var(--muted)!important}
+:root[data-theme="dark"] #app .offers-view .suitable{background:var(--ui-field)}
+:root[data-theme="dark"] #app .offers-view .suitable ul{color:var(--muted)}
+:root[data-theme="dark"] #app .conversation-log{background:var(--bg)}
+:root[data-theme="dark"] #app :is(.conversation-help,.conversation-limit,.conversation-empty){color:var(--muted)}
+:root[data-theme="dark"] #app .conversation-notice{background:var(--ui-field);color:var(--muted)}
+
+:root[data-theme="dark"] #app :is(.customer-home .hero-copy .eyebrow,.verify-details summary i){background:var(--ui-field)}
+:root[data-theme="dark"] #app .offers-view .offers-top .offers-back{color:var(--ink)!important}
 </style>
 </head>
 <body>
@@ -1903,10 +2392,10 @@ function directoryExpertCard(id){
 }
 function vExperts(){
   const ids=directoryExpertIds();
-  return `<button class="page-back" data-a="closeExperts">← Ana sayfaya dön</button>
+  return `<div class="service-page expert-directory-page"><button class="page-back" data-a="closeExperts">← Ana sayfaya dön</button>
     <section class="experts-head"><span class="section-kicker">Uzmanları keşfet</span><h1>Doğru uzmanı daha kolay bul.</h1><p>Hizmet alanı, tamamlanan işler ve doğrulama bilgilerine göz at. Teklif almak için ilan oluşturman yeterli.</p></section>
     <div class="expert-filter-row"><button data-a="expertFilter" data-v="hepsi" aria-pressed="${S.expertFilter==='hepsi'}">Tümü</button>${Object.entries(KAT).map(([k,v])=>`<button data-a="expertFilter" data-v="${k}" aria-pressed="${S.expertFilter===k}">${esc(v.ad)}</button>`).join('')}</div>
-    <div class="expert-directory">${ids.length?ids.map(directoryExpertCard).join(''):'<div class="empty pro-empty"><span>⌕</span><h3>Bu alanda profil görünmüyor</h3><p>Başka bir hizmet seçebilir veya ilan vererek uzmanlardan teklif bekleyebilirsin.</p></div>'}</div>`;
+    <div class="expert-directory">${ids.length?ids.map(directoryExpertCard).join(''):'<div class="empty pro-empty"><span>⌕</span><h3>Bu alanda profil görünmüyor</h3><p>Başka bir hizmet seçebilir veya ilan vererek uzmanlardan teklif bekleyebilirsin.</p></div>'}</div></div>`;
 }
 function proCard(id){const p=prof(id),st=stat(id),sv=p.services||[],ar=(p.service_districts&&p.service_districts.length?p.service_districts:p.service_areas)||[];const complete=!!(p.bio&&sv.length&&p.service_city);const loc=p.service_city?[p.service_city,...ar.slice(0,3)]:ar.slice(0,3);const fullVerified=!!(p.identity_verified&&p.vocational_verified);const trust=(fullVerified?'<span class="badge verified-pro">✓ Doğrulanmış Uzman</span>':'')+(!fullVerified&&p.identity_verified?'<span class="badge">✓ Kimlik doğrulandı</span>':'')+(!fullVerified&&p.vocational_verified?'<span class="badge">✓ Mesleki belge doğrulandı</span>':'')+(p.business_verified?'<span class="badge">✓ İşletme doğrulandı</span>':'')+(p.phone_verified?'<span class="badge">✓ Telefon doğrulandı</span>':'');const safety=id!==uid()?`<div class="foot"><button class="link" data-a="reportUser" data-v="${id}">Şikâyet et</button><button class="link" data-a="blockUser" data-v="${id}">Engelle</button></div>`:'';return `<div class="procard expert-card"><div class="protop expert-head"><div class="proavatar expert-avatar">${esc(initials(p.name))}</div><div><strong>${esc(p.name)}</strong><div class="muted small">${esc(p.title||'Servis ve tamir')}</div></div></div>${p.bio?`<p class="probio">${esc(p.bio)}</p>`:''}<div class="badges expert-badges">${st.rating!=null?`<span class="badge">★ ${Number(st.rating).toFixed(1)} · ${st.jobs} tamamlanan iş</span>`:`<span class="badge">Yeni uzman</span>`}${trust}${sv.slice(0,4).map(x=>`<span class="badge">${esc(x)}</span>`).join('')}${loc.map(x=>`<span class="badge">📍 ${esc(x)}</span>`).join('')}${complete?'<span class="badge">✓ Profil tamamlandı</span>':''}</div>${safety}</div>`}
 const PAYMENTS={
@@ -1999,13 +2488,12 @@ function paymentPlan(l,q,pc,side){
   const tx=D.paymentRecords&&D.paymentRecords[l.id];
   if(tx){
     extra+='<div class="payment-ledger"><span>Ödeme durumu</span><b>'+esc(PAYMENT_STATUS[tx.status]||tx.status)+'</b></div>';
-    if(Number(tx.provider_amount)>0){
-      extra+='<div><span>Kart/online tahsilat</span><b>'+tl(tx.provider_amount)+'</b></div>';
-      if(side==='customer'&&!['paid','refunded','cancelled'].includes(tx.status)){
-        extra+='<button class="btn block pay-start-btn" data-a="startCardPayment" data-v="'+l.id+'">Kartla ödemeye geç</button>';
-      }
+    const amounts=(Number(tx.provider_amount)>0?'<div><span>Kart için planlanan tutar</span><b>'+tl(tx.provider_amount)+'</b></div>':'')
+      +(Number(tx.cash_amount)>0?'<div><span>Nakit kısmı</span><b>'+tl(tx.cash_amount)+'</b></div>':'');
+    if(amounts)extra+='<details class="payment-breakdown"><summary>Kayıtlı tutar ayrıntıları</summary>'+amounts+'</details>';
+    if(Number(tx.provider_amount)>0&&side==='customer'&&!['paid','refunded','cancelled'].includes(tx.status)){
+      extra+='<button class="btn block pay-start-btn" data-a="startCardPayment" data-v="'+l.id+'" disabled>Kart tahsilatı beta döneminde kapalı</button>';
     }
-    if(Number(tx.cash_amount)>0)extra+='<div><span>Nakit kısmı</span><b>'+tl(tx.cash_amount)+'</b></div>';
   }
   if(pc.method==='deposit_cash'){
     extra+='<div><span>Ön ödeme (%'+dp+')</span><b>'+tl(deposit)+'</b></div><div><span>İş sonunda nakit</span><b>'+tl(cashDue)+'</b></div>';
@@ -2014,7 +2502,7 @@ function paymentPlan(l,q,pc,side){
     extra+='<div class="payment-notice">Kart tercihi ödeme planına kaydedildi. Beta döneminde kart tahsilatı aktif değildir.</div>';
   }
   if(side==='customer'&&d<=0&&l.status==='chosen'){
-    extra+='<div class="promo-box selected-promo"><label class="lb" for="selected-promo-'+l.id+'">Promosyon kodun var mı?</label><div class="promo-row"><input class="in" id="selected-promo-'+l.id+'" placeholder="Örn. DEMO500" autocomplete="off" autocapitalize="characters"><button type="button" class="btn ghost sm" data-a="applySelectedPromo" data-v="'+l.id+'">Uygula</button></div></div>';
+    extra+='<div class="promo-box selected-promo"><label class="lb" for="selected-promo-'+l.id+'">Promosyon kodun var mı?</label><div class="promo-row"><input class="in" id="selected-promo-'+l.id+'" placeholder="Promosyon kodu" autocomplete="off" autocapitalize="characters"><button type="button" class="btn ghost sm" data-a="applySelectedPromo" data-v="'+l.id+'">Uygula</button></div></div>';
   }
   if(pc.method==='cash'||pc.method==='deposit_cash'){
     const mine=side==='customer'?pc.customer_cash_confirmed_at:pc.pro_cash_confirmed_at;
@@ -2029,12 +2517,12 @@ function paymentPlan(l,q,pc,side){
       extra+='<button class="btn ghost sm cash-confirm" data-a="confirmCash" data-v="'+l.id+'" '+(mine?'disabled':'')+'>'+verb+'</button>';
     }
   }
-  return '<section class="payment-summary"><div><span>Hizmet bedeli</span><b>'+tl(q.price)+'</b></div>'+(d>0?'<div class="discount"><span>Promosyon indirimi</span><b>-'+tl(d)+'</b></div>':'')+'<div class="total"><span>Ödenecek tutar</span><b>'+tl(final)+'</b></div><p>'+pm.icon+' '+esc(pm.label)+(pc.method==='deposit_cash'&&pc.deposit_percent?' · %'+pc.deposit_percent+' ön ödeme':'')+'</p>'+extra+'</section>';
+  return '<section class="payment-summary service-payment"><h2>Ödeme planı</h2><div><span>Hizmet bedeli</span><b>'+tl(q.price)+'</b></div>'+(d>0?'<div class="discount"><span>Promosyon indirimi</span><b>-'+tl(d)+'</b></div>':'')+'<div class="total"><span>Ödenecek tutar</span><b>'+tl(final)+'</b></div><p>'+pm.icon+' '+esc(pm.label)+(pc.method==='deposit_cash'&&pc.deposit_percent?' · %'+pc.deposit_percent+' ön ödeme':'')+'</p>'+extra+'</section>';
 }
 function paymentChoicePanel(l,q){
   if(!l||!q)return '';
   const methods=quotePayments(q),selected=S.payPick[q.id];
-  return `<section class="payment-summary"><div><span>Uzman seçildi</span><b>✓ ${esc(prof(q.pro).name)}</b></div><div class="customer-pay"><b>Ödeme yöntemini seç</b><p class="hint">Uzmanın kabul ettiği bir yöntemi seçebilirsin. Beta döneminde kart ve ön ödeme tercihleri yalnızca ödeme planına kaydedilir.</p><div class="customer-pay-options">${methods.map(m=>`<button type="button" class="pay-choice" data-a="choosePay" data-v="${q.id}|${m}" aria-pressed="${selected===m}">${PAYMENTS[m].icon} ${PAYMENTS[m].label}${m==='deposit_cash'&&quoteDeposit(q)?` · %${quoteDeposit(q)} ön ödeme`:''}</button>`).join('')}</div></div><button class="btn block" id="save-payment-${l.id}" data-a="savePayment" data-v="${l.id}">Ödeme tercihini kaydet</button></section>`;
+  return `<section class="payment-summary service-payment"><div><span>Seçilen uzman</span><b>✓ ${esc(prof(q.pro).name)}</b></div><div class="customer-pay"><h2>Ödeme yöntemini seç</h2><p class="hint">Uzmanın kabul ettiği bir yöntemi seçebilirsin. Beta döneminde kart ve ön ödeme tercihleri yalnızca ödeme planına kaydedilir.</p><div class="customer-pay-options">${methods.map(m=>`<button type="button" class="pay-choice" data-a="choosePay" data-v="${q.id}|${m}" aria-pressed="${selected===m}">${PAYMENTS[m].icon} ${PAYMENTS[m].label}${m==='deposit_cash'&&quoteDeposit(q)?` · %${quoteDeposit(q)} ön ödeme`:''}</button>`).join('')}</div></div><button class="btn block" id="save-payment-${l.id}" data-a="savePayment" data-v="${l.id}">Ödeme tercihini kaydet</button></section>`;
 }
 const myQuote=id=>Object.values(D.quotes).find(q=>q.listing_id===id&&q.pro===uid());
 const chosenQ=l=>l.chosen_quote?D.quotes[l.chosen_quote]:null;
@@ -2418,19 +2906,19 @@ function workflowCard(l){
 }
 
 function vSetup(){
-  return `<div class="pagehead"><h1>Bağlantı ayarı</h1></div>
+  return `<div class="service-page setup-page"><div class="pagehead"><h1>Bağlantı ayarı</h1></div>
   <p class="lede">Uygulama henüz veritabanına bağlı değil. Supabase proje adresini ve genel (anon veya publishable) anahtarını gir.</p>
   <div class="field two">
     <div><label class="lb" for="s-url">Proje adresi</label><input class="in" id="s-url" inputmode="url" autocapitalize="off" autocomplete="off" placeholder="https://xxxx.supabase.co" value="${esc(S.cfgDraft.url)}"></div>
     <div><label class="lb" for="s-key">Genel anahtar</label><input class="in" id="s-key" autocapitalize="off" autocomplete="off" placeholder="eyJ... veya sb_publishable_..." value="${esc(S.cfgDraft.key)}"></div>
   </div>
   <button class="btn block" data-a="saveCfg">Kaydet</button>
-  <p class="muted small">Gizli (service_role veya secret) anahtarı asla girme.</p>`;
+  <p class="muted small">Gizli (service_role veya secret) anahtarı asla girme.</p></div>`;
 }
 function vGuest(){
   if(S.guestCat&&KAT[S.guestCat]){
     const v=KAT[S.guestCat];
-    return `<button class="link" data-a="guestBack">← Tüm hizmetler</button><section class="create-head"><span class="eyebrow">${esc(v.grup)}</span><h1>${iconFor(S.guestCat)} ${esc(v.ad)}</h1><p>İhtiyacına uygun hizmeti seç, detayları incele. İlan vermek istediğinde ücretsiz hesap açabilirsin.</p></section><div class="field create-card"><h2>Hangi hizmete ihtiyacın var?</h2><div class="chips">${v.sorunlar.map(x=>`<button class="chip" data-a="guestService" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div></div><section class="trustbox"><div class="trusticon">✓</div><div><h3>${esc(v.ad)} için teklif al</h3><p>İşini anlat, uygun uzmanlardan gelen teklifleri karşılaştır.</p></div></section><button class="btn block" data-a="requireAuth" data-v="newIlan">Bu hizmet için ilan ver</button>`;
+    return `<section class="service-page guest-service-page"><button class="page-back" data-a="guestBack">← Tüm hizmetler</button><section class="create-head"><span class="eyebrow">${esc(v.grup)}</span><h1>${iconFor(S.guestCat)} ${esc(v.ad)}</h1><p>İhtiyacına uygun hizmeti seç, detayları incele. İlan vermek istediğinde ücretsiz hesap açabilirsin.</p></section><div class="field create-card"><h2>Hangi hizmete ihtiyacın var?</h2><div class="chips">${v.sorunlar.map(x=>`<button class="chip" data-a="guestService" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div></div><section class="trustbox"><div class="trusticon">✓</div><div><h3>${esc(v.ad)} için teklif al</h3><p>İşini anlat, uygun uzmanlardan gelen teklifleri karşılaştır.</p></div></section><button class="btn block" data-a="requireAuth" data-v="newIlan">Bu hizmet için ilan ver</button></section>`;
   }
   const q=(S.guestSearch||'').trim().toLocaleLowerCase('tr-TR');
   const matches=Object.entries(KAT).filter(([,v])=>!q||v.ad.toLocaleLowerCase('tr-TR').includes(q)||v.grup.toLocaleLowerCase('tr-TR').includes(q)||v.sorunlar.some(x=>x.toLocaleLowerCase('tr-TR').includes(q)));
@@ -2449,7 +2937,7 @@ function vGuest(){
 }
 function vAuth(){
   const up=S.authMode==='up',fromListing=S.pendingAction==='newIlan',confirming=!!S.confirmationEmail;
-  return `<div class="auth-shell">
+  return `<div class="auth-shell service-page">
     <button class="auth-back" data-a="backGuest">← <span>Hizmetlere dön</span></button>
     <section class="auth-welcome">
       <span class="auth-kicker">${confirming?'E-posta doğrulama':up?'Ücretsiz üyelik':'Hesabına eriş'}</span>
@@ -2458,7 +2946,7 @@ function vAuth(){
     </section>
     ${fromListing?`<div class="auth-context"><span>✓</span><div><b>İlanın hazır</b><small>${up?'Kayıttan':'Girişten'} sonra doğrudan ilan oluşturma adımına geçeceksin.</small></div></div>`:''}
     <section class="auth-card">
-      <div class="auth-card-title"><h2>${confirming?'Doğrulama bekleniyor':up?'Hesabını oluştur':'Giriş yap'}</h2><span>${confirming?'Güvenli kayıt':up?'1 dakikadan kısa sürer':'Tekrar hoş geldin'}</span></div>
+      <div class="auth-card-title"><h2>${confirming?'Doğrulama bekleniyor':up?'Hesabını oluştur':'Giriş yap'}</h2></div>
       ${confirming?`<div class="auth-confirm"><p>Bağlantı <strong>${esc(S.confirmationEmail)}</strong> adresine gönderildi.</p><ul><li>Gelen kutusu ile spam/junk klasörünü kontrol et.</li><li>Bağlantıya tıkladıktan sonra Tamİşim’e dönüp giriş yap.</li></ul>${S.authErr?`<div class="err" role="alert">${esc(S.authErr)}</div>`:''}${S.authInfo?`<div class="info">${esc(S.authInfo)}</div>`:''}<button class="auth-primary" data-a="resendConfirmation" ${S.resendBusy?'disabled':''}><b>${S.resendBusy?'Gönderiliyor…':'Doğrulama e-postasını tekrar gönder'}</b><span>↻</span></button><button class="auth-forgot" data-a="confirmationToLogin">Giriş ekranına dön</button></div>`:`
       <div class="auth-fields">
         ${up?`<label><span>Adın</span><input class="in" id="au-name" autocomplete="name" placeholder="Adın veya işletme adın" value="${esc(S.auth.name)}"></label>`:''}
@@ -2481,7 +2969,7 @@ function vAuth(){
 }
 function vSupport(){
   const rows=(S.supportRequests||[]).map(x=>`<article class="support-item"><div class="qhead"><div><h3>${esc(x.subject)}</h3><p class="muted small">${esc({general:'Genel',payment:'Ödeme',account:'Hesap',safety:'Güvenlik',technical:'Teknik',partner:'Partner'}[x.category]||x.category)} · ${ago(x.created_at)}</p></div><span class="pill ${x.status==='resolved'||x.status==='closed'?'good':x.status==='in_progress'?'amber':''}">${x.status==='open'?'Açık':x.status==='in_progress'?'İnceleniyor':x.status==='resolved'?'Çözüldü':'Kapalı'}</span></div><p class="qnote">${esc(x.message)}</p>${x.admin_response?`<div class="support-reply"><b>Tamİşim yanıtı</b><p>${esc(x.admin_response)}</p></div>`:''}</article>`).join('');
-  return `<button class="page-back" data-a="closeSupport">← Hesabıma dön</button>
+  return `<div class="service-page support-page"><button class="page-back" data-a="closeSupport">← Hesabıma dön</button>
   <div class="pagehead"><div><span class="eyebrow">Yardım</span><h1>Destek merkezi</h1><p class="lede">Teknik sorun, hesap, ödeme veya güvenlik konularını buradan iletebilirsin.</p></div><button class="btn ghost sm" data-a="supportRefresh">Yenile</button></div>
   <section class="legal-card support-form"><h2>Yeni destek talebi</h2>
     <label class="lb" for="sup-category">Konu</label><select class="in" id="sup-category"><option value="general">Genel</option><option value="technical">Teknik sorun</option><option value="account">Hesap</option><option value="payment">Ödeme</option><option value="safety">Güvenlik / şikâyet</option><option value="partner">Kurumsal partner</option></select>
@@ -2489,15 +2977,15 @@ function vSupport(){
     <label class="lb" for="sup-message">Açıklama</label><textarea class="in" id="sup-message" maxlength="2000" placeholder="Ne olduğunu ve mümkünse hangi ekranda olduğunu anlat...">${esc(S.supportDraft.message)}</textarea>
     <button class="btn block" data-a="sendSupport">Destek talebi gönder</button>
   </section>
-  <h2>Taleplerim</h2>${rows||'<div class="empty">Henüz destek talebin yok.</div>'}`;
+  <h2>Taleplerim</h2>${rows||'<div class="empty">Henüz destek talebin yok.</div>'}</div>`;
 }
 function vLegal(){
   const back=S.user?'Hesabıma dön':'Hizmetlere dön';
-  return `<button class="page-back" data-a="closeLegal">← ${back}</button>
+  return `<div class="service-page legal-page"><button class="page-back" data-a="closeLegal">← ${back}</button>
   <div class="pagehead"><div><span class="eyebrow">Tamİşim Beta</span><h1>Yasal bilgiler & gizlilik</h1><p class="lede">Bu metinler beta kullanımını açıklar. Şirket ve ödeme kuruluşu devreye alındığında ticari unvan, adres ve ödeme hükümleri güncellenecektir.</p></div></div>
   <section class="legal-card"><h2>Kullanım Koşulları</h2><p>Tamİşim, hizmet arayan kullanıcılarla bağımsız hizmet sağlayıcıları buluşturan bir platformdur. Kullanıcılar ilan, teklif ve mesaj içeriklerinden kendileri sorumludur.</p><p>Beta döneminde kart tahsilatı aktif değildir. Uygulamada görünen kart tutarları yalnızca ödeme planı ve entegrasyon testleri içindir.</p><p>Yanıltıcı ilan, sahte belge, taciz, hukuka aykırı hizmet veya başkasına ait bilgilerin izinsiz kullanımı yasaktır. Güvenlik ve kötüye kullanım halinde hesaplar kısıtlanabilir.</p></section>
   <section class="legal-card"><h2>Gizlilik / KVKK Bilgilendirmesi</h2><p>Hesap oluşturduğunda e-posta, profil bilgileri, ilan/teklif içeriği, mesajlar, işlem kayıtları ve yüklediğin belgeler hizmetin çalışması, güvenlik, destek ve kötüye kullanımın önlenmesi amaçlarıyla işlenebilir.</p><p>Doğrulama belgeleri müşterilere açık gösterilmez; inceleme amacıyla sınırlı tutulur. Ödeme sağlayıcısı bağlandığında kart verileri Tamİşim veritabanında tutulmayacak şekilde sağlayıcının güvenli altyapısı kullanılacaktır.</p><p>Verilerine erişim, düzeltme ve silme talebini hesap bölümündeki araçlardan iletebilirsin. Yasal saklama yükümlülükleri doğarsa bazı kayıtlar gereken süre boyunca tutulabilir.</p></section>
-  <section class="legal-card"><h2>Beta ve ödeme bilgilendirmesi</h2><p>Tamİşim şu anda test/beta aşamasındadır. Gerçek kart tahsilatı kapalıdır. Nakit işaretlemeleri tarafların beyanına dayalı işlem kayıtlarıdır.</p><p>Şirket ve ticari ödeme hesabı aktif olduğunda uygulamada işletme bilgileri, ödeme sağlayıcısı ve ilgili sözleşmeler güncellenecektir.</p></section>`;
+  <section class="legal-card"><h2>Beta ve ödeme bilgilendirmesi</h2><p>Tamİşim şu anda test/beta aşamasındadır. Gerçek kart tahsilatı kapalıdır. Nakit işaretlemeleri tarafların beyanına dayalı işlem kayıtlarıdır.</p><p>Şirket ve ticari ödeme hesabı aktif olduğunda uygulamada işletme bilgileri, ödeme sağlayıcısı ve ilgili sözleşmeler güncellenecektir.</p></section></div>`;
 }
 function vAccount(){
   const p=S.profile||{}, name=p.name||'Profilim';
@@ -2511,7 +2999,7 @@ function vAccount(){
     {ok:p.vocational_verified,title:'Mesleki belge',text:p.vocational_verified?'Doğrulandı':'Ustalık, MYK, diploma veya sertifika'},
     {ok:p.business_verified,title:'İşletme',text:p.business_verified?'Doğrulandı':'Vergi / işletme belgesi (isteğe bağlı)'}
   ].map(x=>`<div class="verify-status ${x.ok?'done':''}"><span class="verify-ico">${x.ok?'✓':'○'}</span><div><b>${x.title}</b><small>${x.text}</small></div></div>`).join('');
-  return `<div class="account-page">
+  return `<div class="account-page service-page">
     <section class="account-cover">
       <div class="account-avatar">${esc(initials(name))}</div>
       <div class="account-cover-copy"><span class="account-kicker">Profilim</span><h1>${esc(name)}</h1><p>${esc(p.title||'Profilini tamamlayarak daha güvenilir görün.')}</p></div>
@@ -2556,6 +3044,10 @@ function vAccount(){
 
     <section class="account-section palette-settings">
       <div class="account-section-head"><div><span>03</span><h2>Görünüm</h2></div><p>Uygulamanın renklerini seç.</p></div>
+      <div class="theme-settings" role="group" aria-label="Tema">
+        <button type="button" data-a="setTheme" data-v="light" aria-pressed="${theme==='light'}">Açık tema</button>
+        <button type="button" data-a="setTheme" data-v="dark" aria-pressed="${theme==='dark'}">Koyu tema</button>
+      </div>
       <div class="palette-options" role="group" aria-label="Renk kombinasyonu">
         <button type="button" class="palette-option" data-a="setPalette" data-v="blue-amber" aria-pressed="${S.palette==='blue-amber'}"><span class="palette-number">1</span><span class="palette-label"><b>Lacivert & turuncu</b><small>Canlı ve güven veren</small></span><span class="palette-swatches"><i></i><i></i></span><span class="palette-check" aria-hidden="true">✓</span></button>
         <button type="button" class="palette-option" data-a="setPalette" data-v="navy-teal" aria-pressed="${S.palette==='navy-teal'}"><span class="palette-number">2</span><span class="palette-label"><b>Lacivert & turkuaz</b><small>Sakin ve profesyonel</small></span><span class="palette-swatches"><i></i><i></i></span><span class="palette-check" aria-hidden="true">✓</span></button>
@@ -2586,7 +3078,7 @@ function vList(){
   <section class="home-section"><div class="home-title"><h2>Popüler hizmetler</h2><button class="link" data-a="newIlan">Tümünü gör</button></div><div class="homecats">${cats}</div></section>
   <div class="home-support-grid"><section class="trustbox"><div class="trusticon">✓</div><div><h3>Güvenle uzmanını seç</h3><p>Teklifleri, puanları, tamamlanan işleri ve doğrulama rozetlerini karşılaştır.</p></div></section>
   <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Hizmeti ve konumu belirt.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section></div>
-  <section class="myjobs" id="myjobs"><div class="home-title"><div><span class="section-kicker">Hesabım</span><h2>İlanlarım</h2></div><button class="btn sm" data-a="newIlan">+ İlan ver</button></div><div class="jobcount">${D.mine.length} ilan</div>${jobs}</section></div>`;
+  <section class="myjobs${S.navSection==='jobs'?' service-page jobs-page':''}" id="myjobs"><div class="home-title"><div><span class="section-kicker">Hesabım</span><h2>İlanlarım</h2></div><button class="btn sm" data-a="newIlan">+ İlan ver</button></div><div class="jobcount">${D.mine.length} ilan</div>${jobs}</section></div>`;
 }
 function detailPromptFor(k){
   const m={
@@ -2718,7 +3210,7 @@ function vDetail(){
 function vExpertOnboarding(){
   const d=S.expertDraft||(S.expertDraft=expertDraft(S.profile||{}));
   const editing=expertReady(S.profile||{});
-  return `<section class="account-section expert-onboarding">
+  return `<section class="service-page account-section expert-onboarding">
     <div class="account-section-head"><div><span>✓</span><h2>${editing?'Uzman profilini düzenle':'Uzman profilini tamamla'}</h2></div><p>Kategori ve şehir yeni iş yetkini belirler. İlçeler yalnızca yakın iş önceliği ve bildirimler içindir.</p></div>
     <div class="field"><label class="lb">Hizmet kategorileri</label><div class="chips">${Object.entries(KAT).map(([k,v])=>`<button type="button" class="chip" data-a="toggleExpertCategory" data-v="${k}" aria-pressed="${d.categories.includes(k)}">${esc(v.ad)}</button>`).join('')}</div><p class="hint">Bir veya birden fazla kategori seçebilirsin.</p></div>
     <div class="field two"><div><label class="lb" for="expert-city">Hizmet verdiğin şehir</label><select class="in" id="expert-city"><option value="">İl seç</option>${ILLER.map(x=>`<option value="${esc(x)}" ${d.city===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
@@ -2948,15 +3440,15 @@ function vAdmin(){
   const payGross=Number(payStats.net_volume||0);
   const payCommission=Number(payStats.commission||0);
   const payPending=Number(payStats.pending||0);
-  const payRows=payments.map(x=>{const cu=a.profiles[x.customer_id]||{},pr=a.profiles[x.pro_id]||{},at=latestAttempt[x.id];return `<article class="quote payment-admin"><div class="qhead"><div><h3>İş #${x.listing_id}</h3><p class="muted small">${esc(cu.name||'Müşteri')} → ${esc(pr.name||'Uzman')} · ${ago(x.created_at)}</p></div><span class="pill ${x.status==='paid'?'good':x.status==='failed'?'amber':''}">${esc(PAYMENT_STATUS[x.status]||x.status)}</span></div><div class="payment-admin-grid"><span>Net tutar <b>${tl(x.payable_amount)}</b></span><span>Kart/online <b>${tl(x.provider_amount||0)}</b></span><span>Nakit <b>${tl(x.cash_amount||0)}</b></span><span>Komisyon <b>${tl(x.platform_commission_amount||0)}</b></span></div><p class="muted small">${esc(PAYMENTS[x.method]&&PAYMENTS[x.method].label||x.method)}${x.provider?' · '+esc(x.provider):''}</p>${at?`<div class="attempt-note"><span>Son ödeme denemesi</span><b>${esc(at.status)}</b><small>${ago(at.created_at)}${at.error_message?' · '+esc(at.error_message):''}</small></div>`:''}</article>`}).join('');
+  const payRows=payments.map(x=>{const cu=a.profiles[x.customer_id]||{},pr=a.profiles[x.pro_id]||{},at=latestAttempt[x.id];return `<article class="quote payment-admin"><div class="qhead"><div><h3>İş #${x.listing_id}</h3><p class="muted small">${esc(cu.name||'Müşteri')} → ${esc(pr.name||'Uzman')} · ${ago(x.created_at)}</p></div><span class="pill ${x.status==='paid'?'good':x.status==='failed'?'amber':''}">${esc(PAYMENT_STATUS[x.status]||x.status)}</span></div><div class="payment-admin-grid"><span>Net tutar <b>${x.payable_amount==null?'—':tl(x.payable_amount)}</b></span><span>Kart/online <b>${tl(x.provider_amount||0)}</b></span><span>Nakit <b>${tl(x.cash_amount||0)}</b></span><span>Komisyon <b>${tl(x.platform_commission_amount||0)}</b></span></div><p class="muted small">${esc(PAYMENTS[x.method]&&PAYMENTS[x.method].label||x.method)}${x.provider?' · '+esc(x.provider):''}</p>${at?`<div class="attempt-note"><span>Son ödeme denemesi</span><b>${esc(at.status)}</b><small>${ago(at.created_at)}${at.error_message?' · '+esc(at.error_message):''}</small></div>`:''}</article>`}).join('');
   const supportRows=(a.support||[]).map(x=>{const p=a.profiles[x.user_id]||{};return `<article class="quote support-admin"><div class="qhead"><div><h3>${esc(x.subject)}</h3><p class="muted small">${esc(p.name||'Kullanıcı')} · ${ago(x.created_at)}</p></div><span class="pill ${x.status==='resolved'||x.status==='closed'?'good':x.status==='in_progress'?'amber':''}">${x.status}</span></div><p class="qnote">${esc(x.message)}</p>${x.admin_response?`<p class="muted small">Yanıt: ${esc(x.admin_response)}</p>`:''}<div class="foot">${x.status==='open'?'<button class="btn ghost sm" data-a="adminSupport" data-v="'+x.id+'|in_progress">İşleme al</button>':''}${!['resolved','closed'].includes(x.status)?'<button class="btn ghost sm" data-a="adminSupport" data-v="'+x.id+'|resolved">Yanıtla & çöz</button>':''}</div></article>`}).join('');
   const deletionRows=(a.deletions||[]).map(x=>{const p=a.profiles[x.user_id]||{};return `<article class="quote deletion-admin"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${ago(x.created_at)} · ${esc(x.status)}</p></div><span class="pill ${x.status==='completed'?'good':x.status==='pending'?'amber':''}">${x.status==='pending'?'Bekliyor':x.status==='processing'?'İşleniyor':x.status==='completed'?'Tamamlandı':'Reddedildi'}</span></div>${x.reason?`<p class="qnote">${esc(x.reason)}</p>`:''}${x.admin_note?`<p class="muted small">Not: ${esc(x.admin_note)}</p>`:''}<div class="foot">${x.status==='pending'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|processing">İşleme al</button>':''}${x.status!=='completed'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|completed">Tamamlandı</button>':''}${x.status==='pending'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|rejected">Reddet</button>':''}</div></article>`}).join('');
-  return `<button class="page-back" data-a="closeAdmin">← Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}
+  return `<div class="service-page operations-page"><button class="page-back" data-a="closeAdmin">← Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}
   <h2>Ödeme operasyonu</h2><div class="field payment-admin-summary"><div><span>Kayıtlı ödeme</span><b>${Number(payStats.payments||payments.length)}</b></div><div><span>Bekleyen</span><b>${payPending}</b></div><div><span>Net hacim</span><b>${tl(payGross)}</b></div><div><span>Tahmini komisyon</span><b>${tl(payCommission)}</b></div></div>${payRows||'<div class="empty">Henüz ödeme kaydı yok.</div>'}
   <h2>Kurumsal partnerler</h2><div class="field partner-form"><div class="two"><div><label class="lb" for="partner-name">Şirket adı</label><input class="in" id="partner-name" placeholder="Örn. Koçtaş"></div><div><label class="lb" for="partner-slug">Kısa ad</label><input class="in" id="partner-slug" placeholder="koctas" autocapitalize="off"></div></div>${partnerCategoryPicker('partner-new',[],false)}<button class="btn partner-add-btn" data-a="addPartner">Partner ekle</button></div>${partners||'<div class="empty">Henüz kurumsal partner yok.</div>'}
   <h2>Destek talepleri</h2>${supportRows||'<div class="empty">Destek talebi yok.</div>'}
   <h2>Hesap silme talepleri</h2>${deletionRows||'<div class="empty">Açık hesap silme talebi yok.</div>'}
-  <h2>Belge doğrulama</h2>${vers||'<div class="empty">Doğrulama başvurusu yok.</div>'}<h2>Şikâyetler</h2>${rows||'<div class="empty">Şikâyet kaydı yok.</div>'}`;
+  <h2>Belge doğrulama</h2>${vers||'<div class="empty">Doğrulama başvurusu yok.</div>'}<h2>Şikâyetler</h2>${rows||'<div class="empty">Şikâyet kaydı yok.</div>'}</div>`;
 }
 async function loadAdmin(){
   if(!S.isAdmin)return;
@@ -2984,7 +3476,7 @@ function vPartnerPanel(){
   const money=`<div class="field partner-portal-money"><div><span>İş hacmi</span><b>${tl(d.gross_volume||0)}</b></div><div><span>Toplam indirim</span><b>${tl(d.discount_total||0)}</b></div><div><span>Tahmini Tamİşim komisyonu</span><b>${tl(d.commission_estimate||0)}</b></div><div><span>Partner kampanya katkısı</span><b>${tl(d.partner_promo_contribution||0)}</b></div></div>`;
   const rows=jobs.map(j=>`<article class="quote partner-job"><div class="qhead"><div><h3>${esc((j.problems||[]).join(', ')||verifyCategoryLabel(j.category))}</h3><p class="muted small">${esc(j.external_order_ref||'Referans yok')} · ${esc([j.district,j.city].filter(Boolean).join(', '))}</p></div><span class="pill ${j.status==='done'?'good':j.status==='chosen'?'amber':''}">${j.status==='done'?'Tamamlandı':j.status==='chosen'?'Uzman seçildi':'Açık'}</span></div><div class="partner-job-meta"><span>${j.chosen_price?tl(j.chosen_price):'—'}</span>${Number(j.discount_amount)>0?`<span>İndirim: -${tl(j.discount_amount)}</span>`:''}</div></article>`).join('');
   const partnerRow=(D.partners||{})[x.partner_id]||{};
-  return `<button class="partner-back" data-a="closePartnerPanel"><span class="partner-back-ico">←</span><span><b>Hesabıma dön</b><small>Profil ve hesap ayarlarına geri git</small></span></button><div class="pagehead partner-pagehead"><div><span class="section-kicker">Kurumsal partner</span><h1>${esc(x.partner_name||'Partner paneli')}</h1><p>@${esc(x.partner_slug||'')} · ${esc(x.member_role||'viewer')}</p><div class="partner-category-badges panel">${partnerCategoryBadges(partnerRow)}</div></div><button class="btn ghost sm" data-a="partnerRefresh">Yenile</button></div>${cards}${money}<h2>Yönlendirilen işler</h2>${rows||'<div class="empty">Henüz partner işi yok.</div>'}`;
+  return `<div class="service-page partner-page"><button class="partner-back" data-a="closePartnerPanel"><span class="partner-back-ico">←</span><span><b>Hesabıma dön</b><small>Profil ve hesap ayarlarına geri git</small></span></button><div class="pagehead partner-pagehead"><div><span class="section-kicker">Kurumsal partner</span><h1>${esc(x.partner_name||'Partner paneli')}</h1><p>@${esc(x.partner_slug||'')} · ${esc(x.member_role||'viewer')}</p><div class="partner-category-badges panel">${partnerCategoryBadges(partnerRow)}</div></div><button class="btn ghost sm" data-a="partnerRefresh">Yenile</button></div>${cards}${money}<h2>Yönlendirilen işler</h2>${rows||'<div class="empty">Henüz partner işi yok.</div>'}</div>`;
 }
 async function loadPartnerPanel(){
   if(!S.partnerCtx)return;
@@ -2995,7 +3487,7 @@ async function loadPartnerPanel(){
 function vNotifications(){
   const ns=D.notifications||[], unread=ns.filter(n=>!n.read_at).length;
   const rows=ns.map(n=>`<article class="notif notif-card ${n.read_at?'':'unread'}"><div class="notif-dot">${n.read_at?'✓':'•'}</div><div class="notif-content"><div class="notif-title"><h3>${esc(n.title)}</h3><span>${ago(n.created_at)}</span></div><p>${esc(n.body)}</p>${n.listing_id?`<button class="notif-link" data-a="openNotification" data-v="${n.id}">İlanı görüntüle →</button>`:''}</div></article>`).join('');
-  return `<button class="page-back" data-a="closeNotifications">← Ana sayfaya dön</button><div class="notification-head"><div><span class="section-kicker">Tamİşim</span><h1>Bildirimler</h1><p>${unread?unread+' okunmamış bildirimin var.':'Yeni bildirimin bulunmuyor.'}</p></div>${unread?'<button class="btn ghost sm" data-a="readAll">Tümünü okundu yap</button>':''}</div><div class="notification-list">${rows||'<div class="empty notif-empty"><span>🔔</span><h3>Şimdilik sessiz</h3><p>Yeni teklif, mesaj ve iş gelişmeleri burada görünecek.</p></div>'}</div>`;
+  return `<div class="service-page notifications-page"><button class="page-back" data-a="closeNotifications">← Ana sayfaya dön</button><div class="notification-head"><div><span class="section-kicker">Tamİşim</span><h1>Bildirimler</h1><p>${unread?unread+' okunmamış bildirimin var.':'Yeni bildirimin bulunmuyor.'}</p></div>${unread?'<button class="btn ghost sm" data-a="readAll">Tümünü okundu yap</button>':''}</div><div class="notification-list">${rows||'<div class="empty notif-empty"><span>🔔</span><h3>Şimdilik sessiz</h3><p>Yeni teklif, mesaj ve iş gelişmeleri burada görünecek.</p></div>'}</div></div>`;
 }
 
 /* ---------- çizim ---------- */
@@ -3030,22 +3522,23 @@ function upd(){
   submit.disabled=sending||!priceValid||!hasPayment;
 }
 function render(){
+  const filterScroll=$('.expert-filter-row')?.scrollLeft;
   const act=document.activeElement;
   const id=act&&act.id,val=act&&act.value;let ss=null;
   try{ss=act.selectionStart}catch(e){}
   let h;
   if(S.setup)h=vSetup();
-  else if(S.loading)h=`<section class="boot-skeleton" aria-busy="true" aria-label="Tamİşim yükleniyor">
+  else if(S.loading)h=`<section class="boot-skeleton service-page" aria-busy="true" aria-label="Tamİşim yükleniyor">
   <div class="sk-hero"><span class="sk-line sk-kicker"></span><span class="sk-line sk-title"></span><span class="sk-line sk-title short"></span><span class="sk-line sk-copy"></span><span class="sk-search"></span></div>
   <div class="sk-section"><div class="sk-line sk-heading"></div><div class="sk-grid"><span></span><span></span><span></span><span></span></div></div>
   <p class="sk-status"><i></i> Tamİşim hazırlanıyor…</p>
 </section>`;
-  else if(S.bootError)h='<div class="fatal-state"><div class="fatal-icon">!</div><h1>Bağlantı kurulamadı</h1><p>'+esc(S.bootError)+'</p><button class="btn" data-a="retryBoot">Tekrar dene</button></div>';
-  else if(S.recovery)h='<div class="pagehead"><h1>Yeni şifre belirle</h1></div><p class="lede">Hesabın için yeni bir şifre oluştur.</p><div class="field"><label class="lb" for="au-pass">Yeni şifre</label><input class="in" id="au-pass" type="password" autocomplete="new-password" placeholder="En az 8 karakter" value="'+esc(S.auth.pass)+'"></div>'+(S.authErr?'<div class="err" role="alert">'+esc(S.authErr)+'</div>':'')+'<button class="btn block" data-a="setNewPass">Şifreyi güncelle</button>';
+  else if(S.bootError)h='<div class="fatal-state service-page"><div class="fatal-icon">!</div><h1>Bağlantı kurulamadı</h1><p>'+esc(S.bootError)+'</p><button class="btn" data-a="retryBoot">Tekrar dene</button></div>';
+  else if(S.recovery)h='<section class="service-page recovery-page"><div class="pagehead"><h1>Yeni şifre belirle</h1></div><p class="lede">Hesabın için yeni bir şifre oluştur.</p><div class="field"><label class="lb" for="au-pass">Yeni şifre</label><input class="in" id="au-pass" type="password" autocomplete="new-password" placeholder="En az 8 karakter" value="'+esc(S.auth.pass)+'"></div>'+(S.authErr?'<div class="err" role="alert">'+esc(S.authErr)+'</div>':'')+'<button class="btn block" data-a="setNewPass">Şifreyi güncelle</button></section>';
   else if(S.page==='support')h=vSupport();
   else if(S.page==='legal')h=vLegal();
   else if(!S.user)h=S.guestAuth?vAuth():(S.view==='new'&&S.draft?vNew():vGuest());
-  else if((S.profile||{}).account_status==='suspended')h='<div class="pagehead"><h1>Hesap askıya alındı</h1></div><p class="lede">Bu hesap moderasyon nedeniyle geçici olarak kısıtlandı.</p><button class="btn ghost" data-a="logout">Çıkış yap</button>';
+  else if((S.profile||{}).account_status==='suspended')h='<div class="service-page"><div class="pagehead"><h1>Hesap askıya alındı</h1></div><p class="lede">Bu hesap moderasyon nedeniyle geçici olarak kısıtlandı.</p><button class="btn ghost" data-a="logout">Çıkış yap</button></div>';
   else if(S.page==='account')h=vAccount();
   else if(S.page==='notifications')h=vNotifications();
   else if(S.page==='experts')h=vExperts();
@@ -3054,6 +3547,8 @@ function render(){
   else if(S.role==='musteri')h=S.view==='new'?vNew():S.view==='detail'?vDetail():(S.view==='activejob'||S.view==='appointment')?vActiveJob():vList();
   else h=S.quoteFor?vQuote():(S.view==='prodetail'||S.view==='appointment')?vActiveJob():vUsta();
   $('#app').innerHTML=h;
+  const expertFilters=$('.expert-filter-row');
+  if(expertFilters&&filterScroll!=null)expertFilters.scrollLeft=filterScroll;
   document.body.classList.toggle('home-shell-active',!!document.querySelector('#app > .home-shell'));
   const signed=!!(S.user&&!S.setup&&!S.loading);
   $('#hdr-r').hidden=!signed;
@@ -3088,7 +3583,7 @@ function render(){
 
 /* ---------- eylemler ---------- */
 const NET=new Set(['experts','expertCategory','saveExpertProfile','sendSupport','supportRefresh','savePartnerCategories','adminSupport','adminDeletion','requestDeletion','startCardPayment','applySelectedPromo','savePayment','proposeAppointment','acceptAppointment','advanceWorkflow','submitReview','sendPreMessage','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','createNext','publish','pick','send','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
-const KEEP=new Set(['menuToggle','menuClose','expertFilter','toggleExpertCategory','pickKat','toggleSorun','choosePay','togglePayment','zaman','sort','filter','pick','send','sendPreMessage','openPreThread','setReviewRating','tab','setPalette']);
+const KEEP=new Set(['menuToggle','menuClose','expertFilter','toggleExpertCategory','pickKat','toggleSorun','choosePay','togglePayment','zaman','sort','filter','pick','send','sendPreMessage','openPreThread','setReviewRating','tab','setPalette','setTheme']);
 const A={
   menuToggle(){S.menuOpen=!S.menuOpen},
   menuClose(){S.menuOpen=false},
@@ -3096,8 +3591,15 @@ const A={
     if(!Object.prototype.hasOwnProperty.call(PALETTE_COLORS,v))return;
     S.palette=v;
     document.documentElement.dataset.palette=v;
-    document.querySelector('meta[name="theme-color"]').content=PALETTE_COLORS[v];
+    syncAppearanceMeta();
     try{localStorage.setItem('tamisim_palette',v)}catch(e){}
+  },
+  setTheme(value){
+    if(value!=='light'&&value!=='dark')return;
+    theme=value;
+    appearanceRoot.dataset.theme=theme;
+    syncAppearanceMeta();
+    try{localStorage.setItem(THEME_KEY,theme)}catch(e){}
   },
   async experts(){S.menuOpen=false;S.expertsLoaded=false;await loadExpertDirectory();S.page='experts';S.expertFilter='hepsi'},
   async expertCategory(v){S.menuOpen=false;S.expertsLoaded=false;await loadExpertDirectory();S.page='experts';S.expertFilter=KAT[v]?v:'hepsi'},
