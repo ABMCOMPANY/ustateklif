@@ -1,11 +1,19 @@
 // Yalnız statik uygulama kabuğu önbelleğe alınır; kullanıcı/API cevapları alınmaz.
 const CACHE_PREFIX = 'tamisim-';
-const CACHE = `${CACHE_PREFIX}static-v54`;
-const SHELL = ['./', './index.html', './config.js', './turkiye-locations.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
-const STATIC_PATHS = new Set(SHELL.map((path) => new URL(path, self.registration.scope).pathname));
+const CACHE = `${CACHE_PREFIX}static-v55`;
+const SHELL = [
+  './', './index.html', './config.js', './turkiye-locations.js',
+  './manifest.webmanifest', './icon-192.png', './icon-512.png', './hero-person.png',
+];
+const SHELL_URLS = new Set(SHELL.map((path) => new URL(path, self.registration.scope).href));
+// index.html'deki sabit sürümlü tarayıcı betiği. Supabase API URL'leri dahil değildir.
+const SDK_URL = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  const assets = [...SHELL_URLS].map((url) =>
+    new Request(url, { cache: 'reload', credentials: 'omit', redirect: 'error' })
+  );
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(assets)).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (e) => {
@@ -16,27 +24,41 @@ self.addEventListener('activate', (e) => {
   );
 });
 
+async function loadSdk(req) {
+  try {
+    const cache = await caches.open(CACHE);
+    const cached = await cache.match(SDK_URL);
+    if (cached) return cached;
+
+    const res = await fetch(SDK_URL, {
+      mode: 'cors', credentials: 'omit', redirect: 'error', cache: 'no-store',
+    });
+    if (res.ok && /^(application|text)\/javascript(?:\s*;|$)/i.test(res.headers.get('content-type') || '')) {
+      await cache.put(SDK_URL, res.clone()).catch(() => {});
+      return res;
+    }
+    if (!res.ok) return res;
+  } catch (_) {
+    // A CORS or cache error must not prevent the browser's normal script request.
+  }
+  return fetch(req, { credentials: 'omit', cache: 'no-store' });
+}
+
 self.addEventListener('fetch', (e) => {
   const req = e.request;
-  const url = new URL(req.url);
-  // Supabase, ödeme ve tüm diğer dış/dinamik istekler doğrudan ağa gider.
-  if (req.method !== 'GET' || url.origin !== self.location.origin) return;
-  const isNavigation = req.mode === 'navigate';
-  const isStatic = STATIC_PATHS.has(url.pathname) && !url.search;
-  if (!isNavigation && !isStatic) return;
+  if (req.method !== 'GET' || req.headers.has('authorization')) return;
+  if (req.url === SDK_URL && req.destination === 'script') {
+    e.respondWith(loadSdk(req));
+    return;
+  }
+  // Yalnız açıkça listelenen statik URL'ler. Sorgulu URL'ler ve API yanıtları önbelleğe girmez.
+  if (!SHELL_URLS.has(req.url)) return;
   e.respondWith((async () => {
     try {
-      const res = await fetch(req, { cache: 'no-store' });
-      if (res.ok) {
-        const key = isNavigation ? new URL('./index.html', self.registration.scope).href : req;
-        const cache = await caches.open(CACHE);
-        await cache.put(key, res.clone());
-      }
-      return res;
+      return await fetch(req, { cache: 'no-store' });
     } catch (_) {
       const cache = await caches.open(CACHE);
-      if (isNavigation) return (await cache.match(new URL('./index.html', self.registration.scope).href)) || Response.error();
-      return (await cache.match(req)) || Response.error();
+      return (await cache.match(req.url)) || Response.error();
     }
   })());
 });
