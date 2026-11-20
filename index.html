@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="tr" data-theme="light" data-palette="blue-amber">
+<html lang="tr" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -17,67 +17,27 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <title>Tamİşim</title>
-<script>
-const PALETTE_COLORS=Object.freeze({'blue-amber':'#102747','navy-teal':'#173B61','indigo-sage':'#443D91'});
-let savedPalette='blue-amber';
-try{const value=localStorage.getItem('tamisim_palette');if(Object.prototype.hasOwnProperty.call(PALETTE_COLORS,value))savedPalette=value}catch(e){}
-const appearanceRoot=document.documentElement;
-const THEME_KEY='tamisim_theme';
-let theme='light';
-try{if(localStorage.getItem(THEME_KEY)==='dark')theme='dark'}catch(e){}
-appearanceRoot.dataset.theme=theme;
-appearanceRoot.dataset.palette=savedPalette;
-function syncAppearanceMeta(){
-  document.querySelector('meta[name="color-scheme"]').content=appearanceRoot.dataset.theme;
-  document.querySelector('meta[name="theme-color"]').content=appearanceRoot.dataset.theme==='dark'
-    ?'#0F1724'
-    :PALETTE_COLORS[appearanceRoot.dataset.palette];
-}
-syncAppearanceMeta();
-</script>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --brand-primary:#1457D9;--brand-ink:#102A56;--brand-muted:#6B7C93;
-  --brand-bg:#F7F9FC;--brand-tint:#EAF2FF;--brand-soft:#F7FAFF;--brand-field:#F8FBFF;
-  --brand-line:#E2E8F0;--brand-accent:#A66316;--brand-bright:#2879EB;
-  --brand-on-dark:#BFD5FF;
-  --brand-primary-rgb:20,87,217;--brand-ink-rgb:16,42,86;
-}
-:root[data-palette="navy-teal"]{
-  --brand-primary:#173B61;--brand-ink:#182D40;--brand-muted:#5D7180;
-  --brand-bg:#F4F8F8;--brand-tint:#E3F2F0;--brand-soft:#F0F7F6;--brand-field:#F5FAF9;
-  --brand-line:#DAE8E7;--brand-accent:#0F766E;--brand-bright:#24577C;
-  --brand-on-dark:#B7E4DD;
-  --brand-primary-rgb:23,59,97;--brand-ink-rgb:24,45,64;
-}
-:root[data-palette="indigo-sage"]{
-  --brand-primary:#443D91;--brand-ink:#24243A;--brand-muted:#696A7F;
-  --brand-bg:#F7F7FB;--brand-tint:#EEEAF8;--brand-soft:#F5F3FA;--brand-field:#FAF9FE;
-  --brand-line:#E5E3F1;--brand-accent:#547A61;--brand-bright:#625AA8;
-  --brand-on-dark:#D4E9D7;
-  --brand-primary-rgb:68,61,145;--brand-ink-rgb:36,36,58;
+  --brand-navy:#102747;
+  --brand-orange:#FF510B;
+  --brand-turquoise:#14B8A6;
+  --brand-white:#fff;
+  --brand-gray:#F4F6FA;
+  --brand-primary:var(--brand-navy);--brand-ink:var(--brand-navy);--brand-muted:#627087;
+  --brand-bg:var(--brand-gray);--brand-tint:#E9EFF6;--brand-soft:#F6F8FC;--brand-field:#FAFBFD;
+  --brand-line:#DFE5ED;--brand-accent:var(--brand-orange);--brand-bright:#193C64;
+  --brand-on-dark:#D9E5F4;--brand-primary-rgb:16,39,71;--brand-ink-rgb:16,39,71;
 }
 :root{
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
-  --bg:var(--brand-bg); --surface:#FFFFFF; --ink:var(--brand-ink); --muted:var(--brand-muted); --line:var(--brand-line);
+  --bg:var(--brand-bg); --surface:var(--brand-white); --ink:var(--brand-ink); --muted:var(--brand-muted); --line:var(--brand-line);
   --petrol:var(--brand-primary); --petrol-ink:#FFFFFF; --stub:var(--brand-primary); --tint:var(--brand-tint); --focus:var(--brand-primary);
   --amber:var(--brand-accent); --amber-ink:#FFFFFF; --amber-bg:var(--brand-tint); --amber-fg:var(--brand-primary);
   --good:#1D7448; --good-bg:#D9F0E4; --err-bg:#FBE0D8; --err-fg:#7A2410;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0B1418; --surface:#132026; --ink:#E7EFF2; --muted:#94A7B0; --line:#25383F;
-    --petrol:#5CC0D8; --petrol-ink:#06232B; --stub:#1A3A45; --tint:#183039; --focus:#F4B31D;
-    --amber-bg:#4A3A0E; --amber-fg:#FFE08A; --good:#5CCB98; --good-bg:#12362A; --err-bg:#4A1F14; --err-fg:#FFC3B0;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0B1418; --surface:#132026; --ink:#E7EFF2; --muted:#94A7B0; --line:#25383F;
-  --petrol:#5CC0D8; --petrol-ink:#06232B; --stub:#1A3A45; --tint:#183039; --focus:#F4B31D;
-  --amber-bg:#4A3A0E; --amber-fg:#FFE08A; --good:#5CCB98; --good-bg:#12362A; --err-bg:#4A1F14; --err-fg:#FFC3B0;
 }
 *,*::before,*::after{box-sizing:inherit}
 [hidden]{display:none!important}
@@ -88,9 +48,23 @@ button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .app{max-width:560px;margin:0 auto;padding:0 16px 48px}
 
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
-.brand{font:800 22px "Bricolage Grotesque",Figtree,sans-serif;letter-spacing:-.01em}
-.brand i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--amber);margin-left:3px}
+.top{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:5;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  min-height:56px;padding:5px 0;background:var(--brand-white);
+}
+.brand{
+  display:inline-flex;align-items:baseline;flex:0 0 auto;white-space:nowrap;
+  font:800 26px/1 "Bricolage Grotesque",Figtree,sans-serif;letter-spacing:-.04em;
+  color:var(--wordmark-ink,var(--brand-navy));
+}
+.brand span:nth-child(2){color:var(--brand-orange)}
+.brand i{
+  flex:none;align-self:baseline;width:.2em;height:.2em;margin-inline-start:.09em;
+  border-radius:50%;background:var(--brand-turquoise);
+}
+body:has(:is(.create-flow,.offers-view,.active-job,.expert-panel,.quote-form)) .top{position:relative;top:auto}
+
 .hdr-r{display:flex;align-items:center;gap:10px}
 .notifbtn{position:relative;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:18px}.notifbadge{position:absolute;right:-4px;top:-5px;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--amber);color:var(--amber-ink);font-size:11px;font-weight:800;display:grid;place-items:center;border:2px solid var(--bg)}.notif{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}.notif.unread{border-left:4px solid var(--amber)}.notif h3{font-size:16px;margin-bottom:3px}.notif p{margin:0;color:var(--muted);font-size:14px}.notifmeta{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px}
 .avatar{width:38px;height:38px;border-radius:50%;background:var(--amber);color:var(--amber-ink);border:0;font-weight:800;font-size:16px;cursor:pointer}
@@ -212,14 +186,12 @@ body.has-bottomnav main{padding-bottom:92px}.bottomnav button.active{color:var(-
 .quote{padding:18px}.quote .price{color:var(--brand-primary)}.quote.chosen{border:2px solid #37A875}.quote.dim{opacity:.58}.qhead h3{color:var(--brand-ink)}.rating{font-weight:700}
 .tabs{background:#EDF3FC;border-radius:14px;padding:4px}.tabs .chip{flex:1;border:0;background:transparent}.tabs .chip[aria-pressed="true"]{background:#fff;color:var(--brand-primary);box-shadow:0 3px 12px rgba(var(--brand-ink-rgb),.08)}
 
-
 .hero{padding:34px 0 12px}.hero .eyebrow{display:inline-block;font-size:13px;font-weight:800;color:var(--brand-primary);background:var(--brand-tint);padding:6px 10px;border-radius:999px;margin-bottom:12px}.hero h1{font-size:39px;line-height:1.03;letter-spacing:-.055em;color:var(--brand-ink)}.hero h1 em{font-style:normal;color:var(--brand-accent)}.hero p{color:var(--brand-muted);margin:14px 0 18px;max-width:380px}.searchbox{width:100%;min-height:58px;border:1px solid var(--brand-line);background:#fff;border-radius:18px;padding:0 18px;text-align:left;color:var(--brand-muted);box-shadow:0 9px 28px rgba(var(--brand-ink-rgb),.08);font-weight:600;cursor:pointer}.searchbox span{font-size:25px;color:var(--brand-primary);margin-right:8px}.home-section{margin:24px 0}.home-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:22px 0 12px}.home-title h2,.steps h2{font-size:21px}.home-title .link{margin:0}.homecats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.homecat{border:0;background:#fff;border-radius:17px;min-height:88px;padding:10px 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 6px 20px rgba(var(--brand-ink-rgb),.06);cursor:pointer}.homecat span{font-size:26px}.homecat b{font-size:11px;line-height:1.15;color:var(--brand-ink)}.trustbox{display:flex;gap:13px;align-items:flex-start;background:var(--brand-tint);border-radius:20px;padding:18px;margin:26px 0}.trusticon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--brand-primary);color:#fff;font-weight:800;flex:none}.trustbox h3{font-size:17px}.trustbox p{margin:4px 0 0;color:var(--brand-muted);font-size:14px}.steps{background:#fff;border-radius:22px;padding:19px;box-shadow:0 7px 24px rgba(var(--brand-ink-rgb),.06);margin:26px 0}.steps h2{margin-bottom:14px}.steps>div{display:flex;gap:12px;align-items:center;padding:9px 0}.steps>div>b{width:30px;height:30px;border-radius:10px;background:var(--brand-tint);color:var(--brand-primary);display:grid;place-items:center}.steps span{display:flex;flex-direction:column}.steps small{color:var(--brand-muted);margin-top:1px}
 @media(max-width:390px){.hero h1{font-size:35px}.homecats{grid-template-columns:repeat(4,1fr);gap:7px}.homecat{min-height:82px}.homecat b{font-size:10px}}
 
 body{background:linear-gradient(180deg,var(--brand-soft) 0,var(--brand-soft) 100%);padding-bottom:84px}
 .app{max-width:520px;padding:0 18px 72px}
-.top{background:rgba(247,249,252,.94);backdrop-filter:blur(14px);border-bottom:0;padding:15px 2px}
-.brand{font-size:25px;color:var(--brand-ink);letter-spacing:-.04em}.brand i{background:var(--brand-accent);width:8px;height:8px}
+
 .avatar,.notifbtn{background:#fff;border-color:var(--brand-line);box-shadow:0 4px 16px rgba(var(--brand-ink-rgb),.06)}
 .pagehead{margin-top:28px}.pagehead h1{font-size:32px;letter-spacing:-.04em;color:var(--brand-ink)}.lede{color:var(--brand-muted)}
 .btn{background:var(--brand-primary);color:#fff;border-radius:14px;box-shadow:0 8px 20px rgba(var(--brand-primary-rgb),.16)}
@@ -235,196 +207,86 @@ body{background:linear-gradient(180deg,var(--brand-soft) 0,var(--brand-soft) 100
 @media(max-width:420px){.seg button{padding:7px 10px}.pagehead h1{font-size:29px}.cats{grid-template-columns:repeat(3,1fr)}}
 
 .create-card{scroll-margin-top:90px}
-/* Tamİşim dark-mode contrast fix */
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]) .pro-tabs{background:var(--tint)}
-  :root:not([data-theme="light"]) .pro-tabs button{color:var(--muted)}
-  :root:not([data-theme="light"]) .pro-tabs button[aria-pressed="true"]{background:var(--surface);color:var(--petrol);box-shadow:none}
-  :root:not([data-theme="light"]) .pro-section-title h2,
-  :root:not([data-theme="light"]) .quote-head h1,
-  :root:not([data-theme="light"]) .notification-head h1,
-  :root:not([data-theme="light"]) .create-head h1,
-  :root:not([data-theme="light"]) .chathead h2,
-  :root:not([data-theme="light"]) .jobs-empty h3,
-  :root:not([data-theme="light"]) .notif-empty h3,
-  :root:not([data-theme="light"]) .pro-empty h3,
-  :root:not([data-theme="light"]) .notif-title h3,
-  :root:not([data-theme="light"]) .chatempty b{color:var(--ink)}
-  :root:not([data-theme="light"]) .pro-section-title p,
-  :root:not([data-theme="light"]) .quote-head p,
-  :root:not([data-theme="light"]) .notification-head p,
-  :root:not([data-theme="light"]) .create-head p,
-  :root:not([data-theme="light"]) .chathead p,
-  :root:not([data-theme="light"]) .jobs-empty p,
-  :root:not([data-theme="light"]) .notif-empty p,
-  :root:not([data-theme="light"]) .pro-empty p,
-  :root:not([data-theme="light"]) .notif-title span,
-  :root:not([data-theme="light"]) .notif-content p,
-  :root:not([data-theme="light"]) .chatempty,
-  :root:not([data-theme="light"]) .chatclosed,
-  :root:not([data-theme="light"]) .jobcount,
-  :root:not([data-theme="light"]) .pro-job-foot small{color:var(--muted)}
-  :root:not([data-theme="light"]) .notif-card,
-  :root:not([data-theme="light"]) .chathead,
-  :root:not([data-theme="light"]) .modern-send,
-  :root:not([data-theme="light"]) .modern-chat .m.usta,
-  :root:not([data-theme="light"]) .create-card{background:var(--surface);border-color:var(--line)}
-  :root:not([data-theme="light"]) .notif-card.unread{background:var(--tint);border-color:var(--petrol)}
-  :root:not([data-theme="light"]) .modern-chat,
-  :root:not([data-theme="light"]) .modern-chat .msgs{background:var(--bg)}
-  :root:not([data-theme="light"]) .modern-chat .m.usta{color:var(--ink)}
-  :root:not([data-theme="light"]) .modern-send .in,
-  :root:not([data-theme="light"]) .create-card .in{background:var(--bg)}
-  :root:not([data-theme="light"]) .create-card .uploadbox{background:var(--surface);border-color:var(--line);color:var(--petrol)}
-  :root:not([data-theme="light"]) .pro-job-foot,
-  :root:not([data-theme="light"]) .chathead,
-  :root:not([data-theme="light"]) .modern-send,
-  :root:not([data-theme="light"]) .chatclosed{border-color:var(--line)}
-  :root:not([data-theme="light"]) .bottomnav{background:rgba(19,32,38,.96);border-color:var(--line);box-shadow:0 12px 38px rgba(0,0,0,.35)}
-  :root:not([data-theme="light"]) .bottomnav button{color:var(--muted)}
-  :root:not([data-theme="light"]) .bottomnav button.active{color:var(--petrol)}
-  :root:not([data-theme="light"]) .bottomnav button.active:not(.navplus) span{background:var(--tint)}
-}
-:root[data-theme="dark"] .pro-tabs{background:var(--tint)}
-:root[data-theme="dark"] .pro-tabs button{color:var(--muted)}
-:root[data-theme="dark"] .pro-tabs button[aria-pressed="true"]{background:var(--surface);color:var(--petrol);box-shadow:none}
-:root[data-theme="dark"] .pro-section-title h2,:root[data-theme="dark"] .quote-head h1,:root[data-theme="dark"] .notification-head h1,:root[data-theme="dark"] .create-head h1,:root[data-theme="dark"] .chathead h2,:root[data-theme="dark"] .jobs-empty h3,:root[data-theme="dark"] .notif-empty h3,:root[data-theme="dark"] .pro-empty h3,:root[data-theme="dark"] .notif-title h3,:root[data-theme="dark"] .chatempty b{color:var(--ink)}
-:root[data-theme="dark"] .notif-card,:root[data-theme="dark"] .chathead,:root[data-theme="dark"] .modern-send,:root[data-theme="dark"] .modern-chat .m.usta,:root[data-theme="dark"] .create-card{background:var(--surface);border-color:var(--line)}
-:root[data-theme="dark"] .modern-chat,:root[data-theme="dark"] .modern-chat .msgs,:root[data-theme="dark"] .modern-send .in,:root[data-theme="dark"] .create-card .in{background:var(--bg)}
-:root[data-theme="dark"] .modern-chat .m.usta{color:var(--ink)}
-:root[data-theme="dark"] .bottomnav{background:rgba(19,32,38,.96);border-color:var(--line)}
-
 
 /* Tamİşim final contrast hardening */
 html{color-scheme:light}
-:root[data-theme="dark"]{color-scheme:dark}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){color-scheme:dark}
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]) .create-card h2,
-  :root:not([data-theme="light"]) .create-card h3,
-  :root:not([data-theme="light"]) .create-card label,
-  :root:not([data-theme="light"]) .detail-title,
-  :root:not([data-theme="light"]) .quotes-title,
-  :root:not([data-theme="light"]) .quote-card h3,
-  :root:not([data-theme="light"]) .quote-card strong{color:var(--ink)!important}
-  :root:not([data-theme="light"]) .create-card p,
-  :root:not([data-theme="light"]) .create-card small,
-  :root:not([data-theme="light"]) .detail-meta,
-  :root:not([data-theme="light"]) .quote-card p,
-  :root:not([data-theme="light"]) .quote-card small{color:var(--muted)!important}
-  :root:not([data-theme="light"]) input,
-  :root:not([data-theme="light"]) textarea,
-  :root:not([data-theme="light"]) select{color:var(--ink);background:var(--bg);border-color:var(--line)}
-  :root:not([data-theme="light"]) input::placeholder,
-  :root:not([data-theme="light"]) textarea::placeholder{color:var(--muted)!important;opacity:1}
-  :root:not([data-theme="light"]) .cat,
-  :root:not([data-theme="light"]) .problem{color:#f7fbff!important}
-}
-:root[data-theme="dark"] .create-card h2,
-:root[data-theme="dark"] .create-card h3,
-:root[data-theme="dark"] .create-card label,
-:root[data-theme="dark"] .detail-title,
-:root[data-theme="dark"] .quotes-title,
-:root[data-theme="dark"] .quote-card h3,
-:root[data-theme="dark"] .quote-card strong{color:var(--ink)!important}
-:root[data-theme="dark"] input,:root[data-theme="dark"] textarea,:root[data-theme="dark"] select{color:var(--ink);background:var(--bg);border-color:var(--line)}
-:root[data-theme="dark"] input::placeholder,:root[data-theme="dark"] textarea::placeholder{color:var(--muted)!important;opacity:1}
-:root[data-theme="dark"] .cat,:root[data-theme="dark"] .problem{color:#f7fbff!important}
-
 
 /* Tamİşim Android auto-dark final override */
-/* Android/Chrome may auto-dark individual controls even while the page stays light.
-   Keep Tamİşim light unless an explicit data-theme=dark is chosen. */
-:root:not([data-theme="dark"]){color-scheme:light!important}
-:root:not([data-theme="dark"]) .create-card h2,
-:root:not([data-theme="dark"]) .create-card h3,
-:root:not([data-theme="dark"]) .create-card label,
-:root:not([data-theme="dark"]) .quotes-title,
-:root:not([data-theme="dark"]) .quote-card h3,
-:root:not([data-theme="dark"]) .quote-card strong{color:#123568!important;opacity:1!important}
-:root:not([data-theme="dark"]) .create-card p,
-:root:not([data-theme="dark"]) .create-card small,
-:root:not([data-theme="dark"]) .quote-card p,
-:root:not([data-theme="dark"]) .quote-card small{color:var(--brand-muted)!important;opacity:1!important}
-:root:not([data-theme="dark"]) .cat,
-:root:not([data-theme="dark"]) .problem{background:#11252d!important;color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important}
-:root:not([data-theme="dark"]) .cat *,
-:root:not([data-theme="dark"]) .problem *{color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important}
-:root:not([data-theme="dark"]) input,
-:root:not([data-theme="dark"]) textarea,
-:root:not([data-theme="dark"]) select{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important;background:var(--brand-field)!important}
-:root:not([data-theme="dark"]) input::placeholder,
-:root:not([data-theme="dark"]) textarea::placeholder{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important;opacity:1!important}
-
-
-/* force-light-v3 */
-@media(prefers-color-scheme:dark){
-:root:not([data-theme=dark]) body{background:var(--brand-bg)!important;color:var(--brand-ink)!important}
-:root:not([data-theme=dark]) .create-card{background:#fff!important;border-color:var(--brand-line)!important}
-:root:not([data-theme=dark]) .create-head h1,:root:not([data-theme=dark]) .create-card h2,:root:not([data-theme=dark]) .create-card h3,:root:not([data-theme=dark]) .create-card label,:root:not([data-theme=dark]) .quotes-title{color:var(--brand-ink)!important}
-:root:not([data-theme=dark]) .create-head p,:root:not([data-theme=dark]) .create-card p,:root:not([data-theme=dark]) .create-card small{color:var(--brand-muted)!important}
-:root:not([data-theme=dark]) .cat,:root:not([data-theme=dark]) .problem{background:#fff!important;color:var(--brand-ink)!important;border-color:var(--brand-line)!important}
-:root:not([data-theme=dark]) .cat *,:root:not([data-theme=dark]) .problem *{color:var(--brand-ink)!important}
-:root:not([data-theme=dark]) .bottomnav{background:#fff!important;border-color:var(--brand-line)!important}
-:root:not([data-theme=dark]) .bottomnav button{color:var(--brand-muted)!important}
-:root:not([data-theme=dark]) .bottomnav button.active{color:var(--brand-primary)!important}
-}
+/* Use light native controls on Android as well. */
+:root[data-theme="light"]{color-scheme:light!important}
+:root[data-theme="light"] .create-card h2,
+:root[data-theme="light"] .create-card h3,
+:root[data-theme="light"] .create-card label,
+:root[data-theme="light"] .quotes-title,
+:root[data-theme="light"] .quote-card h3,
+:root[data-theme="light"] .quote-card strong{color:#123568!important;opacity:1!important}
+:root[data-theme="light"] .create-card p,
+:root[data-theme="light"] .create-card small,
+:root[data-theme="light"] .quote-card p,
+:root[data-theme="light"] .quote-card small{color:var(--brand-muted)!important;opacity:1!important}
+:root[data-theme="light"] .cat,
+:root[data-theme="light"] .problem{background:#11252d!important;color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important}
+:root[data-theme="light"] .cat *,
+:root[data-theme="light"] .problem *{color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important}
+:root[data-theme="light"] input,
+:root[data-theme="light"] textarea,
+:root[data-theme="light"] select{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important;background:var(--brand-field)!important}
+:root[data-theme="light"] input::placeholder,
+:root[data-theme="light"] textarea::placeholder{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important;opacity:1!important}
 
 /* contrast-fix-v4 */
-:root:not([data-theme="dark"]) .cat{background:#fff!important;color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
-:root:not([data-theme="dark"]) .cat *{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
-:root:not([data-theme="dark"]) .cat[aria-pressed="true"]{background:var(--brand-tint)!important;border-color:var(--brand-primary)!important}
-:root:not([data-theme="dark"]) .chip{background:#fff!important;color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important;border-color:var(--brand-line)!important}
-:root:not([data-theme="dark"]) .chip[aria-pressed="true"]{background:var(--brand-primary)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:var(--brand-primary)!important}
-:root:not([data-theme="dark"]) .uploadbox{background:var(--brand-field)!important;color:var(--brand-primary)!important;-webkit-text-fill-color:var(--brand-primary)!important}
-:root:not([data-theme="dark"]) .quote{background:#fff!important;color:var(--brand-ink)!important}
-:root:not([data-theme="dark"]) .quote .qhead h3,
-:root:not([data-theme="dark"]) .quote .rating,
-:root:not([data-theme="dark"]) .quote .qnote{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
-:root:not([data-theme="dark"]) .quote .sub{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
+:root[data-theme="light"] .cat{background:#fff!important;color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
+:root[data-theme="light"] .cat *{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
+:root[data-theme="light"] .cat[aria-pressed="true"]{background:var(--brand-tint)!important;border-color:var(--brand-primary)!important}
+:root[data-theme="light"] .chip{background:#fff!important;color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important;border-color:var(--brand-line)!important}
+:root[data-theme="light"] .chip[aria-pressed="true"]{background:var(--brand-primary)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:var(--brand-primary)!important}
+:root[data-theme="light"] .uploadbox{background:var(--brand-field)!important;color:var(--brand-primary)!important;-webkit-text-fill-color:var(--brand-primary)!important}
+:root[data-theme="light"] .quote{background:#fff!important;color:var(--brand-ink)!important}
+:root[data-theme="light"] .quote .qhead h3,
+:root[data-theme="light"] .quote .rating,
+:root[data-theme="light"] .quote .qnote{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
+:root[data-theme="light"] .quote .sub{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
 
 /* ticket-contrast-v5 */
-:root:not([data-theme="dark"]) .ticket .tbody{background:#fff!important;color:var(--brand-ink)!important}
-:root:not([data-theme="dark"]) .ticket .tbody h3,:root:not([data-theme="dark"]) .ticket .stretch{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
-:root:not([data-theme="dark"]) .ticket .note,:root:not([data-theme="dark"]) .ticket .meta{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
+:root[data-theme="light"] .ticket .tbody{background:#fff!important;color:var(--brand-ink)!important}
+:root[data-theme="light"] .ticket .tbody h3,:root[data-theme="light"] .ticket .stretch{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
+:root[data-theme="light"] .ticket .note,:root[data-theme="light"] .ticket .meta{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
 
 /* notifications-light-v6 */
-:root:not([data-theme="dark"]) .notification-head h1{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important;opacity:1!important}
-:root:not([data-theme="dark"]) .notification-head p{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
-:root:not([data-theme="dark"]) .notif-card{background:#fff!important;border-color:var(--brand-line)!important;color:var(--brand-ink)!important}
-:root:not([data-theme="dark"]) .notif-card.unread{background:var(--brand-soft)!important;border-color:var(--brand-line)!important}
-:root:not([data-theme="dark"]) .notif-title h3{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
-:root:not([data-theme="dark"]) .notif-title span,:root:not([data-theme="dark"]) .notif-content p{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
+:root[data-theme="light"] .notification-head h1{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important;opacity:1!important}
+:root[data-theme="light"] .notification-head p{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
+:root[data-theme="light"] .notif-card{background:#fff!important;border-color:var(--brand-line)!important;color:var(--brand-ink)!important}
+:root[data-theme="light"] .notif-card.unread{background:var(--brand-soft)!important;border-color:var(--brand-line)!important}
+:root[data-theme="light"] .notif-title h3{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
+:root[data-theme="light"] .notif-title span,:root[data-theme="light"] .notif-content p{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
 
 /* global-light-surface-v7 */
 /* Tamİşim currently ships as a light UI. Override Android auto-dark globally. */
 html{color-scheme:only light!important}
-:root:not([data-theme="dark"]) .pro-tabs{background:var(--brand-tint)!important}
-:root:not([data-theme="dark"]) .pro-tabs button{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
-:root:not([data-theme="dark"]) .pro-tabs button[aria-pressed="true"]{background:#fff!important;color:var(--brand-primary)!important;-webkit-text-fill-color:var(--brand-primary)!important}
-:root:not([data-theme="dark"]) .pro-section-title h2{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important;opacity:1!important}
-:root:not([data-theme="dark"]) .pro-section-title p{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important;opacity:1!important}
-:root:not([data-theme="dark"]) .pro-empty{background:#fff!important;border-color:var(--brand-line)!important}
-:root:not([data-theme="dark"]) .pro-empty h3{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
-:root:not([data-theme="dark"]) .pro-empty p{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
-:root:not([data-theme="dark"]) .notification-head h1{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
-:root:not([data-theme="dark"]) .notif-card{background:#fff!important}
+:root[data-theme="light"] .pro-tabs{background:var(--brand-tint)!important}
+:root[data-theme="light"] .pro-tabs button{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
+:root[data-theme="light"] .pro-tabs button[aria-pressed="true"]{background:#fff!important;color:var(--brand-primary)!important;-webkit-text-fill-color:var(--brand-primary)!important}
+:root[data-theme="light"] .pro-section-title h2{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important;opacity:1!important}
+:root[data-theme="light"] .pro-section-title p{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important;opacity:1!important}
+:root[data-theme="light"] .pro-empty{background:#fff!important;border-color:var(--brand-line)!important}
+:root[data-theme="light"] .pro-empty h3{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
+:root[data-theme="light"] .pro-empty p{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
+:root[data-theme="light"] .notification-head h1{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
+:root[data-theme="light"] .notif-card{background:#fff!important}
 
 /* expert-panel-light-v8 */
-:root:not([data-theme="dark"]) .pro-tabs{background:var(--brand-tint)!important}
-:root:not([data-theme="dark"]) .pro-tabs button{background:transparent!important;color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
-:root:not([data-theme="dark"]) .pro-tabs button[aria-pressed="true"]{background:#fff!important;color:var(--brand-primary)!important;-webkit-text-fill-color:var(--brand-primary)!important}
-:root:not([data-theme="dark"]) .pro-section-title,
-:root:not([data-theme="dark"]) .pro-section-title *{opacity:1!important}
-:root:not([data-theme="dark"]) .pro-section-title h2{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
-:root:not([data-theme="dark"]) .pro-section-title p{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
-:root:not([data-theme="dark"]) .profilters .chip{background:#fff!important;color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important;border-color:var(--brand-line)!important}
-:root:not([data-theme="dark"]) .profilters .chip[aria-pressed="true"]{background:var(--brand-primary)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:var(--brand-primary)!important}
-:root:not([data-theme="dark"]) .pro-empty{background:#fff!important;color:var(--brand-ink)!important;border:1px solid var(--brand-line)!important}
-:root:not([data-theme="dark"]) .pro-empty h3{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
-:root:not([data-theme="dark"]) .pro-empty p{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
+:root[data-theme="light"] .pro-tabs{background:var(--brand-tint)!important}
+:root[data-theme="light"] .pro-tabs button{background:transparent!important;color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
+:root[data-theme="light"] .pro-tabs button[aria-pressed="true"]{background:#fff!important;color:var(--brand-primary)!important;-webkit-text-fill-color:var(--brand-primary)!important}
+:root[data-theme="light"] .pro-section-title,
+:root[data-theme="light"] .pro-section-title *{opacity:1!important}
+:root[data-theme="light"] .pro-section-title h2{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
+:root[data-theme="light"] .pro-section-title p{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
+:root[data-theme="light"] .profilters .chip{background:#fff!important;color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important;border-color:var(--brand-line)!important}
+:root[data-theme="light"] .profilters .chip[aria-pressed="true"]{background:var(--brand-primary)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:var(--brand-primary)!important}
+:root[data-theme="light"] .pro-empty{background:#fff!important;color:var(--brand-ink)!important;border:1px solid var(--brand-line)!important}
+:root[data-theme="light"] .pro-empty h3{color:var(--brand-ink)!important;-webkit-text-fill-color:var(--brand-ink)!important}
+:root[data-theme="light"] .pro-empty p{color:var(--brand-muted)!important;-webkit-text-fill-color:var(--brand-muted)!important}
 
 /* guest-catalog-v17 */
 .guest-group{margin-top:18px!important}.guest-group .home-title{margin-bottom:10px}.guest-group .homecats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.guest-group .homecat{min-height:92px}.searchbox input{width:100%;border:0;outline:0;background:transparent;color:var(--brand-ink);font:inherit;font-weight:650}.searchbox input::placeholder{color:var(--brand-muted);opacity:1}
@@ -649,7 +511,7 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
 :root[data-theme="light"]{
   color-scheme:only light!important;
   --bg:var(--brand-bg)!important;
-  --surface:#FFFFFF!important;
+  --surface:var(--brand-white)!important;
   --ink:var(--brand-ink)!important;
   --muted:var(--brand-muted)!important;
   --line:var(--brand-line)!important;
@@ -666,7 +528,6 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
   --good-bg:#D9F0E4!important;
 }
 :root[data-theme="light"] body,
-:root[data-theme="light"] .top,
 :root[data-theme="light"] #app{background:var(--brand-bg)!important}
 :root[data-theme="light"] body{color:var(--brand-ink)!important;-webkit-text-fill-color:initial}
 
@@ -803,19 +664,6 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
   -webkit-text-fill-color:currentColor!important;
 }
 
-/* Palette picker previews keep their own colors while the page theme changes. */
-.palette-options{display:grid;gap:9px}
-.palette-option{width:100%;min-height:70px;display:grid;grid-template-columns:28px minmax(0,1fr) 42px 20px;align-items:center;gap:9px;padding:10px 12px;background:#fff;border:1.5px solid var(--brand-line);border-radius:15px;text-align:left;cursor:pointer}
-.palette-option[aria-pressed="true"]{border-color:var(--brand-primary);background:var(--brand-soft);box-shadow:0 0 0 2px var(--brand-tint)}
-.palette-number{display:grid;place-items:center;width:27px;height:27px;border-radius:9px;background:var(--brand-tint);color:var(--brand-primary);font-size:11px;font-weight:900}
-.palette-label{min-width:0}.palette-label b,.palette-label small{display:block}.palette-label b{color:var(--brand-ink);font-size:12px;line-height:1.3}.palette-label small{color:var(--brand-muted);font-size:10px;margin-top:2px;line-height:1.3}
-.palette-swatches{display:flex;align-items:center}.palette-swatches i{width:23px;height:23px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.13)}.palette-swatches i+i{margin-left:-9px}
-.palette-option[data-v="blue-amber"] .palette-swatches i:first-child{background:#102747}.palette-option[data-v="blue-amber"] .palette-swatches i:last-child{background:#FF510B}
-.palette-option[data-v="navy-teal"] .palette-swatches i:first-child{background:#173B61}.palette-option[data-v="navy-teal"] .palette-swatches i:last-child{background:#0F766E}
-.palette-option[data-v="indigo-sage"] .palette-swatches i:first-child{background:#443D91}.palette-option[data-v="indigo-sage"] .palette-swatches i:last-child{background:#547A61}
-.palette-check{visibility:hidden;color:var(--brand-primary);font-weight:900;font-size:17px}.palette-option[aria-pressed="true"] .palette-check{visibility:visible}
-.palette-note{color:var(--brand-muted);font-size:10px;margin:10px 2px 1px}
-
 /* responsive-shell-v75 */
 .desktopnav{display:none}
 .home-shell,.hero-copy,.hero-actions,.hero-proof,.home-support-grid{min-width:0}
@@ -836,8 +684,7 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
   body{padding-bottom:88px}
   .app{max-width:960px;padding:0 28px 72px}
   body:not(.home-shell-active) #app{width:min(100%,760px);margin-inline:auto}
-  .top{padding:16px 0}
-  .brand{font-size:25px}
+
   .hero{padding:46px 34px 34px;border:1px solid var(--brand-line);border-radius:28px;background:linear-gradient(135deg,#fff 0%,var(--brand-soft) 62%,var(--brand-tint) 100%);box-shadow:0 16px 44px rgba(var(--brand-ink-rgb),.08);overflow:hidden}
   .hero h1{font-size:48px;max-width:650px}
   .hero p{font-size:17px;max-width:560px}
@@ -861,7 +708,7 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
 @media (min-width:1024px){
   body{padding-bottom:0}
   .app{width:100%;max-width:1180px;padding:0 30px 60px}
-  .top{min-height:72px;gap:18px}
+  .top{min-height:72px}
   .hdr-r{flex:1;justify-content:flex-end}
   .desktopnav{display:flex;align-items:center;gap:5px;margin-right:auto;margin-left:16px}
   .desktopnav[hidden]{display:none!important}
@@ -891,23 +738,6 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
 @media (min-width:1600px){
   .app{max-width:1220px;padding-inline:34px}
   .quick-menu{right:max(28px,calc((100vw - 1220px)/2 + 34px))}
-}
-
-/* tamisim-visual-reference-v1 — visual tokens only; preserve content and flows. */
-:root[data-palette="blue-amber"]{
-  --brand-primary:#102747;
-  --brand-ink:#102747;
-  --brand-muted:#627087;
-  --brand-bg:#F4F6FA;
-  --brand-tint:#E9EFF6;
-  --brand-soft:#F6F8FC;
-  --brand-field:#FAFBFD;
-  --brand-line:#DFE5ED;
-  --brand-accent:#FF510B;
-  --brand-bright:#193C64;
-  --brand-on-dark:#D9E5F4;
-  --brand-primary-rgb:16,39,71;
-  --brand-ink-rgb:16,39,71;
 }
 .guest-hdr .guest-cta,
 .desktopnav .desktop-cta{
@@ -1125,15 +955,13 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
     position:relative;
     margin:0 -18px;
     padding:10px 18px 5px;
-    background:#102747!important;
+    background:var(--brand-navy);
+    --wordmark-ink:var(--brand-white);
+    min-height:0;
     border:0;
     border-radius:0;
     backdrop-filter:none;
   }
-  body:has(.guest-home) .brand{color:#fff}
-  body:has(.guest-home) .brand{font-size:27px;line-height:1}
-  body:has(.guest-home) .brand span:nth-child(2){color:#FF5A13}
-  body:has(.guest-home) .brand i{display:none}
   body:has(.guest-home) .guest-hdr .guest-cta{display:none}
   body:has(.guest-home) .guest-hdr .guest-login{padding:0 5px;font-size:10px}
   body:has(.guest-home) .guest-notif{display:grid;place-items:center;width:34px;height:38px;padding:0;border:0;background:transparent;color:#fff;font:22px "Segoe UI Symbol",sans-serif;cursor:pointer}
@@ -1201,11 +1029,6 @@ button{-webkit-tap-highlight-color:transparent}.link{color:var(--brand-primary)!
 }
 /* Reference-led create flow; scoped to the six-step form. */
 body:has(.create-flow){--bg:#fff;--brand-bg:#fff;--surface:#fff;background:#fff!important;color:#102747;padding-bottom:0}
-body:has(.create-flow) .top{background:#fff;height:52px;min-height:52px;box-sizing:border-box;padding:6px 0;gap:8px;border:0;position:relative;top:auto}
-body:has(.create-flow) .brand{display:flex;align-items:baseline;flex:none;white-space:nowrap;font-size:21px;line-height:1;letter-spacing:-.04em}
-body:has(.create-flow) .brand span:nth-child(2){color:#FF510B}
-body:has(.create-flow) .brand i{flex:none;align-self:center;width:5px;height:5px;margin-left:3px}
-body:has(.create-flow) .hdr-r{gap:6px}
 body:has(.create-flow) .seg button{font-size:11px;padding:5px 8px;min-height:32px}
 body:has(.create-flow) .guest-cta{min-height:32px;padding:6px 12px;font-size:11px;box-shadow:none}
 body:has(.create-flow) .beta-strip{margin:0;padding:5px 0;min-height:0;border:0;background:transparent;box-shadow:none;font-size:9px;line-height:1.3;gap:6px}
@@ -1229,7 +1052,7 @@ body:has(.create-flow) #app{width:100%;max-width:620px;margin-inline:auto;paddin
 .create-flow .create-card h2,.create-flow .create-card>label.lb{font-family:Figtree,system-ui,sans-serif;font-size:25px;letter-spacing:-.035em;line-height:1.12;font-weight:800;color:#102747;margin:0 0 9px;padding:0;max-width:330px}
 .create-flow .hint{font-size:13px;line-height:1.4;color:#64748B;margin:0 0 14px}
 .create-flow .in{min-height:44px;border:1px solid #DCE1E9;border-radius:9px;padding:10px 12px;font-size:16px;box-shadow:none}
-:root:not([data-theme="dark"]) .create-flow .in{background:#fff!important}
+:root[data-theme="light"] .create-flow .in{background:#fff!important}
 .create-flow .in:focus-visible{outline:2px solid rgba(255,81,11,.22);outline-offset:1px;border-color:#FF510B}
 .create-flow .create-actions{position:static;display:grid;grid-template-columns:minmax(0,.65fr) minmax(0,1.35fr);gap:10px;padding-top:24px;margin: auto 0 0;background:#fff}
 .create-flow .create-actions.single{grid-template-columns:1fr}
@@ -1240,8 +1063,8 @@ body:has(.create-flow) #app{width:100%;max-width:620px;margin-inline:auto;paddin
 .create-flow .catgroup,.create-flow .cats{display:contents}
 .create-flow .catgroup h3{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 .create-flow .cat{min-width:0;min-height:82px;gap:5px;padding:9px 5px;border:1px solid transparent;border-radius:10px;box-shadow:none;font-size:11px;font-weight:600;line-height:1.2}
-:root:not([data-theme="dark"]) .create-flow .cat{background:#F5F6F8!important}
-:root:not([data-theme="dark"]) .create-flow .cat[aria-pressed="true"]{border-color:#FF510B!important;background:#FFF4EE!important;box-shadow:none;outline:none}
+:root[data-theme="light"] .create-flow .cat{background:#F5F6F8!important}
+:root[data-theme="light"] .create-flow .cat[aria-pressed="true"]{border-color:#FF510B!important;background:#FFF4EE!important;box-shadow:none;outline:none}
 .create-flow .cat .svc-icon{width:28px;height:28px}
 .create-flow #cat-search{font-size:16px}
 .create-flow .catresults>.empty{grid-column:1/-1;margin:0;font-size:13px}
@@ -1249,8 +1072,8 @@ body:has(.create-flow) #app{width:100%;max-width:620px;margin-inline:auto;paddin
 /* Service choices: same quiet tile treatment as categories. */
 .create-flow .step-two-card .chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .create-flow .step-two-card .chip{min-width:0;min-height:66px;padding:10px;border:1px solid transparent!important;border-radius:10px;font-size:13px;line-height:1.3;font-weight:600;white-space:normal;box-shadow:none}
-:root:not([data-theme="dark"]) .create-flow .chip{background:#F5F6F8!important;color:#102747!important;-webkit-text-fill-color:#102747!important;border-color:transparent!important}
-:root:not([data-theme="dark"]) .create-flow .chip[aria-pressed="true"]{border-color:#FF510B!important;background:#FFF4EE!important;color:#102747!important;-webkit-text-fill-color:#102747!important;box-shadow:none}
+:root[data-theme="light"] .create-flow .chip{background:#F5F6F8!important;color:#102747!important;-webkit-text-fill-color:#102747!important;border-color:transparent!important}
+:root[data-theme="light"] .create-flow .chip[aria-pressed="true"]{border-color:#FF510B!important;background:#FFF4EE!important;color:#102747!important;-webkit-text-fill-color:#102747!important;box-shadow:none}
 @media(min-width:768px){.create-flow .step-two-card .chips{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .create-flow #d-not{display:block;min-height:140px;resize:vertical;font-size:16px;line-height:1.5}
 .create-flow .step-three-card>label.lb{margin-bottom:15px}
@@ -1281,13 +1104,7 @@ body:has(.create-flow) #app{width:100%;max-width:620px;margin-inline:auto;paddin
 .create-flow[data-step="1"] [data-a="createNext"]{scroll-margin-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
 /* V1-D: received offers only. */
 body:has(.offers-view){--bg:#fff;--brand-bg:#fff;background:#fff!important;padding-bottom:0}
-body:has(.offers-view) .top{background:#fff;min-height:54px;height:54px;box-sizing:border-box;padding:4px 0;gap:8px;position:relative;top:auto;border:0}
-body:has(.offers-view) .brand{display:flex;align-items:baseline;flex:none;white-space:nowrap;font-size:21px;line-height:1}
-body:has(.offers-view) .brand span:nth-child(2){color:#FF510B}
-body:has(.offers-view) .brand i{flex:none;align-self:center;width:5px;height:5px;margin-left:3px}
-body:has(.offers-view) .hdr-r{gap:6px}
 body:has(.offers-view) .seg button{font-size:11px;padding:5px 8px;min-width:46px;min-height:46px}
-body:has(.offers-view) .hdr-r>button{min-width:46px;min-height:46px}
 body:has(.offers-view) .beta-strip{margin:0;padding:5px 0;border:0;background:transparent;font-size:9px;line-height:1.3}
 body:has(.offers-view) #app{max-width:720px;width:100%;margin-inline:auto;padding:0}
 .offers-view{color:#102747;padding:0 0 24px}
@@ -1352,11 +1169,6 @@ body:has(.offers-view) #app{max-width:720px;width:100%;margin-inline:auto;paddin
 @media(min-width:768px){.offers-view .quote{padding:14px 16px}.offers-view .qhead h3{font-size:16px}.offers-view .qnote{font-size:14px}}
 /* V1-E · Aktif işim */
 body:has(.active-job){--brand-bg:#fff;--bg:#fff;background:#fff!important}
-body:has(.active-job) .top{position:relative;top:auto;box-sizing:border-box;min-height:52px;padding-block:4px;background:white;backdrop-filter:none}
-body:has(.active-job) .brand{display:flex;align-items:baseline;white-space:nowrap;font-size:21px;line-height:1}
-body:has(.active-job) .brand span:nth-child(2){color:#ff510b}
-body:has(.active-job) .brand i{align-self:center;width:5px;height:5px;margin-left:3px}
-body:has(.active-job) .hdr-r{gap:6px}
 body:has(.active-job) .seg button{padding-inline:8px;font-size:12px}
 body:has(.active-job) .beta-strip{margin:0;padding:4px 0;background:transparent;border:0}
 body:has(.active-job) #app{padding-top:0}
@@ -1409,11 +1221,6 @@ body:has(.active-job) #app{padding-top:0}
 @media(max-width:767px){.active-job{margin-inline:-6px}}
 /* V1-F · Uzman iş paneli */
 body:has(.expert-panel){--brand-bg:#fff;--bg:#fff;background:#fff!important}
-body:has(.expert-panel) .top{position:relative;top:auto;min-height:54px;padding-block:4px;box-sizing:border-box;background:#fff;backdrop-filter:none}
-body:has(.expert-panel) .brand{display:flex;align-items:baseline;white-space:nowrap;font-size:21px;line-height:1}
-body:has(.expert-panel) .brand span:nth-child(2){color:#ff510b}
-body:has(.expert-panel) .brand i{align-self:center;width:5px;height:5px;margin-left:3px}
-body:has(.expert-panel) .hdr-r{gap:6px}
 body:has(.expert-panel) .seg button{padding-inline:8px;font-size:12px}
 body:has(.expert-panel) .beta-strip{margin:0;padding:4px 0;background:transparent;border:0}
 .expert-panel{max-width:930px;margin:4px auto 0;color:#102747;overflow-wrap:anywhere}
@@ -1463,11 +1270,6 @@ body:has(.expert-panel) .beta-strip{margin:0;padding:4px 0;background:transparen
 @media(min-width:768px){.expert-panel-list{grid-template-columns:repeat(2,minmax(0,1fr))}.expert-panel-head{padding:16px 20px}}
 /* V1-G · Teklif hazırlama */
 body:has(.quote-form){--brand-bg:#fff;--bg:#fff;background:#fff!important}
-body:has(.quote-form) .top{position:relative;top:auto;box-sizing:border-box;min-height:54px;padding-block:4px;background:#fff;backdrop-filter:none}
-body:has(.quote-form) .brand{display:flex;align-items:baseline;white-space:nowrap;font-size:21px;line-height:1}
-body:has(.quote-form) .brand span:nth-child(2){color:#ff510b}
-body:has(.quote-form) .brand i{align-self:center;width:5px;height:5px;margin-left:3px}
-body:has(.quote-form) .hdr-r{gap:6px}
 body:has(.quote-form) .seg button{padding-inline:8px;font-size:12px}
 body:has(.quote-form) .beta-strip{margin:0;padding:4px 0;background:transparent;border:0}
 .quote-form{max-width:640px;margin:4px auto 0;padding-bottom:calc(12px + env(safe-area-inset-bottom));color:#102747;overflow-wrap:anywhere}
@@ -1600,8 +1402,7 @@ html:has(.conversation-composer input:focus){padding-bottom:calc(env(safe-area-i
 .appointment-card .appointment-head button:focus-visible{outline-color:#fff;outline-offset:-4px}
 @media(min-width:768px){.appointment-head{padding-inline:20px}.appointment-body{padding:18px 20px}}
 /* Remaining V1 screens share these colors within their own surfaces. */
-:root{--ui-paper:#fff;--ui-field:#f5f7fa;--ui-text:#102747;--ui-secondary:#485d75;--ui-stroke:#ccd7e3;--ui-control:#778ba2;--ui-action:#b43808;--ui-bar:#102747}
-:root[data-theme="dark"]{--ui-paper:#152339;--ui-field:#1f3048;--ui-text:#f3f6fa;--ui-secondary:#c4d2e1;--ui-control:#8497ac;--ui-stroke:#485a70;--ui-action:#ad3607;--ui-bar:#102747}
+:root{--ui-paper:var(--brand-white);--ui-field:#f5f7fa;--ui-text:var(--brand-navy);--ui-secondary:#485d75;--ui-stroke:#ccd7e3;--ui-control:#778ba2;--ui-action:#b43808;--ui-bar:var(--brand-navy)}
 #app .service-payment{display:grid;gap:10px;padding:16px;border:1px solid var(--ui-stroke);border-radius:14px;background:var(--ui-paper);color:var(--ui-text);box-shadow:none;overflow-wrap:anywhere}
 #app .service-payment h2{margin:0;color:var(--ui-text);font:750 19px/1.25 'Bricolage Grotesque',sans-serif}
 #app .service-payment>div{padding:3px 0;color:var(--ui-secondary)}
@@ -1669,12 +1470,8 @@ body:has(.service-page) :is(.quick-menu,.bottomnav,.desktopnav){background:var(-
 body:has(.service-page) .quick-menu{max-height:calc(100dvh - 76px);overflow:auto}
 body:has(.service-page) :is(.quick-menu button,.seg button,.desktopnav button){min-height:44px}
 body:has(.service-page).has-bottomnav #app{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
-@media(max-width:420px){body:has(.service-page) .top{gap:5px}body:has(.service-page) .seg button{padding-inline:6px}}
+@media(max-width:420px){body:has(.service-page) .seg button{padding-inline:6px}}
 #app .service-page.recovery-page{max-width:540px}
-body:has(.service-page) .top{gap:6px;box-sizing:border-box;min-height:52px;padding:5px 0}
-body:has(.service-page) .brand{display:inline-flex;align-items:baseline;white-space:nowrap;font-size:22px;line-height:1}
-body:has(.service-page) .brand span:nth-child(2){color:#e65113}
-body:has(.service-page) .brand i{display:none}
 body:has(.service-page) .beta-strip{padding:5px 0;margin:0;border:0;background:transparent}
 #app .service-page .auth-welcome .auth-kicker{color:#dce8f5!important;background:transparent;padding:0}
 #app .service-page .account-cover .account-kicker{color:#dce8f5!important}
@@ -1710,20 +1507,9 @@ body:has(.service-page) .beta-strip{padding:5px 0;margin:0;border:0;background:t
 #app .jobs-page .pill.good{background:#dff4ea;color:#19583d}
 #app .jobs-page{scroll-margin-top:64px}
 #app .jobs-page .home-title h2,#app .jobs-page .jobcount{color:var(--ui-text)!important;-webkit-text-fill-color:var(--ui-text)!important}
-:root[data-theme=dark] body:has(.service-page),:root[data-theme=dark] body:has(.service-page) :is(#app,.top,.beta-strip){background:var(--ui-paper)!important;color:var(--ui-text)}
-:root[data-theme=dark] body:has(.service-page) :is(.brand,.bottomnav button,.desktopnav button){color:var(--ui-text)}
-:root[data-theme=dark] .service-page{--brand-ink:var(--ui-text);--brand-muted:var(--ui-secondary);--brand-line:var(--ui-stroke)}
-:root[data-theme=dark] #app .service-page :is(.auth-forgot,.subsection-title .link,.account-form label>span,.verify-grid label>span,.auth-fields label>span,.legal-card h2,.directory-main h3,.partner-back-ico,.account-menu-row b,.account-section-head h2,.partner-cat-picker summary i){color:var(--ui-text)!important;-webkit-text-fill-color:var(--ui-text)!important}
-:root[data-theme=dark] #app .service-page :is(.notif-content p,.lede,.palette-note,.partner-portal-money span,.payment-admin-summary span,.partner-portal-stats small,.partner-cat-picker summary small,.directory-meta span){color:var(--ui-secondary)!important}
-:root[data-theme=dark] #app .service-page :is(.partner-form,.partner-portal-money,.payment-admin-summary,.partner-cat-picker,.check,.account-menu-row,.verify-status,.verify-details,.directory-meta span,.auth-forgot,.palette-option,.empty-inline){background:var(--ui-field)!important;color:var(--ui-text)}
-:root[data-theme=dark] #app .service-page :is(.profile-score,.account-cover-copy,.account-avatar){--brand-ink:#102747}
-:root[data-theme=dark] #app .service-page .palette-label :is(b,small){color:var(--ui-text)}
-:root[data-theme=dark] #app .service-page .account-menu-row.danger b{color:#ffb8ae!important;-webkit-text-fill-color:#ffb8ae!important}
-:root[data-theme=dark] #app .jobs-page{background:var(--ui-paper);color:var(--ui-text)}
 
 #app .jobs-page .meta .pill.good{background:#dff4ea!important;color:#19583d!important;-webkit-text-fill-color:#19583d!important}
 #app .jobs-page .section-kicker{color:var(--ui-secondary)!important;-webkit-text-fill-color:var(--ui-secondary)!important}
-:root[data-theme=dark] #app .service-page .palette-check{background:#102747;color:white}
 
 #app .payment-breakdown{border-block:1px solid var(--ui-stroke);font:600 14px/1.4 Figtree,sans-serif}
 #app .payment-breakdown summary{padding-block:12px;min-height:44px;cursor:pointer}
@@ -1750,19 +1536,9 @@ body:has(.service-page) .bottomnav button small{font-size:11px}
 :root[data-theme="light"] body:not(:has(.service-page)) .bottomnav button:not(.active) > small{
   color:var(--brand-muted);
 }
-:root[data-theme=dark] body:has(.service-page) .bottomnav button.active:not(.navplus) span{background:#314c69;color:white}
-:root[data-theme=dark] body:has(.service-page) :is(.seg,.menubtn,.notifbtn,.quick-menu-list .qm-ico){background:var(--ui-field)!important;color:var(--ui-text)!important}
-:root[data-theme=dark] body:has(.service-page) .seg button[aria-pressed=true]{background:#334d6c;color:white}
 
 body:has(.service-page) .quick-menu-list i{color:var(--ui-secondary)}
-:root[data-theme=dark] #app .guest-service-page .create-head .eyebrow{color:var(--ui-secondary)!important;-webkit-text-fill-color:var(--ui-secondary)!important}
-:root[data-theme=dark] #app .service-page .verify-history small,:root[data-theme=dark] #job-review .verified-review p{color:var(--ui-secondary)!important}
-:root[data-theme=dark] #app .service-payment :is(.total,.payment-ledger b,.promo-box label){background:transparent!important;color:var(--ui-text)!important;-webkit-text-fill-color:var(--ui-text)!important}
-
-:root[data-theme=dark] #app .operations-page :is(.partner-stats>div,.partner-money span,.payment-admin-grid span),:root[data-theme=dark] #app .partner-page .partner-job-meta span{background:var(--ui-field);color:var(--ui-secondary)}
-:root[data-theme=dark] #app .operations-page :is(.partner-stats b,.payment-admin-grid b),:root[data-theme=dark] #app details[open] .expert-card .expert-head strong{color:var(--ui-text)!important;-webkit-text-fill-color:var(--ui-text)!important}
-:root[data-theme=dark] #app .operations-page .partner-stats small{color:var(--ui-secondary)}
-:root:not([data-theme=dark]) body:has(.service-page) #bottomnav button:not(.active):not(.navplus){color:var(--ui-secondary)!important}
+:root[data-theme="light"] body:has(.service-page) #bottomnav button:not(.active):not(.navplus){color:var(--ui-secondary)!important}
 
 #app .customer-home:has(>.jobs-page)>:not(.jobs-page){display:none}
 #app .jobs-page .home-title{margin:0 0 10px}
@@ -1779,8 +1555,6 @@ body:has(.jobs-page) #bottomnav [data-a=navJobs]:not(.active){color:var(--ui-tex
 body:has(.jobs-page) #bottomnav [data-a=navJobs] span{background:var(--ui-field);border-radius:9px}
 
 #app .jobs-page .ticket,#app .jobs-page .ticket .tbody{background:var(--ui-paper)!important;box-shadow:none!important}
-:root[data-theme=dark] #app .jobs-page .ticket .stretch{color:var(--ui-text)!important;-webkit-text-fill-color:var(--ui-text)!important}
-:root[data-theme=dark] #app .jobs-page .ticket .meta span{color:var(--ui-secondary)!important}
 
 /* Category selection is shared by the profile and filter controls. */
 #app .expert-onboarding .chips,
@@ -1846,243 +1620,286 @@ body:has(.jobs-page) #bottomnav [data-a=navJobs] span{background:var(--ui-field)
   #app .expert-onboarding .chips,#app .expert-panel-filters{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 
-.theme-settings{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:6px;
-  margin:8px 0 14px;
+.top .hdr-r{min-width:0;gap:6px}
+.top .hdr-r .seg{flex:none;align-items:center}
+.top .hdr-r .seg button{min-height:44px;padding:4px 9px;font-size:13px;white-space:nowrap}
+.top .hdr-r > button{flex:none;min-width:44px;min-height:44px}
+@media(max-width:359px){
+  .top{gap:4px}
+  .brand{font-size:23px}
+  .top .hdr-r{gap:3px}
+  .top .hdr-r .seg button{padding-inline:5px}
 }
-#app .theme-settings button{
-  min-height:44px;
-  border:1px solid var(--ui-control);
-  border-radius:8px;
-  background:var(--ui-field);
-  color:var(--ui-text);
-  cursor:pointer;
-  font-weight:700;
+/* The existing wordmark and beta notice form the top of the authentication hero. */
+.app:has(.auth-entry){
+  --entry-gutter:clamp(16px,4vw,28px);
+  position:relative;width:min(100%,560px);margin:0 auto;padding:0 0 24px;
 }
-#app .theme-settings button[aria-pressed="true"]{
-  background:var(--ui-bar);
-  border-color:var(--ui-accent,#b83b08);
-  color:#fff;
-  box-shadow:inset 0 -2px var(--ui-accent,#b83b08);
+.app:has(.auth-entry) .top{
+  --wordmark-ink:white;
+  position:static;min-height:62px;padding:8px var(--entry-gutter);
+  border:0;border-radius:20px 20px 0 0;background:var(--brand-navy);box-shadow:none;
 }
-
-/* Dark surfaces retain the existing layout and icon styles. */
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --dark-canvas:#0f1724;
-  --bg:var(--dark-canvas);
-  --surface:#162338;
-  --ink:#f5f7fa;
-  --muted:#a9b4c7;
-  --line:rgba(255,255,255,.10);
-  --ui-paper:var(--surface);
-  --ui-field:#1b2a42;
-  --ui-text:var(--ink);
-  --ui-secondary:var(--muted);
-  --ui-stroke:var(--line);
-  --ui-control:#7486a0;
-  --ui-bar:#1b2a42;
-  --ui-accent:#ff9366;
-  --ui-action:#b83b08;
-  --focus:var(--ui-accent);
-  --brand-ink:var(--ink);
-  --brand-muted:var(--muted);
-  --brand-bg:var(--bg);
-  --brand-field:var(--ui-field);
-  --brand-line:var(--line);
-  --petrol:#b9d4fd;
-  --petrol-ink:#0f1724;
-  --tint:var(--ui-field);
+.app:has(.auth-entry) #guest-hdr{display:none}
+.app:has(.auth-entry) .beta-strip{
+  justify-content:flex-start;margin:0;padding:0 var(--entry-gutter) 8px;border:0;border-radius:0;
+  background:var(--brand-navy);color:#d9e5f4;font-size:11px;text-align:start;
 }
-:root[data-theme="dark"] #app :is(.expert-onboarding,.expert-filter-row,.expert-panel-filters,.partner-cat-grid){
-  --choice-surface:var(--ui-field);
-  --choice-text:var(--ink);
-  --choice-border:var(--ui-control);
-  --choice-selected:#293e5c;
-  --choice-selected-text:var(--ink);
-  --choice-accent:var(--ui-accent);
+.app:has(.auth-entry) .beta-strip b{border:1px solid #667994;background:transparent;color:white}
+.app:has(.auth-entry) #app{width:100%;max-width:none;padding:0}
+.auth-entry{max-width:none;padding:0}
+.auth-entry .auth-close{
+  position:absolute;z-index:6;top:9px;right:var(--entry-gutter);
+  width:44px;height:44px;border:0;border-radius:50%;background:#253d5b;color:white;
+  font:400 25px/1 Figtree,sans-serif;cursor:pointer;
 }
-:root[data-theme="dark"] body,
-:root[data-theme="dark"] body:has(.service-page),
-:root[data-theme="dark"] body:has(.service-page) #app,
-:root[data-theme="dark"] :is(.top,.beta-strip){
-  background:var(--bg)!important;
-  color:var(--ink);
+.auth-entry-hero{
+  position:relative;isolation:isolate;overflow:hidden;min-height:220px;
+  padding:16px var(--entry-gutter) 64px;border-radius:0 0 24px 24px;
+  background:var(--brand-navy);color:white;
 }
-:root[data-theme="dark"] .top .brand span:first-child{color:var(--ink)}
-:root[data-theme="dark"] .beta-strip>b{background:var(--ui-field);color:var(--ink)}
-:root[data-theme="dark"] .beta-strip>span{color:var(--muted)!important}
-:root[data-theme="dark"] :is(.quick-menu,.bottomnav,.guest-bottomnav,.desktopnav,.seg,.menubtn,.notifbtn,.guest-notif){
-  background:var(--surface)!important;
-  border-color:var(--line)!important;
+.auth-entry-hero img{
+  position:absolute;z-index:-1;right:-7%;bottom:12px;width:55%;height:92%;object-fit:contain;object-position:right bottom;
 }
-:root[data-theme="dark"] .menubtn span{background:var(--ink)!important}
-:root[data-theme="dark"] .guest-notif span{color:var(--ink)}
-:root[data-theme="dark"] :is(.guest-login,.desktopnav button:not(.desktop-cta),.seg button,.guest-bottomnav small,.bottomnav button:not(.navplus)){
-  color:var(--ink)!important;
+.auth-entry-hero h1{max-width:70%;margin:0;font:800 clamp(32px,7.8vw,42px)/1.02 'Bricolage Grotesque',sans-serif;letter-spacing:-.046em;color:white}
+.auth-entry-hero h1 span{display:block;color:#ff793f}
+.auth-entry-hero p{max-width:55%;margin:12px 0 0;color:#d9e5f4;font:450 15px/1.45 Figtree,sans-serif}
+.auth-entry .auth-card,.auth-entry .auth-switch{
+  margin-inline:var(--entry-gutter);background:white;border:1px solid var(--brand-line);border-radius:20px;
 }
-:root[data-theme="dark"] :is(.seg button[aria-pressed="true"],.desktopnav button.active,.bottomnav button.active:not(.navplus) span){
-  background:#304866!important;
-  color:#fff!important;
+.auth-entry .auth-card{position:relative;margin-top:-42px;padding:20px;box-shadow:0 5px 14px rgba(16,39,71,.07)}
+.auth-entry .auth-card-title h2{font-size:23px;letter-spacing:-.035em}
+.auth-entry .auth-card-title{margin-bottom:18px}
+.auth-entry .auth-fields{gap:12px}
+.auth-entry .auth-fields label,.auth-entry .auth-fields label>span{color:var(--brand-navy);font:700 15px/1.35 Figtree,sans-serif}
+.auth-entry .auth-fields label>span{margin-bottom:7px}
+.auth-entry .field-caption{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.auth-entry .field-caption label{padding-block:6px}
+.auth-entry .auth-forgot{margin:0;padding:4px 0;min-height:44px;font-size:14px;color:#a13609}
+.auth-entry .auth-input{position:relative;display:block}
+.auth-entry .auth-fields .in{
+  width:100%;min-height:52px;margin:0;border-radius:12px;border:1px solid #d4dde8;
+  padding:12px 14px;background:#f5f7fa!important;font:400 16px/1.4 Figtree,sans-serif;
 }
-:root[data-theme="dark"] :is(.quick-menu-user b,.quick-menu-list b,.quick-menu-avatar){color:var(--ink)}
-:root[data-theme="dark"] :is(.quick-menu-user small,.quick-menu-list small,.quick-menu-list i,.quick-menu-logout){color:var(--muted)}
-:root[data-theme="dark"] :is(.quick-menu-avatar,.quick-menu-list .qm-ico,.quick-menu-list button:hover,.quick-menu-list button:focus-visible){background:var(--ui-field)}
-:root[data-theme="dark"] :is(.quick-menu-primary,.bottomnav .navplus,.guest-cta,.desktop-cta,.btn:not(.ghost):not(:disabled),.hero-create,.guest-convert-primary){
-  background:var(--ui-action)!important;
-  color:#fff!important;
+.auth-entry .auth-input .in{padding-left:42px}
+.auth-entry .auth-input #au-pass{padding-right:52px}
+.auth-entry svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.auth-entry .auth-input>svg{position:absolute;left:14px;top:50%;translate:0 -50%;color:#65788e;pointer-events:none}
+.auth-entry .auth-eye{
+  position:absolute;inset:0 2px 0 auto;width:48px;display:grid;place-items:center;
+  background:transparent;border:0;color:#50647b;cursor:pointer;
 }
-:root[data-theme="dark"] #app .page-back{
-  background:var(--ui-field)!important;
-  color:var(--ui-text)!important;
-  -webkit-text-fill-color:currentColor!important;
-  border-color:var(--ui-control)!important;
-  box-shadow:none!important;
+.auth-eye[aria-pressed=false] .eye-slash{display:none}
+.auth-entry .auth-primary{
+  display:flex;justify-content:center;position:relative;margin-top:18px;min-height:54px;
+  background:#bc4009;color:white;border-radius:13px;box-shadow:none;
 }
-:root[data-theme="dark"] .menu-backdrop{background:rgba(5,10,18,.68)}
-:root[data-theme="dark"] dialog{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
-:root[data-theme="dark"] dialog::backdrop{background:rgba(5,10,18,.74)}
-
-:root[data-theme="dark"] #app :is(
-  .active-job,.appointment-card,.expert-job-card,.ticket,.ticket .tbody,
-  .expert-card,.offers-view .quote,.agreement-card,.workflow-card,
-  .guest-catalog,.homecat,.hero-proof,.steps,.trustbox,.guest-convert,
-  .draft-experts,.legal-card,.partner-form
-){
-  background:var(--surface)!important;
-  color:var(--ink);
-  border-color:var(--line)!important;
-  box-shadow:none;
+.auth-entry .auth-primary b{font-size:17px}
+.auth-entry .auth-primary span{position:absolute;right:18px}
+.auth-entry .terms-check{font-size:13px}
+.auth-entry .auth-switch{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;margin-top:14px;padding:16px 18px;
 }
-:root[data-theme="dark"] #app :is(
-  .expert-panel-head,.expert-panel-tabs,.expert-panel-empty,.offer-review>summary,
-  .offers-listing,.offers-sort button:not([aria-pressed=true]),.offers-view .wait,
-  .job-person,.job-customer,.job-facts,.job-contact :is(button,summary),.job-avatar,
-  .agreement-grid>div,.appointment-calendar,.appointment-calendar span,
-  .quote-form-methods button,.quote-form-methods button[aria-pressed=true],
-  .create-flow .cat,.create-flow .chip,.create-flow .uploadbox,.guest-photo-note,
-  .expert-job-actions summary,.empty,.searchbox,.steps>div>b,.trusticon,
-  .btn.ghost,.offer-actions .btn[data-a=openPreThread],.offer-avatar,.directory-avatar
-){
-  background:var(--ui-field)!important;
-  color:var(--ink)!important;
-  border-color:var(--line)!important;
+.auth-entry .auth-switch b{font-size:15px}
+.auth-entry .auth-switch small{color:#51647a;font-size:13px}
+.auth-entry .auth-switch button{width:auto;min-height:44px;padding:8px 14px;font-size:14px;background:var(--brand-bg)}
+.auth-benefits{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);padding:0;margin:20px var(--entry-gutter) 0;gap:6px;text-align:center}
+.auth-benefits li{display:grid;justify-items:center;align-content:start;gap:7px;font-size:13px;font-weight:700}
+.auth-benefits i{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;color:#aa3907;background:#ffeadf}
+.auth-benefits li:nth-child(2) i{color:var(--brand-navy);background:#e7edf5}
+.auth-benefits li:nth-child(3) i{color:#146854;background:#daf3e9}
+@media(min-width:600px){
+  .app:has(.auth-entry){margin-block:24px}
+  .auth-entry-hero{min-height:224px}
+  .auth-entry-hero img{right:0}
 }
-:root[data-theme="dark"] #app :is(.create-actions,.field:not(.service-page .field)){background:transparent}
-:root[data-theme="dark"] #app :is(.cat,.chip)[aria-pressed="true"]:not(.expert-onboarding .chip){
-  background:#293e5c!important;
-  border-color:var(--ui-accent)!important;
+/* Only the administration view uses this dashboard shell. */
+.app:has(.admin-dashboard,.partner-page,.account-page) .top,.app:has(.admin-dashboard,.partner-page,.account-page) .beta-strip{
+  --wordmark-ink:white;background:var(--brand-navy);box-shadow:0 0 0 100vmax var(--brand-navy);clip-path:inset(0 -100vmax);
 }
-:root[data-theme="dark"] #app :is(.offers-sort,.expert-panel-tabs) button[aria-pressed="true"]{background:#304866!important;color:#fff!important}
-:root[data-theme="dark"] #app :is(.quote-form-selection,.expert-job-meta>span+span,.quote-form-meta>span+span,.quote-form-methods,.quote-form-summary,.quote-form-deposit,.create-review-row,.appointment-context,.partner-cat-body,.partner-all-choice){border-color:var(--line)}
-:root[data-theme="dark"] #app :is(.create-flow,.offers-view,.quote-form,.expert-panel){color:var(--ink)}
-:root[data-theme="dark"] #app :is(
-  .home-title h2,.homecat b,.steps strong,.trustbox h3,.guest-convert h2,.hero-proof b,
-  .quote .qhead h3,.quote .price,.ticket .stretch,.ticket .tbody h3,
-  .job-title h2,.job-person h3,.job-facts dd,.appointment-context h3,
-  .appointment-section h4,.appointment-slot time,.appointment-context dd,
-  .create-progress-meta,.create-review-row b,.create-topbar .link
-){color:var(--ink)!important;-webkit-text-fill-color:currentColor}
-:root[data-theme="dark"] #app :is(
-  .hero-proof small,.homecat small,.steps small,.trustbox p,.guest-convert>p,.guest-signin-row>span,
-  .hint,.create-review-row small,.guest-photo-note,.offer-review-body .sub,
-  .offers-top>span,.offers-listing>summary span,.quote .rating,.quote .qnote,.quote .pr .small,
-  .expert-panel-head p,.expert-panel-empty p,.expert-job-title small,.expert-job-meta,
-  .expert-job-state small,.expert-job-description,.expert-job-description small,
-  .job-title p,.job-person small,.job-customer h3,.job-facts dt,.job-progress .workflow-step,
-  .appointment-context p,.appointment-section p,.appointment-slot p,.appointment-slot h4,
-  .appointment-context dt,.appointment-picker-grid label,.appointment-choice,
-  .quote-form-guide,.quote-form-summary small,.quote-form-meta,.quote-form-payment-title small,
-  .quote-form #quote-note-count,.quote-form-deposit p,.quote-form-payment-info dd,.quote-form #quote-submit-help,
-  .partner-cat-group>b,.partner-all-choice small,.sk-status
-){color:var(--muted)!important;-webkit-text-fill-color:currentColor}
-:root[data-theme="dark"] #app :is(.guest-signin-row button,.guest-convert-kicker,.eyebrow,.offer-profile>summary,.job-facts .job-appointment-link,.appointment-alternative summary,.quote-form summary,.link,.partner-all-choice b,.expert-panel-head>button){
-  color:#bfd8fd!important;
-  -webkit-text-fill-color:currentColor;
+.app:has(.admin-dashboard,.partner-page,.account-page) .top{position:relative;top:auto}
+.app:has(.admin-dashboard,.partner-page,.account-page) .beta-strip{justify-content:flex-start;color:#d9e5f4;padding-block:5px 12px;text-align:left}
+.app:has(.admin-dashboard,.partner-page,.account-page) .beta-strip b{background:transparent;color:white;border:1px solid #708197}
+#app .admin-dashboard{
+  --admin-stroke:#e0e5ed;--admin-muted:#50637a;
+  padding:16px 0 max(32px,env(safe-area-inset-bottom));background:var(--brand-bg);
 }
-:root[data-theme="dark"] #app :is(.palette-number,.expert-panel-head>button,.quote-form #qsend:disabled,.offers-view .btn[data-a=pick]:disabled){
-  background:var(--ui-field);
-  color:var(--muted);
+#app .admin-dashboard .page-back{min-height:44px;padding:6px 16px;margin-bottom:14px;border:1px solid var(--admin-stroke);border-radius:24px;background:white;color:var(--brand-navy);font-weight:700}
+#app .admin-dashboard .pagehead{
+  position:relative;display:grid;gap:16px;justify-content:start;align-items:start;
+  padding:20px;margin:0 0 14px;border-radius:24px;background:linear-gradient(110deg,var(--brand-navy) 68%,#243149)!important;
 }
-:root[data-theme="dark"] #app :is(.in,.appointment-picker-grid input){
-  background:var(--ui-field)!important;
-  color:var(--ink)!important;
-  -webkit-text-fill-color:currentColor!important;
-  border-color:var(--ui-control)!important;
-  color-scheme:dark;
+.admin-dashboard .admin-kicker{display:block;margin-bottom:8px;color:#ffae76;font:800 11px/1.2 Figtree,sans-serif;letter-spacing:.16em}
+#app .admin-dashboard .pagehead h1{font-size:clamp(24px,4vw,30px)}
+#app .admin-dashboard .pagehead .lede{max-width:30ch;margin-top:8px;font-size:15px}
+.admin-dashboard .admin-shield{position:absolute;top:20px;right:20px;display:grid;place-items:center;width:44px;height:44px;border-radius:15px;background:#ffffff18;color:white}
+.admin-dashboard .admin-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.admin-dashboard .admin-intro{padding-right:52px}
+#app .admin-dashboard .pagehead button{justify-self:start;display:inline-flex;align-items:center;gap:8px;padding-inline:16px;border:0;border-radius:13px;background:white!important;color:var(--brand-navy)!important}
+.admin-dashboard .admin-kpis,#app .admin-dashboard .payment-admin-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:0;margin:0;border:0;background:none;box-shadow:none}
+.admin-kpis>div,#app .admin-dashboard .payment-admin-summary>div{
+  min-width:0;padding:15px;background:white;border:1px solid var(--admin-stroke);border-radius:16px;
 }
-:root[data-theme="dark"] #app :is(.in,input,textarea)::placeholder{
-  color:var(--muted)!important;
-  -webkit-text-fill-color:currentColor!important;
-  opacity:1;
+.admin-kpis>div{display:flex;align-items:center;gap:10px}
+.admin-kpis .admin-mark,.admin-queue .queue-mark{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#fff3e4;color:#b54908}
+.admin-kpis>div:nth-child(even) .admin-mark,.admin-queue .queue-mark{background:#e6f6ef;color:#13775c}
+.admin-kpis strong,.admin-kpis small{display:block}
+.admin-kpis strong,#app .admin-dashboard .payment-admin-summary b{font:800 24px/1.15 'Bricolage Grotesque',sans-serif;color:var(--brand-navy)}
+.admin-kpis small,#app .admin-dashboard .payment-admin-summary span{color:var(--admin-muted);font:500 13px/1.3 Figtree,sans-serif}
+.admin-kpis small{margin-top:4px}
+#app .admin-dashboard h2{margin:22px 0 10px;font:800 21px/1.2 'Bricolage Grotesque',sans-serif;letter-spacing:-.025em;color:var(--brand-navy)}
+#app .admin-dashboard .payment-admin-summary>div{display:grid;align-content:space-between;gap:12px}
+#app .admin-dashboard .payment-admin-summary>div:nth-child(3){background:var(--brand-navy)}
+#app .admin-dashboard .payment-admin-summary>div:nth-child(4){background:#b83e08}
+#app .admin-dashboard .payment-admin-summary>div:nth-child(n+3) :is(span,b){color:white}
+.admin-queue header{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.admin-dashboard .admin-status{display:inline-block;padding:4px 9px;border-radius:20px;color:#11674d;background:#e6f6ef;font:700 12px/1.4 Figtree,sans-serif}
+#app .admin-dashboard :is(.empty,.quote,.partner-form),.admin-dashboard .admin-accounts ul{
+  margin:0 0 10px;border:1px solid var(--admin-stroke);border-radius:18px;background:white;box-shadow:none;
 }
-:root[data-theme="dark"] #app :is(button,summary,input,select,textarea):focus-visible{
-  outline-color:var(--focus)!important;
-}
-:root[data-theme="dark"] #app .quote-form-error{color:#ffb1a3}
-:root[data-theme="dark"] #app .create-progress span{background:#435874}
-:root[data-theme="dark"] #app .create-progress .on{background:var(--ui-accent)}
-:root[data-theme="dark"] #app .quote-form-methods button[aria-pressed="true"] .quote-method-check{background:var(--ui-action);border-color:var(--ui-accent)}
-:root[data-theme="dark"] #app :is(.sk-line,.sk-search,.sk-grid span){background:linear-gradient(90deg,#192840 25%,#263852 45%,#192840 65%);background-size:220% 100%}
-
-/* Keep both existing bubble variants and their ink paired when the shell changes. */
-:root[data-theme="dark"] #app .conversation{
-  background:var(--surface);
-  border-color:var(--line);
-  --brand-ink:var(--message-ink);
-  --brand-muted:var(--message-secondary);
-}
-
-:root[data-theme="dark"] body{
-  --bg:var(--dark-canvas);
-  --brand-bg:var(--dark-canvas);
-  --surface:var(--ui-paper);
-}
-:root[data-theme="dark"] body .top :is(.notifbtn,.menubtn){
-  background:var(--surface)!important;
-  border-color:var(--line);
-}
-:root[data-theme="dark"][data-palette="navy-teal"]{--readable-accent:#74d8ca}
-:root[data-theme="dark"][data-palette="indigo-sage"]{--readable-accent:#afdab9}
-:root[data-theme="dark"] .customer-home .hero h1 em,
-:root[data-theme="dark"] .rating .star-i{color:var(--readable-accent,var(--brand-accent))}
-:root[data-theme="dark"][data-palette="blue-amber"] .notifbadge{color:#192030}
-:root[data-theme="dark"]:not([data-palette="blue-amber"]) .notifbadge{color:#fff}
+#app .admin-dashboard .empty{color:var(--admin-muted);padding:20px 14px}
+#app .admin-dashboard .queue-empty{display:grid;justify-items:center;gap:4px;text-align:center;padding:24px 12px;font-size:14px}
+.admin-queue .queue-mark{margin-bottom:8px}
+.admin-queue .queue-empty strong{color:var(--brand-navy);font-size:16px}
+#app .admin-dashboard :is(.quote,.partner-form){padding:16px}
+#app .admin-dashboard .qhead{align-items:start;flex-wrap:wrap;gap:8px}
+#app .admin-dashboard .pill{max-width:100%;white-space:normal;font-size:12px;line-height:1.4;border:0}
+#app .admin-dashboard .payment-admin .pill{background:#fff2e1;color:#8e420e}
+#app .admin-dashboard .payment-admin .pill.good{background:#e6f6ef;color:#11674d}
+#app .admin-dashboard .payment-admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#app .admin-dashboard .payment-admin-grid span{display:grid;gap:4px;padding:10px;border-radius:12px;background:var(--brand-bg);color:var(--admin-muted);font-size:13px}
+#app .admin-dashboard .payment-admin-grid b{color:var(--brand-navy);font-size:15px}
+.admin-dashboard .admin-accounts ul{list-style:none;padding:0 14px}
+.admin-accounts li{display:flex;align-items:center;gap:10px;padding:12px 0;min-width:0}
+.admin-accounts li+li{border-top:1px solid var(--admin-stroke)}
+.admin-accounts .account-initial{flex:none;display:grid;place-items:center;width:35px;height:35px;border-radius:50%;background:#e7eef6;color:var(--brand-navy);font-weight:800}
+.admin-accounts li b{flex:1;min-width:0;font-size:15px}
+.admin-dashboard .admin-neutral{background:var(--brand-bg);color:var(--admin-muted)}
 @media(min-width:768px){
-  :root[data-theme="dark"] #app .customer-home .hero{
-    background:linear-gradient(135deg,var(--surface),var(--ui-field));
-    border-color:var(--line);
-    box-shadow:none;
-  }
+  .admin-dashboard .admin-kpis,#app .admin-dashboard .payment-admin-summary{grid-template-columns:repeat(4,minmax(0,1fr))}
+  #app .admin-dashboard .pagehead{padding:24px}
 }
-:root[data-theme="dark"] #app .customer-home .hero-proof div{
-  background:var(--ui-field);
-  border-color:var(--line);
+#app .partner-page{padding:14px 0 max(32px,env(safe-area-inset-bottom));background:var(--brand-bg)}
+#app .partner-page .partner-back{display:inline-flex;width:auto;gap:10px;padding:10px 16px;margin:0 0 14px;background:white;border:1px solid var(--brand-line);border-radius:16px}
+#app .partner-page .partner-back-ico{width:34px;height:34px;background:var(--brand-bg);border-radius:10px}
+.partner-page .partner-back b{font-size:14px}
+.partner-page .partner-back small{font-size:12px;color:var(--ui-secondary)}
+#app .partner-page .partner-pagehead{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px 12px;align-items:start;
+  margin:0;padding:20px;border-radius:22px;background:linear-gradient(112deg,var(--brand-navy) 66%,#2d3249)!important;
 }
-:root[data-theme="dark"] #app :is(.searchbox label,.searchbox>span,.searchbox,.notif-link,.section-kicker,.verify-details summary i,.file-drop .file-drop-icon){
-  color:#bfd8fd!important;
-  -webkit-text-fill-color:currentColor!important;
+#app .partner-page .partner-pagehead .section-kicker{padding:0;letter-spacing:.14em;color:#ffae80!important;-webkit-text-fill-color:#ffae80!important}
+#app .partner-page .partner-pagehead h1{margin:6px 0;font-size:clamp(25px,4vw,32px)}
+.partner-page .partner-symbol{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.partner-page .company-symbol{display:grid;place-items:center;padding:12px;border-radius:15px;background:#ffffff19;color:white}
+#app .partner-page .partner-category-badges{gap:5px;margin-top:12px}
+#app .partner-page .partner-category-badges span{padding:4px 10px;background:#314a69;color:white;font-size:12px}
+#app .partner-page [data-a="partnerRefresh"]{grid-column:1/-1;justify-self:start;display:flex;align-items:center;gap:7px;background:white!important;border:0;border-radius:13px;padding-inline:16px}
+#app .partner-page .partner-portal-stats{gap:10px;margin:14px 0}
+#app .partner-page .partner-portal-stats>div{min-width:0;padding:14px 16px;text-align:left;border:1px solid var(--brand-line);border-radius:16px;background:white}
+.partner-portal-stats .partner-symbol{color:#bf4408}
+.partner-portal-stats>div:last-child .partner-symbol{color:#16735a}
+.partner-page .partner-portal-stats b{margin-top:7px;font:800 29px/1.1 'Bricolage Grotesque',sans-serif}
+.partner-page .partner-portal-stats small{font-size:14px;color:var(--ui-secondary)}
+#app .partner-page .partner-portal-money{margin:0;padding:18px;gap:0;background:white;border:1px solid var(--brand-line);border-radius:18px}
+.partner-portal-money h2{margin:0 0 12px;font-size:19px}
+.partner-page .partner-portal-money>div{align-items:baseline;padding:11px 0;gap:12px;font-size:14px}
+.partner-page .partner-portal-money b{text-align:right;min-width:0}
+.partner-page .partner-portal-money>div+div{border-top:1px solid var(--brand-line)}
+.partner-page .partner-portal-money .partner-volume{display:grid;gap:4px;padding:15px;margin-bottom:5px;background:var(--brand-navy);border-radius:14px}
+.partner-page .partner-volume span{color:#d8e3f2}
+.partner-page .partner-volume b{color:white;text-align:start;font:800 clamp(23px,5vw,31px)/1.18 'Bricolage Grotesque',sans-serif}
+.partner-page .partner-portal-money .partner-volume+div{border:0}
+.partner-page .partner-portal-money>div:last-child b{color:#a83809}
+#app .partner-page :is(.partner-job,.empty){padding:16px;margin:0 0 10px;border:1px solid var(--brand-line);border-radius:16px;background:white;box-shadow:none}
+.partner-page .partner-job .qhead{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:9px;align-items:start}
+.partner-job .svc-icon{width:36px;height:36px;padding:8px;border-radius:11px;color:#ac3908;background:#fff1e4}
+.partner-page .partner-job h3{font-size:16px}
+#app .partner-job .qhead p{font-size:13px;line-height:1.4;margin:3px 0 0}
+#app .partner-job .pill{max-width:12ch;white-space:normal;padding:4px 8px;font-size:12px;line-height:1.35}
+#app .partner-job .pill.good{background:#dff6ec;color:#11684e}
+.partner-page .partner-job-meta{align-items:baseline;flex-wrap:wrap;padding:10px 12px;border-radius:12px;background:var(--brand-bg);color:var(--brand-navy);font-size:16px}
+.partner-page .partner-job-meta span+span{color:#17684d;font-size:13px}
+/* Signed-in customer landing only. */
+.client-landing{display:grid;gap:18px;padding:10px 0 calc(80px + env(safe-area-inset-bottom));color:var(--brand-navy)}
+.client-welcome{
+  position:relative;isolation:isolate;overflow:hidden;padding:20px 16px 15px;border-radius:20px;
+  background:var(--brand-navy);color:white;
 }
-:root[data-theme="dark"] #app .file-drop .file-drop-icon{background:#263852}
-:root[data-theme="dark"] #app :is(.file-drop b,.expert-panel-tabs button,.offers-view .suitable){color:var(--ink)}
-:root[data-theme="dark"] #app .verify-details .privacy-note{background:var(--ui-field)}
-:root[data-theme="dark"] #app :is(.verify-details .privacy-note,.quote .rating .muted,.create-flow .optional){color:var(--muted)!important}
-:root[data-theme="dark"] #app .offers-view .suitable{background:var(--ui-field)}
-:root[data-theme="dark"] #app .offers-view .suitable ul{color:var(--muted)}
-:root[data-theme="dark"] #app .conversation-log{background:var(--bg)}
-:root[data-theme="dark"] #app :is(.conversation-help,.conversation-limit,.conversation-empty){color:var(--muted)}
-:root[data-theme="dark"] #app .conversation-notice{background:var(--ui-field);color:var(--muted)}
-
-:root[data-theme="dark"] #app :is(.customer-home .hero-copy .eyebrow,.verify-details summary i){background:var(--ui-field)}
-:root[data-theme="dark"] #app .offers-view .offers-top .offers-back{color:var(--ink)!important}
+.client-welcome img{position:absolute;z-index:-1;right:-7%;bottom:10px;width:56%;height:94%;object-fit:contain;object-position:right bottom}
+.client-welcome h1{max-width:68%;margin:3px 0 8px;font:800 clamp(29px,6vw,45px)/1.03 'Bricolage Grotesque',sans-serif;letter-spacing:-.04em;color:white}
+.client-welcome h1 em{display:block;color:#ff8148;font-style:normal}
+.client-welcome p{max-width:57%;margin:0;font-size:14px;line-height:1.45;color:#dbe6f3}
+.client-welcome .welcome-action{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:50px;margin-top:24px;padding:10px 16px;border:0;border-radius:13px;background:#bb400a;color:white;font-size:16px;font-weight:800;cursor:pointer}
+.client-section{min-width:0;padding:14px;border:1px solid var(--brand-line);border-radius:18px;background:white}
+.client-section header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.client-section h2{margin:0;font:800 20px/1.15 'Bricolage Grotesque',sans-serif;letter-spacing:-.025em}
+.client-section header button{min-height:44px;border:0;background:none;color:var(--brand-navy);font-size:13px;font-weight:750;cursor:pointer}
+.client-activity{display:grid;gap:7px}
+.client-job{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;text-align:start;min-height:52px;padding:10px;border:1px solid var(--brand-line);border-radius:12px;background:white;color:var(--brand-navy);cursor:pointer}
+.client-job b,.client-job small{display:block;overflow-wrap:anywhere}
+.client-job b{font-size:14px}
+.client-job small,.client-empty p{font-size:13px;color:var(--ui-secondary)}
+.client-job .pill{font-size:12px;white-space:normal}
+.client-empty{padding:12px;background:var(--brand-bg);border-radius:12px}
+.client-empty p{margin:3px 0 0}
+.client-services .homecats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.client-services .homecat{min-width:0;min-height:74px;padding:8px 4px;border:0;border-radius:12px;background:var(--brand-gray);box-shadow:none}
+.client-services .homecat b{font-size:12px;line-height:1.2;color:var(--brand-navy)}
+.client-services .svc-icon{width:25px;height:25px}
+@media(min-width:700px){
+  .client-landing{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+  .client-welcome{grid-column:1/-1;padding:26px}
+  .client-welcome img{right:4%;bottom:0;width:40%;height:100%}
+  .client-welcome .welcome-action{width:min(100%,280px)}
+}
+@media(min-width:1024px){.client-services .homecats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+#app .account-page{padding:16px 0;background:var(--brand-bg)}
+#app .account-page .account-cover{
+  display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:14px;
+  padding:20px;margin:0 0 14px;border-radius:24px;background:linear-gradient(120deg,var(--brand-navy) 62%,#343246)!important;
+}
+.account-page .account-avatar{width:56px;height:56px;border-radius:16px;background:#dce8f3;color:var(--brand-navy);box-shadow:none}
+#app .account-page .account-cover h1{font-size:clamp(20px,4vw,26px);white-space:normal;overflow-wrap:anywhere}
+#app .account-page .account-cover p{margin:4px 0 0;font-size:14px;opacity:1}
+.account-stats{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.account-stats>div{display:grid;align-content:center;gap:3px;min-height:64px;padding:8px 4px;border-radius:15px;background:#ffffff18;text-align:center}
+.account-stats b{color:white;font:800 20px/1.15 'Bricolage Grotesque',sans-serif}
+.account-stats small{font-size:12px;color:#dbe6f3}
+#app .account-page .account-section{padding:clamp(15px,3vw,23px);margin:14px 0;border:1px solid var(--brand-line);border-radius:21px;background:white}
+.account-page .account-section-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:5px 8px}
+#app .account-page .account-section-head p{grid-column:1/-1;margin:0;font-size:14px;color:var(--ui-secondary)}
+.account-page .account-section-head h2{font:800 20px/1.18 'Bricolage Grotesque',sans-serif}
+#app .account-page .profile-score,.account-page .verify-count{grid-column:2;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;padding:5px 8px;border-radius:20px;background:#fff0e5;color:#943507;font-size:12px}
+.account-page .profile-score b,.account-page .profile-score small{margin:0;font-size:inherit;opacity:1}
+.account-page .account-form-grid,.account-page .verify-grid.modern{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(185px,100%),1fr));align-items:start;gap:10px}
+.account-page .account-form-grid{grid-template-columns:repeat(auto-fit,minmax(min(140px,100%),1fr))}
+#app .account-page :is(.account-form,.verify-grid) .in{width:100%;min-width:0;border:1px solid #d5dfeb!important;border-radius:12px;background:#f5f7fa!important}
+.account-page .account-form{gap:9px}
+.account-page .account-form textarea.in{min-height:96px}
+.account-extra summary{width:fit-content;display:list-item;align-content:center;color:var(--brand-navy);font-size:14px;font-weight:700}
+.account-extra[open] label{margin-top:10px}
+#app .account-page .account-save{margin-top:5px;border-radius:14px;min-height:50px}
+.account-page .verification-progress{display:block;width:100%;height:7px;margin:0 0 15px;appearance:none;border:0;border-radius:7px;background:var(--brand-bg)}
+.verification-progress::-webkit-progress-bar{background:var(--brand-bg);border-radius:7px}
+.verification-progress::-webkit-progress-value{background:var(--brand-orange);border-radius:7px}
+.verification-progress::-moz-progress-bar{background:var(--brand-orange);border-radius:7px}
+#app .account-page :is(.verify-status,.account-menu-row){padding:12px;border:0;border-radius:14px;background:var(--brand-bg)}
+#app .account-page .verify-details{border:1px dashed #d78559;border-radius:14px;background:white}
+#app .account-page .verify-details summary i{background:var(--ui-action);color:white}
+.account-page .verify-status b,.account-page .account-menu-row b,.account-page .verify-details summary b{font-size:15px}
+.account-page .verify-details summary small{font-size:13px;color:var(--ui-secondary)}
+.account-page .verify-grid .file-drop{grid-column:1/-1}
+.account-page .account-menu-row+.account-menu-row{margin-top:8px}
+#app .account-page .account-menu-row.danger{background:#fff5f3}
+.account-page .account-menu-row .menu-icon{background:white;color:#b63f0d}
+#app .account-page .account-logout{background:white!important;border-radius:14px}
 </style>
 </head>
 <body>
 <div class="app">
   <header class="top">
-    <div class="brand"><span>Tam</span><span>İşim</span><i></i></div>
+    <div class="brand"><span>Tam</span><span>İşim</span><i aria-hidden="true"></i></div>
     <div class="guest-hdr" id="guest-hdr">
       <button class="guest-login" data-a="showAuth">Giriş yap</button>
       <button class="guest-cta" data-a="requireAuth" data-v="newIlan"><span class="guest-cta-plus">＋</span><span class="guest-cta-text">İlan ver</span></button><button class="guest-notif" data-a="showAuth" aria-label="Bildirimler için giriş yap"><span aria-hidden="true"></span></button>
@@ -2185,7 +2002,7 @@ if(cfg.url&&cfg.key&&window.supabase){
 }
 
 /* ---------- durum ---------- */
-const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,navSection:'home',palette:savedPalette,
+const S={setup:!sb,user:null,profile:null,loading:!!sb,role:'musteri',page:'main',view:'list',sel:null,navSection:'home',
   draft:null,quoteFor:null,q:null,quoteDrafts:new Map(),payPick:{},promoApplied:{},appointmentDrafts:{},workflowRequestIds:{},reviewDrafts:{},reviewRequestIds:{},preThread:null,conversationFeedback:null,preDrafts:{},preRequestIds:{},tab:'acik',filter:'hepsi',catSearch:'',sort:'uygun',busy:false,
   authMode:'in',authErr:'',authInfo:'',confirmationEmail:'',resendBusy:false,recovery:false,guestAuth:false,guestCat:null,guestSearch:'',pendingAction:null,createStep:1,expertPreview:{key:'',loading:false,rows:[],total:0,nearby:0},auth:{name:'',email:'',pass:'',terms:false},acct:null,expertDraft:null,expertEditing:false,cfgDraft:{url:'',key:''},isAdmin:false,admin:null,partnerCtx:null,partnerDash:null,partnerJobs:[],supportRequests:[],supportDraft:{category:'general',subject:'',message:''},bootError:'',menuOpen:false,expertFilter:'hepsi',expertsLoaded:false};
 
@@ -2287,12 +2104,17 @@ function commitNavigation(before,action){
   if(NAV_REPLACE_ACTIONS.has(action)){
     history.replaceState(navState({depth:0,scrollY:0}),'',location.href);return;
   }
+  const closingPanel=action==='closeAdmin'||action==='closePartnerPanel';
+  if(closingPanel&&!current.returnToAccount){
+    history.replaceState(navState({depth,scrollY:0}),'',location.href);return;
+  }
+  const returnToAccount=before.page==='account'&&(after.page==='admin'||after.page==='partner');
   const beforeCore={...before,menuOpen:false},afterCore={...after,menuOpen:false};
   const closingOverlay=before.menuOpen&&!after.menuOpen&&navComparable(beforeCore)===navComparable(afterCore);
   if((closingOverlay||NAV_BACK_ACTIONS.has(action))&&depth>0){history.back();return}
   history.replaceState({...current,scrollY:Math.max(0,Math.round(window.scrollY||0))},'',location.href);
-  if(before.menuOpen&&!after.menuOpen){history.replaceState(navState({depth,scrollY:0}),'',location.href);return}
-  history.pushState(navState({depth:depth+1,scrollY:0}),'',location.href);
+  if(before.menuOpen&&!after.menuOpen){history.replaceState(navState({depth,scrollY:0,returnToAccount}),'',location.href);return}
+  history.pushState(navState({depth:depth+1,scrollY:0,returnToAccount}),'',location.href);
 }
 if('scrollRestoration' in history)history.scrollRestoration='manual';
 window.addEventListener('popstate',e=>{if(e.state&&e.state.app===NAV_STATE_KEY)restoreNavigation(e.state)});
@@ -2937,33 +2759,42 @@ function vGuest(){
 }
 function vAuth(){
   const up=S.authMode==='up',fromListing=S.pendingAction==='newIlan',confirming=!!S.confirmationEmail;
-  return `<div class="auth-shell service-page">
-    <button class="auth-back" data-a="backGuest">← <span>Hizmetlere dön</span></button>
-    <section class="auth-welcome">
-      <span class="auth-kicker">${confirming?'E-posta doğrulama':up?'Ücretsiz üyelik':'Hesabına eriş'}</span>
-      <h1>${confirming?'E-postanı kontrol et':up?'Tamİşim’e katıl':'Tekrar hoş geldin'}</h1>
-      <p>${confirming?'Hesabını kullanmadan önce e-posta adresini doğrulaman gerekiyor.':fromListing?(up?'Hesabını oluştur; hazırladığın ilana kaldığın yerden devam et.':'İlanını yayınlamak için giriş yap; kaldığın yerden devam et.'):(up?'İlanlarını, tekliflerini ve mesajlarını tek yerden yönet.':'İlanlarını, tekliflerini ve mesajlarını tek yerden yönet.')}</p>
-    </section>
-    ${fromListing?`<div class="auth-context"><span>✓</span><div><b>İlanın hazır</b><small>${up?'Kayıttan':'Girişten'} sonra doğrudan ilan oluşturma adımına geçeceksin.</small></div></div>`:''}
+  return `<div class="auth-shell ${confirming?'service-page':'auth-entry'}">
+    ${confirming?`<button class="auth-back" data-a="backGuest">← <span>Hizmetlere dön</span></button>
+    <section class="auth-welcome"><span class="auth-kicker">E-posta doğrulama</span>
+      <h1>E-postanı kontrol et</h1><p>Hesabını kullanmadan önce e-posta adresini doğrulaman gerekiyor.</p>
+    </section>`:`<button type="button" class="auth-close" data-a="backGuest" aria-label="Hizmetlere dön">×</button>
+    <section class="auth-entry-hero">
+      <img src="hero-person.png" alt="">
+      <h1>${up?'Tamİşim’e katıl':'Tekrar<br> hoş geldin, <span>uzmanın burada.</span>'}</h1>
+      <p>${fromListing?(up?'Hesabını oluştur; hazırladığın ilana kaldığın yerden devam et.':'İlanını yayınlamak için giriş yap; kaldığın yerden devam et.'):'İlanlarını, tekliflerini ve mesajlarını tek yerden yönet.'}</p>
+    </section>`}
     <section class="auth-card">
+      ${fromListing?`<div class="auth-context"><span>✓</span><div><b>İlanın hazır</b><small>${up?'Kayıttan':'Girişten'} sonra doğrudan ilan oluşturma adımına geçeceksin.</small></div></div>`:''}
       <div class="auth-card-title"><h2>${confirming?'Doğrulama bekleniyor':up?'Hesabını oluştur':'Giriş yap'}</h2></div>
       ${confirming?`<div class="auth-confirm"><p>Bağlantı <strong>${esc(S.confirmationEmail)}</strong> adresine gönderildi.</p><ul><li>Gelen kutusu ile spam/junk klasörünü kontrol et.</li><li>Bağlantıya tıkladıktan sonra Tamİşim’e dönüp giriş yap.</li></ul>${S.authErr?`<div class="err" role="alert">${esc(S.authErr)}</div>`:''}${S.authInfo?`<div class="info">${esc(S.authInfo)}</div>`:''}<button class="auth-primary" data-a="resendConfirmation" ${S.resendBusy?'disabled':''}><b>${S.resendBusy?'Gönderiliyor…':'Doğrulama e-postasını tekrar gönder'}</b><span>↻</span></button><button class="auth-forgot" data-a="confirmationToLogin">Giriş ekranına dön</button></div>`:`
       <div class="auth-fields">
         ${up?`<label><span>Adın</span><input class="in" id="au-name" autocomplete="name" placeholder="Adın veya işletme adın" value="${esc(S.auth.name)}"></label>`:''}
-        <label><span>E-posta</span><input class="in" id="au-email" type="email" inputmode="email" autocapitalize="off" autocomplete="email" placeholder="ornek@email.com" value="${esc(S.auth.email)}"></label>
-        <label><span>Şifre</span><div class="auth-pass-wrap"><input class="in" id="au-pass" type="password" autocomplete="${up?'new-password':'current-password'}" placeholder="${up?'En az 6 karakter':'Şifren'}" value="${esc(S.auth.pass)}"></div></label>
+        <label for="au-email"><span>E-posta</span><span class="auth-input"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg><input class="in" id="au-email" type="email" inputmode="email" autocapitalize="off" autocomplete="email" placeholder="ornek@email.com" value="${esc(S.auth.email)}"></span></label>
+        <div><div class="field-caption"><label for="au-pass">Şifre</label>${up?'':'<button type="button" class="auth-forgot" data-a="forgotPass">Şifremi unuttum</button>'}</div>
+          <div class="auth-input"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><input class="in" id="au-pass" type="password" autocomplete="${up?'new-password':'current-password'}" placeholder="${up?'En az 6 karakter':'Şifren'}" value="${esc(S.auth.pass)}"><button type="button" class="auth-eye" aria-label="Şifreyi göster" aria-controls="au-pass" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="eye-slash" d="m3 3 18 18"/></svg></button></div>
+        </div>
       </div>
       ${S.authErr?`<div class="err" role="alert">${esc(S.authErr)}</div>`:''}
       ${S.authInfo?`<div class="info">${esc(S.authInfo)}</div>`:''}
       ${up?'<label class="terms-check"><input id="au-terms" type="checkbox" '+(S.auth.terms?'checked':'')+'> <span><button type="button" class="inline-link" data-a="legal">Kullanım Koşulları</button> ve <button type="button" class="inline-link" data-a="legal">Gizlilik/KVKK bilgilendirmesini</button> okudum ve kabul ediyorum.</span></label>':''}
       <button class="auth-primary" data-a="authGo"><b>${up?'Ücretsiz kayıt ol':'Giriş yap'}</b><span>→</span></button>
-      ${!up?'<button class="auth-forgot" data-a="forgotPass">Şifremi unuttum</button>':''}
       `}
     </section>
     ${confirming?'':`<section class="auth-switch">
       <div><b>${up?'Zaten hesabın var mı?':'Tamİşim’de yeni misin?'}</b><small>${up?'Hesabına güvenli şekilde giriş yap.':'Ücretsiz hesap aç ve ilan vermeye başla.'}</small></div>
-      <button data-a="authMode">${up?'Giriş yap':'Ücretsiz kayıt ol'} <span>→</span></button>
+      <button data-a="authMode">${up?'Giriş yap':'Kayıt ol'} <span>→</span></button>
     </section>`}
+    ${confirming?'':`<ul class="auth-benefits" aria-label="Tamİşim avantajları">
+      <li><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h9l9 9-8 8-10-10Z"/><circle cx="8" cy="8" r="1"/></svg></i>Ücretsiz ilan</li>
+      <li><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v16m-5 2h10M3 6h18M5 6l-3 7h6L5 6Zm14 0-3 7h6l-3-7Z"/></svg></i>Teklifleri karşılaştır</li>
+      <li><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 8 3v6c0 5-4 9-8 11-4-2-8-6-8-11V5Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></i>Güvenli seçim</li>
+    </ul>`}
     ${up?'<p class="auth-beta-note">Beta döneminde gerçek kart tahsilatı aktif değildir.</p>':''}
   </div>`;
 }
@@ -2987,13 +2818,25 @@ function vLegal(){
   <section class="legal-card"><h2>Gizlilik / KVKK Bilgilendirmesi</h2><p>Hesap oluşturduğunda e-posta, profil bilgileri, ilan/teklif içeriği, mesajlar, işlem kayıtları ve yüklediğin belgeler hizmetin çalışması, güvenlik, destek ve kötüye kullanımın önlenmesi amaçlarıyla işlenebilir.</p><p>Doğrulama belgeleri müşterilere açık gösterilmez; inceleme amacıyla sınırlı tutulur. Ödeme sağlayıcısı bağlandığında kart verileri Tamİşim veritabanında tutulmayacak şekilde sağlayıcının güvenli altyapısı kullanılacaktır.</p><p>Verilerine erişim, düzeltme ve silme talebini hesap bölümündeki araçlardan iletebilirsin. Yasal saklama yükümlülükleri doğarsa bazı kayıtlar gereken süre boyunca tutulabilir.</p></section>
   <section class="legal-card"><h2>Beta ve ödeme bilgilendirmesi</h2><p>Tamİşim şu anda test/beta aşamasındadır. Gerçek kart tahsilatı kapalıdır. Nakit işaretlemeleri tarafların beyanına dayalı işlem kayıtlarıdır.</p><p>Şirket ve ticari ödeme hesabı aktif olduğunda uygulamada işletme bilgileri, ödeme sağlayıcısı ve ilgili sözleşmeler güncellenecektir.</p></section></div>`;
 }
+function accountDraft(){
+  const p=S.profile||{};
+  return {
+    name:p.name||'',title:p.title||'',bio:p.bio||'',
+    services:(p.services||[]).join(', '),areas:(p.service_areas||[]).join(', '),
+    city:p.service_city||'',districts:(p.service_districts||[]).join(', ')
+  };
+}
 function vAccount(){
+  S.acct??=accountDraft();
   const p=S.profile||{}, name=p.name||'Profilim';
   const profileChecks=[S.acct.name,S.acct.title,S.acct.services,S.acct.city,S.acct.bio].map(x=>!!String(x||'').trim());
   const verificationChecks=[!!p.identity_verified,!!p.vocational_verified,!!p.business_verified];
   const completed=[...profileChecks,...verificationChecks].filter(Boolean).length;
   const pct=Math.round(completed/8*100);
   const verCount=verificationChecks.filter(Boolean).length;
+  const expert=S.role==='usta',expertStats=stat(uid());
+  const jobs=expert?expertStats.jobs:D.mine.filter(l=>l.status==='done').length;
+  const rating=expertStats.rating==null?'—':Number(expertStats.rating).toLocaleString('tr-TR',{maximumFractionDigits:1});
   const verRows=[
     {ok:p.identity_verified,title:'Kimlik',text:p.identity_verified?'Doğrulandı':'Kimlik belgesiyle doğrula'},
     {ok:p.vocational_verified,title:'Mesleki belge',text:p.vocational_verified?'Doğrulandı':'Ustalık, MYK, diploma veya sertifika'},
@@ -3002,27 +2845,35 @@ function vAccount(){
   return `<div class="account-page service-page">
     <section class="account-cover">
       <div class="account-avatar">${esc(initials(name))}</div>
-      <div class="account-cover-copy"><span class="account-kicker">Profilim</span><h1>${esc(name)}</h1><p>${esc(p.title||'Profilini tamamlayarak daha güvenilir görün.')}</p></div>
-      <div class="profile-score"><b>%${pct}</b><small>tamamlandı</small></div>
+      <div class="account-cover-copy"><h1>${esc(name)}</h1><p>${expert?'Uzman':'Müşteri'}${p.title?' · '+esc(p.title):''}</p></div>
+      <div class="account-stats">
+        <div><b>${esc(jobs||0)}</b><small>Tamamlanan</small></div>
+        <div><b>${expert?rating:D.mine.length}</b><small>${expert?'Puan':'İlanlarım'}</small></div>
+        <div><b>${verCount}/3</b><small>Doğrulama</small></div>
+      </div>
     </section>
 
     <section class="account-section">
-      <div class="account-section-head"><div><span>01</span><h2>Profil bilgileri</h2></div><p>Müşterilerin seni tanıması için temel bilgiler.</p></div>
+      <div class="account-section-head"><h2>Profil bilgileri</h2><div class="profile-score"><b>%${pct}</b><small>tamamlandı</small></div><p>Hizmet verdiğin bölgeyi ve kendini tanıt.</p></div>
       <div class="account-form">
-        <label><span>Adın / işletme adın</span><input class="in" id="ac-name" maxlength="80" value="${esc(S.acct.name)}" placeholder="Adın veya işletme adın"></label>
-        <label><span>Kısa uzmanlık başlığı</span><input class="in" id="ac-title" maxlength="100" placeholder="Örn. Klima ve soğutma uzmanı" value="${esc(S.acct.title)}"></label>
-        <label><span>Verdiğin hizmetler</span><input class="in" id="ac-services" maxlength="300" placeholder="Klima bakımı, montaj, gaz dolumu" value="${esc(S.acct.services)}"><small>Hizmetleri virgülle ayır.</small></label>
         <div class="account-form-grid">
           <label><span>Hizmet verdiğin il</span><select class="in" id="ac-city"><option value="">İl seç</option>${ILLER.map(x=>`<option value="${esc(x)}" ${S.acct.city===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label>
           <label><span>İlçeler</span><input class="in" id="ac-districts" maxlength="400" placeholder="Yenişehir, Mezitli..." value="${esc(S.acct.districts)}"><small>Boş bırakırsan tüm il kabul edilir.</small></label>
         </div>
         <label><span>Kendini ve hizmetini tanıt</span><textarea class="in" id="ac-bio" maxlength="600" placeholder="Deneyimini, çalışma şeklini ve müşterinin bilmesini istediğin noktaları yaz...">${esc(S.acct.bio)}</textarea><small>En iyi profiller kısa, net ve güven veren açıklamalar kullanır.</small></label>
+        <details class="account-extra"${S.acct.name.trim().length<2?' open':''}>
+          <summary>Ad, uzmanlık ve hizmetler</summary>
+        <label><span>Adın / işletme adın</span><input class="in" id="ac-name" maxlength="80" value="${esc(S.acct.name)}" placeholder="Adın veya işletme adın"></label>
+        <label><span>Kısa uzmanlık başlığı</span><input class="in" id="ac-title" maxlength="100" placeholder="Örn. Klima ve soğutma uzmanı" value="${esc(S.acct.title)}"></label>
+        <label><span>Verdiğin hizmetler</span><input class="in" id="ac-services" maxlength="300" placeholder="Klima bakımı, montaj, gaz dolumu" value="${esc(S.acct.services)}"><small>Hizmetleri virgülle ayır.</small></label>
+        </details>
       </div>
       <button class="btn block account-save" data-a="saveAcct">Değişiklikleri kaydet</button>
     </section>
 
     <section class="account-section verification-section">
-      <div class="account-section-head"><div><span>02</span><h2>Güven & doğrulama</h2></div><p>${verCount}/3 doğrulama tamamlandı.</p></div>
+      <div class="account-section-head"><h2>Güven & doğrulama</h2><b class="verify-count">${verCount}/3</b></div>
+      <progress class="verification-progress" value="${verCount}" max="3" aria-label="Tamamlanan doğrulamalar"></progress>
       <div class="verify-status-list">${verRows}</div>
 
       <details class="verify-details">
@@ -3042,22 +2893,8 @@ function vAccount(){
       <div class="verify-history compact"><div class="subsection-title"><h3>Başvurularım</h3><button class="link" data-a="syncVerify">Yenile</button></div>${(D.verifications||[]).length?(D.verifications||[]).map(v=>`<div class="verify-row"><div><b>${esc(VERIFY_TYPES[v.verification_type]||v.verification_type)}</b><small>${esc(verifyCategoryLabel(v.category))} · ${esc(v.document_type)}</small></div><span class="pill ${v.status==='approved'?'good':v.status==='pending'?'amber':''}">${esc(VERIFY_STATUS[v.status]||v.status)}</span></div>`).join(''):'<p class="empty-inline">Henüz belge göndermedin.</p>'}</div>
     </section>
 
-    <section class="account-section palette-settings">
-      <div class="account-section-head"><div><span>03</span><h2>Görünüm</h2></div><p>Uygulamanın renklerini seç.</p></div>
-      <div class="theme-settings" role="group" aria-label="Tema">
-        <button type="button" data-a="setTheme" data-v="light" aria-pressed="${theme==='light'}">Açık tema</button>
-        <button type="button" data-a="setTheme" data-v="dark" aria-pressed="${theme==='dark'}">Koyu tema</button>
-      </div>
-      <div class="palette-options" role="group" aria-label="Renk kombinasyonu">
-        <button type="button" class="palette-option" data-a="setPalette" data-v="blue-amber" aria-pressed="${S.palette==='blue-amber'}"><span class="palette-number">1</span><span class="palette-label"><b>Lacivert & turuncu</b><small>Canlı ve güven veren</small></span><span class="palette-swatches"><i></i><i></i></span><span class="palette-check" aria-hidden="true">✓</span></button>
-        <button type="button" class="palette-option" data-a="setPalette" data-v="navy-teal" aria-pressed="${S.palette==='navy-teal'}"><span class="palette-number">2</span><span class="palette-label"><b>Lacivert & turkuaz</b><small>Sakin ve profesyonel</small></span><span class="palette-swatches"><i></i><i></i></span><span class="palette-check" aria-hidden="true">✓</span></button>
-        <button type="button" class="palette-option" data-a="setPalette" data-v="indigo-sage" aria-pressed="${S.palette==='indigo-sage'}"><span class="palette-number">4</span><span class="palette-label"><b>İndigo & adaçayı</b><small>Yumuşak ve özgün</small></span><span class="palette-swatches"><i></i><i></i></span><span class="palette-check" aria-hidden="true">✓</span></button>
-      </div>
-      <p class="palette-note">Seçimin bu tarayıcıda kaydedilir.</p>
-    </section>
-
     <section class="account-section account-settings">
-      <div class="account-section-head"><div><span>04</span><h2>Hesap & destek</h2></div><p>Destek, yasal bilgiler ve hesap işlemleri.</p></div>
+      <div class="account-section-head"><h2>Hesap & destek</h2><p>Destek, yasal bilgiler ve hesap işlemleri.</p></div>
       ${S.partnerCtx?'<button class="account-menu-row" data-a="partnerPanel"><span class="menu-icon">▦</span><span><b>Kurumsal partner paneli</b><small>Partner performansı ve işler</small></span><i>›</i></button>':''}
       ${S.isAdmin?'<button class="account-menu-row" data-a="admin"><span class="menu-icon">⚙</span><span><b>Yönetici paneli</b><small>Operasyon ve moderasyon</small></span><i>›</i></button>':''}
       <button class="account-menu-row" data-a="support"><span class="menu-icon">?</span><span><b>Destek merkezi</b><small>Bir sorun bildir veya yardım iste</small></span><i>›</i></button>
@@ -3073,12 +2910,28 @@ function vAccount(){
 function vList(){
   const popular=['boya','tesisat','elektrik','klima','temizlik','nakliyat','mobilya','oto'];
   const cats=popular.map(k=>{const v=KAT[k];return `<button class="homecat" data-a="quickCat" data-v="${k}"><span>${iconFor(k)}</span><b>${esc(v.ad)}</b></button>`}).join('');
-  const jobs=D.mine.length?D.mine.map(l=>ticket(l,{act:chosenQ(l)?'openActive':'open',pill:pillMine(l)})).join(''):'<div class="empty jobs-empty"><span>▤</span><h3>Henüz ilanın yok</h3><p>İlk ilanını ver, uygun uzmanlardan teklifler almaya başla.</p><button class="btn sm" data-a="newIlan">İlk ilanımı ver</button></div>';
-  return `<div class="home-shell customer-home"><section class="hero"><div class="hero-copy"><span class="eyebrow">Tamİşim</span><h1>İhtiyacın neyse,<br><em>uzmanı burada.</em></h1><p>İşini anlat, teklif al, karşılaştır ve güvenle seç.</p><div class="hero-actions"><button class="searchbox" data-a="newIlan"><span>⌕</span> Hangi hizmete ihtiyacın var?</button><button class="hero-create" data-a="newIlan">İlan Oluştur</button></div></div><aside class="hero-proof" aria-label="Tamİşim güven özellikleri"><div><b>Tek ilan, çok teklif</b><small>Uzmanları fiyat ve profilleriyle karşılaştır.</small></div><div><b>Doğrulama görünür</b><small>Onaylı bilgileri seçimden önce incele.</small></div><div><b>Süreç kontrol altında</b><small>Randevu ve iş adımlarını takip et.</small></div></aside></section>
-  <section class="home-section"><div class="home-title"><h2>Popüler hizmetler</h2><button class="link" data-a="newIlan">Tümünü gör</button></div><div class="homecats">${cats}</div></section>
-  <div class="home-support-grid"><section class="trustbox"><div class="trusticon">✓</div><div><h3>Güvenle uzmanını seç</h3><p>Teklifleri, puanları, tamamlanan işleri ve doğrulama rozetlerini karşılaştır.</p></div></section>
-  <section class="steps"><h2>Nasıl çalışır?</h2><div><b>1</b><span><strong>İhtiyacını anlat</strong><small>Hizmeti ve konumu belirt.</small></span></div><div><b>2</b><span><strong>Teklifleri karşılaştır</strong><small>Fiyat ve uzman profilini incele.</small></span></div><div><b>3</b><span><strong>Uzmanını seç</strong><small>Mesajlaş ve işini tamamla.</small></span></div></section></div>
-  <section class="myjobs${S.navSection==='jobs'?' service-page jobs-page':''}" id="myjobs"><div class="home-title"><div><span class="section-kicker">Hesabım</span><h2>İlanlarım</h2></div><button class="btn sm" data-a="newIlan">+ İlan ver</button></div><div class="jobcount">${D.mine.length} ilan</div>${jobs}</section></div>`;
+  if(S.navSection==='jobs'){
+    const jobs=D.mine.length?D.mine.map(l=>ticket(l,{act:chosenQ(l)?'openActive':'open',pill:pillMine(l)})).join(''):'<div class="empty jobs-empty"><span>▤</span><h3>Henüz ilanın yok</h3><p>İlk ilanını ver, uygun uzmanlardan teklifler almaya başla.</p><button class="btn sm" data-a="newIlan">İlk ilanımı ver</button></div>';
+    return `<div class="home-shell customer-home"><section class="myjobs service-page jobs-page" id="myjobs"><div class="home-title"><div><span class="section-kicker">Hesabım</span><h2>İlanlarım</h2></div><button class="btn sm" data-a="newIlan">+ İlan ver</button></div><div class="jobcount">${D.mine.length} ilan</div>${jobs}</section></div>`;
+  }
+  const recent=D.mine.slice(0,3).map(l=>{
+    const category=KAT[l.category]?.ad||'İlan';
+    const title=(l.problems||[]).join(', ')||category;
+    return `<button class="client-job" data-a="${chosenQ(l)?'openActive':'open'}" data-v="${l.id}">
+      <span><b>${esc(title)}</b><small>${esc(locText(l))}</small></span>
+      ${pillMine(l)}<span aria-hidden="true">›</span></button>`;
+  }).join('');
+  return `<div class="home-shell customer-home client-landing">
+    <section class="client-welcome"><img src="hero-person.png" alt="">
+      <h1>Hoş geldin,<br><em>uzmanın burada.</em></h1><p>İhtiyacını paylaş, gelen teklifleri karşılaştır.</p>
+      <button class="welcome-action" data-a="newIlan"><span aria-hidden="true">＋</span> İlan Oluştur <span aria-hidden="true">→</span></button>
+    </section>
+    <section class="client-section"><header><h2>İlanlarım</h2><button data-a="navJobs">Tüm ilanlarım →</button></header>
+      <div class="client-activity">${recent||'<div class="client-empty"><b>Henüz ilanın yok</b><p>İlk ilanını oluşturduğunda gelen teklifleri buradan takip edebilirsin.</p></div>'}</div>
+    </section>
+    <section class="client-section client-services"><header><h2>Popüler hizmetler</h2><button data-a="newIlan">Tümünü gör →</button></header>
+      <div class="homecats">${cats}</div>
+    </section></div>`;
 }
 function detailPromptFor(k){
   const m={
@@ -3431,7 +3284,14 @@ function vQuote(){
 
 function vAdmin(){
   const a=S.admin||{stats:{},reports:[],profiles:{}};const st=a.stats||{};
-  const cards=`<div class="field two"><div class="check"><b>${st.users||0}</b><span>Kullanıcı</span></div><div class="check"><b>${st.open_reports||0}</b><span>Açık şikâyet</span></div><div class="check"><b>${st.open_listings||0}</b><span>Açık ilan</span></div><div class="check"><b>${st.done_listings||0}</b><span>Tamamlanan iş</span></div></div>`;
+  const icon=paths=>`<svg class="admin-icon" viewBox="0 0 24 24" aria-hidden="true">${paths}</svg>`;
+  const kpi=(label,value,paths)=>`<div><span class="admin-mark">${icon(paths)}</span><div><strong>${esc(value||0)}</strong><small>${label}</small></div></div>`;
+  const cards=`<div class="admin-kpis">
+    ${kpi('Kullanıcı',st.users,'<circle cx="9" cy="8" r="3"/><path d="M2 20v-2a7 7 0 0 1 14 0v2M16 5a3 3 0 0 1 0 6m2 3c2 .5 4 2 4 5"/>')}
+    ${kpi('Açık şikâyet',st.open_reports,'<path d="M5 21V4m0 1c5-4 9 4 15 0v10c-6 4-10-4-15 0"/>')}
+    ${kpi('Açık ilan',st.open_listings,'<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 9h2m3 0h5M7 14h2m3 0h5"/>')}
+    ${kpi('Tamamlanan iş',st.done_listings,'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>')}
+  </div>`;
   const rows=(a.reports||[]).map(r=>{const p=a.profiles[r.reported_id]||{};return `<article class="quote"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${esc(r.status)} · ${ago(r.created_at)}</p></div><span class="pill ${p.account_status==='suspended'?'amber':''}">${p.account_status==='suspended'?'Askıda':'Aktif'}</span></div><p class="qnote">${esc(r.reason)}</p><div class="badges">${p.phone_verified?'<span class="badge">✓ Telefon</span>':''}${p.identity_verified?'<span class="badge">✓ Kimlik</span>':''}</div><div class="foot"><button class="btn ghost sm" data-a="adminReport" data-v="${r.id}|${r.status==='resolved'?'open':'resolved'}">${r.status==='resolved'?'Yeniden aç':'Çözüldü yap'}</button><button class="btn ghost sm" data-a="adminIdentity" data-v="${r.reported_id}|${p.identity_verified?'0':'1'}">${p.identity_verified?'Kimlik onayını kaldır':'Kimliği onayla'}</button><button class="btn sm" data-a="adminSuspend" data-v="${r.reported_id}|${p.account_status==='suspended'?'active':'suspended'}">${p.account_status==='suspended'?'Hesabı aç':'Hesabı askıya al'}</button></div></article>`}).join('');
   const vers=(a.verifications||[]).map(v=>{const p=a.profiles[v.user_id]||{};return `<article class="quote verify-admin"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${esc(VERIFY_TYPES[v.verification_type]||v.verification_type)} · ${esc(verifyCategoryLabel(v.category))}</p></div><span class="pill ${v.status==='approved'?'good':v.status==='pending'?'amber':''}">${esc(VERIFY_STATUS[v.status]||v.status)}</span></div><p class="qnote">${esc(v.document_type)}</p><div class="foot"><button class="btn ghost sm" data-a="openVerificationDoc" data-v="${v.id}">Belgeyi aç</button>${v.status==='pending'?`<button class="btn ghost sm" data-a="reviewVerification" data-v="${v.id}|approved">Onayla</button><button class="btn ghost sm" data-a="reviewVerification" data-v="${v.id}|rejected">Reddet</button>`:''}</div></article>`}).join('');
   const partners=(a.partners||[]).map(p=>{const st=(a.partnerStats||[]).find(x=>x.partner_id===p.id)||{};return `<article class="quote partner-admin"><div class="qhead"><div><h3>${esc(p.name)}</h3><p class="muted small">@${esc(p.slug)}</p></div><span class="pill ${p.status==='active'?'good':p.status==='paused'?'amber':''}">${p.status==='active'?'Aktif':p.status==='paused'?'Duraklatıldı':'Kapalı'}</span></div><div class="partner-category-badges">${partnerCategoryBadges(p)}</div><div class="partner-stats"><div><b>${st.listings||0}</b><small>İlan</small></div><div><b>${st.chosen||0}</b><small>Seçilen</small></div><div><b>${st.done||0}</b><small>Tamamlanan</small></div><div><b>${tl(st.gross_volume||0)}</b><small>Hacim</small></div></div>${partnerCategoryPicker('partner-'+p.id,p.service_categories)}<button class="btn ghost sm partner-cat-save" data-a="savePartnerCategories" data-v="${p.id}">Hizmet alanlarını kaydet</button><div class="partner-terms"><label>Komisyon %<input class="in" id="pc-${p.id}" type="number" min="0" max="50" step="0.5" value="${Number(p.commission_percent||0)}"></label><label>Partner indirim katkısı %<input class="in" id="pp-${p.id}" type="number" min="0" max="100" step="1" value="${Number(p.promo_share_percent||0)}"></label><button class="btn ghost sm" data-a="savePartnerTerms" data-v="${p.id}">Oranları kaydet</button></div><div class="partner-money"><span>Tahmini Tamİşim komisyonu <b>${tl(st.platform_commission_estimate||0)}</b></span><span>Partner kampanya katkısı <b>${tl(st.partner_promo_contribution_estimate||0)}</b></span></div><div class="foot"><button class="btn ghost sm" data-a="partnerStatus" data-v="${p.id}|${p.status==='active'?'paused':'active'}">${p.status==='active'?'Duraklat':'Aktif et'}</button><button class="btn ghost sm" data-a="partnerStatus" data-v="${p.id}|disabled">Kapat</button></div></article>`}).join('');
@@ -3443,12 +3303,28 @@ function vAdmin(){
   const payRows=payments.map(x=>{const cu=a.profiles[x.customer_id]||{},pr=a.profiles[x.pro_id]||{},at=latestAttempt[x.id];return `<article class="quote payment-admin"><div class="qhead"><div><h3>İş #${x.listing_id}</h3><p class="muted small">${esc(cu.name||'Müşteri')} → ${esc(pr.name||'Uzman')} · ${ago(x.created_at)}</p></div><span class="pill ${x.status==='paid'?'good':x.status==='failed'?'amber':''}">${esc(PAYMENT_STATUS[x.status]||x.status)}</span></div><div class="payment-admin-grid"><span>Net tutar <b>${x.payable_amount==null?'—':tl(x.payable_amount)}</b></span><span>Kart/online <b>${tl(x.provider_amount||0)}</b></span><span>Nakit <b>${tl(x.cash_amount||0)}</b></span><span>Komisyon <b>${tl(x.platform_commission_amount||0)}</b></span></div><p class="muted small">${esc(PAYMENTS[x.method]&&PAYMENTS[x.method].label||x.method)}${x.provider?' · '+esc(x.provider):''}</p>${at?`<div class="attempt-note"><span>Son ödeme denemesi</span><b>${esc(at.status)}</b><small>${ago(at.created_at)}${at.error_message?' · '+esc(at.error_message):''}</small></div>`:''}</article>`}).join('');
   const supportRows=(a.support||[]).map(x=>{const p=a.profiles[x.user_id]||{};return `<article class="quote support-admin"><div class="qhead"><div><h3>${esc(x.subject)}</h3><p class="muted small">${esc(p.name||'Kullanıcı')} · ${ago(x.created_at)}</p></div><span class="pill ${x.status==='resolved'||x.status==='closed'?'good':x.status==='in_progress'?'amber':''}">${x.status}</span></div><p class="qnote">${esc(x.message)}</p>${x.admin_response?`<p class="muted small">Yanıt: ${esc(x.admin_response)}</p>`:''}<div class="foot">${x.status==='open'?'<button class="btn ghost sm" data-a="adminSupport" data-v="'+x.id+'|in_progress">İşleme al</button>':''}${!['resolved','closed'].includes(x.status)?'<button class="btn ghost sm" data-a="adminSupport" data-v="'+x.id+'|resolved">Yanıtla & çöz</button>':''}</div></article>`}).join('');
   const deletionRows=(a.deletions||[]).map(x=>{const p=a.profiles[x.user_id]||{};return `<article class="quote deletion-admin"><div class="qhead"><div><h3>${esc(p.name||'Kullanıcı')}</h3><p class="muted small">${ago(x.created_at)} · ${esc(x.status)}</p></div><span class="pill ${x.status==='completed'?'good':x.status==='pending'?'amber':''}">${x.status==='pending'?'Bekliyor':x.status==='processing'?'İşleniyor':x.status==='completed'?'Tamamlandı':'Reddedildi'}</span></div>${x.reason?`<p class="qnote">${esc(x.reason)}</p>`:''}${x.admin_note?`<p class="muted small">Not: ${esc(x.admin_note)}</p>`:''}<div class="foot">${x.status==='pending'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|processing">İşleme al</button>':''}${x.status!=='completed'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|completed">Tamamlandı</button>':''}${x.status==='pending'?'<button class="btn ghost sm" data-a="adminDeletion" data-v="'+x.id+'|rejected">Reddet</button>':''}</div></article>`}).join('');
-  return `<div class="service-page operations-page"><button class="page-back" data-a="closeAdmin">← Hesabıma dön</button><div class="pagehead"><div><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div><button class="btn ghost sm" data-a="adminRefresh">Yenile</button></div>${cards}
-  <h2>Ödeme operasyonu</h2><div class="field payment-admin-summary"><div><span>Kayıtlı ödeme</span><b>${Number(payStats.payments||payments.length)}</b></div><div><span>Bekleyen</span><b>${payPending}</b></div><div><span>Net hacim</span><b>${tl(payGross)}</b></div><div><span>Tahmini komisyon</span><b>${tl(payCommission)}</b></div></div>${payRows||'<div class="empty">Henüz ödeme kaydı yok.</div>'}
+  const accounts=Object.values(a.profiles||{}).map(p=>{
+    const name=p.name||'Kullanıcı';
+    const status=p.account_status==='suspended'?'Askıda':p.identity_verified?'Kimlik onaylı':p.account_status==='active'?'Aktif':'';
+    return `<li><span class="account-initial" aria-hidden="true">${esc(name.trim().charAt(0).toLocaleUpperCase('tr-TR'))}</span><b>${esc(name)}</b>${status?`<span class="admin-status ${p.identity_verified&&p.account_status!=='suspended'?'':'admin-neutral'}">${status}</span>`:''}</li>`;
+  }).join('');
+  return `<div class="service-page operations-page admin-dashboard">
+  <button class="page-back" data-a="closeAdmin">← Hesabıma dön</button>
+  <div class="pagehead"><div class="admin-intro"><span class="admin-kicker">YÖNETİM</span><h1>Yönetici paneli</h1><p class="lede">Şikâyet kuyruğu, doğrulama ve hesap denetimi.</p></div>
+    <span class="admin-shield">${icon('<path d="m12 3 8 3v5c0 5-3 8-8 11-5-3-8-6-8-11V6Z"/><path d="M12 7v10"/>')}</span>
+    <button class="btn ghost sm" data-a="adminRefresh">${icon('<path d="M20 6v5h-5"/><path d="M19 10a7.5 7.5 0 1 0-1 7"/>')} Yenile</button>
+  </div>${cards}
+  <h2>Ödeme operasyonu</h2><div class="field payment-admin-summary"><div><span>Kayıtlı ödeme</span><b>${Number(payStats.payments||payments.length)}</b></div><div><span>Bekleyen</span><b>${payPending}</b></div><div><span>Net hacim</span><b>${tl(payGross)}</b></div><div><span>Tahmini komisyon</span><b>${tl(payCommission)}</b></div></div>
+  <section class="admin-queue"><header><h2>Şikâyet kuyruğu</h2>${!rows&&!st.open_reports?'<span class="admin-status">Kuyruk boş</span>':''}</header>
+    ${rows||`<div class="empty queue-empty"><span class="queue-mark">${icon('<path d="m5 12 4 4L19 6"/>')}</span><strong>${st.open_reports?'Şikâyet kaydı listelenemedi':'Bekleyen şikâyet yok'}</strong><span>Şikâyet kayıtları burada listelenir.</span></div>`}
+  </section>
+  <h2>İş ve ödeme kayıtları</h2>${payRows||'<div class="empty">Henüz ödeme kaydı yok.</div>'}
+  <section class="admin-accounts"><h2>Hesap denetimi</h2>${accounts?`<ul aria-label="Yönetim kayıtlarında yer alan hesaplar">${accounts}</ul>`:'<div class="empty">İncelenecek hesap kaydı yok.</div>'}</section>
+  <h2>Belge doğrulama</h2>${vers||'<div class="empty">Doğrulama başvurusu yok.</div>'}
   <h2>Kurumsal partnerler</h2><div class="field partner-form"><div class="two"><div><label class="lb" for="partner-name">Şirket adı</label><input class="in" id="partner-name" placeholder="Örn. Koçtaş"></div><div><label class="lb" for="partner-slug">Kısa ad</label><input class="in" id="partner-slug" placeholder="koctas" autocapitalize="off"></div></div>${partnerCategoryPicker('partner-new',[],false)}<button class="btn partner-add-btn" data-a="addPartner">Partner ekle</button></div>${partners||'<div class="empty">Henüz kurumsal partner yok.</div>'}
   <h2>Destek talepleri</h2>${supportRows||'<div class="empty">Destek talebi yok.</div>'}
   <h2>Hesap silme talepleri</h2>${deletionRows||'<div class="empty">Açık hesap silme talebi yok.</div>'}
-  <h2>Belge doğrulama</h2>${vers||'<div class="empty">Doğrulama başvurusu yok.</div>'}<h2>Şikâyetler</h2>${rows||'<div class="empty">Şikâyet kaydı yok.</div>'}</div>`;
+  </div>`;
 }
 async function loadAdmin(){
   if(!S.isAdmin)return;
@@ -3472,11 +3348,12 @@ async function loadAdmin(){
 }
 function vPartnerPanel(){
   const x=S.partnerCtx||{},d=(S.partnerDash&&S.partnerDash[0])||{},jobs=S.partnerJobs||[];
-  const cards=`<div class="partner-portal-stats"><div><b>${d.listings||0}</b><small>Toplam ilan</small></div><div><b>${d.open_listings||0}</b><small>Açık</small></div><div><b>${d.chosen||0}</b><small>Seçilen</small></div><div><b>${d.done||0}</b><small>Tamamlanan</small></div></div>`;
-  const money=`<div class="field partner-portal-money"><div><span>İş hacmi</span><b>${tl(d.gross_volume||0)}</b></div><div><span>Toplam indirim</span><b>${tl(d.discount_total||0)}</b></div><div><span>Tahmini Tamİşim komisyonu</span><b>${tl(d.commission_estimate||0)}</b></div><div><span>Partner kampanya katkısı</span><b>${tl(d.partner_promo_contribution||0)}</b></div></div>`;
-  const rows=jobs.map(j=>`<article class="quote partner-job"><div class="qhead"><div><h3>${esc((j.problems||[]).join(', ')||verifyCategoryLabel(j.category))}</h3><p class="muted small">${esc(j.external_order_ref||'Referans yok')} · ${esc([j.district,j.city].filter(Boolean).join(', '))}</p></div><span class="pill ${j.status==='done'?'good':j.status==='chosen'?'amber':''}">${j.status==='done'?'Tamamlandı':j.status==='chosen'?'Uzman seçildi':'Açık'}</span></div><div class="partner-job-meta"><span>${j.chosen_price?tl(j.chosen_price):'—'}</span>${Number(j.discount_amount)>0?`<span>İndirim: -${tl(j.discount_amount)}</span>`:''}</div></article>`).join('');
+  const symbol=path=>`<svg class="partner-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="${path}"/></svg>`;
+  const cards=`<div class="partner-portal-stats"><div>${symbol('M8 6h13M8 12h13M8 18h13M3 6h.2M3 12h.2M3 18h.2')}<b>${d.listings||0}</b><small>Toplam ilan</small></div><div>${symbol('M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 4v5l3 2')}<b>${d.open_listings||0}</b><small>Açık</small></div><div>${symbol('M9 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM3 20v-2a6 6 0 0 1 12 0v2Zm12-9 2 2 4-5')}<b>${d.chosen||0}</b><small>Seçilen</small></div><div>${symbol('M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm-4 9 3 3 5-6')}<b>${d.done||0}</b><small>Tamamlanan</small></div></div>`;
+  const money=`<div class="field partner-portal-money"><h2>Finans özeti</h2><div class="partner-volume"><span>İş hacmi</span><b>${tl(d.gross_volume||0)}</b></div><div><span>Toplam indirim</span><b>${tl(d.discount_total||0)}</b></div><div><span>Tahmini Tamİşim komisyonu</span><b>${tl(d.commission_estimate||0)}</b></div><div><span>Partner kampanya katkısı</span><b>${tl(d.partner_promo_contribution||0)}</b></div></div>`;
+  const rows=jobs.map(j=>`<article class="quote partner-job"><div class="qhead">${iconFor(j.category)}<div><h3>${esc((j.problems||[]).join(', ')||verifyCategoryLabel(j.category))}</h3><p class="muted small">${esc(j.external_order_ref||'Referans yok')} · ${esc([j.district,j.city].filter(Boolean).join(', '))}</p></div><span class="pill ${j.status==='done'?'good':j.status==='chosen'?'amber':''}">${j.status==='done'?'Tamamlandı':j.status==='chosen'?'Uzman seçildi':'Açık'}</span></div><div class="partner-job-meta"><span>${j.chosen_price?tl(j.chosen_price):'—'}</span>${Number(j.discount_amount)>0?`<span>İndirim: -${tl(j.discount_amount)}</span>`:''}</div></article>`).join('');
   const partnerRow=(D.partners||{})[x.partner_id]||{};
-  return `<div class="service-page partner-page"><button class="partner-back" data-a="closePartnerPanel"><span class="partner-back-ico">←</span><span><b>Hesabıma dön</b><small>Profil ve hesap ayarlarına geri git</small></span></button><div class="pagehead partner-pagehead"><div><span class="section-kicker">Kurumsal partner</span><h1>${esc(x.partner_name||'Partner paneli')}</h1><p>@${esc(x.partner_slug||'')} · ${esc(x.member_role||'viewer')}</p><div class="partner-category-badges panel">${partnerCategoryBadges(partnerRow)}</div></div><button class="btn ghost sm" data-a="partnerRefresh">Yenile</button></div>${cards}${money}<h2>Yönlendirilen işler</h2>${rows||'<div class="empty">Henüz partner işi yok.</div>'}</div>`;
+  return `<div class="service-page partner-page"><button class="partner-back" data-a="closePartnerPanel"><span class="partner-back-ico">←</span><span><b>Hesabıma dön</b><small>Profil ve hesap ayarlarına geri git</small></span></button><div class="pagehead partner-pagehead"><div><span class="section-kicker">Kurumsal partner</span><h1>${esc(x.partner_name||'Partner paneli')}</h1><p>@${esc(x.partner_slug||'')} · ${esc(x.member_role||'viewer')}</p><div class="partner-category-badges panel">${partnerCategoryBadges(partnerRow)}</div></div><span class="company-symbol">${symbol('M5 21V3h14v18h-5v-5h-4v5ZM8 7h1m5 0h1m-7 4h1m5 0h1')}</span><button class="btn ghost sm" data-a="partnerRefresh">${symbol('M20 5v6h-6m5-2a8 8 0 1 0 0 7')} Yenile</button></div>${cards}${money}<h2>Yönlendirilen işler</h2>${rows||'<div class="empty">Henüz partner işi yok.</div>'}</div>`;
 }
 async function loadPartnerPanel(){
   if(!S.partnerCtx)return;
@@ -3583,24 +3460,10 @@ function render(){
 
 /* ---------- eylemler ---------- */
 const NET=new Set(['experts','expertCategory','saveExpertProfile','sendSupport','supportRefresh','savePartnerCategories','adminSupport','adminDeletion','requestDeletion','startCardPayment','applySelectedPromo','savePayment','proposeAppointment','acceptAppointment','advanceWorkflow','submitReview','sendPreMessage','partnerPanel','partnerRefresh','authGo','forgotPass','setNewPass','saveAcct','logout','createNext','publish','pick','send','sendQuote','reportUser','blockUser','syncVerify','admin','adminRefresh','adminReport','adminIdentity','adminSuspend']);
-const KEEP=new Set(['menuToggle','menuClose','expertFilter','toggleExpertCategory','pickKat','toggleSorun','choosePay','togglePayment','zaman','sort','filter','pick','send','sendPreMessage','openPreThread','setReviewRating','tab','setPalette','setTheme']);
+const KEEP=new Set(['menuToggle','menuClose','expertFilter','toggleExpertCategory','pickKat','toggleSorun','choosePay','togglePayment','zaman','sort','filter','pick','send','sendPreMessage','openPreThread','setReviewRating','tab']);
 const A={
   menuToggle(){S.menuOpen=!S.menuOpen},
   menuClose(){S.menuOpen=false},
-  setPalette(v){
-    if(!Object.prototype.hasOwnProperty.call(PALETTE_COLORS,v))return;
-    S.palette=v;
-    document.documentElement.dataset.palette=v;
-    syncAppearanceMeta();
-    try{localStorage.setItem('tamisim_palette',v)}catch(e){}
-  },
-  setTheme(value){
-    if(value!=='light'&&value!=='dark')return;
-    theme=value;
-    appearanceRoot.dataset.theme=theme;
-    syncAppearanceMeta();
-    try{localStorage.setItem(THEME_KEY,theme)}catch(e){}
-  },
   async experts(){S.menuOpen=false;S.expertsLoaded=false;await loadExpertDirectory();S.page='experts';S.expertFilter='hepsi'},
   async expertCategory(v){S.menuOpen=false;S.expertsLoaded=false;await loadExpertDirectory();S.page='experts';S.expertFilter=KAT[v]?v:'hepsi'},
   closeExperts(){S.page='main';S.menuOpen=false},
@@ -3660,7 +3523,7 @@ const A={
   closeNotifications(){S.page='main';},
   async readAll(){const r=await sb.from('notifications').update({read_at:new Date().toISOString()}).eq('user_id',uid()).is('read_at',null);if(r.error)throw r.error;await refresh();},
   async openNotification(v){const n=(D.notifications||[]).find(x=>String(x.id)===String(v));if(!n)return;if(!n.read_at)await sb.from('notifications').update({read_at:new Date().toISOString()}).eq('id',n.id).eq('user_id',uid());S.page='main';S.preThread=null;if(n.listing_id){const l=D.listings[n.listing_id];if(l){S.role=l.owner===uid()?'musteri':'usta';S.sel=n.listing_id;S.view=l.owner===uid()?'detail':'prodetail';}}await refresh();if(n.type==='preselection_message'&&n.listing_id){const l=D.listings[n.listing_id];if(l&&l.owner===uid()){S.role='musteri';S.view='detail';const q=Object.values(D.quotes).find(x=>x.listing_id===l.id&&x.pro===n.actor_id);if(q)S.preThread=q.id}else{S.role='usta';S.view='list';S.tab='teklifler';const q=myQuote(n.listing_id);if(q)S.preThread=q.id}}},
-  account(){S.menuOpen=false;const p=S.profile||{};S.page='account';S.acct={name:p.name||'',title:p.title||'',bio:p.bio||'',services:(p.services||[]).join(', '),areas:(p.service_areas||[]).join(', '),city:p.service_city||'',districts:(p.service_districts||[]).join(', ')}},
+  account(){S.menuOpen=false;S.acct=accountDraft();S.page='account'},
   closeAcct(){S.page='main'},
   async admin(){S.menuOpen=false;if(!S.isAdmin)return;await loadAdmin();S.page='admin'},
   async partnerPanel(){S.menuOpen=false;if(!S.partnerCtx)return;await loadPartnerPanel();S.page='partner'},
@@ -4069,6 +3932,14 @@ async function run(a,v,el){
   const before=navSnapshot();
   let result;
   if(NET.has(a)){if(S.busy)return;S.busy=true;document.body.style.cursor='progress'}
+  if(a==='authGo'){
+    const submit=document.querySelector('.auth-entry [data-a="authGo"]');
+    if(submit){
+      submit.disabled=true;
+      submit.setAttribute('aria-busy','true');
+      submit.querySelector('b').textContent=S.authMode==='up'?'Kaydediliyor…':'Giriş yapılıyor…';
+    }
+  }
   const appointmentAction=a==='proposeAppointment'||a==='acceptAppointment';
   if(appointmentAction){
     appointmentFeedback=null;
@@ -4139,6 +4010,14 @@ window.visualViewport?.addEventListener('resize',keepConversationComposerVisible
 document.addEventListener('error',e=>{
   if(e.target.matches?.('.job-cover img'))e.target.hidden=true;
 },true);
+document.addEventListener('click',e=>{
+  const toggle=e.target.closest('.auth-entry .auth-eye');
+  if(!toggle)return;
+  const input=document.getElementById(toggle.getAttribute('aria-controls'));
+  const reveal=input.type==='password';
+  input.type=reveal?'text':'password';
+  toggle.setAttribute('aria-pressed',String(reveal));
+});
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el)run(el.dataset.a,el.dataset.v,el)});
 document.addEventListener('keydown',e=>{
   if(e.key!=='Enter'||e.target.tagName==='TEXTAREA')return;
@@ -4273,12 +4152,13 @@ if(sb){
         const authState=history.state,authDepth=Math.max(0,Number(authState&&authState.depth)||0);
         const authHistorySteps=continued&&authState&&authState.app===NAV_STATE_KEY&&authState.guestAuth?(authDepth>1?2:authDepth):0;
         S.quoteDrafts.clear();S.quoteFor=null;S.q=null;
+        S.acct=null;
         S.user=u;S.page='main';S.view='list';S.role='musteri';S.auth.pass='';S.authErr='';S.authInfo='';S.confirmationEmail='';S.guestAuth=false;
         S.pendingAction=null;
         setTimeout(async()=>{await boot();if(continued)resumeListingDraftAfterAuth(continued,continuedStep,authHistorySteps)},0);
       }
     }else{
-      if(S.user){S.quoteDrafts.clear();S.quoteFor=null;S.q=null;S.user=null;S.profile=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:'',terms:false};S.authErr='';S.authInfo='';S.confirmationEmail=''}
+      if(S.user){S.quoteDrafts.clear();S.quoteFor=null;S.q=null;S.user=null;S.profile=null;S.acct=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:'',terms:false};S.authErr='';S.authInfo='';S.confirmationEmail=''}
       if(!S.draft){const saved=loadGuestDraft();if(saved){S.draft=saved;S.view='new'}}
       S.loading=false;
       setTimeout(render,0);
