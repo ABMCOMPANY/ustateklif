@@ -347,7 +347,15 @@ html{color-scheme:only light!important}.quote-head,.quote-head h1,.quote-head p,
 .terms-check{display:flex;align-items:flex-start;gap:9px;margin:2px 0 14px;font-size:11px;line-height:1.45;color:#607086}.terms-check input{margin-top:3px;width:16px;height:16px;flex:0 0 auto}.inline-link{appearance:none;border:0;background:none;padding:0;color:var(--brand-primary);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}.account-tools{display:grid;gap:10px;margin-top:12px}.danger-ghost{border-color:#E7B7B7!important;color:#A53A3A!important;background:#FFF9F9!important}.legal-card{background:#fff;border:1px solid #E3E9F1;border-radius:18px;padding:18px;margin:0 0 12px}.legal-card h2{margin:0 0 10px;color:var(--brand-ink);font-size:17px}.legal-card p{margin:0 0 10px;color:#5F7087;font-size:12px;line-height:1.65}.legal-card p:last-child{margin-bottom:0}
 
 /* support-ux-v50 */
-.offline-banner{margin:0 20px 10px;padding:9px 12px;border-radius:12px;background:#FFF1F1;border:1px solid #F0CACA;color:#923D3D;font-size:11px;text-align:center}.support-form{display:grid;gap:9px}.support-item{background:#fff;border:1px solid #E3E9F1;border-radius:16px;padding:15px;margin-bottom:10px}.support-reply{margin-top:12px;padding:12px;border-radius:12px;background:#F4F7FB}.support-reply b{font-size:11px;color:var(--brand-ink)}.support-reply p{margin:5px 0 0;font-size:12px;line-height:1.55;color:#52657D}.fatal-state{text-align:center;padding:64px 20px}.fatal-icon{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;margin:0 auto 14px;background:#FFF1F1;color:#A53A3A;font-weight:900;font-size:24px}.fatal-state h1{margin:0 0 8px}.fatal-state p{color:#6A7A8F;max-width:420px;margin:0 auto 18px;line-height:1.55}@media(max-width:520px){.offline-banner{margin-left:12px;margin-right:12px}}
+.offline-banner{margin:0 20px 10px;padding:9px 12px;border-radius:12px;background:#FFF1F1;border:1px solid #F0CACA;color:#923D3D;font-size:11px;text-align:center}.support-form{display:grid;gap:9px}.support-item{background:#fff;border:1px solid #E3E9F1;border-radius:16px;padding:15px;margin-bottom:10px}.support-reply{margin-top:12px;padding:12px;border-radius:12px;background:#F4F7FB}.support-reply b{font-size:11px;color:var(--brand-ink)}.support-reply p{margin:5px 0 0;font-size:12px;line-height:1.55;color:#52657D}.fatal-state{text-align:center;padding:64px 20px}.fatal-icon{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;margin:0 auto 14px;background:#FFF1F1;color:#A53A3A;font-weight:900;font-size:24px}.fatal-state h1{margin:0 0 8px}.fatal-state p{color:#6A7A8F;max-width:420px;margin:0 auto 18px;line-height:1.55}
+@media(max-width:767px){
+  .offline-banner{
+    margin:0;padding:2px 12px;border:0;border-radius:0;
+    background:#fff5e7;color:#75440d;font-weight:700;line-height:16px;
+  }
+  body:has(.guest-home) .offline-banner{margin-inline:-18px}
+  body:has(.guest-home,.auth-entry) .offline-banner{background:var(--brand-navy);color:#ffd39b}
+}
 
 /* account-redesign-v51 */
 .account-page{padding-bottom:20px}.account-cover{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:13px;align-items:center;margin:10px 0 16px;padding:18px;background:linear-gradient(140deg,var(--brand-ink) 0%,var(--brand-primary) 55%,var(--brand-bright) 100%);border-radius:24px;color:#fff;box-shadow:0 14px 34px rgba(var(--brand-ink-rgb),.18);overflow:hidden}.account-cover:after{content:"";position:absolute;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.08);right:-62px;top:-70px}.account-avatar{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;background:#fff;color:var(--brand-primary);font-size:21px;font-weight:900;box-shadow:0 7px 20px rgba(7,32,75,.18)}.account-cover-copy{min-width:0}.account-kicker{display:block;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.72;margin-bottom:3px}.account-cover h1{margin:0;font-size:22px;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.account-cover p{margin:5px 0 0;font-size:11px;opacity:.78;line-height:1.35}.profile-score{position:relative;z-index:1;text-align:right}.profile-score b{display:block;font-size:18px}.profile-score small{display:block;font-size:9px;opacity:.7;margin-top:1px}
@@ -1624,11 +1632,14 @@ body:has(.jobs-page) #bottomnav [data-a=navJobs] span{background:var(--ui-field)
 .top .hdr-r .seg{flex:none;align-items:center}
 .top .hdr-r .seg button{min-height:44px;padding:4px 9px;font-size:13px;white-space:nowrap}
 .top .hdr-r > button{flex:none;min-width:44px;min-height:44px}
-@media(max-width:359px){
+@media(max-width:360px){
   .top{gap:4px}
   .brand{font-size:23px}
   .top .hdr-r{gap:3px}
   .top .hdr-r .seg button{padding-inline:5px}
+}
+@media(max-width:320px){
+  .top:has(.hdr-r:not([hidden])){margin-inline:-11px}
 }
 /* The existing wordmark and beta notice form the top of the authentication hero. */
 .app:has(.auth-entry){
@@ -1639,6 +1650,13 @@ body:has(.jobs-page) #bottomnav [data-a=navJobs] span{background:var(--ui-field)
   --wordmark-ink:white;
   position:static;min-height:62px;padding:8px var(--entry-gutter);
   border:0;border-radius:20px 20px 0 0;background:var(--brand-navy);box-shadow:none;
+}
+@media(max-width:560px){
+  .app:has(.auth-entry) .top{position:relative;top:auto;border-radius:0}
+  .app:has(.auth-entry) .top::before{
+    content:"";position:absolute;inset-inline:0;bottom:100%;
+    height:env(safe-area-inset-top,0px);background:inherit;pointer-events:none;
+  }
 }
 .app:has(.auth-entry) #guest-hdr{display:none}
 .app:has(.auth-entry) .beta-strip{
@@ -1922,7 +1940,7 @@ body:has(.jobs-page) #bottomnav [data-a=navJobs] span{background:var(--ui-field)
   <button class="menu-backdrop" id="menu-backdrop" data-a="menuClose" aria-label="Menüyü kapat" hidden></button>
   <aside class="quick-menu" id="quick-menu" hidden aria-label="Hızlı menü"></aside>
   <div class="beta-strip"><b>Beta</b><span>Kart tahsilatı henüz aktif değil · Diğer akışlar test edilebilir</span></div>
-  <div id="offline-banner" class="offline-banner" hidden>İnternet bağlantın kesildi. Bağlantı gelince işlemlerine devam edebilirsin.</div>
+  <div id="offline-banner" class="offline-banner" hidden>İnternet bağlantısı yok.</div>
   <main id="app"></main>
   <nav class="bottomnav" id="bottomnav" hidden aria-label="Ana menü"><button data-a="navHome"><span aria-hidden="true">⌂</span><small>Ana Sayfa</small></button><button data-a="navJobs"><span aria-hidden="true">▤</span><small>İlanlarım</small></button><button class="navplus" data-a="newIlan" aria-label="Yeni ilan oluştur"><span aria-hidden="true">＋</span></button><button data-a="notifications"><span aria-hidden="true">♢</span><small>Bildirimler</small></button><button data-a="account"><span aria-hidden="true">○</span><small>Profil</small></button></nav>
 </div>
@@ -2015,7 +2033,7 @@ function navSnapshot(){
   if(!signed){
     return {app:NAV_STATE_KEY,signed:false,page:S.page==='legal'?'legal':'main',view:S.view==='new'&&S.draft?'new':'list',createStep:S.view==='new'?Math.min(6,Math.max(1,Number(S.createStep)||1)):1,guestAuth:!!S.guestAuth,guestCat:KAT[S.guestCat]?S.guestCat:null,recovery:!!S.recovery,menuOpen:false};
   }
-  return {app:NAV_STATE_KEY,signed:true,page:String(S.page||'main'),role:S.role==='usta'?'usta':'musteri',view:String(S.view||'list'),createStep:S.view==='new'?Math.min(6,Math.max(1,Number(S.createStep)||1)):1,sel:safeId(S.sel),quoteFor:safeId(S.quoteFor),preThread:safeId(S.preThread),navSection:S.navSection==='jobs'?'jobs':'home',expertEditing:!!S.expertEditing,expertFilter:KAT[S.expertFilter]?S.expertFilter:'hepsi',menuOpen:!!S.menuOpen};
+  return {app:NAV_STATE_KEY,signed:true,page:String(S.page||'main'),role:S.role==='usta'?'usta':'musteri',view:String(S.view||'list'),...(S.view==='new'&&S.draft?{draftOwner:uid()}:{}),createStep:S.view==='new'?Math.min(6,Math.max(1,Number(S.createStep)||1)):1,sel:safeId(S.sel),quoteFor:safeId(S.quoteFor),preThread:safeId(S.preThread),navSection:S.navSection==='jobs'?'jobs':'home',expertEditing:!!S.expertEditing,expertFilter:KAT[S.expertFilter]?S.expertFilter:'hepsi',menuOpen:!!S.menuOpen};
 }
 function navComparable(x){
   if(!x)return '';
@@ -2044,8 +2062,12 @@ function resumeListingDraftAfterAuth(rawDraft,step,authHistorySteps){
     S.draft=draft;S.createStep=Math.min(6,Math.max(1,Number(step)||1));
     S.page='main';S.role='musteri';S.view='new';S.sel=null;S.quoteFor=null;S.navSection='home';S.guestAuth=false;
   };
+  const owner=uid();
   const finish=()=>{
+    if(uid()!==owner)return;
     restoreDraft();
+    persistListingDraft();
+    clearGuestDraft();
     render();
     if(authHistorySteps>1){
       const current=history.state||{},depth=Math.max(0,Number(current.depth)||0);
@@ -2077,7 +2099,10 @@ function restoreNavigation(raw){
       S.createStep=Math.min(6,Math.max(1,Number(raw.createStep)||1));
       S.navSection=raw.navSection==='jobs'?'jobs':'home';
       S.sel=safeId(raw.sel);S.quoteFor=safeId(raw.quoteFor);S.preThread=safeId(raw.preThread);
-      if(S.view==='new'&&!S.draft)S.view='list';
+      if(S.view==='new'){
+        if(!S.draft||raw.draftOwner!==uid())S.view='list';
+        else if(S.role==='musteri'&&S.page==='main')persistListingDraft();
+      }
       if(['detail','prodetail','activejob','appointment'].includes(S.view)&&!D.listings[S.sel]){S.view='list';S.sel=null}
       S.q=S.quoteDrafts.get(S.quoteFor)||null;
       if(S.quoteFor&&(!S.q||!D.listings[S.quoteFor]))S.quoteFor=null;
@@ -2093,6 +2118,20 @@ function restoreNavigation(raw){
       }else window.scrollTo({top:Math.max(0,Number(raw.scrollY)||0)});
     });
   }finally{navRestoring=false}
+}
+function restoreGuestNavigationOnLoad(){
+  const saved=history.state;
+  if(navHistoryReady||S.user||saved?.app!==NAV_STATE_KEY||saved.signed!==false||saved.page!=='main')return false;
+  if(saved.guestAuth||saved.recovery)return false;
+  if(!Number.isSafeInteger(saved.depth)||saved.depth<0||saved.depth>=history.length)return false;
+  if(saved.view==='new'){
+    if(!S.draft||!Number.isInteger(saved.createStep)||saved.createStep<1||saved.createStep>6)return false;
+  }else if(saved.view!=='list'||(saved.guestCat!==null&&!Object.hasOwn(KAT,saved.guestCat)))return false;
+
+  restoreNavigation(saved);
+  history.replaceState(navState({depth:saved.depth,scrollY:saved.scrollY}),'',location.href);
+  navHistoryReady=true;
+  return true;
 }
 const NAV_BACK_ACTIONS=new Set(['back','backGuest','guestBack','createPrev','cancelDraft','closeExperts','closeSupport','closeLegal','closeNotifications','closeAcct','closePartnerPanel','closeAdmin','cancelQuote','cancelExpertEdit','closePreThread','closeAppointment']);
 const NAV_REPLACE_ACTIONS=new Set(['logout','setNewPass']);
@@ -2133,25 +2172,52 @@ function serviceMatch(p,k){
 const expertReady=p=>!!(p&&p.account_status==='active'&&p.expert_status==='active'&&Array.isArray(p.service_categories)&&p.service_categories.length&&String(p.service_city||'').trim()&&String(p.title||'').trim()&&String(p.bio||'').trim());
 const expertDraft=p=>({categories:[...((p&&p.service_categories)||[])],city:p&&p.service_city||'',districts:((p&&p.service_districts)||[]).join(', '),title:p&&p.title||'',bio:p&&p.bio||''});
 const GUEST_DRAFT_KEY='tamisim-listing-draft-v1';
+const LISTING_DRAFT_MAX_AGE=24*60*60*1000;
+const listingDraftKey=owner=>owner?GUEST_DRAFT_KEY+':'+owner:GUEST_DRAFT_KEY;
 const blankDraft=(kat=null)=>({kat:KAT[kat]?kat:null,sorunlar:[],not:'',city:'',district:'',neighborhood:'',zaman:'Bugün',photos:[]});
 function safeDraft(raw){
   if(!raw||typeof raw!=='object')return null;
-  const kat=KAT[raw.kat]?raw.kat:null,city=ILLER.includes(raw.city)?raw.city:'',allowed=districtsFor(city);
+  const kat=Object.hasOwn(KAT,raw.kat)?raw.kat:null,city=ILLER.includes(raw.city)?raw.city:'',allowed=districtsFor(city);
   return {kat,sorunlar:kat&&Array.isArray(raw.sorunlar)?raw.sorunlar.filter(x=>KAT[kat].sorunlar.includes(x)).slice(0,8):[],not:String(raw.not||'').slice(0,500),city,district:allowed.includes(raw.district)?raw.district:'',neighborhood:String(raw.neighborhood||'').trim().slice(0,100),zaman:ZAMAN.includes(raw.zaman)?raw.zaman:'Bugün',photos:[]};
 }
-function persistGuestDraft(){
-  if(S.user||!S.draft)return;
-  try{sessionStorage.setItem(GUEST_DRAFT_KEY,JSON.stringify({...safeDraft(S.draft),step:Math.min(6,Math.max(1,Number(S.createStep)||1)),savedAt:Date.now()}))}catch(e){}
+function persistListingDraft(){
+  if(!S.draft)return;
+  const {photos,...draft}=safeDraft(S.draft);
+  if(uid()&&(S.draft.photos?.length||S.draft.photosNeedReselection))draft.hadPhotos=true;
+  try{sessionStorage.setItem(listingDraftKey(uid()),JSON.stringify({...draft,step:S.createStep,savedAt:Date.now()}))}catch(e){}
+}
+function clearListingDraft(owner){try{sessionStorage.removeItem(listingDraftKey(owner))}catch(e){}}
+function clearGuestDraft(){clearListingDraft(null)}
+function readListingDraft(owner){
+  try{
+    const raw=JSON.parse(sessionStorage.getItem(listingDraftKey(owner))||'null');
+    if(!raw)return null;
+    const age=Date.now()-raw.savedAt;
+    if(!Number.isFinite(raw.savedAt)||age<0||age>LISTING_DRAFT_MAX_AGE){
+      clearListingDraft(owner);return null;
+    }
+    const draft=safeDraft(raw);
+    if(draft&&owner&&raw.hadPhotos===true)draft.photosNeedReselection=true;
+    return draft?{draft,step:Math.min(6,Math.max(1,Number(raw.step)||1))}:null;
+  }catch(e){return null}
 }
 function loadGuestDraft(){
-  try{const raw=JSON.parse(sessionStorage.getItem(GUEST_DRAFT_KEY)||'null');if(!raw||Date.now()-Number(raw.savedAt||0)>24*60*60*1000)return null;const d=safeDraft(raw);if(d)S.createStep=Math.min(6,Math.max(1,Number(raw.step)||1));return d}catch(e){return null}
+  const saved=readListingDraft(null);
+  if(saved)S.createStep=saved.step;
+  return saved?.draft||null;
 }
-function clearGuestDraft(){try{sessionStorage.removeItem(GUEST_DRAFT_KEY)}catch(e){}}
+function restoreCustomerDraftOnLoad(owner){
+  const saved=readListingDraft(owner),nav=history.state;
+  if(!saved||nav?.app!==NAV_STATE_KEY||nav.signed!==true||nav.draftOwner!==owner||
+    nav.page!=='main'||nav.role!=='musteri'||nav.view!=='new')return;
+  S.draft=saved.draft;S.createStep=saved.step;S.view='new';
+  replaceNavigationSnapshot();
+}
 function startDraft(kat=null,problem=null){
   const saved=!S.user&&loadGuestDraft(),d=saved||blankDraft(kat);
   if(kat&&KAT[kat]&&d.kat!==kat)Object.assign(d,blankDraft(kat));
   if(problem&&d.kat&&KAT[d.kat].sorunlar.includes(problem)&&!d.sorunlar.includes(problem))d.sorunlar=[problem];
-  S.draft=d;S.createStep=problem?3:kat?2:(saved?S.createStep:1);S.page='main';S.view='new';S.role='musteri';S.guestAuth=false;S.guestCat=null;S.catSearch='';S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};persistGuestDraft();
+  S.draft=d;S.createStep=problem?3:kat?2:(saved?S.createStep:1);S.page='main';S.view='new';S.role='musteri';S.guestAuth=false;S.guestCat=null;S.catSearch='';S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};persistListingDraft();
 }
 function draftPreviewKey(d){return d&&d.kat&&d.city?[d.kat,d.city,d.district||''].join('|'):''}
 async function loadDraftExpertPreview(){
@@ -2965,12 +3031,12 @@ function vNew(){
   if(step===1)body=`<div class="field create-card"><span class="stepno">1</span><h2>Ne yaptırmak istiyorsun?</h2><p class="hint">Kategori veya hizmet adıyla ara.</p><input class="in" id="cat-search" value="${esc(S.catSearch)}" placeholder="Örn. boya, su kaçağı, lastik..." autocomplete="off"><div class="catresults">${cats||'<div class="empty">Aramana uygun hizmet bulunamadı.</div>'}</div></div>`;
   if(step===2)body=`<div class="field create-card step-two-card"><span class="stepno">2</span><h2>Hangi hizmete veya soruna ihtiyacın var?</h2><p class="hint">Birden fazla seçebilirsin.</p><div class="chips">${d.kat?KAT[d.kat].sorunlar.map(x=>`<button class="chip" data-a="toggleSorun" data-v="${esc(x)}" aria-pressed="${d.sorunlar.includes(x)}">${esc(x)}</button>`).join(''):''}</div></div>`;
   if(step===3)body=`<div class="field create-card step-three-card"><span class="stepno">3</span><label class="lb" for="d-not">${prompt[0]}</label><textarea class="in" id="d-not" maxlength="500" placeholder="${esc(prompt[1])}">${esc(d.not)}</textarea><span class="lb">Ne zaman gelsin?</span><div class="chips">${ZAMAN.map(z=>`<button class="chip" data-a="zaman" data-v="${z}" aria-pressed="${d.zaman===z}">${z}</button>`).join('')}</div></div>`;
-  if(step===4)body=`<div class="field create-card v1c-final-card"><span class="stepno">4</span><h2>Fotoğraf ekle <small class="optional">İsteğe bağlı</small></h2><p class="hint">En fazla 5 fotoğraf, fotoğraf başına en fazla 8 MB.</p>${S.user?`<div class="photo-picker"><label class="uploadbox" for="d-photos">📷 Fotoğraf seç<input id="d-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>${d.photos.length?`<div class="photo-grid">${d.photos.map((x,i)=>`<div class="photo-thumb"><img src="${esc(x.preview)}" alt="Seçilen fotoğraf ${i+1}"><button type="button" data-a="removePhoto" data-v="${i}" aria-label="Fotoğrafı kaldır">×</button></div>`).join('')}</div>`:''}</div>`:'<div class="guest-photo-note">Fotoğrafları giriş yaptıktan sonra ekleyebilirsin. Taslağın kaybolmayacak.</div>'}</div>`;
+  if(step===4)body=`<div class="field create-card v1c-final-card"><span class="stepno">4</span><h2>Fotoğraf ekle <small class="optional">İsteğe bağlı</small></h2><p class="hint">En fazla 5 fotoğraf, fotoğraf başına en fazla 8 MB.</p>${S.user?`<p class="hint">Sayfayı yenilersen fotoğrafları yeniden eklemen gerekir.</p><div class="photo-picker"><label class="uploadbox" for="d-photos">📷 Fotoğraf seç<input id="d-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>${d.photos.length?`<div class="photo-grid">${d.photos.map((x,i)=>`<div class="photo-thumb"><img src="${esc(x.preview)}" alt="Seçilen fotoğraf ${i+1}"><button type="button" data-a="removePhoto" data-v="${i}" aria-label="Fotoğrafı kaldır">×</button></div>`).join('')}</div>`:''}</div>`:'<div class="guest-photo-note">Fotoğrafları giriş yaptıktan sonra ekleyebilirsin. Taslağın kaybolmayacak.</div>'}</div>`;
   if(step===5){const districts=districtsFor(d.city);body=`<div class="field create-card v1c-final-card location-card"><span class="stepno">5</span><h2>Nerede?</h2><p class="hint">İl ve ilçe standart listeden seçilir; mahalle isteğe bağlıdır.</p><div class="field two"><div><label class="lb" for="d-city">İl</label><select class="in" id="d-city"><option value="">İl seç</option>${ILLER.map(x=>`<option value="${esc(x)}" ${d.city===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div><div><label class="lb" for="d-district">İlçe</label><select class="in" id="d-district" ${d.city?'':'disabled'}><option value="">İlçe seç</option>${districts.map(x=>`<option value="${esc(x)}" ${d.district===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div><div><label class="lb" for="d-neighborhood">Mahalle <small class="optional">İsteğe bağlı</small></label><input class="in" id="d-neighborhood" maxlength="100" value="${esc(d.neighborhood)}" placeholder="Örn. Güzelyalı" autocomplete="address-level3"></div></div></div>`}
   if(step===6)body=`<div class="field create-card v1c-final-card review-card"><span class="stepno">6</span><h2>Kontrol et ve yayınla</h2><div class="create-review"><div class="create-review-row"><small>Hizmet</small><b>${esc(KAT[d.kat]?.ad||'—')} · ${esc(d.sorunlar.join(', '))}</b></div><div class="create-review-row"><small>Detay ve zaman</small><b>${esc(d.not)} · ${esc(d.zaman)}</b></div><div class="create-review-row"><small>Konum</small><b>${esc([d.neighborhood,d.district,d.city].filter(Boolean).join(', '))}</b></div><div class="create-review-row"><small>Fotoğraf</small><b>${S.user?d.photos.length+' fotoğraf':`Girişten sonra eklenebilir`}</b></div></div></div>${draftExpertPreview(d)}`;
   const nextLabel=step===5?'Kontrol et':step===6?'':'Devam';
   const actions=step===6?`<div class="create-actions"><button class="btn ghost" data-a="createPrev">Geri</button>${S.user?`<button class="btn" id="pub" data-a="publish" ${canPub(d)&&!S.busy?'':'disabled'}>İlanı yayınla</button>`:'<button class="btn" data-a="draftAuth">Giriş yap ve ilanı yayınla</button>'}</div>`:`<div class="create-actions ${step===1?'single':''}">${step>1?'<button class="btn ghost" data-a="createPrev">Geri</button>':''}<button class="btn" data-a="createNext">${nextLabel}</button></div>`;
-  return `<section class="create-flow" data-step="${step}"><div class="create-topbar"><button class="link" data-a="cancelDraft" aria-label="${S.user?'İlanlarıma dön':'Ana sayfaya dön'}">←</button><span>Yeni ilan</span></div><div class="create-progress-row"><div class="create-progress">${[1,2,3,4,5,6].map(n=>`<span class="${n<=step?'on':''}"></span>`).join('')}</div><div class="create-progress-meta"><span>Adım ${step}/6</span><span class="sr-only">${6-step} adım kaldı</span></div></div><div class="create-head"><h1>İşini birkaç adımda anlat</h1><p>Her adımda yalnız gerekli bilgiyi isteyeceğiz.</p></div>${body}${actions}</section>`;
+  return `<section class="create-flow" data-step="${step}"><div class="create-topbar"><button class="link" data-a="cancelDraft" aria-label="${S.user?'İlanlarıma dön':'Ana sayfaya dön'}">←</button><span>Yeni ilan</span></div><div class="create-progress-row"><div class="create-progress">${[1,2,3,4,5,6].map(n=>`<span class="${n<=step?'on':''}"></span>`).join('')}</div><div class="create-progress-meta"><span>Adım ${step}/6</span><span class="sr-only">${6-step} adım kaldı</span></div></div><div class="create-head"><h1>İşini birkaç adımda anlat</h1><p>Her adımda yalnız gerekli bilgiyi isteyeceğiz.</p></div>${S.user&&d.photosNeedReselection?'<p class="hint" role="status">Seçtiğin fotoğraflar korunamadı. Lütfen yeniden ekle.</p>':''}${body}${actions}</section>`;
 }
 function quoteSuitability(q,l,offers){
   const p=prof(q.pro),s=stat(q.pro);
@@ -3502,7 +3568,7 @@ const A={
   guestBack(){S.guestCat=null},
   guestService(v){if(S.guestCat&&KAT[S.guestCat]&&KAT[S.guestCat].sorunlar.includes(v))startDraft(S.guestCat,v)},
   requireAuth(v){if(v==='newIlan'){startDraft(S.guestCat);return}S.pendingAction=v||null;S.guestAuth=true;S.authErr='';S.authInfo=''},
-  draftAuth(){persistGuestDraft();S.pendingAction='newIlan';S.guestAuth=true;S.authErr='';S.authInfo=''},
+  draftAuth(){persistListingDraft();S.pendingAction='newIlan';S.guestAuth=true;S.authErr='';S.authInfo=''},
   navHome(){S.menuOpen=false;S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null;S.navSection='home'},
   navJobs(){S.menuOpen=false;S.page='main';S.role='musteri';S.view='list';S.sel=null;S.quoteFor=null;S.navSection='jobs';setTimeout(()=>{const x=document.getElementById('myjobs');if(x)x.scrollIntoView({behavior:'smooth',block:'start'})},0)},
   role(v){S.role=v;S.view='list';S.page='main';S.tab='acik';S.quoteFor=null;S.sel=null;S.navSection='home';S.expertEditing=false;if(v==='usta')S.expertDraft=expertDraft(S.profile||{})},
@@ -3624,7 +3690,7 @@ const A={
     if(r.error)throw r.error;
     await refresh();S.page='main';toast('Profilin kaydedildi.');
   },
-  async logout(){clearGuestDraft();S.draft=null;S.createStep=1;S.guestAuth=false;S.pendingAction=null;S.confirmationEmail='';await sb.auth.signOut()},
+  async logout(){clearListingDraft(uid());clearGuestDraft();S.draft=null;S.createStep=1;S.guestAuth=false;S.pendingAction=null;S.confirmationEmail='';await sb.auth.signOut()},
   saveCfg(){
     const url=S.cfgDraft.url.trim().replace(/\/+$/,''),key=S.cfgDraft.key.trim();
     if(!/^https:\/\/.+/.test(url)||key.length<20){toast('Adres ve anahtarı kontrol et.');return}
@@ -3681,13 +3747,13 @@ const A={
   pickKat(v){
     if(!KAT[v])return;
     if(S.draft.kat!==v){S.draft.kat=v;S.draft.sorunlar=[];S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0}}
-    persistGuestDraft();
+    persistListingDraft();
   },
   toggleSorun(v){
     if(!S.draft.kat||!KAT[S.draft.kat].sorunlar.includes(v))return;
     const s=S.draft.sorunlar,x=s.indexOf(v);
     x<0?s.push(v):s.splice(x,1);
-    persistGuestDraft();
+    persistListingDraft();
   },
   async createNext(){
     const d=S.draft,step=S.createStep;
@@ -3695,17 +3761,19 @@ const A={
     if(step===2&&!d.sorunlar.length){toast('İhtiyacın olan hizmeti veya sorunu seçmelisin.');return}
     if(step===3&&String(d.not||'').trim().length<10){toast('İşin detaylarını en az 10 karakterle anlatmalısın.');return}
     if(step===5&&(!ILLER.includes(d.city)||!districtsFor(d.city).includes(d.district))){toast('İl ve ilçeyi listeden seçmelisin.');return}
-    if(step<6)S.createStep=step+1;persistGuestDraft();
+    if(step<6)S.createStep=step+1;persistListingDraft();
     if(S.createStep===6)await loadDraftExpertPreview();
   },
-  createPrev(){if(S.createStep>1)S.createStep-=1;persistGuestDraft()},
-  cancelDraft(){(S.draft&&S.draft.photos||[]).forEach(x=>URL.revokeObjectURL(x.preview));clearGuestDraft();S.draft=null;S.createStep=1;S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};S.view='list';S.guestCat=null},
-  zaman(v){if(ZAMAN.includes(v)){S.draft.zaman=v;persistGuestDraft()}},
-  removePhoto(v){const i=+v,x=S.draft.photos[i];if(x){URL.revokeObjectURL(x.preview);S.draft.photos.splice(i,1)}},
+  createPrev(){if(S.createStep>1)S.createStep-=1;persistListingDraft()},
+  cancelDraft(){(S.draft&&S.draft.photos||[]).forEach(x=>URL.revokeObjectURL(x.preview));clearListingDraft(uid());S.draft=null;S.createStep=1;S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};S.view='list';S.guestCat=null},
+  zaman(v){if(ZAMAN.includes(v)){S.draft.zaman=v;persistListingDraft()}},
+  removePhoto(v){const i=+v,x=S.draft.photos[i];if(x){URL.revokeObjectURL(x.preview);S.draft.photos.splice(i,1);persistListingDraft()}},
   async publish(){
     const d=S.draft;if(!canPub(d))return;
+    const owner=uid();
     const r=await sb.from('listings').insert({owner:uid(),category:d.kat,problems:d.sorunlar,note:d.not.trim(),area:[d.neighborhood,d.district,d.city].filter(Boolean).join(', '),city:d.city,district:d.district.trim(),neighborhood:d.neighborhood.trim(),when_text:d.zaman}).select().single();
     if(r.error)throw r.error;
+    if(S.draft===d)clearListingDraft(owner);
     let photoFailed=false;
     const files=(d.photos||[]).map(x=>x.file);
     for(let i=0;i<files.length;i++){
@@ -3717,6 +3785,7 @@ const A={
       if(pr.error){photoFailed=true;await sb.storage.from('listing-photos').remove([path])}
     }
     (d.photos||[]).forEach(x=>URL.revokeObjectURL(x.preview));
+    if(S.draft===d)clearListingDraft(owner);
     await refresh();
     S.sel=r.data.id;S.view='detail';S.sort='uygun';S.draft=null;
     clearGuestDraft();S.createStep=1;S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};
@@ -4028,10 +4097,10 @@ document.addEventListener('keydown',e=>{
 });
 const F={
   'guest-search':v=>{S.guestSearch=v},
-  'd-not':v=>{S.draft.not=v.slice(0,500);persistGuestDraft()},
-  'd-city':v=>{const city=ILLER.includes(v)?v:'';S.draft.city=city;if(!districtsFor(city).includes(S.draft.district))S.draft.district='';S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};persistGuestDraft();render()},
-  'd-district':v=>{S.draft.district=districtsFor(S.draft.city).includes(v)?v:'';S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};persistGuestDraft()},
-  'd-neighborhood':v=>{S.draft.neighborhood=v.slice(0,100);persistGuestDraft()},'cat-search':v=>{S.catSearch=v},
+  'd-not':v=>{S.draft.not=v.slice(0,500);persistListingDraft()},
+  'd-city':v=>{const city=ILLER.includes(v)?v:'';S.draft.city=city;if(!districtsFor(city).includes(S.draft.district))S.draft.district='';S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};persistListingDraft();render()},
+  'd-district':v=>{S.draft.district=districtsFor(S.draft.city).includes(v)?v:'';S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0};persistListingDraft()},
+  'd-neighborhood':v=>{S.draft.neighborhood=v.slice(0,100);persistListingDraft()},'cat-search':v=>{S.catSearch=v},
   'q-fiyat':v=>{S.q.fiyat=v;S.q.error=''},'q-sure':v=>{S.q.sure=v;S.q.error=''},'q-not':v=>{S.q.not=v.slice(0,500);S.q.error=''},'q-deposit':v=>{S.q.deposit=parseInt(v,10)||20;S.q.error=''},
   'au-name':v=>{S.auth.name=v},'au-email':v=>{S.auth.email=v},'au-pass':v=>{S.auth.pass=v},
   'sup-subject':v=>{S.supportDraft.subject=v},'sup-message':v=>{S.supportDraft.message=v},
@@ -4111,6 +4180,10 @@ document.addEventListener('change',e=>{
     const room=Math.max(0,5-(S.draft.photos||[]).length),chosen=good.slice(0,room);
     if(!S.draft.photos)S.draft.photos=[];
     chosen.forEach(file=>S.draft.photos.push({file,preview:URL.createObjectURL(file)}));
+    if(chosen.length){
+      delete S.draft.photosNeedReselection;
+      persistListingDraft();
+    }
     if([...e.target.files].some(f=>f.size>8*1024*1024))toast('8 MB üzerindeki fotoğraflar eklenmedi.');
     else if(good.length>room)toast('En fazla 5 fotoğraf ekleyebilirsin.');
     render();
@@ -4148,20 +4221,36 @@ if(sb){
     const u=session&&session.user||null;
     if(u){
       if(!S.user||S.user.id!==u.id){
-        const pending=S.pendingAction,continued=pending==='newIlan'?(safeDraft(S.draft)||loadGuestDraft()):null,continuedStep=S.createStep;
+        const continued=!S.user&&S.pendingAction==='newIlan'?(safeDraft(S.draft)||loadGuestDraft()):null,continuedStep=S.createStep;
         const authState=history.state,authDepth=Math.max(0,Number(authState&&authState.depth)||0);
         const authHistorySteps=continued&&authState&&authState.app===NAV_STATE_KEY&&authState.guestAuth?(authDepth>1?2:authDepth):0;
         S.quoteDrafts.clear();S.quoteFor=null;S.q=null;
         S.acct=null;
+        if(S.user)clearListingDraft(uid());
+        (S.draft?.photos||[]).forEach(x=>URL.revokeObjectURL(x.preview));
+        S.draft=null;S.createStep=1;
         S.user=u;S.page='main';S.view='list';S.role='musteri';S.auth.pass='';S.authErr='';S.authInfo='';S.confirmationEmail='';S.guestAuth=false;
         S.pendingAction=null;
-        setTimeout(async()=>{await boot();if(continued)resumeListingDraftAfterAuth(continued,continuedStep,authHistorySteps)},0);
+        if(ev==='INITIAL_SESSION')restoreCustomerDraftOnLoad(u.id);
+        setTimeout(async()=>{
+          if(uid()!==u.id)return;
+          await boot();
+          if(continued&&uid()===u.id)resumeListingDraftAfterAuth(continued,continuedStep,authHistorySteps);
+        },0);
       }
     }else{
-      if(S.user){S.quoteDrafts.clear();S.quoteFor=null;S.q=null;S.user=null;S.profile=null;S.acct=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:'',terms:false};S.authErr='';S.authInfo='';S.confirmationEmail=''}
+      if(S.user){
+        clearListingDraft(uid());
+        (S.draft?.photos||[]).forEach(x=>URL.revokeObjectURL(x.preview));
+        S.draft=null;S.createStep=1;S.view='list';
+        S.quoteDrafts.clear();S.quoteFor=null;S.q=null;S.user=null;S.profile=null;S.acct=null;D=emptyD();unsubscribe();S.authMode='in';S.auth={name:'',email:'',pass:'',terms:false};S.authErr='';S.authInfo='';S.confirmationEmail='';
+      }
       if(!S.draft){const saved=loadGuestDraft();if(saved){S.draft=saved;S.view='new'}}
       S.loading=false;
-      setTimeout(render,0);
+      setTimeout(()=>{
+        if(ev==='INITIAL_SESSION'&&restoreGuestNavigationOnLoad())return;
+        render();
+      },0);
     }
   });
 }else{render()}
