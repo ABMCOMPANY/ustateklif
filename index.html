@@ -2056,18 +2056,18 @@ function replaceNavigationSnapshot(){
   history.replaceState(navState({depth,scrollY:0}),'',location.href);
   navHistoryReady=true;
 }
-function resumeListingDraftAfterAuth(rawDraft,step,authHistorySteps){
-  const draft=safeDraft(rawDraft);if(!draft)return false;
+function resumeListingDraftAfterAuth(rawDraft,step,authHistorySteps,guestSource){
+  const current=sessionGuard(),draft=safeDraft(rawDraft);
+  if(!uid()||!draft)return false;
   const restoreDraft=()=>{
     S.draft=draft;S.createStep=Math.min(6,Math.max(1,Number(step)||1));
     S.page='main';S.role='musteri';S.view='new';S.sel=null;S.quoteFor=null;S.navSection='home';S.guestAuth=false;
   };
-  const owner=uid();
   const finish=()=>{
-    if(uid()!==owner)return;
+    if(!current())return;
     restoreDraft();
-    persistListingDraft();
-    clearGuestDraft();
+    if(guestSource)guestTransfers.set(draft,{source:guestSource,current});
+    const saved=persistListingDraft();
     render();
     if(authHistorySteps>1){
       const current=history.state||{},depth=Math.max(0,Number(current.depth)||0);
@@ -2075,7 +2075,7 @@ function resumeListingDraftAfterAuth(rawDraft,step,authHistorySteps){
       history.pushState(navState({depth:depth+1,scrollY:0}),'',location.href);
       navHistoryReady=true;
     }else replaceNavigationSnapshot();
-    requestAnimationFrame(()=>toast('İlanına kaldığın yerden devam ediyorsun.'));
+    requestAnimationFrame(()=>current()&&toast(saved?'İlanına kaldığın yerden devam ediyorsun.':'Taslak hesabına kaydedilemedi. Yenilersen son değişikliklerin kaybolabilir.'));
   };
   if(authHistorySteps>0){
     window.addEventListener('popstate',finish,{once:true});
@@ -2161,6 +2161,11 @@ const emptyD=()=>({listings:{},mine:[],open:[],quotes:{},counts:{},profiles:{},e
 let D=emptyD();
 
 const uid=()=>S.user&&S.user.id;
+let sessionEpoch=0;
+function sessionGuard(){
+  const epoch=sessionEpoch,owner=uid();
+  return ()=>epoch===sessionEpoch&&owner===uid();
+}
 const qsOf=id=>Object.values(D.quotes).filter(q=>q.listing_id===id);
 const prof=id=>D.profiles[id]||{name:'Kullanıcı',title:'',bio:'',services:[],service_categories:[],expert_status:'not_started',service_areas:[],service_city:'',service_districts:[],created_at:null,phone_verified:false,identity_verified:false,vocational_verified:false,business_verified:false,account_status:'active'};
 const stat=id=>D.stats[id]||{jobs:0,rating:null};
@@ -2178,13 +2183,36 @@ const blankDraft=(kat=null)=>({kat:KAT[kat]?kat:null,sorunlar:[],not:'',city:'',
 function safeDraft(raw){
   if(!raw||typeof raw!=='object')return null;
   const kat=Object.hasOwn(KAT,raw.kat)?raw.kat:null,city=ILLER.includes(raw.city)?raw.city:'',allowed=districtsFor(city);
-  return {kat,sorunlar:kat&&Array.isArray(raw.sorunlar)?raw.sorunlar.filter(x=>KAT[kat].sorunlar.includes(x)).slice(0,8):[],not:String(raw.not||'').slice(0,500),city,district:allowed.includes(raw.district)?raw.district:'',neighborhood:String(raw.neighborhood||'').trim().slice(0,100),zaman:ZAMAN.includes(raw.zaman)?raw.zaman:'Bugün',photos:[]};
+  const sorunlar=kat&&Array.isArray(raw.sorunlar)
+    ? [...new Set(raw.sorunlar.filter(x=>KAT[kat].sorunlar.includes(x)))]
+    : [];
+  return {kat,sorunlar,not:String(raw.not||'').slice(0,500),city,district:allowed.includes(raw.district)?raw.district:'',neighborhood:String(raw.neighborhood||'').trim().slice(0,100),zaman:ZAMAN.includes(raw.zaman)?raw.zaman:'Bugün',photos:[]};
+}
+const guestTransfers=new WeakMap();
+function guestTransferSource(draft,step){
+  try{
+    const source=sessionStorage.getItem(GUEST_DRAFT_KEY),record=JSON.parse(source);
+    if(record?.step===step&&JSON.stringify(safeDraft(record))===JSON.stringify(draft))return source;
+  }catch(e){}
+  return null;
+}
+function finishGuestTransfer(){
+  const transfer=guestTransfers.get(S.draft);
+  if(!transfer?.current())return;
+  try{
+    if(sessionStorage.getItem(GUEST_DRAFT_KEY)===transfer.source)sessionStorage.removeItem(GUEST_DRAFT_KEY);
+    guestTransfers.delete(S.draft);
+  }catch(e){/* Retry cleanup after the next successful write. */}
 }
 function persistListingDraft(){
-  if(!S.draft)return;
+  if(!S.draft)return false;
   const {photos,...draft}=safeDraft(S.draft);
   if(uid()&&(S.draft.photos?.length||S.draft.photosNeedReselection))draft.hadPhotos=true;
-  try{sessionStorage.setItem(listingDraftKey(uid()),JSON.stringify({...draft,step:S.createStep,savedAt:Date.now()}))}catch(e){}
+  try{
+    sessionStorage.setItem(listingDraftKey(uid()),JSON.stringify({...draft,step:S.createStep,savedAt:Date.now()}));
+    finishGuestTransfer();
+    return true;
+  }catch(e){return false}
 }
 function clearListingDraft(owner){try{sessionStorage.removeItem(listingDraftKey(owner))}catch(e){}}
 function clearGuestDraft(){clearListingDraft(null)}
@@ -2196,6 +2224,7 @@ function readListingDraft(owner){
     if(!Number.isFinite(raw.savedAt)||age<0||age>LISTING_DRAFT_MAX_AGE){
       clearListingDraft(owner);return null;
     }
+    if(owner&&(!Number.isInteger(raw.step)||raw.step<1||raw.step>6))return null;
     const draft=safeDraft(raw);
     if(draft&&owner&&raw.hadPhotos===true)draft.photosNeedReselection=true;
     return draft?{draft,step:Math.min(6,Math.max(1,Number(raw.step)||1))}:null;
@@ -2214,6 +2243,18 @@ function restoreCustomerDraftOnLoad(owner){
   replaceNavigationSnapshot();
 }
 function startDraft(kat=null,problem=null){
+  if(S.user){
+    const saved=S.draft?{draft:S.draft,step:S.createStep}:readListingDraft(uid());
+    if(saved){
+      if(!kat||saved.draft.kat===kat){
+        S.draft=saved.draft;S.createStep=saved.step;
+        S.page='main';S.role='musteri';S.view='new';
+        return;
+      }
+      if(!confirm('Başka kategoriye geçersen mevcut ilan taslağın silinecek. Devam etmek istiyor musun?'))return false;
+      (S.draft?.photos||[]).forEach(x=>URL.revokeObjectURL(x.preview));
+    }
+  }
   const saved=!S.user&&loadGuestDraft(),d=saved||blankDraft(kat);
   if(kat&&KAT[kat]&&d.kat!==kat)Object.assign(d,blankDraft(kat));
   if(problem&&d.kat&&KAT[d.kat].sorunlar.includes(problem)&&!d.sorunlar.includes(problem))d.sorunlar=[problem];
@@ -2458,7 +2499,12 @@ function errMsg(e){
 
 /* ---------- veri ---------- */
 async function refresh(){
-  const me=uid();if(!sb||!me)return false;
+  const current=sessionGuard(),me=uid();
+  if(!sb||!me)return false;
+  try{return await refreshSessionData(me,current)}
+  catch(e){if(current())throw e;return false}
+}
+async function refreshSessionData(me,current){
   const chk=r=>{if(r.error)throw r.error;return r.data||[]};
   const [mine,open,myq,nr,br]=await Promise.all([
     sb.from('listings').select('*').eq('owner',me).order('created_at',{ascending:false}).then(chk),
@@ -2467,6 +2513,7 @@ async function refresh(){
     sb.from('notifications').select('*').eq('user_id',me).order('created_at',{ascending:false}).limit(50),
     sb.from('user_blocks').select('blocked_id').eq('blocker_id',me)
   ]);
+  if(!current())return false;
   const notifications=chk(nr);
   const blocks=chk(br).map(x=>x.blocked_id);
   const mineIds=mine.map(l=>l.id);
@@ -2478,6 +2525,7 @@ async function refresh(){
     extraIds.length?sb.from('listings').select('*').in('id',extraIds).then(chk):[],
     openIds.length?sb.from('quote_counts').select('*').in('listing_id',openIds).then(chk):[]
   ]);
+  if(!current())return false;
   const listings={};[...mine,...open,...extra].forEach(l=>{listings[l.id]=l});
   const quotes={};[...qMine,...myq].forEach(q=>{quotes[q.id]=q});
   const quoteIds=Object.keys(quotes).map(Number);
@@ -2503,11 +2551,13 @@ async function refresh(){
     sb.from('professional_verifications').select('id,user_id,category,verification_type,document_type,status,review_note,reviewed_at,expires_at,created_at').eq('user_id',me).order('created_at',{ascending:false}).then(chk),
     sb.from('partners').select('id,name,slug,status,created_at,service_categories').eq('status','active').then(chk)
   ]);
+  if(!current())return false;
   const photos={};
   if(ph.length){
     const signed=await Promise.all(ph.map(async x=>{const r=await sb.storage.from('listing-photos').createSignedUrl(x.path,3600);return {...x,url:r.data&&r.data.signedUrl||''}}));
     signed.filter(x=>x.url).forEach(x=>{(photos[x.listing_id]=photos[x.listing_id]||[]).push(x)});
   }
+  if(!current())return false;
   const profiles={};pr.forEach(p=>{profiles[p.id]=p});
   const stats={};st.forEach(s=>{stats[s.pro_id]=s});
   const msgs={};ms.forEach(m=>{(msgs[m.listing_id]=msgs[m.listing_id]||[]).push(m)});
@@ -2529,21 +2579,25 @@ async function refresh(){
   return changed;
 }
 async function boot(){
+  const current=sessionGuard();
   S.loading=true;render();
   try{
     await refresh();
+    if(!current())return;
     const [ar,pc]=await Promise.all([sb.rpc('is_admin'),sb.rpc('my_partner_context')]);
+    if(!current())return;
     S.isAdmin=!ar.error&&ar.data===true;
     S.partnerCtx=!pc.error&&Array.isArray(pc.data)&&pc.data.length?pc.data[0]:null;
-  }catch(e){console.error(e);S.bootError=errMsg(e)}
+  }catch(e){if(!current())return;console.error(e);S.bootError=errMsg(e)}
   S.loading=false;render();if(!S.bootError)subscribe();
 }
 let kickT;
 function kick(){
+  const current=sessionGuard();
   clearTimeout(kickT);
   kickT=setTimeout(async()=>{
-    if(!S.user||S.busy||document.activeElement?.matches('[id^="appointment-date-"],[id^="appointment-time-"]'))return;
-    try{if(await refresh())render()}catch(e){console.error(e)}
+    if(!current()||!S.user||S.busy||document.activeElement?.matches('[id^="appointment-date-"],[id^="appointment-time-"]'))return;
+    try{if(await refresh()&&current())render()}catch(e){if(current())console.error(e)}
   },400);
 }
 let chan=null;
@@ -2551,11 +2605,13 @@ function subscribe(){
   if(!sb||!S.user)return;
   try{
     if(chan)sb.removeChannel(chan);
+    const current=sessionGuard();
+    const onChange=()=>{if(current())kick()};
     chan=sb.channel('ut-live')
-      .on('postgres_changes',{event:'*',schema:'public',table:'listings'},kick)
-      .on('postgres_changes',{event:'*',schema:'public',table:'quotes'},kick)
-      .on('postgres_changes',{event:'*',schema:'public',table:'messages'},kick)
-      .on('postgres_changes',{event:'*',schema:'public',table:'notifications',filter:`user_id=eq.${uid()}`},kick)
+      .on('postgres_changes',{event:'*',schema:'public',table:'listings'},onChange)
+      .on('postgres_changes',{event:'*',schema:'public',table:'quotes'},onChange)
+      .on('postgres_changes',{event:'*',schema:'public',table:'messages'},onChange)
+      .on('postgres_changes',{event:'*',schema:'public',table:'notifications',filter:`user_id=eq.${uid()}`},onChange)
       .subscribe();
   }catch(e){console.error(e)}
 }
@@ -3690,7 +3746,12 @@ const A={
     if(r.error)throw r.error;
     await refresh();S.page='main';toast('Profilin kaydedildi.');
   },
-  async logout(){clearListingDraft(uid());clearGuestDraft();S.draft=null;S.createStep=1;S.guestAuth=false;S.pendingAction=null;S.confirmationEmail='';await sb.auth.signOut()},
+  async logout(){
+    try{
+      const {error}=await sb.auth.signOut();
+      if(error)throw error;
+    }catch(e){toast('Çıkış yapılamadı. Lütfen tekrar dene.')}
+  },
   saveCfg(){
     const url=S.cfgDraft.url.trim().replace(/\/+$/,''),key=S.cfgDraft.key.trim();
     if(!/^https:\/\/.+/.test(url)||key.length<20){toast('Adres ve anahtarı kontrol et.');return}
@@ -3742,8 +3803,11 @@ const A={
       return !!r.data.session;
     }
   },
-  newIlan(){S.menuOpen=false;S.sel=null;S.quoteFor=null;S.navSection='home';startDraft()},
-  quickCat(v){S.menuOpen=false;S.sel=null;S.quoteFor=null;S.navSection='home';startDraft(v)},
+  newIlan(){
+    S.menuOpen=false;S.sel=null;S.quoteFor=null;S.navSection='home';
+    startDraft();
+  },
+  quickCat(v){if(startDraft(v)===false)return;S.menuOpen=false;S.sel=null;S.quoteFor=null;S.navSection='home'},
   pickKat(v){
     if(!KAT[v])return;
     if(S.draft.kat!==v){S.draft.kat=v;S.draft.sorunlar=[];S.expertPreview={key:'',loading:false,rows:[],total:0,nearby:0}}
@@ -4216,30 +4280,41 @@ setInterval(()=>{if(!document.hidden&&S.user)kick()},30000);
 
 /* ---------- başlangıç ---------- */
 if(sb){
-  sb.auth.onAuthStateChange((ev,session)=>{
-    if(ev==='PASSWORD_RECOVERY'){S.recovery=true;S.loading=false;S.authErr='';S.authInfo='';setTimeout(render,0);return}
+  function applyAuthEvent(ev,session){
+    if(ev==='PASSWORD_RECOVERY'){S.recovery=true;S.loading=false;S.authErr='';S.authInfo='';const current=sessionGuard();setTimeout(()=>{if(current())render()},0);return}
     const u=session&&session.user||null;
     if(u){
       if(!S.user||S.user.id!==u.id){
         const continued=!S.user&&S.pendingAction==='newIlan'?(safeDraft(S.draft)||loadGuestDraft()):null,continuedStep=S.createStep;
+        const guestSource=continued&&guestTransferSource(continued,continuedStep);
         const authState=history.state,authDepth=Math.max(0,Number(authState&&authState.depth)||0);
         const authHistorySteps=continued&&authState&&authState.app===NAV_STATE_KEY&&authState.guestAuth?(authDepth>1?2:authDepth):0;
         S.quoteDrafts.clear();S.quoteFor=null;S.q=null;
         S.acct=null;
-        if(S.user)clearListingDraft(uid());
+        sessionEpoch++;
+        if(S.user){clearListingDraft(uid());unsubscribe()}
+        D=emptyD();S.profile=null;S.expertsLoaded=false;
+        S.isAdmin=false;S.partnerCtx=null;S.bootError='';S.loading=true;
         (S.draft?.photos||[]).forEach(x=>URL.revokeObjectURL(x.preview));
         S.draft=null;S.createStep=1;
         S.user=u;S.page='main';S.view='list';S.role='musteri';S.auth.pass='';S.authErr='';S.authInfo='';S.confirmationEmail='';S.guestAuth=false;
         S.pendingAction=null;
-        if(ev==='INITIAL_SESSION')restoreCustomerDraftOnLoad(u.id);
+        if(!continued)restoreCustomerDraftOnLoad(u.id);
+        const current=sessionGuard();
         setTimeout(async()=>{
-          if(uid()!==u.id)return;
+          if(!current())return;
           await boot();
-          if(continued&&uid()===u.id)resumeListingDraftAfterAuth(continued,continuedStep,authHistorySteps);
+          if(continued&&current())resumeListingDraftAfterAuth(continued,continuedStep,authHistorySteps,guestSource);
         },0);
       }
     }else{
       if(S.user){
+        sessionEpoch++;
+        S.isAdmin=false;S.partnerCtx=null;S.bootError='';S.expertsLoaded=false;
+        if(ev==='SIGNED_OUT'){
+          clearGuestDraft();
+          S.guestAuth=false;S.pendingAction=null;
+        }
         clearListingDraft(uid());
         (S.draft?.photos||[]).forEach(x=>URL.revokeObjectURL(x.preview));
         S.draft=null;S.createStep=1;S.view='list';
@@ -4247,11 +4322,31 @@ if(sb){
       }
       if(!S.draft){const saved=loadGuestDraft();if(saved){S.draft=saved;S.view='new'}}
       S.loading=false;
+      const current=sessionGuard();
       setTimeout(()=>{
+        if(!current())return;
         if(ev==='INITIAL_SESSION'&&restoreGuestNavigationOnLoad())return;
         render();
       },0);
     }
+  }
+  let authEventNumber=0;
+  sb.auth.onAuthStateChange((ev,session)=>{
+    const eventNumber=++authEventNumber;
+    if(ev!=='SIGNED_OUT'||!S.user){applyAuthEvent(ev,session);return}
+    const sameSession=sessionGuard();
+    const current=()=>sameSession()&&eventNumber===authEventNumber;
+    // A delayed cross-tab logout carries no user ID. Consult the SDK outside its callback.
+    queueMicrotask(async()=>{
+      if(!current())return;
+      try{
+        const {data,error}=await sb.auth.getSession();
+        if(!current())return;
+        if(error)throw error;
+        if(!data.session)applyAuthEvent(ev,null);
+        else if(data.session.user.id!==uid())applyAuthEvent('SIGNED_IN',data.session);
+      }catch(e){if(current())toast('Oturum durumu doğrulanamadı. Bağlantını kontrol et.')}
+    });
   });
 }else{render()}
 if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
